@@ -18,8 +18,7 @@ public class TestAMovilla {
     public static void main(String[] args) {
         
        GameWindow gameWindow = new GameWindow();
-       //gameWindow.showMenu();
-        
+       
     }
     
 }

@@ -33,28 +33,22 @@ import javax.swing.JLabel;
  */
 public class GameWindow {
 
-    JFrame gameWindow;
+    private JFrame gameFrame;
+    public Canvas gameCanvas;
     
     public GameWindow() {
-        gameWindow = new JFrame();
+        gameFrame = new JFrame();
         Dimension dims1 = new Dimension(600,500);
         
-        gameWindow.setVisible(true);
-        gameWindow.setSize(dims1);
-        gameWindow.setTitle("JavaPokemon");
-        gameWindow.setResizable(false);
-        gameWindow.setLocation(200, 200);
+        gameFrame.setVisible(true);
+        gameFrame.setSize(dims1);
+        gameFrame.setTitle("JavaPokemon");
+        gameFrame.setResizable(false);
+        gameFrame.setLocation(200, 200);
        
-        
-        Canvas canvas1;
-        canvas1 = new Canvas();
-    //    Dimension dims2 = new Dimension(100,100);
-     //   canvas1.setSize(dims2);
-    //    canvas1.setLocation(100, 100);
-    //canvas1.setBounds(5, 5, 50, 50);
-        canvas1.setBackground( Color.getHSBColor((float)33.6, (float)63, (float)46.7) );
-    //    Color.getHSBColor((float)(33.6/360), (float)(63/100), (float)(46.7/100));
-        gameWindow.getContentPane().add(canvas1);
+        gameCanvas = new Canvas();
+        gameCanvas.setBackground(Color.green);
+        gameFrame.getContentPane().add(gameCanvas);
         
     }
     /*
