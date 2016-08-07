@@ -5,15 +5,10 @@
  */
 package testamovilla;
 
-import java.awt.Image;
 /**
  *
  * @author Andres
  */
-public class testPelota {
-
-    public testPelota() {
-       //Image pelota = new Image();
-    }
+public class Estructura {
     
 }
