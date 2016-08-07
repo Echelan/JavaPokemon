@@ -10,5 +10,16 @@ package testamovilla;
  * @author Andres
  */
 public class Pokemon {
-    
+    int id;
+	String nombre;
+	TipoPokemon tipo1;
+	TipoPokemon tipo2;
+
+  public Pokemon(int id, String nombre, TipoPokemon tipo1, TipoPokemon tipo2) {
+	this.id = id;
+	this.nombre = nombre;
+	this.tipo1 = tipo1;
+	this.tipo2 = tipo2;
+  }
+	
 }
