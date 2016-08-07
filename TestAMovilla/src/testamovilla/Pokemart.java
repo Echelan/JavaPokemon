@@ -9,6 +9,6 @@ package testamovilla;
  *
  * @author Andres
  */
-public class Tienda {
-    
+public class Pokemart extends Estructura{
+  
 }

@@ -9,6 +9,5 @@ package testamovilla;
  *
  * @author Andres
  */
-public class Gimnasio {
-    
+public class Gimnasio extends Estructura{
 }

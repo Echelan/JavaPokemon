@@ -9,6 +9,5 @@ package testamovilla;
  *
  * @author Andres
  */
-public class Casa {
-    
+public class Casa extends Estructura {
 }

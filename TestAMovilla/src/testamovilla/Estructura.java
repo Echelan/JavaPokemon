@@ -10,5 +10,5 @@ package testamovilla;
  * @author Andres
  */
 public class Estructura {
-    
+	int PosX, PosY;
 }

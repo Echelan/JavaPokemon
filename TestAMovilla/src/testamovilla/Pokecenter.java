@@ -9,6 +9,5 @@ package testamovilla;
  *
  * @author Andres
  */
-public class Pokecenter {
-    
+public class Pokecenter extends Estructura {
 }
