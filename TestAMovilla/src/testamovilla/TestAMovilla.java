@@ -5,6 +5,12 @@
  */
 package testamovilla;
 
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Toolkit;
+import javax.swing.JWindow;
+
 
 /**
  *
@@ -16,9 +22,10 @@ public class TestAMovilla {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-       GameWindow gameWindow = new GameWindow();
-	   
+		
+		//ManejadorPokemon manejadorPokemon = new ManejadorPokemon();
+		//GameWindow gameWindow = new GameWindow();
+		
 		
     }
     
