@@ -19,11 +19,18 @@ import java.util.logging.Logger;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 */
+import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Color;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JWindow;
 
 
 /**
@@ -33,8 +40,8 @@ import javax.swing.JLabel;
  */
 public class GameWindow {
 
-    private JFrame gameFrame;
-    public Canvas gameCanvas;
+    final private JFrame gameFrame;
+    final public Canvas gameCanvas;
     
     public GameWindow() {
         gameFrame = new JFrame();
@@ -42,15 +49,18 @@ public class GameWindow {
         
         gameFrame.setVisible(true);
         gameFrame.setSize(dims1);
-        gameFrame.setTitle("JavaPokemon");
+        gameFrame.setTitle("Pokemon Violet");
         gameFrame.setResizable(false);
-        gameFrame.setLocation(200, 200);
+        gameFrame.setLocationRelativeTo(null);
        
         gameCanvas = new Canvas();
         gameCanvas.setBackground(Color.green);
         gameFrame.getContentPane().add(gameCanvas);
         
     }
+	
+			
+	
     /*
     public void showMenu(){
         JLabel title = new JLabel("Texto");

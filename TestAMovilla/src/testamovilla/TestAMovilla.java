@@ -9,8 +9,10 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JWindow;
-
 
 /**
  *
@@ -21,12 +23,14 @@ public class TestAMovilla {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 		
-		//ManejadorPokemon manejadorPokemon = new ManejadorPokemon();
-		//GameWindow gameWindow = new GameWindow();
-		
-		
+		SplashWindow splash = new SplashWindow();
+		ManejadorPokemon manejadorPokemon = new ManejadorPokemon();
+		Thread.sleep(5000);
+		GameWindow gameWindow = new GameWindow();
+		splash.setVisible(false);
+		splash = null;
     }
     
 }
