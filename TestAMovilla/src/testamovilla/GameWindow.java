@@ -19,18 +19,10 @@ import java.util.logging.Logger;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 */
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Color;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JWindow;
 
 
 /**
@@ -41,7 +33,7 @@ import javax.swing.JWindow;
 public class GameWindow {
 
     final private JFrame gameFrame;
-    final public Canvas gameCanvas;
+  //  final public Canvas gameCanvas;
     
     public GameWindow() {
         gameFrame = new JFrame();
@@ -53,18 +45,15 @@ public class GameWindow {
         gameFrame.setResizable(false);
         gameFrame.setLocationRelativeTo(null);
        
-        gameCanvas = new Canvas();
-        gameCanvas.setBackground(Color.green);
-        gameFrame.getContentPane().add(gameCanvas);
+     //   gameCanvas = new Canvas();
+     //   gameCanvas.setBackground(Color.green);
+     //   gameFrame.getContentPane().add(gameCanvas);
         
     }
 	
-			
+	//public void paint (Graphics g)
+	//{
+		//g.drawRect(100, 100, 50, 50);
+	//}
 	
-    /*
-    public void showMenu(){
-        JLabel title = new JLabel("Texto");
-        gameWindow.getContentPane().add(title);
-    }
-    */
 }

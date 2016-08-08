@@ -5,14 +5,15 @@
  */
 package testamovilla;
 
+/*
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JWindow;
+*/
 
 /**
  *
@@ -23,7 +24,7 @@ public class TestAMovilla {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException{
 		
 		SplashWindow splash = new SplashWindow();
 		ManejadorPokemon manejadorPokemon = new ManejadorPokemon();
