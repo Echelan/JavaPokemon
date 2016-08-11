@@ -37,7 +37,7 @@ public class ManejadorPokemon {
 	  "Dragón",
 	  "Siniestro",
 	};
-	
+	/*
 	String[][] infoPokemon = {
 		{ "001", "Bulbasaur", "12", "4" },
 		{ "002", "Ivysaur", "12", "4" },
@@ -191,19 +191,19 @@ public class ManejadorPokemon {
 		{ "150", "Mewtwo", "14", "0" },
 		{ "151", "Mew", "14", "0" },
 	};
-	
+	*/
 	for (int i = 0; i < nombresTipos.length; i++) {
 	  listaTipos[i] = new TipoPokemon(i,nombresTipos[i]);
 	}
 	
-	for (int i = 0; i < infoPokemon.length; i++) {
+	//for (int i = 0; i < infoPokemon.length; i++) {
 	 // String[] strings = infoPokemon[i];
-	  int id = Integer.valueOf(infoPokemon[i][0]);
-	  String name = infoPokemon[i][1];
-	  int type1 = Integer.valueOf(infoPokemon[i][2]);
-	  int type2 = Integer.valueOf(infoPokemon[i][3]);
-	  listaPokemon[i] = new Pokemon(id,name,listaTipos[type1],listaTipos[type2]);
-	}
+	//  int id = Integer.valueOf(infoPokemon[i][0]);
+	//  String name = infoPokemon[i][1];
+	//  int type1 = Integer.valueOf(infoPokemon[i][2]);
+	//  int type2 = Integer.valueOf(infoPokemon[i][3]);
+	//  listaPokemon[i] = new Pokemon(id,name,listaTipos[type1],listaTipos[type2]);
+	//}
   }
   
 }

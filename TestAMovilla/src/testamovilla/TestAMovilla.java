@@ -5,15 +5,6 @@
  */
 package testamovilla;
 
-/*
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JWindow;
-*/
 
 /**
  *
@@ -27,11 +18,28 @@ public class TestAMovilla {
     public static void main(String[] args) throws InterruptedException{
 		
 		SplashWindow splash = new SplashWindow();
-		ManejadorPokemon manejadorPokemon = new ManejadorPokemon();
+			
+		/*
+		try {
+			String content = readFile("pokeDB.txt", StandardCharsets.UTF_8);
+			System.out.println(content);
+			System.out.println(content[1]);
+		} catch (IOException ex) {
+			Logger.getLogger(TestAMovilla.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		*/
+		
+		
+		//ManejadorPokemon manejadorPokemon = new ManejadorPokemon();
 		Thread.sleep(5000);
-		GameWindow gameWindow = new GameWindow();
+		//GameWindow gameWindow = new GameWindow();
 		splash.setVisible(false);
 		splash = null;
     }
-    
+    /*
+	static String readFile(String path, Charset encoding) throws IOException{
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded, encoding);
+	}
+	*/
 }

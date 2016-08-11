@@ -12,6 +12,7 @@ package testamovilla;
 public class Pokemon {
 	// 'GLOBAL'
     final int id;
+	/*
 	final String speciesName;
 	final TipoPokemon[] types;
 	final int catchrate;
@@ -23,7 +24,12 @@ public class Pokemon {
 	
 	// 'LOCAL'
 	String gender;
-
+	String name;
+	int experience;
+	int[] stats;
+	int level;
+	*/
+	
   public Pokemon(int id) {
 	this.id = id;
   }
