@@ -10,16 +10,22 @@ package testamovilla;
  * @author Andres
  */
 public class Pokemon {
-    int id;
-	String nombre;
-	TipoPokemon tipo1;
-	TipoPokemon tipo2;
-
-  public Pokemon(int id, String nombre, TipoPokemon tipo1, TipoPokemon tipo2) {
-	this.id = id;
-	this.nombre = nombre;
-	this.tipo1 = tipo1;
-	this.tipo2 = tipo2;
-  }
+	// 'GLOBAL'
+    final int id;
+	final String speciesName;
+	final TipoPokemon[] types;
+	final int catchrate;
+	final int[] baseStats;
+	final int yieldXP;
+	final int[] yieldEV;
+	final boolean evolves;
+	final int evolvesInto;
 	
+	// 'LOCAL'
+	String gender;
+
+  public Pokemon(int id) {
+	this.id = id;
+  }
+
 }
