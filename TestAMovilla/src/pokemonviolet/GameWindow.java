@@ -5,23 +5,25 @@
  */
 package pokemonviolet;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.*;
+/*
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+*/
 import java.util.Random;
 import javax.swing.*;
+//import javax.swing.GroupLayout.ParallelGroup;
 
 
 /**
  *
  * @author movillaf
  */
-public class GameWindow extends Frame implements WindowListener,ActionListener {
+public class GameWindow extends JFrame implements WindowListener, ActionListener {
 
     /**
      * @param args the command line arguments
@@ -29,6 +31,7 @@ public class GameWindow extends Frame implements WindowListener,ActionListener {
     
     public Pokemon enemy;
     final JTextField PokeInfo;
+    final JButton spawnPokemans;
     
     void performactionthing(ActionEvent evt){
         Random rnd = new Random();
@@ -37,37 +40,65 @@ public class GameWindow extends Frame implements WindowListener,ActionListener {
     
     public GameWindow(){
     //  final public Canvas gameCanvas;
-        final JButton spawnPokemans;
+    //final JButton spawnPokemans;
         final GroupLayout winLayout;
         final JFrame gameFrame;
+        final Dimension dims1 = new Dimension(600,500);
         
-     
-		
+       // new JFrame();
+        setLayout(null);
+        setVisible(true);
+        setSize(dims1);
+        setTitle("Pokemon Violet");
+        setResizable(false);
+        setLocationRelativeTo(null);
+	/*	
         gameFrame = new JFrame();
-        Dimension dims1 = new Dimension(600,500);
+       
         
         gameFrame.setVisible(true);
         gameFrame.setSize(dims1);
         gameFrame.setTitle("Pokemon Violet");
         gameFrame.setResizable(false);
         gameFrame.setLocationRelativeTo(null);
-       
+       */
      //   gameCanvas = new Canvas();
      //   gameCanvas.setBackground(Color.green);
      //   gameFrame.getContentPane().add(gameCanvas);
+     
         spawnPokemans = new JButton();
-        spawnPokemans.setBackground(Color.red);
-        spawnPokemans.setForeground(Color.white);
-        //spawnPokemans.set
-        spawnPokemans.setToolTipText("Undalo que no muerde");
+     //   spawnPokemans.setBackground(Color.red);
+     //   spawnPokemans.setForeground(Color.white);
+     //   spawnPokemans.setToolTipText("Undalo que no muerde");
+       // spawnPokemans.setSize(20, 10);
+        //spawnPokemans.setBounds(10, 20, 30, 40);
+        spawnPokemans.setText("Spawn");
+        spawnPokemans.addActionListener(this);
+      //  spawnPokemans.setLocation(100, 200);
+        //spawnPokemans.setBounds()
+        spawnPokemans.setBounds(100, 200, 150, 60);
+      //  spawnPokemans.setSize(40,10);
+        //spawnPokemans.setLocation(1000, 1000);
+        add(spawnPokemans);
         
         PokeInfo = new JTextField();
+        PokeInfo.setBounds(40,50,150,60);
+       // PokeInfo.isVisible(true);
+        add(PokeInfo);
         
-        //PokeInfo
         
+    //    gameFrame.add(spawnPokemans);
+        
+        /*
         winLayout=new GroupLayout(gameFrame.getContentPane());
         gameFrame.getContentPane().setLayout(winLayout);
+        ParallelGroup winGroup = winLayout.createParallelGroup();
         
+        winGroup.addComponent(spawnPokemans);
+        */
+       // gameFrame.getContentPane().add(spawnPokemans);
+        
+        /*
         winLayout.setHorizontalGroup(
             winLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(GroupLayout.Alignment.TRAILING, winLayout.createSequentialGroup()
@@ -95,6 +126,7 @@ public class GameWindow extends Frame implements WindowListener,ActionListener {
                 )
            // )
         );
+        */
         /*
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -121,11 +153,6 @@ public class GameWindow extends Frame implements WindowListener,ActionListener {
                 .addContainerGap(266, Short.MAX_VALUE))
         );
         */
-       // spawnPokemans.setSize(20, 10);
-        //spawnPokemans.setBounds(10, 20, 30, 40);
-        spawnPokemans.setText("Spawn");
-        spawnPokemans.addActionListener(this);
-        gameFrame.getContentPane().add(spawnPokemans);
         
     }
 
@@ -135,7 +162,7 @@ public class GameWindow extends Frame implements WindowListener,ActionListener {
 		
 		
 		//ManejadorPokemon manejadorPokemon = new ManejadorPokemon();
-		Thread.sleep(2000);
+		Thread.sleep(100);
                 
 		GameWindow gameWindow=new GameWindow();
                 
@@ -182,12 +209,12 @@ public class GameWindow extends Frame implements WindowListener,ActionListener {
     //    enemy = new Pokemon(rnd.nextInt(151));
   //  }
     
-    
+    /*
 	static String readFile(String path, Charset encoding) throws IOException{
             byte[] encoded = Files.readAllBytes(Paths.get(path));
             return new String(encoded, encoding);
 	}
-        
+      */  
 	@Override
         public void windowClosing(WindowEvent e) {
             dispose();
@@ -228,7 +255,7 @@ public class GameWindow extends Frame implements WindowListener,ActionListener {
             Random rnd = new Random();
             enemy = new Pokemon(rnd.nextInt(151));
     //    enemy = new Pokemon(121);
-            this.PokeInfo.setText(enemy.speciesName);
+        //    this.PokeInfo.setText(enemy.speciesName);
         }
         
 }
