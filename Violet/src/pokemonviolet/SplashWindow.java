@@ -24,7 +24,7 @@ public class SplashWindow extends JWindow{
 	SplashWindow()
 	{    
 		try {	
-			logo  = Toolkit.getDefaultToolkit().createImage("VioletSMALL.png"); 	 	
+			logo  = Toolkit.getDefaultToolkit().createImage("splashImage.png"); 	 	
 			media = new MediaTracker(this);
 			media.addImage(logo,0);
 			media.waitForID(0);

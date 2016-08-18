@@ -41,7 +41,12 @@ public class Pokemon {
 	
 	
   public Pokemon(int id) {
-      String[] pokeinfo = new String[100];
+	  this.name = "";
+	  this.pokeEntry = "";
+	  this.speciesName = "";
+	  this.catchRate = 1;
+	  
+      String[] pokeinfo = new String[30];
       int limite = 0;
       System.out.println("ID: " + id);
      // pokeinfo[0] = "" + id;
@@ -185,13 +190,13 @@ public class Pokemon {
          String[] partes = pokeinfo[i].split("=");
          
          if (partes[0].compareTo( "Name" )==0){
-             this.name = partes[1];
+    //         this.name = partes[1];
          }else if (partes[0].compareTo("InternalName")==0){
-             this.speciesName = partes[1];
+    //         this.speciesName = partes[1];
          }else if (partes[0].compareTo("Pokedex")==0){
-             this.pokeEntry = partes[1];
+    //         this.pokeEntry = partes[1];
          }else if (partes[0].compareTo("Rareness")==0){
-             this.catchRate = partes[1];
+    //         this.catchRate = partes[1];
    //      }else if (partes[0].compareTo("Pokedex")==0){
    //          this.pokeEntry = partes[1];
          }else{
