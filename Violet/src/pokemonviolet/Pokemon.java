@@ -7,6 +7,7 @@ package pokemonviolet;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Random;
 //import java.io.IOException;
 //import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
@@ -192,8 +193,35 @@ public class Pokemon {
 	public int getId() {
 		return id;
 	}
-
 	
+	private double calcAlpha() {
+		// MADE UP VALUES
+		Random rnd = new Random();
+		int HPpercent = rnd.nextInt(99)+1;
+		int HPmax = this.baseHP;
+		double HPcurrent = this.baseHP * (HPpercent/100);
+		int rate = this.catchRate;
+		int bonusball = 1;
+		double bonusstatus= (rnd.nextInt(2)+2)/2;
+		
+		double alpha = ((((3 * HPmax) - (2 * HPcurrent)) * rate * bonusball)/(3*HPmax))*bonusstatus;
+		
+		return alpha;
+	}
+	
+	public boolean tryCatch(){
+		boolean shakeCheck = false;
+		Random rnd = new Random();
+		
+		double alpha = calcAlpha();
+		
+		double beta = 1048560/Math.sqrt(Math.sqrt(16711680/alpha));
+		if (beta > rnd.nextInt(65535)) {
+			shakeCheck = true;
+		}
+		
+		return shakeCheck;
+	}
 	
 
 

@@ -31,7 +31,10 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
     
     public Pokemon currentPokemon;
     private final JTextField pokemonNameDisplay;
+    private final JTextField pokemonWeightDisplay;
+    private final JTextField pokemonHeightDisplay;
     private final JButton walkBtn;
+    private final JButton throwBtn;
     private static BufferedImage allPokemonImgMH;
 	private ImageIcon pokemonImgDisplay;
 	private final JLabel imgContainerLabel;
@@ -55,19 +58,31 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
      
         walkBtn = new JButton();
         walkBtn.setText("Walk");
-		/*
-        walkBtn.addActionListener(new ActionListener() {
-			walkBtnPress(e);
-        });
-		*/
 		walkBtn.addActionListener(this);
         walkBtn.setBounds(10, 10, 160, 70);
         add(walkBtn);
+		
+		throwBtn = new JButton();
+        throwBtn.setText("Throw Pokeball");
+		throwBtn.addActionListener(this);
+        throwBtn.setBounds(180, 190, 160, 70);
+		throwBtn.setEnabled(false);
+        add(throwBtn);
         
         pokemonNameDisplay = new JTextField();
         pokemonNameDisplay.setBounds(10,100,160,70);
 		pokemonNameDisplay.setEditable(false);
         add(pokemonNameDisplay);
+        
+        pokemonHeightDisplay = new JTextField();
+        pokemonHeightDisplay.setBounds(10,190,160,70);
+		pokemonHeightDisplay.setEditable(false);
+        add(pokemonHeightDisplay);
+        
+        pokemonWeightDisplay = new JTextField();
+        pokemonWeightDisplay.setBounds(10,280,160,70);
+		pokemonWeightDisplay.setEditable(false);
+        add(pokemonWeightDisplay);
         
 		eventsTextDisplay = new JTextArea();
 		eventsTextDisplay.setBounds(360, 10, 230, 160);
@@ -100,6 +115,7 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 		splash.setVisible(false);
 		splash = null;
 		GameWindow gameWindow=new GameWindow();
+		
 		
     }
 	
@@ -138,39 +154,104 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 	public void windowClosed(WindowEvent e) {
 	}
 
-	public void walkBtnPress(ActionEvent ae) {
+	public void displayEvent(String event) {
+		
+		eventsTextDisplay.setText(event + "\n" + eventsTextDisplay.getText());
+		
+	}
+	
+	public void walkBtnPress() {
 		stepsToSpawn = stepsToSpawn - 1;
 		if (stepsToSpawn == 0){
 			Random rnd = new Random();
 			currentPokemon = new Pokemon(rnd.nextInt(150)+1);
 			
 			pokemonNameDisplay.setText(currentPokemon.getSpeciesName());
+			pokemonHeightDisplay.setText(currentPokemon.getHeight() + " m.");
+			pokemonWeightDisplay.setText(currentPokemon.getWeight() + " kg.");
+			
+			throwBtn.setEnabled(true);
 			
 			int x = (int)(Math.floor((double)(currentPokemon.getId()-1)%10)*POKEIMGWIDTH);
 			int y = (int)(Math.floor((double)(currentPokemon.getId()-1)/10)*POKEIMGHEIGHT);
 			pokemonImgDisplay = new ImageIcon (allPokemonImgMH.getSubimage(x, y, POKEIMGWIDTH, POKEIMGHEIGHT));
 			imgContainerLabel.setIcon(pokemonImgDisplay);
-			
-			eventsTextDisplay.setText("A wild " + currentPokemon.getSpeciesName() + " appeared!\n" + eventsTextDisplay.getText());
+				
+			displayEvent("A wild " + currentPokemon.getSpeciesName() + " appeared!");
 			
 			stepsToSpawn = calcSteps();
 		}else{
 			currentPokemon = null;
 			pokemonNameDisplay.setText(" ");
+			pokemonHeightDisplay.setText(" ");
+			pokemonWeightDisplay.setText(" ");
+			
+			throwBtn.setEnabled(false);
 			
 			int x = (int)(Math.floor((double)(151)%10)*POKEIMGWIDTH);
 			int y = (int)(Math.floor((double)(151)/10)*POKEIMGHEIGHT);
 			pokemonImgDisplay = new ImageIcon (allPokemonImgMH.getSubimage(x, y, POKEIMGWIDTH, POKEIMGHEIGHT));
 			imgContainerLabel.setIcon(pokemonImgDisplay);
 			
-			eventsTextDisplay.setText("You walk through the grass.\n" + eventsTextDisplay.getText());
+			displayEvent("You walk through the grass.");
 		}
 	}
 
+	public void throwBtnPress() {
+		throwBtn.setEnabled(false);
+		displayEvent("You throw a Pokeball!");
+		
+		boolean caught = currentPokemon.tryCatch();
+		
+		if (caught){
+			displayEvent("*shake*");
+			caught = currentPokemon.tryCatch();
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException ex) {
+			}
+				
+			if (caught){
+				displayEvent("*shake*");
+				caught = currentPokemon.tryCatch();
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException ex) {
+				}
+				
+				if (caught){
+					displayEvent("*shake*");
+					caught = currentPokemon.tryCatch();
+					try {
+						Thread.sleep(200);
+					} catch (InterruptedException ex) {
+					}
+				
+					if (caught){
+						try {
+							Thread.sleep(200);
+						} catch (InterruptedException ex) {
+						}
+
+						displayEvent("Gotcha! " + currentPokemon.getSpeciesName() + " was caught!");
+						walkBtnPress();
+					}
+				}
+			}
+		}
+		
+		if (!caught){
+			throwBtn.setEnabled(true);
+			displayEvent("The Pokemon breaks free!");
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == walkBtn){
-			walkBtnPress(e);
+			walkBtnPress();
+		}else if (e.getSource() == throwBtn){
+			throwBtnPress();
 		}
 	}
 	public int calcSteps(){
