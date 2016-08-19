@@ -5,9 +5,15 @@
  */
 package pokemonviolet;
 
-import java.awt.Dimension;
+
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 
@@ -19,15 +25,20 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
     /**
      * @param args the command line arguments
      */
+	static private int POKEIMGWIDTH = 160;
+	static private int POKEIMGHEIGHT = 160;
     
     public Pokemon enemy;
     final JTextField PokeInfo;
     final JButton spawnPokemans;
-    
-    void performactionthing(ActionEvent evt){
-        Random rnd = new Random();
-        enemy = new Pokemon(rnd.nextInt(151));
-    }
+    private static BufferedImage allPokemonMH;
+	private ImageIcon pokemonImg;
+	private final JLabel imgContainer;
+			
+  //  void performactionthing(ActionEvent evt){
+  //      Random rnd = new Random();
+  //      enemy = new Pokemon(rnd.nextInt(151));
+  //  }
     
     public GameWindow(){
 		
@@ -42,18 +53,30 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
         spawnPokemans = new JButton();
         spawnPokemans.setText("Spawn");
         spawnPokemans.addActionListener(this);
-        spawnPokemans.setBounds(100, 200, 150, 60);
+        spawnPokemans.setBounds(10, 10, 160, 70);
         add(spawnPokemans);
         
         PokeInfo = new JTextField();
-        PokeInfo.setBounds(40,50,150,60);
+        PokeInfo.setBounds(10,100,160,70);
+		PokeInfo.setEditable(false);
         add(PokeInfo);
         
+		imgContainer = new JLabel(pokemonImg);
+		imgContainer.setBounds(180,10,POKEIMGWIDTH,POKEIMGHEIGHT);
+		add(imgContainer);
+			
+		
     }
 
     public static void main(String[] args) throws InterruptedException{
 		
 		SplashWindow splash = new SplashWindow();
+		
+		try { 
+			allPokemonMH = ImageIO.read(new File("MH all151.png"));
+		} catch (IOException ex) {
+			Logger.getLogger(GameWindow.class.getName()).log(Level.SEVERE, null, ex);
+		}
 		
 		Thread.sleep(100);
 		
@@ -101,7 +124,14 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		Random rnd = new Random();
-		enemy = new Pokemon(rnd.nextInt(151));
+		enemy = new Pokemon(rnd.nextInt(150)+1);
+		PokeInfo.setText(enemy.getSpeciesName());
+		int x = (int)(Math.floor((double)(enemy.getId()-1)%10)*POKEIMGWIDTH);
+		int y = (int)(Math.floor((double)(enemy.getId()-1)/10)*POKEIMGHEIGHT);
+
+		pokemonImg = new ImageIcon (allPokemonMH.getSubimage(x, y, POKEIMGWIDTH, POKEIMGHEIGHT));
+		imgContainer.setIcon(pokemonImg);
+		
 	}
         
 }
