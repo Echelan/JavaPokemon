@@ -7,11 +7,11 @@ package pokemonviolet;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+//import java.io.IOException;
+//import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 //import static pokemonviolet.GameWindow.readFile;
 
 /**
@@ -71,7 +71,6 @@ public class Pokemon {
 	public Pokemon(int id) {
 	  int limite = 0;
       String[] pokeinfo = new String[NUMATTRIB];
-      System.out.println("ID: " + id);
 	  
         File archivo = new File("pokeDB.txt");
             try {
@@ -171,7 +170,7 @@ public class Pokemon {
 		//	this.evolveLevel = Integer.parseInt(partes[1]);
 		}
     }
-	
+	System.out.println(this.id + ": " + this.speciesName);
   }
 
 	public String getSpeciesName() {
