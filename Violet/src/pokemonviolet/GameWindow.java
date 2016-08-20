@@ -36,6 +36,7 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
     private final JTextField pokemonHeightDisplay;
     private final JButton walkBtn;
     private final JButton throwBtn;
+    private final JButton evolveBtn;
     private static BufferedImage allPokemonBig;
     private static BufferedImage allPokemonSmall;
 	private ImageIcon pokemonImgDisplay;
@@ -58,28 +59,35 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
         walkBtn = new JButton();
         walkBtn.setText("Walk");
 		walkBtn.addActionListener(this);
-        walkBtn.setBounds(350, 190, 160, 70);
+        walkBtn.setBounds(10, 180, 160, 70);
         add(walkBtn);
 		
 		throwBtn = new JButton();
         throwBtn.setText("Throw Pokeball");
 		throwBtn.addActionListener(this);
-        throwBtn.setBounds(180, 190, 160, 70);
+        throwBtn.setBounds(180, 180, 160, 70);
 		throwBtn.setEnabled(false);
         add(throwBtn);
+		
+		evolveBtn = new JButton();
+        evolveBtn.setText("Evolve wild Pokemon");
+		evolveBtn.addActionListener(this);
+        evolveBtn.setBounds(10, 260, 160, 70);
+		evolveBtn.setEnabled(false);
+        add(evolveBtn);
         
         pokemonNameDisplay = new JTextField();
-        pokemonNameDisplay.setBounds(10,10,160,70);
+        pokemonNameDisplay.setBounds(10,10,160,47);
 		pokemonNameDisplay.setEditable(false);
         add(pokemonNameDisplay);
         
         pokemonHeightDisplay = new JTextField();
-        pokemonHeightDisplay.setBounds(10,100,160,70);
+        pokemonHeightDisplay.setBounds(10,67,160,47);
 		pokemonHeightDisplay.setEditable(false);
         add(pokemonHeightDisplay);
         
         pokemonWeightDisplay = new JTextField();
-        pokemonWeightDisplay.setBounds(10,190,160,70);
+        pokemonWeightDisplay.setBounds(10,123,160,47);
 		pokemonWeightDisplay.setEditable(false);
         add(pokemonWeightDisplay);
         
@@ -104,7 +112,9 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 			teamImgContainerLabel[i] = new JLabel();
 			playerTeamPokemonImgDisplay[i] = new ImageIcon (allPokemonSmall.getSubimage(xSmall, ySmall, POKEIMGSMALLWIDTH, POKEIMGSMALLHEIGHT));
 			teamImgContainerLabel[i].setIcon(playerTeamPokemonImgDisplay[i]);
-			teamImgContainerLabel[i].setBounds(10 + (i*(POKEIMGSMALLWIDTH+10)),270,POKEIMGSMALLWIDTH,POKEIMGSMALLHEIGHT);
+			int xCalc = 350 + ((i%3)*(POKEIMGSMALLWIDTH+5));
+			int yCalc = 180 + (int)((float)Math.floor(i/3)*(POKEIMGSMALLWIDTH+5));
+			teamImgContainerLabel[i].setBounds(xCalc,yCalc,POKEIMGSMALLWIDTH,POKEIMGSMALLHEIGHT);
 			add(teamImgContainerLabel[i]);
 		}
 		
@@ -142,19 +152,10 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 		stepsToSpawn = stepsToSpawn - 1;
 		if (stepsToSpawn == 0){
 			Random rnd = new Random();
-			currentPokemon = new Pokemon(rnd.nextInt(150)+1);
+				currentPokemon = new Pokemon(rnd.nextInt(150)+1);
 			
-			pokemonNameDisplay.setText(currentPokemon.getNameSpecies());
-			pokemonHeightDisplay.setText(currentPokemon.getHeight() + " m.");
-			pokemonWeightDisplay.setText(currentPokemon.getWeight() + " kg.");
-			
-			throwBtn.setEnabled(true);
-			
-			int xBig = (int)(Math.floor((double)(currentPokemon.getId()-1)%10)*POKEIMGBIGWIDTH);
-			int yBig = (int)(Math.floor((double)(currentPokemon.getId()-1)/10)*POKEIMGBIGHEIGHT);
-			pokemonImgDisplay = new ImageIcon (allPokemonBig.getSubimage(xBig, yBig, POKEIMGBIGWIDTH, POKEIMGBIGHEIGHT));
-			imgContainerLabel.setIcon(pokemonImgDisplay);
-				
+			updateWildPokemon();
+					
 			displayEvent("A wild " + currentPokemon.getNameSpecies()+ " appeared!");
 			
 			stepsToSpawn = calcSteps();
@@ -172,6 +173,7 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 		pokemonWeightDisplay.setText(" ");
 
 		throwBtn.setEnabled(false);
+		evolveBtn.setEnabled(false);
 
 		int xBig = (int)(Math.floor((double)(151)%10)*POKEIMGBIGWIDTH);
 		int yBig = (int)(Math.floor((double)(151)/10)*POKEIMGBIGHEIGHT);
@@ -221,6 +223,36 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 		}
 	}
 	
+	public void evolveBtnPress(){
+		String pastName = currentPokemon.getNameSpecies();
+		boolean couldEvolve = currentPokemon.evolve();
+		
+		if (couldEvolve){
+			evolveBtn.setEnabled(false);
+			updateWildPokemon();
+			displayEvent(pastName + " evolved to a " + currentPokemon.getNameSpecies() + "!");
+		}else{
+			displayEvent(currentPokemon.getNameSpecies() + " couldn't evolve!");
+		}
+	}
+	
+	public void updateWildPokemon(){
+			
+		pokemonNameDisplay.setText(currentPokemon.getNameSpecies());
+		pokemonHeightDisplay.setText(currentPokemon.getHeight() + " m.");
+		pokemonWeightDisplay.setText(currentPokemon.getWeight() + " kg.");
+
+		throwBtn.setEnabled(true);
+		if (currentPokemon.getCanEvolve()){
+			evolveBtn.setEnabled(true);
+		}
+
+		int xBig = (int)(Math.floor((double)(currentPokemon.getId()-1)%10)*POKEIMGBIGWIDTH);
+		int yBig = (int)(Math.floor((double)(currentPokemon.getId()-1)/10)*POKEIMGBIGHEIGHT);
+		pokemonImgDisplay = new ImageIcon (allPokemonBig.getSubimage(xBig, yBig, POKEIMGBIGWIDTH, POKEIMGBIGHEIGHT));
+		imgContainerLabel.setIcon(pokemonImgDisplay);
+	}
+	
 	public void updateTeamImg(){
 		for (int i = 0; i < player.getEquipo().length; i++) {
 			if (i < player.getNumPokemonTeam()){
@@ -245,6 +277,8 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 			walkBtnPress();
 		}else if (e.getSource() == throwBtn){
 			throwBtnPress();
+		}else if (e.getSource() == evolveBtn){
+			evolveBtnPress();
 		}
 	}
 	

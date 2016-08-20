@@ -33,7 +33,7 @@ public class Item {
 		this.id = id;
 		this.amount = 1;
 		
-		boolean couldCreate = readInfo( id );
+		boolean couldCreate = readInfo( this.id );
 		
 		if (!couldCreate){
 			System.err.println("Could not find item with id " + id + ".");
