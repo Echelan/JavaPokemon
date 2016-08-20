@@ -25,10 +25,10 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
     /**
      * @param args the command line arguments
      */
-	static private int POKEIMGBIGWIDTH = 160;
-	static private int POKEIMGBIGHEIGHT = 160;
-	static private int POKEIMGSMALLWIDTH = 40;
-	static private int POKEIMGSMALLHEIGHT = 40;
+	static final private int POKEIMGBIGWIDTH = 160;
+	static final private int POKEIMGBIGHEIGHT = 160;
+	static final private int POKEIMGSMALLWIDTH = 40;
+	static final private int POKEIMGSMALLHEIGHT = 40;
     
     private Pokemon currentPokemon;
     private final JTextField pokemonNameDisplay;

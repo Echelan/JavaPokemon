@@ -6,15 +6,10 @@
 package pokemonviolet;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import jdk.nashorn.internal.objects.NativeArray;
 
 /**
  * @author Andres
@@ -82,7 +77,6 @@ public class Pokemon {
 			System.err.println("Could not find Pokemon with id " + id + ".");
 		}
 	}
-	
 	
 	public Pokemon(int id) {
 		this.id = id;

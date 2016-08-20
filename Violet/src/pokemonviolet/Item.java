@@ -6,14 +6,9 @@
 package pokemonviolet;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -114,6 +109,10 @@ public class Item {
 		return success;
 	}
 
+	public String getNameInternal() {
+		return nameInternal;
+	}
+
 	private int getItemID(String internalName){
 		int id = 0;
 		File archivo = new File("listItems.txt");
@@ -144,4 +143,48 @@ public class Item {
 		return id;
 	}
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	public String getNameSingular() {
+		return nameSingular;
+	}
+
+	public String getNamePlural() {
+		return namePlural;
+	}
+
+	public int getPocket() {
+		return pocket;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public int getUseOutBattle() {
+		return useOutBattle;
+	}
+
+	public int getUseInBattle() {
+		return useInBattle;
+	}
+
+	public int getPokeRate() {
+		return pokeRate;
+	}
+
+	public int getAmount() {
+		return amount;
+	}
+
 }
