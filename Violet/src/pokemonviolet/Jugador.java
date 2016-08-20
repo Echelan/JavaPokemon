@@ -24,25 +24,34 @@ public class Jugador {
 	private int numPokemonPC;
 
 	public Jugador(String name, Pokemon starter) {
-		this.equipo = new Pokemon[6];
-		this.equipo[0] = starter;
+		setBasics();
 		this.name = name;
-		this.PC = new Pokemon[200];
-		this.dinero = 0;
-		this.pocketBalls = new Item[100];
-		this.pocketBattles = new Item[100];
-		this.pocketItems = new Item[100];
-		this.pocketKeys = new Item[100];
-		this.pocketMachines = new Item[100];
-		this.pocketMeds = new Item[100];
+		this.equipo[0] = starter;
 		this.numPokemonTeam = 1;
-		this.numPokemonPC = 0;
 	}
 
 	public Jugador(String name, int starterID) {
-		this.equipo = new Pokemon[6];
-		this.equipo[0] = new Pokemon(starterID);
+		setBasics();
 		this.name = name;
+		this.equipo[0] = new Pokemon(starterID);
+		this.numPokemonTeam = 1;
+	}
+
+	public Jugador(String name) {
+		setBasics();
+		this.name = name;
+		this.numPokemonTeam = 0;
+	}
+
+	public Jugador(String name, String internalName) {
+		setBasics();
+		this.name = name;
+		this.equipo[0] = new Pokemon(internalName);
+		this.numPokemonTeam = 1;
+	}
+	
+	private void setBasics(){
+		this.equipo = new Pokemon[6];
 		this.PC = new Pokemon[200];
 		this.dinero = 0;
 		this.pocketBalls = new Item[100];
@@ -51,7 +60,6 @@ public class Jugador {
 		this.pocketKeys = new Item[100];
 		this.pocketMachines = new Item[100];
 		this.pocketMeds = new Item[100];
-		this.numPokemonTeam = 1;
 		this.numPokemonPC = 0;
 	}
 

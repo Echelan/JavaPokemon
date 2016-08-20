@@ -152,7 +152,8 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 		stepsToSpawn = stepsToSpawn - 1;
 		if (stepsToSpawn == 0){
 			Random rnd = new Random();
-				currentPokemon = new Pokemon(rnd.nextInt(150)+1);
+			currentPokemon = new Pokemon(rnd.nextInt(150)+1);
+			
 			
 			updateWildPokemon();
 					
