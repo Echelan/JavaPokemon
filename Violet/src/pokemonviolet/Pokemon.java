@@ -100,34 +100,7 @@ public class Pokemon {
 		boolean success = false;
 		
 		int limite = 0;
-	//	String[] pokeinfo = new String[NUMATTRIB];
-	  /*
-        File archivo = new File("listPokemon.txt");
-		try {
-			Scanner eyes = new Scanner(archivo);
-			boolean foundPokemon = false;
-			while (eyes.hasNextLine() && foundPokemon == false) {
-				String thisline = eyes.nextLine();
-				if ( thisline.matches("\\[\\d*\\]") ){
-					if (Integer.parseInt(thisline.substring(1, thisline.length()-1)) == id ){
-						foundPokemon = true;
-					}
-				}
-			}
-			if (foundPokemon == true){
-				boolean endInfo = false;
-				while (eyes.hasNextLine() && endInfo == false) {
-					String thisline = eyes.nextLine();
-					if ( thisline.matches("\\[\\d*\\]") ){
-
-						endInfo = true;
-					}else{
-						pokeinfo[ limite ] = thisline;
-						limite++;
-					}
-				}
-		*/
-		File archivo = new File("pokeDexOrganized.txt");
+		File archivo = new File("listPokemon.txt");
 		try{
 			List<String> lines = Files.readAllLines(archivo.toPath());
 			String[] pokeinfo = lines.get(id-1).split(";");
@@ -287,29 +260,7 @@ public class Pokemon {
 	
 	private int getPokemonID(String internalName){
 		int id = 0;
-	//	System.out.println("Searching for " + internalName + "...");
-	/*
 		File archivo = new File("listPokemon.txt");
-		try {
-			Scanner eyes = new Scanner(archivo);
-			boolean foundPokemon = false;
-			while (eyes.hasNextLine() && foundPokemon == false) {
-				String thisline = eyes.nextLine();
-				if ( thisline.matches("\\[\\d*\\]") ){
-					id = Integer.parseInt(thisline.substring(1, thisline.length()-1));
-				}else if (thisline.split("=")[0].compareTo("InternalName") == 0){
-					if (thisline.split("=")[1].compareTo(internalName) == 0){
-						foundPokemon = true;
-					}
-				}
-			}
-			if (!foundPokemon){
-				id = 0;
-			}
-		}catch (FileNotFoundException ex) {
-		}
-		*/
-		File archivo = new File("pokeDexOrganized.txt");
 		try{
 			boolean foundPokemon = false;
 			List<String> lines = Files.readAllLines(archivo.toPath());
