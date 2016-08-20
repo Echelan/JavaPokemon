@@ -99,7 +99,6 @@ public class Pokemon {
 	private boolean readInfo(int id){
 		boolean success = false;
 		
-		int limite = 0;
 		File archivo = new File("listPokemon.txt");
 		try{
 			List<String> lines = Files.readAllLines(archivo.toPath());
