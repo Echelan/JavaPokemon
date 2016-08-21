@@ -331,6 +331,10 @@ public class Pokemon {
 		}
 		return success;
 	}
+
+	public String getColor() {
+		return color;
+	}
 	
 	public String getNameSpecies() {
 		return nameSpecies;
