@@ -26,7 +26,7 @@ public class Item {
 	private String description;
 	private int useOutBattle;
 	private int useInBattle;
-	private int pokeRate; 
+	private double pokeRate; 
 	private int amount;
 
 	public Item(int id) {
@@ -99,7 +99,7 @@ public class Item {
 				}else if (partes[0].compareTo("useInBattle")==0){
 					this.useInBattle = Integer.parseInt(partes[1]);
 				}else if (partes[0].compareTo("pokeRate")==0){
-					this.pokeRate = Integer.parseInt(partes[1]);
+					this.pokeRate = Double.parseDouble(partes[1]);
 				}
 			}
 			success = true;
@@ -137,9 +137,13 @@ public class Item {
 				}
 				id = id + 1;
 			}
+			if (!foundItem){
+				System.err.println("Could not find item " + internalName + ".");
+			}
 		} catch (IOException ex) {
 		}
-			
+		
+		
 		return id;
 	}
 	
@@ -179,7 +183,7 @@ public class Item {
 		return useInBattle;
 	}
 
-	public int getPokeRate() {
+	public double getPokeRate() {
 		return pokeRate;
 	}
 

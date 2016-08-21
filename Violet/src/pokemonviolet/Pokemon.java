@@ -16,10 +16,10 @@ import java.util.Random;
  */
 public class Pokemon {
 	// 'GLOBAL'
-	static int NUMATTRIB = 40;
+	static final private int NUMATTRIB = 40;
 	
     private int id;
-	private boolean isShiny;
+	private final boolean isShiny;
 	private String nameSpecies;
 	private String nameInternal;
 	private String kind;
@@ -49,7 +49,6 @@ public class Pokemon {
 	
 	private String height;
 	private String weight;
-//	private String genderRate;
 	
 	private int numEvols;
 	private String[] evolvesInto;
@@ -61,6 +60,7 @@ public class Pokemon {
 	// 'LOCAL'
 	private String gender;
 	private String nameNick;
+	private String ballType;
 //	int experience;
 //	int[] stats;
 //	int level;
@@ -70,6 +70,7 @@ public class Pokemon {
 		this.id = getPokemonID(nameInternal);
 		this.isShiny = false;
 		this.gender = "TBD";
+		this.ballType = "POKEBALL";
 		
 		boolean couldCreate = readInfo( this.id );
 		
@@ -82,6 +83,34 @@ public class Pokemon {
 		this.id = id;
 		this.isShiny = false;
 		this.gender = "TBD";
+		this.ballType = "POKEBALL";
+		
+		boolean couldCreate = readInfo( this.id );
+		
+		if (!couldCreate){
+			System.err.println("Could not find Pokemon with id " + id + ".");
+		}
+	}
+
+	public Pokemon(String nameInternal, String ballType) {
+		this.nameInternal = nameInternal;
+		this.id = getPokemonID(nameInternal);
+		this.isShiny = false;
+		this.gender = "TBD";
+		this.ballType = ballType;
+		
+		boolean couldCreate = readInfo( this.id );
+		
+		if (!couldCreate){
+			System.err.println("Could not find Pokemon with id " + id + ".");
+		}
+	}
+	
+	public Pokemon(int id, String ballType) {
+		this.id = id;
+		this.isShiny = false;
+		this.gender = "TBD";
+		this.ballType = ballType;
 		
 		boolean couldCreate = readInfo( this.id );
 		
@@ -222,14 +251,14 @@ public class Pokemon {
 		return success;
 	}
 	
-	private double calcAlpha() {
+	private double calcAlpha(double bonusball) {
 		// MADE UP VALUES
 		Random rnd = new Random();
 		int HPpercent = rnd.nextInt(99)+1;
 		int HPmax = this.baseHP;
 		double HPcurrent = this.baseHP * (HPpercent/100);
 		int rate = this.catchRate;
-		int bonusball = 1;
+		
 		double bonusstatus= (rnd.nextInt(2)+2)/2;
 		
 		double alpha = ((((3 * HPmax) - (2 * HPcurrent)) * rate * bonusball)/(3*HPmax))*bonusstatus;
@@ -237,11 +266,11 @@ public class Pokemon {
 		return alpha;
 	}
 	
-	public boolean tryCatch(){
+	public boolean tryCatch(double bonusball){
 		boolean shakeCheck = false;
 		Random rnd = new Random();
 		
-		double alpha = calcAlpha();
+		double alpha = calcAlpha(bonusball);
 		
 		double beta = 1048560/Math.sqrt(Math.sqrt(16711680/alpha));
 		if (beta > rnd.nextInt(65535)) {
@@ -275,6 +304,9 @@ public class Pokemon {
 					}
 				}
 				id = id + 1;
+			}
+			if (!foundPokemon){
+				System.err.println("Could not find pokemon " + internalName + ".");
 			}
 		} catch (IOException ex) {
 		}
@@ -318,6 +350,14 @@ public class Pokemon {
 
 	public String getPokeEntry() {
 		return pokeEntry;
+	}
+
+	public String getBallType() {
+		return ballType;
+	}
+
+	public void setBallType(String ballType) {
+		this.ballType = ballType;
 	}
 
 	public String getHeight() {

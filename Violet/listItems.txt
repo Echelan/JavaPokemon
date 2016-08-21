@@ -1,4 +1,4 @@
-1;internalName=REPEL;nameSingular=Repel;namePlural=Repels;pocket=1;price=350;description="An item that prevents weak wild Pokémon from appearing for 100 steps after its use.";useOutBattle=2;useInBattle=0;pokeRate=0;
+﻿1;internalName=REPEL;nameSingular=Repel;namePlural=Repels;pocket=1;price=350;description="An item that prevents weak wild Pokémon from appearing for 100 steps after its use.";useOutBattle=2;useInBattle=0;pokeRate=0;
 2;internalName=SUPERREPEL;nameSingular=Super Repel;namePlural=Super Repels;pocket=1;price=500;description="An item that prevents weak wild Pokémon from appearing for 200 steps after its use.";useOutBattle=2;useInBattle=0;pokeRate=0;
 3;internalName=MAXREPEL;nameSingular=Max Repel;namePlural=Max Repels;pocket=1;price=700;description="An item that prevents weak wild Pokémon from appearing for 250 steps after its use.";useOutBattle=2;useInBattle=0;pokeRate=0;
 4;internalName=ESCAPEROPE;nameSingular=Escape Rope;namePlural=Escape Ropes;pocket=1;price=550;description="A long and durable rope. Use it to escape instantly from a cave or a dungeon.";useOutBattle=2;useInBattle=0;pokeRate=0;

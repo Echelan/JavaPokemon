@@ -276,7 +276,7 @@ public class Jugador {
 			break;
 		}
 		
-		for (int i = 0; i < pocket.length; i++) {
+		for (int i = 0; i < pocketCap; i++) {
 			if (pocket[i].getId() == id){
 				pocket[i].setAmount(pocket[i].getAmount()+1);
 				success = true;
@@ -324,7 +324,7 @@ public class Jugador {
 			break;
 		}
 		
-		for (int i = 0; i < pocket.length; i++) {
+		for (int i = 0; i < pocketCap; i++) {
 			if (pocket[i].getId() == item.getId()){
 				pocket[i].setAmount(pocket[i].getAmount()+1);
 				success = true;
@@ -334,6 +334,189 @@ public class Jugador {
 		if (!success){
 			pocket[pocketCap] = item;
 			pocketCap = pocketCap + 1;
+		}
+		
+		return success;
+	}
+	
+	public boolean addItem(int id, int amount){
+		boolean success = false;
+		Item[] pocket = null;
+		int pocketCap = 0;
+		Item item = new Item(id, amount);
+		
+		switch(item.getPocket()){
+			case 1:
+				pocket = this.pocketItems;
+				pocketCap = this.numItems;
+			break;
+			case 2:
+				pocket = this.pocketMeds;
+				pocketCap = this.numMeds;
+			break;
+			case 3:
+				pocket = this.pocketBalls;
+				pocketCap = this.numBalls;
+			break;
+			case 4:
+				pocket = this.pocketMachines;
+				pocketCap = this.numMachines;
+			break;
+			case 7:
+				pocket = this.pocketBattles;
+				pocketCap = this.numBattles;
+			break;
+			case 8:
+				pocket = this.pocketKeys;
+				pocketCap = this.numKeys;
+			break;
+		}
+		
+		for (int i = 0; i < pocketCap; i++) {
+			if (pocket[i].getId() == id){
+				pocket[i].setAmount(pocket[i].getAmount() + item.getAmount());
+				success = true;
+			}
+		}
+		
+		if (!success){
+			pocket[pocketCap] = item;
+			pocketCap = pocketCap + 1;
+		}
+		
+		return success;
+	}
+	
+	public boolean addItem(String internalName, int amount){
+		boolean success = false;
+		Item[] pocket = null;
+		int pocketCap = 0;
+		Item item = new Item(internalName, amount);
+		
+		switch(item.getPocket()){
+			case 1:
+				pocket = this.pocketItems;
+				pocketCap = this.numItems;
+			break;
+			case 2:
+				pocket = this.pocketMeds;
+				pocketCap = this.numMeds;
+			break;
+			case 3:
+				pocket = this.pocketBalls;
+				pocketCap = this.numBalls;
+			break;
+			case 4:
+				pocket = this.pocketMachines;
+				pocketCap = this.numMachines;
+			break;
+			case 7:
+				pocket = this.pocketBattles;
+				pocketCap = this.numBattles;
+			break;
+			case 8:
+				pocket = this.pocketKeys;
+				pocketCap = this.numKeys;
+			break;
+		}
+		
+		for (int i = 0; i < pocketCap; i++) {
+			if (pocket[i].getId() == item.getId()){
+				pocket[i].setAmount(pocket[i].getAmount()+ item.getAmount());
+				success = true;
+			}
+		}
+		
+		if (!success){
+			System.out.println("Added " + item.getNameSingular() + ".");
+			pocket[pocketCap] = item;
+			pocketCap = pocketCap + 1;
+		}
+		
+		return success;
+	}
+	
+	public boolean subItem(int id){
+		boolean success = false;
+		Item[] pocket = null;
+		int pocketCap = 0;
+		Item item = new Item(id);
+		
+		switch(item.getPocket()){
+			case 1:
+				pocket = this.pocketItems;
+				pocketCap = this.numItems;
+			break;
+			case 2:
+				pocket = this.pocketMeds;
+				pocketCap = this.numMeds;
+			break;
+			case 3:
+				pocket = this.pocketBalls;
+				pocketCap = this.numBalls;
+			break;
+			case 4:
+				pocket = this.pocketMachines;
+				pocketCap = this.numMachines;
+			break;
+			case 7:
+				pocket = this.pocketBattles;
+				pocketCap = this.numBattles;
+			break;
+			case 8:
+				pocket = this.pocketKeys;
+				pocketCap = this.numKeys;
+			break;
+		}
+		
+		for (int i = 0; i < pocketCap; i++) {
+			if (pocket[i].getId() == id){
+				pocket[i].setAmount(pocket[i].getAmount()-1);
+				success = true;
+			}
+		}
+		
+		return success;
+	}
+	
+	public boolean subItem(String internalName){
+		boolean success = false;
+		Item[] pocket = null;
+		int pocketCap = 0;
+		Item item = new Item(internalName);
+		
+		switch(item.getPocket()){
+			case 1:
+				pocket = this.pocketItems;
+				pocketCap = this.numItems;
+			break;
+			case 2:
+				pocket = this.pocketMeds;
+				pocketCap = this.numMeds;
+			break;
+			case 3:
+				pocket = this.pocketBalls;
+				pocketCap = this.numBalls;
+			break;
+			case 4:
+				pocket = this.pocketMachines;
+				pocketCap = this.numMachines;
+			break;
+			case 7:
+				pocket = this.pocketBattles;
+				pocketCap = this.numBattles;
+			break;
+			case 8:
+				pocket = this.pocketKeys;
+				pocketCap = this.numKeys;
+			break;
+		}
+		
+		for (int i = 0; i < pocketCap; i++) {
+			if (pocket[i].getId() == item.getId()){
+				pocket[i].setAmount(pocket[i].getAmount()-1);
+				success = true;
+			}
 		}
 		
 		return success;
