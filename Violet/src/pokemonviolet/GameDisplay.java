@@ -23,17 +23,17 @@ public class GameDisplay extends Canvas {
 	BufferedImage playerSprite;
 	
 	
+//	public GameDisplay(GraphicsConfiguration gc) {
 	public GameDisplay() {
+	//	super(gc);
 		try {
 			playerSprite = ImageIO.read(new File("player.png"));
 		} catch (IOException ex) {
 		}
-		//super(gc);
 	}
 	
 	public void paint(Graphics g){
 		g.drawImage(playerSprite, 100, 100, this);
-		
 	}
 	
 }

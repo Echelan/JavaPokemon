@@ -39,6 +39,7 @@ public final class Player {
 	// MOVEMENT
 	private int x, y;
 	private boolean left, right, up, down;
+	private boolean isRunning;
 	
 	
 	public Player(String name, Pokemon starter) {
@@ -418,6 +419,10 @@ public final class Player {
 
 	public void setDown(boolean down) {
 		this.down = down;
+	}
+
+	public void setIsRunning(boolean isRunning) {
+		this.isRunning = isRunning;
 	}
 
 	public int getX() {

@@ -76,35 +76,30 @@ public class Item {
 	private boolean readInfo(int id){
 		boolean success = false;
 		
-		File archivo = new File("listItems.txt");
-		try{
-			List<String> lines = Files.readAllLines(archivo.toPath());
-			String[] iteminfo = lines.get(id-1).split(";");
-			for (int i = 0; i < NUMATTRIB; i++){
-				String[] partes = iteminfo[i].split("=");
-				if (partes[0].compareTo("internalName")==0){
-					this.nameInternal = partes[1];
-				}else if (partes[0].compareTo( "nameSingular" )==0){
-					this.nameSingular = partes[1];
-				}else if (partes[0].compareTo("namePlural")==0){
-					this.namePlural = partes[1];
-				}else if (partes[0].compareTo("pocket")==0){
-					this.pocket = Integer.parseInt(partes[1]);
-				}else if (partes[0].compareTo("price")==0){
-					this.price = Integer.parseInt(partes[1]);
-				}else if (partes[0].compareTo("description")==0){
-					this.description = partes[1];
-				}else if (partes[0].compareTo("useOutBattle")==0){
-					this.useOutBattle = Integer.parseInt(partes[1]);
-				}else if (partes[0].compareTo("useInBattle")==0){
-					this.useInBattle = Integer.parseInt(partes[1]);
-				}else if (partes[0].compareTo("pokeRate")==0){
-					this.pokeRate = Double.parseDouble(partes[1]);
-				}
+		String[] iteminfo = Game.INFOITEMS.get(id-1).split(";");
+		for (int i = 0; i < NUMATTRIB; i++){
+			String[] partes = iteminfo[i].split("=");
+			if (partes[0].compareTo("internalName")==0){
+				this.nameInternal = partes[1];
+			}else if (partes[0].compareTo( "nameSingular" )==0){
+				this.nameSingular = partes[1];
+			}else if (partes[0].compareTo("namePlural")==0){
+				this.namePlural = partes[1];
+			}else if (partes[0].compareTo("pocket")==0){
+				this.pocket = Integer.parseInt(partes[1]);
+			}else if (partes[0].compareTo("price")==0){
+				this.price = Integer.parseInt(partes[1]);
+			}else if (partes[0].compareTo("description")==0){
+				this.description = partes[1];
+			}else if (partes[0].compareTo("useOutBattle")==0){
+				this.useOutBattle = Integer.parseInt(partes[1]);
+			}else if (partes[0].compareTo("useInBattle")==0){
+				this.useInBattle = Integer.parseInt(partes[1]);
+			}else if (partes[0].compareTo("pokeRate")==0){
+				this.pokeRate = Double.parseDouble(partes[1]);
 			}
-			success = true;
-		} catch (IOException ex) {
 		}
+		success = true;
 		
 		return success;
 	}
@@ -115,32 +110,29 @@ public class Item {
 
 	private int getItemID(String internalName){
 		int id = 0;
-		File archivo = new File("listItems.txt");
-		try{
-			boolean foundItem = false;
-			List<String> lines = Files.readAllLines(archivo.toPath());
-			
-			while (foundItem == false){
-				String[] iteminfo = lines.get(id).split(";");
-				int attribComp = 0;
-				while (attribComp < NUMATTRIB && foundItem == false){
-					String[] partes = iteminfo[attribComp].split("=");
-					if (partes[0].compareTo("internalName")==0){
-						if (partes[1].compareTo(internalName)==0){
-							foundItem = true;
-						}else{
-							attribComp = attribComp + 100;
-						}
+		
+		boolean foundItem = false;
+		List<String> lines = Game.INFOITEMS;
+
+		while (foundItem == false){
+			String[] iteminfo = lines.get(id).split(";");
+			int attribComp = 0;
+			while (attribComp < NUMATTRIB && foundItem == false){
+				String[] partes = iteminfo[attribComp].split("=");
+				if (partes[0].compareTo("internalName")==0){
+					if (partes[1].compareTo(internalName)==0){
+						foundItem = true;
 					}else{
-						attribComp = attribComp + 1;
+						attribComp = attribComp + 100;
 					}
+				}else{
+					attribComp = attribComp + 1;
 				}
-				id = id + 1;
 			}
-			if (!foundItem){
-				System.err.println("Could not find item " + internalName + ".");
-			}
-		} catch (IOException ex) {
+			id = id + 1;
+		}
+		if (!foundItem){
+			System.err.println("Could not find item " + internalName + ".");
 		}
 		
 		

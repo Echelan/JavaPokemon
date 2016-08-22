@@ -5,6 +5,10 @@
  */
 package pokemonviolet;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
 import java.util.Random;
 
 
@@ -13,6 +17,11 @@ import java.util.Random;
  * @author Andres
  */
 public class Game {
+	
+	public static List<String> INFOPOKEMON;
+	public static List<String> INFOITEMS;
+	public static List<String> INFOMOVES;
+	public static List<String> INFOTYPES;
 	
 	public static Player player;
 	public static int stepsToSpawn = calcSteps();;
@@ -24,13 +33,39 @@ public class Game {
 		
 		SplashWindow splash = new SplashWindow();
 		
+		List<String> readInfoP = null;
+		List<String> readInfoI = null;
+		List<String> readInfoM = null;
+		List<String> readInfoT = null;
+		try {
+			File archivo = new File("listPokemon.txt");
+			readInfoP = Files.readAllLines(archivo.toPath());
+			
+			archivo = new File("listItems.txt");
+			readInfoI = Files.readAllLines(archivo.toPath());
+			
+			archivo = new File("listMoves.txt");
+			readInfoM = Files.readAllLines(archivo.toPath());
+			
+			archivo = new File("listTypes.txt");
+			readInfoT = Files.readAllLines(archivo.toPath());
+		} catch (IOException ex) {
+			System.err.println("Couldn't load files!");
+			System.exit(0);
+		}
+		
+		INFOITEMS = readInfoI;
+		INFOPOKEMON = readInfoP;
+		INFOMOVES = readInfoM;
+		INFOTYPES = readInfoT;
+				
+		
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException ex) {
-		//	Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		
-	//	splash.setVisible(false);
+		splash.setVisible(false);
 		splash = null;
 		
 		player = new Player ("Red",1);

@@ -7,6 +7,7 @@ package pokemonviolet;
 
 
 import java.awt.Color;
+import java.awt.GraphicsConfiguration;
 import java.awt.event.*;
 import javax.swing.*;
 
