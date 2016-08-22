@@ -354,10 +354,10 @@ public class Pokemon {
 					}
 				}
 			}
-			updateStats();
-			this.curHP = this.statHP;
-			success = true;
 		}
+		updateStats();
+		this.curHP = this.statHP;
+		success = true;
 		
 		return success;
 	}
@@ -515,6 +515,7 @@ public class Pokemon {
 		this.statSpAtk = (((2 * this.baseSpAtk + this.IVSpAtk + (this.EVSpAtk/4))*this.level)/100)+5;
 		this.statSpDef = (((2 * this.baseSpDef + this.IVSpDef + (this.EVSpDef/4))*this.level)/100)+5;
 		this.statSpeed = (((2 * this.baseSpeed + this.IVSpeed + (this.EVSpeed/4))*this.level)/100)+5;
+		
 		switch(this.growthRate){
 			case "Parabolic":
 				this.maxEXP = (6/5*(this.level^3)) - (15*(this.level^2)) + (100*this.level) - 140;
