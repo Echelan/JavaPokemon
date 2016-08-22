@@ -102,6 +102,7 @@ public class Pokemon {
 		this.level = 0;
 		this.ballType = "POKEBALL";
 		this.isWild = true;
+		this.status="";
 		
 		Random rnd = new Random();
 		
@@ -134,6 +135,7 @@ public class Pokemon {
 		this.level = 0;
 		this.ballType = "POKEBALL";
 		this.isWild = true;
+		this.status="";
 		
 		boolean couldCreate = readInfo( this.id );
 		
