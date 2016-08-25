@@ -5,7 +5,6 @@
  */
 package pokemonviolet;
 
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -13,111 +12,109 @@ import java.util.Random;
  * @author Andres
  */
 public class PokemonMove {
-	static final private int NUMATTRIB = 13;
-	
-	private final int id;
-    private String nameDisplay;
-    private String nameInternal;
-    private PokemonType type;
-	private String description;
-	private String category;	
-    private int PP;
-    private int PPMax;
-	private int dmgBase;
-	private int numDice;
-	private int numSides;
-	private int accuracy;
-	private String flags;
+        static final private int NUMATTRIB = 13;
 
-  public PokemonMove(int id){
-	this.id = id;
-	
-	boolean couldCreate = readInfo( this.id );
+        private final int id;
+        private String nameDisplay;
+        private String nameInternal;
+        private PokemonType type;
+        private String description;
+        private String category;	
+        private int PP;
+        private int PPMax;
+        private int dmgBase;
+        private int numDice;
+        private int numSides;
+        private int accuracy;
+        private String flags;
 
-	if (!couldCreate){
-		System.err.println("Could not find Move with id " + id + ".");
-	}
-  }
+        public PokemonMove(int id){
+            this.id = id;
+
+            boolean couldCreate = readInfo( this.id );
+
+            if (!couldCreate){
+                    System.err.println("Could not find Move with id " + id + ".");
+            }
+        }
+
+        public PokemonMove(String nameInternal){
+            this.nameInternal = nameInternal;
+            this.id = getMoveID(nameInternal);
+
+            boolean couldCreate = readInfo( this.id );
+
+            if (!couldCreate){
+                    System.err.println("Could not find Move with id " + id + ".");
+            }
+        }
   
-  public PokemonMove(String nameInternal){
-	this.nameInternal = nameInternal;
-	this.id = getMoveID(nameInternal);
+        private boolean readInfo(int id){
+                boolean success = false;
 
-	boolean couldCreate = readInfo( this.id );
+                String[] iteminfo = Game.INFOMOVES.get(id-1).split(";");
+                for (int i = 0; i < NUMATTRIB; i++){
+                        String[] partes = iteminfo[i].split("=");
+                        if (partes[0].compareTo("internalName")==0){
+                                this.nameInternal = partes[1];
+                        }else if (partes[0].compareTo("displayName")==0){
+                                this.nameDisplay = partes[1];
+                        }else if (partes[0].compareTo("basePower")==0){
+                                this.dmgBase = Integer.parseInt(partes[1]);
+                        }else if (partes[0].compareTo("code")==0){
+                //		this.dmgBase = Integer.parseInt(partes[1]);
+                        }else if (partes[0].compareTo("type")==0){
+                //		this.dmgBase = Integer.parseInt(partes[1]);
+                        }else if (partes[0].compareTo("category")==0){
+                                this.category = partes[1];
+                        }else if (partes[0].compareTo("description")==0){
+                                this.description = partes[1];
+                        }else if (partes[0].compareTo("accuracy")==0){
+                                this.accuracy = Integer.parseInt(partes[1]);
+                        }else if (partes[0].compareTo("totalPP")==0){
+                                this.PPMax = Integer.parseInt(partes[1]);
+                        }else if (partes[0].compareTo("effectChance")==0){
+                //		this.dmgBase = Integer.parseInt(partes[1]);
+                        }else if (partes[0].compareTo("target")==0){
+                //		this.dmgBase = Integer.parseInt(partes[1]);
+                        }else if (partes[0].compareTo("priority")==0){
+                //		this.dmgBase = Integer.parseInt(partes[1]);
+                        }else if (partes[0].compareTo("flags")==0){
+                                this.flags = partes[1];
+                        }
+                }
+                success = true;
 
-	if (!couldCreate){
-		System.err.println("Could not find Move with id " + id + ".");
-	}
-  }
-  
-	private boolean readInfo(int id){
-		boolean success = false;
-		
-		String[] iteminfo = Game.INFOMOVES.get(id-1).split(";");
-		for (int i = 0; i < NUMATTRIB; i++){
-			String[] partes = iteminfo[i].split("=");
-			if (partes[0].compareTo("internalName")==0){
-				this.nameInternal = partes[1];
-			}else if (partes[0].compareTo("displayName")==0){
-				this.nameDisplay = partes[1];
-			}else if (partes[0].compareTo("basePower")==0){
-				this.dmgBase = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("code")==0){
-		//		this.dmgBase = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("type")==0){
-		//		this.dmgBase = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("category")==0){
-				this.category = partes[1];
-			}else if (partes[0].compareTo("description")==0){
-				this.description = partes[1];
-			}else if (partes[0].compareTo("accuracy")==0){
-				this.accuracy = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("totalPP")==0){
-				this.PPMax = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("effectChance")==0){
-		//		this.dmgBase = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("target")==0){
-		//		this.dmgBase = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("priority")==0){
-		//		this.dmgBase = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("flags")==0){
-				this.flags = partes[1];
-			}
-		}
-		success = true;
-		
-		return success;
-	}
+                return success;
+        }
 
 	private int getMoveID(String internalName){
-		int id = 0;
-		
-		boolean foundItem = false;
-		List<String> lines = Game.INFOMOVES;
+            int id = 0;
+            boolean foundMove = false;
+            System.out.println("Searching for " + internalName);
+            while (foundMove == false && id < Game.INFOMOVES.size()){
+                String[] moveinfo = Game.INFOMOVES.get(id).split(";");
+                int attribComp = 0;
+                while (attribComp < NUMATTRIB && foundMove == false){
+                        String[] partes = moveinfo[attribComp].split("=");
+                        if (partes[0].compareTo("internalName")==0){
+                            if (partes[1].compareTo(internalName)==0){
+                                foundMove = true;
+                            }else{
+                                attribComp = attribComp + 100;
+                            }
+                        }else{
+                            attribComp = attribComp + 1;
+                        }
+                }
+                id = id + 1;
+            }
+            if (!foundMove){
+                System.err.println("Could not find move " + internalName + ".");
+            }
 
-		while (foundItem == false){
-			String[] iteminfo = lines.get(id).split(";");
-			int attribComp = 0;
-			while (attribComp < NUMATTRIB && foundItem == false){
-				String[] partes = iteminfo[attribComp].split("=");
-				if (partes[0].compareTo("internalName")==0){
-					if (partes[1].compareTo(internalName)==0){
-						foundItem = true;
-					}else{
-						attribComp = attribComp + 100;
-					}
-				}else{
-					attribComp = attribComp + 1;
-				}
-			}
-			id = id + 1;
-		}
-		if (!foundItem){
-			System.err.println("Could not find item " + internalName + ".");
-		}
-		
-		
-		return id;
+
+            return id;
 	}
   
 	public int calcDaño(){

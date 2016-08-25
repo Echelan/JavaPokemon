@@ -5,10 +5,6 @@
  */
 package pokemonviolet;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -413,10 +409,9 @@ public class Pokemon {
 	private int getPokemonID(String internalName){
 		int id = 0;
 		boolean foundPokemon = false;
-		List<String> lines = Game.INFOPOKEMON;
 
-		while (foundPokemon == false){
-			String[] pokeinfo = lines.get(id).split(";");
+		while (foundPokemon == false && id < Game.INFOPOKEMON.size()){
+			String[] pokeinfo = Game.INFOPOKEMON.get(id).split(";");
 			int attribComp = 0;
 			while (attribComp < NUMATTRIB && foundPokemon == false){
 				String[] partes = pokeinfo[attribComp].split("=");

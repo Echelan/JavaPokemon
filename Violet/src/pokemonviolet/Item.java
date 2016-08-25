@@ -5,11 +5,6 @@
  */
 package pokemonviolet;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.List;
-
 /**
  *
  * @author Andres
@@ -112,10 +107,9 @@ public class Item {
 		int id = 0;
 		
 		boolean foundItem = false;
-		List<String> lines = Game.INFOITEMS;
 
-		while (foundItem == false){
-			String[] iteminfo = lines.get(id).split(";");
+		while (foundItem == false && id < Game.INFOITEMS.size()){
+			String[] iteminfo = Game.INFOITEMS.get(id).split(";");
 			int attribComp = 0;
 			while (attribComp < NUMATTRIB && foundItem == false){
 				String[] partes = iteminfo[attribComp].split("=");
