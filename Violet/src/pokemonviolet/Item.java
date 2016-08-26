@@ -10,23 +10,61 @@ package pokemonviolet;
  * @author Andres
  */
 public class Item {
-	static int NUMATTRIB = 10;
 	
-    private int id;
-	private String nameSingular;
-	private String namePlural;
-	private String nameInternal;
-	private int pocket;
-	private int price;
-	private String description;
-	private int useOutBattle;
-	private int useInBattle;
-	private double pokeRate; 
-	private int amount;
-
+	// <editor-fold defaultstate="collapsed" desc="Attributes">
+		/**
+		 * Number of attributes per Item.
+		 */
+		static int NUMATTRIB = 10;
+		/**
+		 * ID of Item.
+		 */
+		private final int id;
+		/**
+		 * Name of Item, singular form.
+		 */
+		private String nameSingular;
+		/**
+		 * Name of Item, plural form.
+		 */
+		private String namePlural;
+		/**
+		 * Internal name of Item.
+		 */
+		private String nameInternal;
+		/**
+		 * Pocket where Item is found.
+		 */
+		private int pocket;
+		/**
+		 * Price for Item in a store.
+		 */
+		private int price;
+		/**
+		 * Description of Item.
+		 */
+		private String description;
+		/**
+		 * Usage out of battle of Item.
+		 */
+		private int useOutBattle;
+		/**
+		 * Usage in battle of Item.
+		 */
+		private int useInBattle;
+		/**
+		 * Pokemon catch rate of Item, only applicable for Pokeballs.
+		 */
+		private double pokeRate; 
+		/**
+		 * Amount of Item.
+		 */
+		private int amount;
+	// </editor-fold>
+		
 	/**
-	 * Create Item based on ID.
-	 * @param id ID to create Item with.
+	 * Create Item based on given ID.
+	 * @param id Item ID to create.
 	 */
 	public Item(int id) {
 		this.id = id;
@@ -39,6 +77,11 @@ public class Item {
 		}
 	}
 	
+	/**
+	 * Create Item based on given ID and given amount.
+	 * @param id Item ID to create.
+	 * @param amount Item amount to create.
+	 */
 	public Item(int id, int amount){
 		this.id = id;
 		this.amount = amount;
@@ -50,6 +93,10 @@ public class Item {
 		}
 	}
 
+	/**
+	 * Create Item based on given internal name.
+	 * @param internalName Item internal name to create.
+	 */
 	public Item(String internalName) {
 		this.id = getItemID(internalName);
 		this.amount = 1;
@@ -61,6 +108,11 @@ public class Item {
 		}
 	}
 	
+	/**
+	 * Create Item based on given internal and given amount.
+	 * @param internalName Item internal name to create.
+	 * @param amount Item amount to create.
+	 */
 	public Item(String internalName, int amount){
 		this.id = getItemID(internalName);
 		this.amount = amount;
@@ -72,6 +124,11 @@ public class Item {
 		}
 	}
 
+	/**
+	 * Acquire information from main data about Item with given ID.
+	 * @param id Item to search for in main data.
+	 * @return Success of process.
+	 */
 	private boolean readInfo(int id){
 		boolean success = false;
 		
@@ -103,10 +160,11 @@ public class Item {
 		return success;
 	}
 
-	public String getNameInternal() {
-		return nameInternal;
-	}
-
+	/**
+	 * Searches in main data for Item with given internal name, and returns its ID.
+	 * @param internalName Item internal name to search for.
+	 * @return Item ID.
+	 */
 	public static int getItemID(String internalName){
 		int id = 0;
 		
@@ -137,9 +195,13 @@ public class Item {
 		return id;
 	}
 	
-	// <editor-fold defaultstate="collapsed" desc="Getters & Setters"> 
+	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
 		public int getId() {
 			return id;
+		}
+
+		public String getNameInternal() {
+			return nameInternal;
 		}
 
 		public void setAmount(int amount) {

@@ -15,49 +15,170 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
- *
+ * 
  * @author Andres
  */
 public class ClassTestWindow extends JFrame implements WindowListener, ActionListener {
-    private static final int POKEIMGBIGWIDTH = 160;
-    private static final int POKEIMGBIGHEIGHT = 160;
-    private static final int POKEIMGSMALLWIDTH = 40;
-    private static final int POKEIMGSMALLHEIGHT = 40;
-    private static final int ITEMIMGWIDTH = 30;
-    private static final int ITEMIMGHEIGHT = 30;
-    
-    private static BufferedImage allPokemonBig;
-    private static BufferedImage allPokemonSmall;
-    private static BufferedImage allItems;
-    private ImageIcon pokemonImgDisplay;
-    private ImageIcon[] playerTeamPokemonImgDisplay;
-    private final JTextField pokemonNameDisplay;
-    private final JTextField pokemonWeightDisplay;
-    private final JTextField pokemonHeightDisplay;
-    private final JTextField throwDialog;
-    private final JTextField buyDialog;
-    private final JTextField amountDialog;
-    private final JTextField moneyDialog;
-    private final JButton walkBtn;
-    private final JButton evolveBtn;
-	private final JButton throwPokeBtn;
-	private final JButton throwGreatBtn;
-	private final JButton throwUltraBtn;
-	private final JButton throwMasterBtn;
-	private final JButton buyPokeBtn;
-	private final JButton buyGreatBtn;
-	private final JButton buyUltraBtn;
-	private final JButton buyMasterBtn;
-	private final JLabel[] imgContainerTeam;
-	private final JLabel imgContainerEnemy;
-	private final JTextField amountDisplayPoke;
-	private final JTextField amountDisplayGreat;
-	private final JTextField amountDisplayUltra;
-	private final JTextField amountDisplayMaster;
-	private final JTextArea eventsTextDisplay;
 	
+	//<editor-fold defaultstate="collapsed" desc="Attributes">
+		//<editor-fold defaultstate="collapsed" desc="Statics">
+			/**
+			 * Monster Hunter Pokemon Images Width.
+			 */
+			private static final int POKEIMGBIGWIDTH = 160;
+			/**
+			 * Monster Hunter Pokemon Images Height.
+			 */
+			private static final int POKEIMGBIGHEIGHT = 160;
+			/**
+			 * Pokemon Icon Images Width.
+			 */
+			private static final int POKEIMGSMALLWIDTH = 40;
+			/**
+			 * Pokemon Icon Images Height.
+			 */
+			private static final int POKEIMGSMALLHEIGHT = 40;
+			/**
+			 * Item Image Width.
+			 */
+			private static final int ITEMIMGWIDTH = 30;
+			/**
+			 * Item Image Height.
+			 */
+			private static final int ITEMIMGHEIGHT = 30;
+		//</editor-fold>
+		//<editor-fold defaultstate="collapsed" desc="All Elements Images">
+			/**
+			 * All Monster Hunter Pokemon Image.
+			 */
+			private static BufferedImage allPokemonBig;
+			/**
+			 * All Icon Pokemon Image.
+			 */
+			private static BufferedImage allPokemonSmall;
+			/**
+			 * All Items Image.
+			 */
+			private static BufferedImage allItems;
+		//</editor-fold>
+		//<editor-fold defaultstate="collapsed" desc="Current Pokemon UI">
+				/**
+				 * Current Pokemon Image.
+				 */
+				private ImageIcon pokemonImgDisplay;
+				/**
+				 * Current Pokemon Name Display.
+				 */
+				private final JTextField pokemonNameDisplay;
+				/**
+				 * Current Pokemon Weight Display.
+				 */
+				private final JTextField pokemonWeightDisplay;
+				/**
+				 * Current Pokemon Height Display.
+				 */
+				private final JTextField pokemonHeightDisplay;
+			//</editor-fold>
+		//<editor-fold defaultstate="collapsed" desc="Pokeball Throw">
+			/**
+			 * 'Throw' JLabel.
+			 */
+			private final JTextField throwDialog;
+			/**
+			 * Throw Pokeball Button.
+			 */
+			private final JButton throwPokeBtn;
+			/**
+			 * Throw Greatball Button.
+			 */
+			private final JButton throwGreatBtn;
+			/**
+			 * Throw Ultraball Button.
+			 */
+			private final JButton throwUltraBtn;
+			/**
+			 * Throw Masterball Button.
+			 */
+			private final JButton throwMasterBtn;
+		//</editor-fold>
+		//<editor-fold defaultstate="collapsed" desc="Pokeball Buy">
+			/**
+			 * 'Buy' JLabel.
+			 */
+			private final JTextField buyDialog;
+			/**
+			 * Buy Pokeball Button.
+			 */
+			private final JButton buyPokeBtn;
+			/**
+			 * Buy Greatball Button.
+			 */
+			private final JButton buyGreatBtn;
+			/**
+			 * Buy Ultraball Button.
+			 */
+			private final JButton buyUltraBtn;
+			/**
+			 * Buy Masterball Button.
+			 */
+			private final JButton buyMasterBtn;
+		//</editor-fold>
+		//<editor-fold defaultstate="collapsed" desc="Pokeball Amounts">
+			/**
+			 * 'Amount' JLabel.
+			 */
+			private final JTextField amountDialog;
+			/**
+			 * Amount Pokeball Label.
+			 */
+			private final JTextField amountDisplayPoke;
+			/**
+			 * Amount Greatball Label.
+			 */
+			private final JTextField amountDisplayGreat;
+			/**
+			 * Amount Ultraball Label.
+			 */
+			private final JTextField amountDisplayUltra;
+			/**
+			 * Amount Masterball Label.
+			 */
+			private final JTextField amountDisplayMaster;
+		//</editor-fold>
+		//<editor-fold defaultstate="collapsed" desc="General UI">
+			/**
+			 * Group of Player Pokemon Team Images.
+			 */
+			private ImageIcon[] playerTeamPokemonImgDisplay;
+			/**
+			 * Group of Player Pokemon Team Labels.
+			 */
+			private final JLabel[] imgContainerTeam;
+			/**
+			 * Player Current Money Display.
+			 */
+			private final JTextField moneyDialog;
+			/**
+			 * Walk Button.
+			 */
+			private final JButton walkBtn;
+			/**
+			 * Evolve Current Pokemon Button.
+			 */
+			private final JButton evolveBtn;
+			/**
+			 * Current Pokemon Image.
+			 */
+			private final JLabel imgContainerEnemy;
+			/**
+			 * Events Display.
+			 */
+			private final JTextArea eventsTextDisplay;
+		//</editor-fold>
+	//</editor-fold>
+		
     /**
-	* Create Class Test Window.
+	* Create a new ClassTestWindow.
 	*/
     public ClassTestWindow(){
         try {
@@ -369,7 +490,7 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 	/**
 	 * Throw button press event method.
 	 * Checks if Player can throw given Pokeball, does shake checks and adds Pokemon to player if need be.
-	 * @param ball 
+	 * @param ball Pokeball to be thrown.
 	 */
 	public void throwBtnPress(Item ball) {
 		boolean canDo = Game.player.subItem(ball.getId());

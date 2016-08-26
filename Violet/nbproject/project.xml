@@ -12,8 +12,12 @@
             </test-roots>
         </data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>Greatball</word>
+            <word>Masterball</word>
             <word>Pokeball</word>
+            <word>Pokeballs</word>
             <word>Pokemon</word>
+            <word>Ultraball</word>
         </spellchecker-wordlist>
     </configuration>
 </project>

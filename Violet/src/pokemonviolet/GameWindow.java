@@ -16,8 +16,16 @@ import javax.swing.*;
  */
 public class GameWindow extends JFrame implements WindowListener, ActionListener {
 	
-	private final GameDisplay screen;
+	// <editor-fold defaultstate="collapsed" desc="Attributes">
+		/**
+		 * Canvas.
+		 */
+		private final GameDisplay screen;
+	// </editor-fold>
 	
+	/**
+	 * Create a new GameWindow.
+	 */
 	public GameWindow() {
 		setLayout(null);
 		setSize(600,500);
@@ -38,44 +46,45 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 		setVisible(true);
 	}
 	
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-	}
-	
-	@Override
-	public void windowClosing(WindowEvent e) {
-		dispose();
-		System.exit(0);
-	}
+	//<editor-fold defaultstate="collapsed" desc="Overriden JFrame Methods">
+		@Override
+		public void actionPerformed(ActionEvent e) {
 
-	@Override
-	public void windowOpened(WindowEvent e) {
-	}
+		}
 
+		@Override
+		public void windowClosing(WindowEvent e) {
+			dispose();
+			System.exit(0);
+		}
 
-	@Override
-	public void windowActivated(WindowEvent e) {
-	}
+		@Override
+		public void windowOpened(WindowEvent e) {
+		}
 
 
-	@Override
-	public void windowIconified(WindowEvent e) {
-	}
+		@Override
+		public void windowActivated(WindowEvent e) {
+		}
 
 
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-	}
+		@Override
+		public void windowIconified(WindowEvent e) {
+		}
 
 
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-	}
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+		}
 
 
-	@Override
-	public void windowClosed(WindowEvent e) {
-	}
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+		}
+
+
+		@Override
+		public void windowClosed(WindowEvent e) {
+		}
+	//</editor-fold>
 }

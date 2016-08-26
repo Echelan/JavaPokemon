@@ -11,16 +11,46 @@ package pokemonviolet;
  * @author Andres
  */
 public class PokemonType {
-	static final private int NUMATTRIB = 7;
 	
-    private int id;
-    private String nameDisplay;
-	private String nameInternal;
-	private String isPseudoType;
-	private String isSpecialType;
-	private String weakness;
-	private String resistance;
-	private String immunity;	
+	//<editor-fold defaultstate="collapsed" desc="Attributes">
+		/**
+		 * Number of Attributes per Type.
+		 */
+		static final private int NUMATTRIB = 7;
+		
+		/**
+		 * ID of Type.
+		 */
+		private final int id;
+		/**
+		 * Name of Type.
+		 */
+		private String nameDisplay;
+		/**
+		 * Internal name of Type.
+		 */
+		private String nameInternal;
+		/**
+		 * isPseudoType boolean. (TODO: FIX THIS)
+		 */
+		private String isPseudoType;
+		/**
+		 * isSpecialType boolean. (TODO: FIX THIS, ALSO WHAT IS THIS?)
+		 */
+		private String isSpecialType;
+		/**
+		 * Weaknesses of Type.
+		 */
+		private String weakness;
+		/**
+		 * Resistances of Type.
+		 */
+		private String resistance;
+		/**
+		 * Immunities of Type.
+		 */
+		private String immunity;	
+	//</editor-fold>
 	
 	/**
 	 * Create Type based on ID.
@@ -118,21 +148,21 @@ public class PokemonType {
 		return id;
 	}
 
-	// GETTERS AND SETTERS
-	public String getNameDisplay() {
-		return nameDisplay;
-	}
+	//<editor-fold defaultstate="collapsed" desc="Getters & Setters">
+		public String getNameDisplay() {
+			return nameDisplay;
+		}
 
-	public String getWeakness() {
-		return weakness;
-	}
+		public String getWeakness() {
+			return weakness;
+		}
 
-	public String getResistance() {
-		return resistance;
-	}
+		public String getResistance() {
+			return resistance;
+		}
 
-	public String getImmunity() {
-		return immunity;
-	}
-	
+		public String getImmunity() {
+			return immunity;
+		}
+	//</editor-fold>
 }

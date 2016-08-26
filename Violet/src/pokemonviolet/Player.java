@@ -11,37 +11,104 @@ package pokemonviolet;
  * @author Andres
  */
 public final class Player {
-	// GENERAL
-	private int dinero;
-	private String name;
 	
-	// ITEMS
-	private Item[] pocketItems;		// POCKET 1
-	private Item[] pocketMeds;		// POCKET 2
-	private Item[] pocketBalls;		// POCKET 3
-	private Item[] pocketMachines;	// POCKET 4
-	private Item[] pocketKeys;		// POCKET 8
-	private Item[] pocketBattles;	// POCKET 7
-	private int numItems;
-	private int numMeds;
-	private int numBalls;
-	private int numMachines;
-	private int numKeys;
-	private int numBattles;
-	
-	// POKEMON
-    private Pokemon[] equipo;
-    private Pokemon[] PC;
-	private int numPokemonTeam;
-	private int numPokemonPC;
-	
-	// MOVEMENT
-	private int x, y;
-	private boolean left, right, up, down;
-	private boolean isRunning;
+	// <editor-fold defaultstate="collapsed" desc="Attributes">
+		// <editor-fold defaultstate="collapsed" desc="General">
+			/**
+			 * Player funds.
+			 */
+			private int dinero;
+			/**
+			 * Player name.
+			 */
+			private String name;
+		// </editor-fold>
+		// <editor-fold defaultstate="collapsed" desc="Items">
+			/**
+			 * Player Bag Pocket for Items [1].
+			 */
+			private Item[] pocketItems;		// POCKET 1
+			/**
+			 * Player Bag Pocket for Medicine [2].
+			 */
+			private Item[] pocketMeds;		// POCKET 2
+			/**
+			 * Player Bag Pocket for Pokeballs [3].
+			 */
+			private Item[] pocketBalls;		// POCKET 3
+			/**
+			 * Player Bag Pocket for Machines (TM/HM) [4].
+			 */
+			private Item[] pocketMachines;	// POCKET 4
+			/**
+			 * Player Bag Pocket for Battle-Related Items [7].
+			 */
+			private Item[] pocketBattles;	// POCKET 7
+			/**
+			 * Player Bag Pocket for Key Items [8].
+			 */
+			private Item[] pocketKeys;		// POCKET 8
+			/**
+			 * Number of Items in Player Bag Pocket for Items [1].
+			 */
+			private int numItems;			// POCKET 1
+			/**
+			 * Number of Items in Player Bag Pocket for Medicine [2].
+			 */
+			private int numMeds;			// POCKET 2
+			/**
+			 * Number of Items in Player Bag Pocket for Pokeballs [3].
+			 */
+			private int numBalls;			// POCKET 3
+			/**
+			 * Number of Items in Player Bag Pocket for Machines [4].
+			 */
+			private int numMachines;		// POCKET 4
+			/**
+			 * Number of Items in Player Bag Pocket for Battle-related Items [7].
+			 */
+			private int numBattles;			// POCKET 7
+			/**
+			 * Number of Items in Player Bag Pocket for Key Items [8].
+			 */
+			private int numKeys;			// POCKET 8
+		// </editor-fold>
+		// <editor-fold defaultstate="collapsed" desc="Pokemon">
+			/**
+			 * Player Pokemon Team.
+			 */
+			private Pokemon[] equipo;
+			/**
+			 * Player Pokemon PC.
+			 */
+			private Pokemon[] PC;
+			/**
+			 * Number of Pokemon in Player Team.
+			 */
+			private int numPokemonTeam;
+			/**
+			 * Number of Pokemon in Player PC.
+			 */
+			private int numPokemonPC;
+		// </editor-fold>
+		// <editor-fold defaultstate="collapsed" desc="Movement">
+			/**
+			 * Player coordinates.
+			 */
+			private int x, y;
+			/**
+			 * Player direction booleans.
+			 */
+			private boolean left, right, up, down;
+			/**
+			 * Player running boolean.
+			 */
+			private boolean isRunning;
+		// </editor-fold>
+	// </editor-fold>
 	
 	/**
-	 * Create Player object.
+	 * Create Player with given name and given starter Pokemon.
 	 * @param name Player name.
 	 * @param starterPokemon Starter Pokemon.
 	 */
@@ -53,7 +120,7 @@ public final class Player {
 	}
 
 	/**
-	 * Create Player object.
+	 * Create Player with given name and starter Pokemon with given ID.
 	 * @param name Player name.
 	 * @param starterID Starter Pokemon ID.
 	 */
@@ -65,17 +132,7 @@ public final class Player {
 	}
 
 	/**
-	 * Create Player object.
-	 * @param name Player name.
-	 */
-	public Player(String name) {
-		setBasics();
-		this.name = name;
-		this.numPokemonTeam = 0;
-	}
-
-	/**
-	 * Create Player object.
+	 * Create Player with given name and starter Pokemon with given internal name.
 	 * @param name Player name.
 	 * @param internalName Starter Pokemon internal name.
 	 */
@@ -87,7 +144,17 @@ public final class Player {
 	}
 	
 	/**
-	 * Set Player's main default statistics.
+	 * Create Player with given name.
+	 * @param name Player name.
+	 */
+	public Player(String name) {
+		setBasics();
+		this.name = name;
+		this.numPokemonTeam = 0;
+	}
+
+	/**
+	 * Set Player's main default attributes.
 	 */
 	private void setBasics(){
 		this.equipo = new Pokemon[6];
@@ -107,11 +174,14 @@ public final class Player {
 		this.numKeys = 0;
 		this.numBattles = 0;
 	}
- 
+
 	public void update(){
 		move();
 	}
 	
+	/**
+	 * Move Player coordinates.
+	 */
 	public void move(){
 		if (left){
 			x = x - 1;
@@ -127,6 +197,11 @@ public final class Player {
 		}
 	}
 	
+	/**
+	 * Adds given Pokemon to Player.
+	 * @param newPokemon Pokemon to add.
+	 * @return Integer representing where Pokemon was sent to. (0 = Team, 1 = PC, 2 = Released)
+	 */
 	public int addPokemon(Pokemon newPokemon){
 		int response = 0;
 		if (numPokemonTeam == 6){
@@ -146,7 +221,24 @@ public final class Player {
 	}
 
 	/**
-	 * [MASTER] Returns amount of item with given ID in Player pocket with given ID.
+	 * Reduce Player funds by given amount if possible, returns false if Player has insufficient funds.
+	 * @param amount Amount to reduce Player funds by.
+	 * @return Success of process.
+	 */
+	public boolean reduceMoney(int amount){
+		boolean success = false;
+		
+		if (this.dinero >= amount){
+			this.dinero = this.dinero - amount;
+			success = true;
+		}
+		
+		return success;
+	}
+	
+	/**
+	 * Returns amount of item with given ID in Player pocket with given ID.
+	 * <p> [MASTER] </p>
 	 * @param id Item ID to search for.
 	 * @param pocketID Pocket ID to search in.
 	 * @return amount of Item present.
@@ -190,36 +282,41 @@ public final class Player {
 		return amount;
 	}
 	
-	/**
-	 * Returns amount of item with given ID carried by Player.
-	 * (Sub-process, wraps to a MASTER.)
-	 * @param id Item ID to search for.
-	 * @return amount of Item present.
-	 */
-	public int getAmountItem(int id){
-		int amount;
-		
-		amount = getAmountItem(id,new Item(id).getPocket());
-		
-		return amount;
-	}
+	//<editor-fold defaultstate="collapsed" desc="getAmountItem Sub-Processes">
+		/**
+		 * Returns amount of item with given ID carried by Player.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param id Item ID to search for.
+		 * @return amount of Item present.
+		 * @see getAmountItem(int, int)
+		 */
+		public int getAmountItem(int id){
+			int amount;
+
+			amount = getAmountItem(id,new Item(id).getPocket());
+
+			return amount;
+		}
+
+		/**
+		 * Returns amount of item with given internal name carried by Player.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param internalName Item internal name to search for.
+		 * @return amount of Item present.
+		 * @see getAmountItem(int, int)
+		 */
+		public int getAmountItem(String internalName){
+			int amount;
+
+			amount = getAmountItem(new Item(internalName).getId());
+
+			return amount;
+		}
+	//</editor-fold>
 	
 	/**
-	 * Returns amount of item with given internal name carried by Player.
-	 * (Sub-process, wraps to a MASTER.)
-	 * @param internalName Item internal name to search for.
-	 * @return amount of Item present.
-	 */
-	public int getAmountItem(String internalName){
-		int amount;
-		
-		amount = getAmountItem(new Item(internalName).getId());
-		
-		return amount;
-	}
-	
-	/**
-	 * [MASTER] Add item to Player inventory.
+	 * Add item to Player inventory.
+	 * <p>[MASTER]</p>
 	 * @param id Item ID to add.
 	 * @param amount Amount of item to add.
 	 * @return Success of process.
@@ -311,51 +408,57 @@ public final class Player {
 		return success;
 	}
 	
-	/**
-	 * Add item to Player inventory.
-	 * (Sub-process, wraps to a MASTER.)
-	 * @param id Item id to add.
-	 * @return Success of process.
-	 */
-	public boolean addItem(int id){
-		boolean success;
-		
-		success = addItem(id, 1);
-		
-		return success;
-	}
-	 
-	/**
-	 * Add item to Player inventory.
-	 * (Sub-process, wraps to a MASTER.)
-	 * @param internalName Item internal name to add.
-	 * @return Success of process.
-	 */
-	public boolean addItem(String internalName){
-		boolean success;
-		
-		success = addItem(new Item(internalName).getId());
-		
-		return success;
-	}
-	
-	/**
-	 * Add item to Player inventory.
-	 * (Sub-process, wraps to a MASTER.)
-	 * @param internalName Item internal name to add.
-	 * @param amount Item amount to add.
-	 * @return Success of process.
-	 */
-	public boolean addItem(String internalName, int amount){
+	//<editor-fold defaultstate="collapsed" desc="addItem Sub-Processes">
+		/**
+		 * Add item to Player inventory.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param id Item id to add.
+		 * @return Success of process.
+		 * @see addItem(int, int)
+		 */
+		public boolean addItem(int id){
+			boolean success;
+
+			success = addItem(id, 1);
+
+			return success;
+		}
+
+		/**
+		 * Add item to Player inventory.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param internalName Item internal name to add.
+		 * @return Success of process.
+		 * @see addItem(int, int)
+		 */
+		public boolean addItem(String internalName){
+			boolean success;
+
+			success = addItem(new Item(internalName).getId());
+
+			return success;
+		}
+
+		/**
+		 * Add item to Player inventory.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param internalName Item internal name to add.
+		 * @param amount Item amount to add.
+		 * @return Success of process.
+		 * @see addItem(int, int)
+		 */
+		public boolean addItem(String internalName, int amount){
 		boolean success;
 		
 		success = addItem(new Item(internalName).getId(), amount);
 		
 		return success;
 	}
+	//</editor-fold>
 	
 	/**
-	 * [MASTER] Remove item from Player inventory.
+	 * Remove item from Player inventory.
+	 * <p>[MASTER]</p>
 	 * @param id Item ID to remove.
 	 * @return Success of process.
 	 */
@@ -441,31 +544,23 @@ public final class Player {
 		return success;
 	}
 	
-	/**
-	 * Remove item from Player inventory.
-	 * (Sub-process, wraps to a MASTER.)
-	 * @param internalName Item internal name to remove.
-	 * @return Success of process.
-	 */
-	public boolean subItem(String internalName){
+	//<editor-fold defaultstate="collapsed" desc="subItem Sub-Processes">
+		/**
+		 * Remove item from Player inventory.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param internalName Item internal name to remove.
+		 * @return Success of process.
+		 * @see subItem(int)
+		 */
+		public boolean subItem(String internalName){
 		boolean success;
 		
 		success = subItem(new Item(internalName).getId());
 		
 		return success;
 	}
-	
-	public boolean reduceMoney(int amount){
-		boolean success = false;
+	//</editor-fold>
 		
-		if (this.dinero >= amount){
-			this.dinero = this.dinero - amount;
-			success = true;
-		}
-		
-		return success;
-	}
-	
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
 		public int getDinero() {
 			return dinero;

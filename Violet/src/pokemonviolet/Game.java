@@ -18,17 +18,48 @@ import java.util.Random;
  */
 public class Game {
 	
-	public static List<String> INFOPOKEMON;
-	public static List<String> INFOITEMS;
-	public static List<String> INFOMOVES;
-	public static List<String> INFOTYPES;
-	
-	public static Player player;
-	public static int stepsToSpawn = roll(1,2,3);;
-	public static Pokemon currentPokemon;
-	private static GameWindow gameWindow;
-	private static ClassTestWindow classTestWindow;
-	
+	// <editor-fold defaultstate="collapsed" desc="Attributes">
+		// <editor-fold defaultstate="collapsed" desc="Statics">
+			/**
+			 * Main data for Pokemon.
+			 */
+			public static List<String> INFOPOKEMON;
+			/**
+			 * Main data for Items.
+			 */
+			public static List<String> INFOITEMS;
+			/**
+			 * Main data for Moves.
+			 */
+			public static List<String> INFOMOVES;
+			/**
+			 * Main data for Types.
+			 */
+			public static List<String> INFOTYPES;
+		//</editor-fold>
+		
+		/**
+		 * The Player in game.
+		 */
+		public static Player player;
+		/**
+		 * Steps needed to spawn a Pokemon.
+		 */
+		public static int stepsToSpawn = roll(1,2,3);;
+		/**
+		 * Current Pokemon in game.
+		 */
+		public static Pokemon currentPokemon;
+		/**
+		 * Game Window. (The one with the canvas.)
+		 */
+		private static GameWindow gameWindow;
+		/**
+		 * Class Test Window. (The one with the buttons and pictures.)
+		 */
+		private static ClassTestWindow classTestWindow;
+	// </editor-fold>
+		
 	/**
 	 * Build game.
 	 */
@@ -61,8 +92,7 @@ public class Game {
 		INFOPOKEMON = readInfoP;
 		INFOMOVES = readInfoM;
 		INFOTYPES = readInfoT;
-
-
+		
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException ex) {
@@ -91,7 +121,7 @@ public class Game {
 		for (int i = 0; i < numDice; i++) {
 		  value = value + (rnd.nextInt(numSides)+1);
 		}
-//		System.out.println(steps);
+		
 		return value;
 	}
 }
