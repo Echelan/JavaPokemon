@@ -7,7 +7,6 @@ package pokemonviolet;
 
 
 import java.awt.Color;
-import java.awt.GraphicsConfiguration;
 import java.awt.event.*;
 import javax.swing.*;
 
@@ -17,43 +16,26 @@ import javax.swing.*;
  */
 public class GameWindow extends JFrame implements WindowListener, ActionListener {
 	
-	//private final GameDisplay screen;
+	private final GameDisplay screen;
 	
 	public GameWindow() {
-            setLayout(null);
-            setSize(600,500);
-            setTitle("Pokemon Violet [GAME]");
-            setResizable(false);
-            setLocationRelativeTo(null);
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLayout(null);
+		setSize(600,500);
+		setTitle("Pokemon Violet [GAME]");
+		setResizable(false);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             
- //           add(new GameDisplay());
-            
-           GameDisplay screen = new GameDisplay();
-            screen.setBounds(1, 1, 592, 469);
-            screen.setBackground(Color.black);
-            screen.setFocusable(false);
-            add(screen);
-            
-            Thread asd = new Thread(screen);
-            asd.start();
-            
-           
-           /*
-            Graphics g = screen.getGraphics();
-            System.out.println(g);
-            g.setColor(Color.RED);
-            g.fillOval(50,50,30,30);
-            */
-           /*
-           @Override
-           public void paint(Graphics g){
-               g.setColor(Color.red);
-               g.fillOval(50, 50, 30, 30);
-           }*/
-                   
-            
-            setVisible(true);
+		screen = new GameDisplay();
+		screen.setBounds(1, 1, 592, 469);
+		screen.setBackground(Color.black);
+		screen.setFocusable(false);
+		add(screen);
+
+		Thread asd = new Thread(screen);
+		asd.start();
+		
+		setVisible(true);
 	}
 	
 	
@@ -64,8 +46,8 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 	
 	@Override
 	public void windowClosing(WindowEvent e) {
-            dispose();
-            System.exit(0);
+		dispose();
+		System.exit(0);
 	}
 
 	@Override

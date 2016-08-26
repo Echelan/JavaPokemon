@@ -235,13 +235,13 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
         int xSmall = (int)(Math.floor((double)(152)%10)*POKEIMGSMALLWIDTH);
         int ySmall = (int)(Math.floor((double)(152)/10)*POKEIMGSMALLHEIGHT);
         for (int i = 0; i < playerTeamPokemonImgDisplay.length; i++) {
-                imgContainerTeam[i] = new JLabel();
-                playerTeamPokemonImgDisplay[i] = new ImageIcon (allPokemonSmall.getSubimage(xSmall, ySmall, POKEIMGSMALLWIDTH, POKEIMGSMALLHEIGHT));
-                imgContainerTeam[i].setIcon(playerTeamPokemonImgDisplay[i]);
-                int xCalc = 350 + ((i%3)*(POKEIMGSMALLWIDTH+5));
-                int yCalc = 180 + (int)((float)Math.floor(i/3)*(POKEIMGSMALLWIDTH+5));
-                imgContainerTeam[i].setBounds(xCalc,yCalc,POKEIMGSMALLWIDTH,POKEIMGSMALLHEIGHT);
-                add(imgContainerTeam[i]);
+			imgContainerTeam[i] = new JLabel();
+			playerTeamPokemonImgDisplay[i] = new ImageIcon (allPokemonSmall.getSubimage(xSmall, ySmall, POKEIMGSMALLWIDTH, POKEIMGSMALLHEIGHT));
+			imgContainerTeam[i].setIcon(playerTeamPokemonImgDisplay[i]);
+			int xCalc = 350 + ((i%3)*(POKEIMGSMALLWIDTH+5));
+			int yCalc = 180 + (int)((float)Math.floor(i/3)*(POKEIMGSMALLWIDTH+5));
+			imgContainerTeam[i].setBounds(xCalc,yCalc,POKEIMGSMALLWIDTH,POKEIMGSMALLHEIGHT);
+			add(imgContainerTeam[i]);
         }
 
         updateTeamImg();
