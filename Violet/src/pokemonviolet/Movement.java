@@ -14,8 +14,6 @@ import java.awt.event.KeyEvent;
  * @author Andres
  */
 public class Movement extends KeyAdapter{
-//	public void keyTyped(KeyEvent arg0) {
-//   }
     
     public void keyReleased(KeyEvent key) {switch (key.getKeyCode()) {
 		case KeyEvent.VK_UP:

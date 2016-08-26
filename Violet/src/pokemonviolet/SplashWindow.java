@@ -5,7 +5,6 @@
  */
 package pokemonviolet;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MediaTracker;
@@ -18,11 +17,13 @@ import javax.swing.JWindow;
  */
 public class SplashWindow extends JWindow{
 	
-	Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 	Image logo; 
 	MediaTracker media;
-	SplashWindow()
-	{    
+	
+	/**
+	 * Create a splash window.
+	 */
+	public SplashWindow(){
 		try {	
 			logo  = Toolkit.getDefaultToolkit().createImage("splashImage.png"); 	 	
 			media = new MediaTracker(this);
@@ -32,7 +33,7 @@ public class SplashWindow extends JWindow{
 			this.setLocationRelativeTo(null);
 			setVisible(true);
 		}catch (Exception ex){
-			System.out.println (ex.getMessage());
+		//	System.out.println (ex.getMessage());
 		}
 	}
 	

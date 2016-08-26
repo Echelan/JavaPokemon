@@ -5,7 +5,6 @@
  */
 package pokemonviolet;
 
-import java.util.Dictionary;
 
 /**
  *
@@ -41,14 +40,23 @@ public final class Player {
 	private boolean left, right, up, down;
 	private boolean isRunning;
 	
-	
-	public Player(String name, Pokemon starter) {
+	/**
+	 * Create Player object.
+	 * @param name Player name.
+	 * @param starterPokemon Starter Pokemon.
+	 */
+	public Player(String name, Pokemon starterPokemon) {
 		setBasics();
 		this.name = name;
-		this.equipo[0] = starter;
+		this.equipo[0] = starterPokemon;
 		this.numPokemonTeam = 1;
 	}
 
+	/**
+	 * Create Player object.
+	 * @param name Player name.
+	 * @param starterID Starter Pokemon ID.
+	 */
 	public Player(String name, int starterID) {
 		setBasics();
 		this.name = name;
@@ -56,12 +64,21 @@ public final class Player {
 		this.numPokemonTeam = 1;
 	}
 
+	/**
+	 * Create Player object.
+	 * @param name Player name.
+	 */
 	public Player(String name) {
 		setBasics();
 		this.name = name;
 		this.numPokemonTeam = 0;
 	}
 
+	/**
+	 * Create Player object.
+	 * @param name Player name.
+	 * @param internalName Starter Pokemon internal name.
+	 */
 	public Player(String name, String internalName) {
 		setBasics();
 		this.name = name;
@@ -69,6 +86,9 @@ public final class Player {
 		this.numPokemonTeam = 1;
 	}
 	
+	/**
+	 * Set Player's main default statistics.
+	 */
 	private void setBasics(){
 		this.equipo = new Pokemon[6];
 		this.PC = new Pokemon[200];
@@ -88,7 +108,49 @@ public final class Player {
 		this.numBattles = 0;
 	}
  
-	// MASTER
+	public void update(){
+		move();
+	}
+	
+	public void move(){
+		if (left){
+			x = x - 1;
+		}
+		if (right){
+			x = x + 1;
+		}
+		if (up){
+			y = y - 1;
+		}
+		if (down){
+			y = y + 1;
+		}
+	}
+	
+	public int addPokemon(Pokemon newPokemon){
+		int response = 0;
+		if (numPokemonTeam == 6){
+			if (numPokemonPC == 200){
+				response = 2;
+			}else{
+				response = 1;
+				this.PC[numPokemonPC] = newPokemon;
+				numPokemonPC = numPokemonPC + 1;
+			}
+		}else{
+			response = 0;
+			this.equipo[numPokemonTeam] = newPokemon;
+			numPokemonTeam = numPokemonTeam + 1;
+		}
+		return response;
+	}
+
+	/**
+	 * [MASTER] Returns amount of item carried by Player.
+	 * @param id Item ID to search for.
+	 * @param pocketID Pocket ID to search in.
+	 * @return amount of Item present.
+	 */
 	public int getAmountItem(int id, int pocketID){
 		int amount = 0;
 		Item[] pocket = null;
@@ -128,6 +190,11 @@ public final class Player {
 		return amount;
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 * @return 
+	 */
 	public int getAmountItem(int id){
 		int amount;
 		
@@ -136,6 +203,11 @@ public final class Player {
 		return amount;
 	}
 	
+	/**
+	 * 
+	 * @param internalName
+	 * @return 
+	 */
 	public int getAmountItem(String internalName){
 		int amount;
 		
@@ -144,7 +216,12 @@ public final class Player {
 		return amount;
 	}
 	
-	// MASTER
+	/**
+	 * [MASTER] Add item to Player inventory.
+	 * @param id Item ID to add.
+	 * @param amount Amount of item to add.
+	 * @return Success of process.
+	 */
 	public boolean addItem(int id, int amount){
 		boolean success = false;
 		Item item = new Item(id, amount);
@@ -232,6 +309,12 @@ public final class Player {
 		return success;
 	}
 	
+	/**
+	 * Add item to Player inventory.
+	 * (Sub-process, wraps to a MASTER.)
+	 * @param id Item id to add.
+	 * @return Success of process.
+	 */
 	public boolean addItem(int id){
 		boolean success;
 		
@@ -239,25 +322,13 @@ public final class Player {
 		
 		return success;
 	}
-	
-	public int addPokemon(Pokemon newPokemon){
-		int response = 0;
-		if (numPokemonTeam == 6){
-			if (numPokemonPC == 200){
-				response = 2;
-			}else{
-				response = 1;
-				this.PC[numPokemonPC] = newPokemon;
-				numPokemonPC = numPokemonPC + 1;
-			}
-		}else{
-			response = 0;
-			this.equipo[numPokemonTeam] = newPokemon;
-			numPokemonTeam = numPokemonTeam + 1;
-		}
-		return response;
-	}
-
+	 
+	/**
+	 * Add item to Player inventory.
+	 * (Sub-process, wraps to a MASTER.)
+	 * @param internalName Item internal name to add.
+	 * @return Success of process.
+	 */
 	public boolean addItem(String internalName){
 		boolean success;
 		
@@ -266,6 +337,13 @@ public final class Player {
 		return success;
 	}
 	
+	/**
+	 * Add item to Player inventory.
+	 * (Sub-process, wraps to a MASTER.)
+	 * @param internalName Item internal name to add.
+	 * @param amount Item amount to add.
+	 * @return Success of process.
+	 */
 	public boolean addItem(String internalName, int amount){
 		boolean success;
 		
@@ -274,7 +352,12 @@ public final class Player {
 		return success;
 	}
 	
-	// MASTER
+	
+	/**
+	 * [MASTER] Remove item from Player inventory.
+	 * @param id Item ID to remove.
+	 * @return Success of process.
+	 */
 	public boolean subItem(int id){
 		boolean success = false;
 		Item item = new Item(id);
@@ -357,6 +440,12 @@ public final class Player {
 		return success;
 	}
 	
+	/**
+	 * Remove item from Player inventory.
+	 * (Sub-process, wraps to a MASTER.)
+	 * @param internalName Item internal name to remove.
+	 * @return Success of process.
+	 */
 	public boolean subItem(String internalName){
 		boolean success;
 		
@@ -365,72 +454,57 @@ public final class Player {
 		return success;
 	}
 	
-	public void update(){
-		move();
-	}
-	
-	public void move(){
-		if (left){
-			x = x - 1;
+	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
+		public int getDinero() {
+			return dinero;
 		}
-		if (right){
-			x = x + 1;
+
+		public String getName() {
+			return name;
 		}
-		if (up){
-			y = y - 1;
+
+		public int getNumPokemonTeam() {
+			return numPokemonTeam;
 		}
-		if (down){
-			y = y + 1;
+
+		public void setDinero(int dinero) {
+			this.dinero = dinero;
 		}
-	}
-	
-	// GETTERS AND SETTERS
-	public int getDinero() {
-		return dinero;
-	}
 
-	public String getName() {
-		return name;
-	}
+		public Pokemon[] getEquipo() {
+			return equipo;
+		}
 
-	public int getNumPokemonTeam() {
-		return numPokemonTeam;
-	}
+		public void setLeft(boolean left) {
+			this.left = left;
+		}
 
-	public void setDinero(int dinero) {
-		this.dinero = dinero;
-	}
-	
-	public Pokemon[] getEquipo() {
-		return equipo;
-	}
+		public void setRight(boolean right) {
+			this.right = right;
+		}
 
-	public void setLeft(boolean left) {
-		this.left = left;
-	}
+		public void setUp(boolean up) {
+			this.up = up;
+		}
 
-	public void setRight(boolean right) {
-		this.right = right;
-	}
+		public void setDown(boolean down) {
+			this.down = down;
+		}
 
-	public void setUp(boolean up) {
-		this.up = up;
-	}
+		public void setIsRunning(boolean isRunning) {
+			this.isRunning = isRunning;
+		}
 
-	public void setDown(boolean down) {
-		this.down = down;
-	}
+		public boolean isIsRunning() {
+			return isRunning;
+		}
 
-	public void setIsRunning(boolean isRunning) {
-		this.isRunning = isRunning;
-	}
+		public int getX() {
+			return x;
+		}
 
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
-	}
-	
+		public int getY() {
+			return y;
+		}
+	//</editor-fold>
 }

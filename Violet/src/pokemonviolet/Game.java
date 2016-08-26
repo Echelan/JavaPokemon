@@ -61,7 +61,7 @@ public class Game {
 
 
 		try {
-			Thread.sleep(100);
+			Thread.sleep(1000);
 		} catch (InterruptedException ex) {
 		}
 

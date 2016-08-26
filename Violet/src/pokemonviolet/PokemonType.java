@@ -5,7 +5,6 @@
  */
 package pokemonviolet;
 
-import java.util.List;
 
 /**
  *
@@ -14,16 +13,19 @@ import java.util.List;
 public class PokemonType {
 	static final private int NUMATTRIB = 7;
 	
-    private static int id;
-    private static String nameDisplay;
-	private static String nameInternal;
-	private static String isPseudoType;
-	private static String isSpecialType;
-	private static String weakness;
-	private static String resistance;
-	private static String immunity;	
+    private int id;
+    private String nameDisplay;
+	private String nameInternal;
+	private String isPseudoType;
+	private String isSpecialType;
+	private String weakness;
+	private String resistance;
+	private String immunity;	
 	
-	
+	/**
+	 * Create Type based on ID.
+	 * @param id ID of Type to create.
+	 */
     public PokemonType(int id) {
 		this.id = id;
 		
@@ -34,6 +36,10 @@ public class PokemonType {
 		}
     }
 	
+	/**
+	 * Create Type based on internal name.
+	 * @param internalName Internal name of Type to create.
+	 */
     public PokemonType(String internalName) {
 		this.nameInternal = internalName;
 		this.id = getTypeID(internalName);
@@ -45,10 +51,15 @@ public class PokemonType {
 		}
     }
 	
+	/**
+	 * Get info from main data about Type with given ID.
+	 * @param id Type ID to search for in main data.
+	 * @return Success of process.
+	 */
 	private boolean readInfo(int id){
 		boolean success = false;
 		
-		String[] iteminfo = Game.INFOTYPES.get(id-1).split(";");
+		String[] iteminfo = Game.	INFOTYPES.get(id-1).split(";");
 		for (int i = 0; i < NUMATTRIB; i++){
 			String[] partes = iteminfo[i].split("=");
 			if (partes[0].compareTo("InternalName")==0){
@@ -72,14 +83,18 @@ public class PokemonType {
 		return success;
 	}
 	
+	/**
+	 * Get ID of Type based on internal name.
+	 * @param internalName Internal name of Type.
+	 * @return Type ID.
+	 */
 	private int getTypeID(String internalName){
 		int id = 0;
 		
 		boolean foundItem = false;
-		List<String> lines = Game.INFOITEMS;
 
 		while (foundItem == false){
-			String[] iteminfo = lines.get(id).split(";");
+			String[] iteminfo = Game.INFOITEMS.get(id).split(";");
 			int attribComp = 0;
 			while (attribComp < NUMATTRIB && foundItem == false){
 				String[] partes = iteminfo[attribComp].split("=");
@@ -102,4 +117,22 @@ public class PokemonType {
 		
 		return id;
 	}
+
+	// GETTERS AND SETTERS
+	public String getNameDisplay() {
+		return nameDisplay;
+	}
+
+	public String getWeakness() {
+		return weakness;
+	}
+
+	public String getResistance() {
+		return resistance;
+	}
+
+	public String getImmunity() {
+		return immunity;
+	}
+	
 }

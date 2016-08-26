@@ -24,6 +24,10 @@ public class Item {
 	private double pokeRate; 
 	private int amount;
 
+	/**
+	 * Create Item based on ID.
+	 * @param id ID to create Item with.
+	 */
 	public Item(int id) {
 		this.id = id;
 		this.amount = 1;
@@ -133,6 +137,7 @@ public class Item {
 		return id;
 	}
 	
+	// GETTERS AND SETTERS
 	public int getId() {
 		return id;
 	}

@@ -361,9 +361,6 @@ public class Pokemon {
 	}
 	
 	private double calcAlpha(double bonusball) {
-		// MADE UP VALUES
-		Random rnd = new Random();
-		int rate = this.catchRate;
 		
 		double bonusstatus;
 		switch (this.status){
@@ -550,86 +547,88 @@ public class Pokemon {
 		return (int)gain;
 	}
 	
-	public PokemonMove[] getMoves(){
-		return moves;
-	}
-	
-	public String getColor() {
-		return color;
-	}
-
-	public int getLevel() {
-		return level;
-	}
-	
-	public String getNameSpecies() {
-		return nameSpecies;
-	}
-
-	public String getGender() {
-		return gender;
-	}
-
-	public String getNameNick() {
-		return nameNick;
-	}
-
-	public  String getNameInternal() {
-		return nameInternal;
-	}
-
-	public void setNameNick(String nickname) {
-		this.nameNick = nickname;
-	}
-
-	public String getPokeEntry() {
-		return pokeEntry;
-	}
-
-	public int getCurHP() {
-		return curHP;
-	}
-
-	public void setCurHP(int curHP) {
-		this.curHP = curHP;
-	}
-
-	public int getCurEXP() {
-		return curEXP;
-	}
-
-	public void setCurEXP(int curEXP) {
-		this.curEXP = curEXP;
-		if (this.curEXP >= this.maxEXP){
-			levelUp();
+	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
+		public PokemonMove[] getMoves(){
+			return moves;
 		}
-	}
 
-	public String getBallType() {
-		return ballType;
-	}
+		public String getColor() {
+			return color;
+		}
 
-	public void setBallType(String ballType) {
-		this.ballType = ballType;
-	}
+		public int getLevel() {
+			return level;
+		}
 
-	public String getHeight() {
-		return height;
-	}
+		public String getNameSpecies() {
+			return nameSpecies;
+		}
 
-	public void setIsWild(boolean isWild) {
-		this.isWild = isWild;
-	}
+		public String getGender() {
+			return gender;
+		}
 
-	public String getWeight() {
-		return weight;
-	}
+		public String getNameNick() {
+			return nameNick;
+		}
 
-	public int getId() {
-		return id;
-	}
-	
-	public boolean getCanEvolve(){
-		return (this.numEvols > 0);
-	}
+		public  String getNameInternal() {
+			return nameInternal;
+		}
+
+		public void setNameNick(String nickname) {
+			this.nameNick = nickname;
+		}
+
+		public String getPokeEntry() {
+			return pokeEntry;
+		}
+
+		public int getCurHP() {
+			return curHP;
+		}
+
+		public void setCurHP(int curHP) {
+			this.curHP = curHP;
+		}
+
+		public int getCurEXP() {
+			return curEXP;
+		}
+
+		public void setCurEXP(int curEXP) {
+			this.curEXP = curEXP;
+			if (this.curEXP >= this.maxEXP){
+				levelUp();
+			}
+		}
+
+		public String getBallType() {
+			return ballType;
+		}
+
+		public void setBallType(String ballType) {
+			this.ballType = ballType;
+		}
+
+		public String getHeight() {
+			return height;
+		}
+
+		public void setIsWild(boolean isWild) {
+			this.isWild = isWild;
+		}
+
+		public String getWeight() {
+			return weight;
+		}
+
+		public int getId() {
+			return id;
+		}
+
+		public boolean getCanEvolve(){
+			return (this.numEvols > 0);
+		}
+	// </editor-fold>
 }

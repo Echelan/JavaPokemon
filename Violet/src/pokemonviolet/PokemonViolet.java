@@ -13,7 +13,7 @@ public class PokemonViolet {
 	
 	public static void main(String[] args) throws InterruptedException{
 		
-		Game game = new Game();
+		new Game();
 		
     }
 }
