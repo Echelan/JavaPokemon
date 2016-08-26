@@ -74,6 +74,7 @@ public class Game {
         //    classTestWindow=new ClassTestWindow();
             gameWindow=new GameWindow();
 		
+		splash.dispose();
 	}
 	
 	public static int calcSteps(){

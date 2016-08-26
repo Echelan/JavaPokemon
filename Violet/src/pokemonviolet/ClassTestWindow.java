@@ -40,22 +40,25 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
     private final JTextField moneyDialog;
     private final JButton walkBtn;
     private final JButton evolveBtn;
-    private final JButton throwPokeBtn;
-    private final JButton throwGreatBtn;
-    private final JButton throwUltraBtn;
-    private final JButton throwMasterBtn;
-    private final JButton buyPokeBtn;
-    private final JButton buyGreatBtn;
-    private final JButton buyUltraBtn;
-    private final JButton buyMasterBtn;
-    private final JLabel[] imgContainerTeam;
-    private final JLabel imgContainerEnemy;
-    private final JTextField amountDisplayPoke;
-    private final JTextField amountDisplayGreat;
-    private final JTextField amountDisplayUltra;
-    private final JTextField amountDisplayMaster;
-    private final JTextArea eventsTextDisplay;
-    
+	private final JButton throwPokeBtn;
+	private final JButton throwGreatBtn;
+	private final JButton throwUltraBtn;
+	private final JButton throwMasterBtn;
+	private final JButton buyPokeBtn;
+	private final JButton buyGreatBtn;
+	private final JButton buyUltraBtn;
+	private final JButton buyMasterBtn;
+	private final JLabel[] imgContainerTeam;
+	private final JLabel imgContainerEnemy;
+	private final JTextField amountDisplayPoke;
+	private final JTextField amountDisplayGreat;
+	private final JTextField amountDisplayUltra;
+	private final JTextField amountDisplayMaster;
+	private final JTextArea eventsTextDisplay;
+	
+    /**
+	* Create Class Test Window.
+	*/
     public ClassTestWindow(){
         try {
                 allPokemonBig = ImageIO.read(new File("pokemonIconsBig.png"));
