@@ -17,6 +17,7 @@
             <word>Pokeball</word>
             <word>Pokeballs</word>
             <word>Pokemon</word>
+            <word>stats</word>
             <word>Ultraball</word>
         </spellchecker-wordlist>
     </configuration>

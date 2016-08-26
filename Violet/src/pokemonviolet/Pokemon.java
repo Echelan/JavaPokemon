@@ -11,85 +11,114 @@ import java.util.Random;
  * @author Andres
  */
 public class Pokemon {
-	// 'GLOBAL'
-	static final private int NUMATTRIB = 40;
-	static final private int MAXTOTALEV = 510;
-	static final private int MAXSINGLEEV = 252;
 	
-    private int id;
-	private final boolean isShiny;
-	private String nameSpecies;
-	private String nameInternal;
-	private String kind;
-	private String pokeEntry;
-	private PokemonType[] types;
-	
-	private int baseHP;
-	private int baseAttack;
-	private int baseDefense;
-	private int baseSpeed;
-	private int baseSpAtk;
-	private int baseSpDef;
-	
-	private int yieldEXP;
-	private int yieldHP;
-	private int yieldAttack;
-	private int yieldDefense;
-	private int yieldSpeed;
-	private int yieldSpAtk;
-	private int yieldSpDef;
-	
-	private int statHP;
-	private int statAttack;
-	private int statDefense;
-	private int statSpeed;
-	private int statSpAtk;
-	private int statSpDef;
-	
-	private int EVHP;
-	private int EVAttack;
-	private int EVDefense;
-	private int EVSpeed;
-	private int EVSpAtk;
-	private int EVSpDef;
-	
-	private int IVHP;
-	private int IVAttack;
-	private int IVDefense;
-	private int IVSpeed;
-	private int IVSpAtk;
-	private int IVSpDef;
-	
-	private int catchRate;
-	private String growthRate;
-	private int hatchSteps;
-	private String color;
-	private String habitat;
-	private String[] allMoves;
-	
-	private String height;
-	private String weight;
-	
-	private int numEvols;
-	private String[] evolvesInto;
-	private String[] evolveMethod;
-	private int[] evolveLevel;
-	private String[] evolveItem;
-	
-	
-	// 'LOCAL'
-	private String gender;
-	private String nameNick;
-	private String ballType;
-	private PokemonMove[] moves;
-	private int curHP;
-	private int curEXP;
-	private int maxEXP;
-	private int level;
-	private boolean isWild;
-	private boolean isFainted;
-	private String status;
+	//<editor-fold defaultstate="collapsed" desc="Attributes">
+		// 'GLOBAL'
+		static final private int NUMATTRIB = 40;
+		static final private int MAXTOTALEV = 510;
+		static final private int MAXSINGLEEV = 252;
 
+		private int id;
+		private final boolean isShiny;
+		private String nameSpecies;
+		private String nameInternal;
+		private String kind;
+		private String pokeEntry;
+		private PokemonType[] types;
+
+		private int baseHP;
+		private int baseAttack;
+		private int baseDefense;
+		private int baseSpeed;
+		private int baseSpAtk;
+		private int baseSpDef;
+
+		private int yieldEXP;
+		private int yieldHP;
+		private int yieldAttack;
+		private int yieldDefense;
+		private int yieldSpeed;
+		private int yieldSpAtk;
+		private int yieldSpDef;
+
+		private int statHP;
+		private int statAttack;
+		private int statDefense;
+		private int statSpeed;
+		private int statSpAtk;
+		private int statSpDef;
+
+		private int EVHP;
+		private int EVAttack;
+		private int EVDefense;
+		private int EVSpeed;
+		private int EVSpAtk;
+		private int EVSpDef;
+
+		private int IVHP;
+		private int IVAttack;
+		private int IVDefense;
+		private int IVSpeed;
+		private int IVSpAtk;
+		private int IVSpDef;
+
+		private int catchRate;
+		private String growthRate;
+		private int hatchSteps;
+		private String color;
+		private String habitat;
+		private String[] allMoves;
+
+		private String height;
+		private String weight;
+
+		private int numEvols;
+		private String[] evolvesInto;
+		private String[] evolveMethod;
+		private int[] evolveLevel;
+		private String[] evolveItem;
+
+
+		// 'LOCAL'
+		private String gender;
+		private String nameNick;
+		private String ballType;
+		private PokemonMove[] moves;
+		private int curHP;
+		private int curEXP;
+		private int maxEXP;
+		private int level;
+		private boolean isWild;
+		private boolean isFainted;
+		private String status;
+	//</editor-fold>
+	
+	/**
+	 * Create Pokemon based on given ID.
+	 * @param id Pokemon ID to create.
+	 */
+	public Pokemon(int id) {
+		this.id = id;
+		this.isShiny = false;
+		this.gender = "TBD";
+		this.level = 0;
+		this.ballType = "POKEBALL";
+		this.isWild = true;
+		this.status="";
+		
+		genIVs();
+		
+		boolean couldCreate = readInfo( this.id );
+		
+		if (!couldCreate){
+			System.err.println("Could not find Pokemon with id " + id + ".");
+		}
+	}
+
+	/**
+	 * Create Pokemon based on given internal name.
+	 * @param nameInternal Pokemon internal name to create.
+	 */
 	public Pokemon(String nameInternal) {
 		this.nameInternal = nameInternal;
 		this.id = getPokemonID(nameInternal);
@@ -100,22 +129,7 @@ public class Pokemon {
 		this.isWild = true;
 		this.status="";
 		
-		Random rnd = new Random();
-		
-	
-		IVHP = rnd.nextInt(32);
-		IVAttack = rnd.nextInt(32);
-		IVDefense = rnd.nextInt(32);
-		IVSpeed = rnd.nextInt(32);
-		IVSpAtk = rnd.nextInt(32);
-		IVSpDef = rnd.nextInt(32);
-	
-		EVHP = 0;
-		EVAttack = 0;
-		EVDefense = 0;
-		EVSpeed = 0;
-		EVSpAtk = 0;
-		EVSpDef = 0;
+		genIVs();
 		
 		boolean couldCreate = readInfo( this.id );
 		
@@ -124,22 +138,11 @@ public class Pokemon {
 		}
 	}
 	
-	public Pokemon(int id) {
-		this.id = id;
-		this.isShiny = false;
-		this.gender = "TBD";
-		this.level = 0;
-		this.ballType = "POKEBALL";
-		this.isWild = true;
-		this.status="";
-		
-		boolean couldCreate = readInfo( this.id );
-		
-		if (!couldCreate){
-			System.err.println("Could not find Pokemon with id " + id + ".");
-		}
-	}
-
+	/**
+	 * Create Pokemon based on given internal name and given ball type internal name.
+	 * @param nameInternal Pokemon internal name to create.
+	 * @param ballType Pokemon Pokeball internal name.
+	 */
 	public Pokemon(String nameInternal, String ballType) {
 		this.nameInternal = nameInternal;
 		this.id = getPokemonID(nameInternal);
@@ -148,6 +151,8 @@ public class Pokemon {
 		this.level = 0;
 		this.ballType = ballType;
 		
+		genIVs();
+		
 		boolean couldCreate = readInfo( this.id );
 		
 		if (!couldCreate){
@@ -155,6 +160,11 @@ public class Pokemon {
 		}
 	}
 	
+	/**
+	 * Create Pokemon based on given id and given ball type internal name.
+	 * @param id Pokemon ID to create.
+	 * @param ballType Pokemon Pokeball internal name.
+	 */
 	public Pokemon(int id, String ballType) {
 		this.id = id;
 		this.isShiny = false;
@@ -162,6 +172,8 @@ public class Pokemon {
 		this.level = 0;
 		this.ballType = ballType;
 		
+		genIVs();
+		
 		boolean couldCreate = readInfo( this.id );
 		
 		if (!couldCreate){
@@ -169,6 +181,125 @@ public class Pokemon {
 		}
 	}
 	
+	/**
+	 * Create Pokemon based on given internal name and given ball type ID.
+	 * @param nameInternal Pokemon internal name to create.
+	 * @param ballType Pokemon Pokeball ID.
+	 */
+	public Pokemon(String nameInternal, int ballType) {
+		this.nameInternal = nameInternal;
+		this.id = getPokemonID(nameInternal);
+		this.isShiny = false;
+		this.gender = "TBD";
+		this.level = 0;
+		this.ballType = new Item(ballType).getNameInternal();
+		
+		genIVs();
+		
+		boolean couldCreate = readInfo( this.id );
+		
+		if (!couldCreate){
+			System.err.println("Could not find Pokemon with id " + id + ".");
+		}
+	}
+	
+	/**
+	 * Create Pokemon based on given id and given ball type ID.
+	 * @param id Pokemon ID to create.
+	 * @param ballType Pokemon Pokeball ID.
+	 */
+	public Pokemon(int id, int ballType) {
+		this.id = id;
+		this.isShiny = false;
+		this.gender = "TBD";
+		this.level = 0;
+		this.ballType = new Item(ballType).getNameInternal();
+		
+		genIVs();
+		
+		boolean couldCreate = readInfo( this.id );
+		
+		if (!couldCreate){
+			System.err.println("Could not find Pokemon with id " + id + ".");
+		}
+	}
+	
+	/**
+	 * Create Pokemon based on given internal name and given ball item.
+	 * @param nameInternal Pokemon internal name to create.
+	 * @param ball Pokemon Pokeball Item.
+	 */
+	public Pokemon(String nameInternal, Item ball) {
+		this.nameInternal = nameInternal;
+		this.id = getPokemonID(nameInternal);
+		this.isShiny = false;
+		this.gender = "TBD";
+		this.level = 0;
+		this.ballType = ball.getNameInternal();
+		
+		genIVs();
+		
+		boolean couldCreate = readInfo( this.id );
+		
+		if (!couldCreate){
+			System.err.println("Could not find Pokemon with id " + id + ".");
+		}
+	}
+	
+	/**
+	 * Create Pokemon based on given id and given ball item.
+	 * @param id Pokemon ID to create.
+	 * @param ball Pokemon Pokeball Item
+	 */
+	public Pokemon(int id, Item ball) {
+		this.id = id;
+		this.isShiny = false;
+		this.gender = "TBD";
+		this.level = 0;
+		this.ballType = ball.getNameInternal();
+		
+		genIVs();
+		
+		boolean couldCreate = readInfo( this.id );
+		
+		if (!couldCreate){
+			System.err.println("Could not find Pokemon with id " + id + ".");
+		}
+	}
+	
+	/**
+	 * Generate Pokemon IVs.
+	 */
+	private void genIVs(){
+		Random rnd = new Random();
+		
+		this.IVHP = rnd.nextInt(32);
+		this.IVAttack = rnd.nextInt(32);
+		this.IVDefense = rnd.nextInt(32);
+		this.IVSpeed = rnd.nextInt(32);
+		this.IVSpAtk = rnd.nextInt(32);
+		this.IVSpDef = rnd.nextInt(32);
+		
+		wipeEVs();
+	}
+	
+	/**
+	 * Wipe Pokemon EVs.
+	 */
+	private void wipeEVs(){
+		this.EVHP = 0;
+		this.EVAttack = 0;
+		this.EVDefense = 0;
+		this.EVSpeed = 0;
+		this.EVSpAtk = 0;
+		this.EVSpDef = 0;
+	}
+	
+	/**
+	 * Acquire information from main data about Pokemon with given ID.
+	 * @param id Pokemon to search for in main data.
+	 * @return Success of process.
+	 */
 	private boolean readInfo(int id){
 		boolean success = false;
 		
@@ -360,6 +491,11 @@ public class Pokemon {
 		return success;
 	}
 	
+	/**
+	 * Calculate the 'Alpha' of the Catch Rate formula.
+	 * @param bonusball Pokeball multiplier.
+	 * @return 'Alpha' value for the formula
+	 */
 	private double calcAlpha(double bonusball) {
 		
 		double bonusstatus;
@@ -389,6 +525,12 @@ public class Pokemon {
 		return alpha;
 	}
 	
+	/**
+	 * Do a shake check.
+	 * <p>[MASTER]</p>
+	 * @param bonusball Pokeball multiplier.
+	 * @return Success of shake check.
+	 */
 	public boolean tryCatch(double bonusball){
 		boolean shakeCheck = false;
 		Random rnd = new Random();
@@ -403,6 +545,58 @@ public class Pokemon {
 		return shakeCheck;
 	}
 	
+	//<editor-fold defaultstate="collapsed" desc="tryCatch Sub-Processes">
+		/**
+		 * Do a shake check.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param ball Item Pokeball being used.
+		 * @return Success of shake check.
+		 * @see tryCatch(double)
+		 */
+		public boolean tryCatch(Item ball){
+			boolean shakeCheck;
+
+			shakeCheck = tryCatch(ball.getPokeRate());
+
+			return shakeCheck;
+		}
+
+		/**
+		 * Do a shake check.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param ballName Internal name of Pokeball being used.
+		 * @return Success of shake check.
+		 * @see tryCatch(double)
+		 */
+		public boolean tryCatch(String ballName){
+			boolean shakeCheck;
+
+			shakeCheck = tryCatch(new Item(ballName).getPokeRate());
+
+			return shakeCheck;
+		}
+
+		/**
+		 * Do a shake check.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param ballID ID of Pokeball being used.
+		 * @return Success of shake check.
+		 * @see tryCatch(double)
+		 */
+		public boolean tryCatch(int ballID){
+			boolean shakeCheck;
+
+			shakeCheck = tryCatch(new Item(ballID).getPokeRate());
+
+			return shakeCheck;
+		}
+	//</editor-fold>
+	
+	/**
+	 * Searches in main data for Pokemon with given internal name, and returns its ID.
+	 * @param internalName Pokemon internal name to search for.
+	 * @return Pokemon ID.
+	 */
 	private int getPokemonID(String internalName){
 		int id = 0;
 		boolean foundPokemon = false;
@@ -432,6 +626,10 @@ public class Pokemon {
 		return id;
 	}
 	
+	/**
+	 * Evolve this Pokemon.
+	 * @return Success of process.
+	 */
 	public boolean evolve(){
 		boolean success = false;
 		if (this.numEvols > 0){
@@ -450,58 +648,113 @@ public class Pokemon {
 		return success;
 	}
 	
+	/**
+	 * Sets a given move in a given place.
+	 * <p>[MASTER]</p>
+	 * @param place Place to set given move in.
+	 * @param newMove New move to set.
+	 */
 	public void setMove(int place, PokemonMove newMove){
 		moves[place] = newMove;
 	}
 	
-	public void setMove(int place, String newMove){
-		setMove(place,new PokemonMove(newMove));
-	}
-	
-	public void setMove(int place, int newMove){
-		setMove(place,new PokemonMove(newMove));
-	}
-	
-	public void replaceMove(String oldMove, PokemonMove newMove){
-		int place = 0;
-		for (int i = 0; i < moves.length; i++) {
-			if (moves[i].getNameInternal().compareTo(oldMove)== 0){
-				place = i;
-			}
+	//<editor-fold defaultstate="collapsed" desc="setMove Sub-Processes">
+		/**
+		 * Sets a given move in a given place.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param place Place to set given move in.
+		 * @param newMove Internal name of new move to set.
+		 */
+		public void setMove(int place, String newMove){
+			setMove(place,new PokemonMove(newMove));
 		}
-		setMove(place,newMove);
-	}
-	
-	public void replaceMove(int oldMove, PokemonMove newMove){
-		int id = 0;
-		for (int i = 0; i < moves.length; i++) {
-			if (moves[i].getId() == oldMove){
-				id = i;
-			}
+
+		/**
+		 * Sets a given move in a given place.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param place Place to set given move in.
+		 * @param newMove ID of new move to set.
+		 */
+		public void setMove(int place, int newMove){
+			setMove(place,new PokemonMove(newMove));
 		}
-		setMove(id,newMove);
-	}
+
+		/**
+		 * Replaces a given move with another given move.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param oldMove Internal name of old move.
+		 * @param newMove New move to set.
+		 */
+		public void replaceMove(String oldMove, PokemonMove newMove){
+			int place = 0;
+			for (int i = 0; i < moves.length; i++) {
+				if (moves[i].getNameInternal().compareTo(oldMove)== 0){
+					place = i;
+				}
+			}
+			setMove(place,newMove);
+		}
+
+		/**
+		 * Replaces a given move with another given move.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param oldMove ID of old move.
+		 * @param newMove New move to set.
+		 */
+		public void replaceMove(int oldMove, PokemonMove newMove){
+			int id = 0;
+			for (int i = 0; i < moves.length; i++) {
+				if (moves[i].getId() == oldMove){
+					id = i;
+				}
+			}
+			setMove(id,newMove);
+		}
+
+		/**
+		 * Replaces a given move with another given move.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param oldMove Internal name of old move.
+		 * @param newMove Internal name of new move to set.
+		 */
+		public void replaceMove(String oldMove, String newMove){
+			replaceMove(oldMove,new PokemonMove(newMove));
+		}
+
+		/**
+		 * Replaces a given move with another given move.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param oldMove ID of old move.
+		 * @param newMove Internal name of new move to set.
+		 */
+		public void replaceMove(int oldMove, String newMove){
+			replaceMove(oldMove,new PokemonMove(newMove));
+		}
+
+		/**
+		 * Replaces a given move with another given move.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param oldMove Internal name of old move.
+		 * @param newMove ID of new move to set.
+		 */
+		public void replaceMove(String oldMove, int newMove){
+			replaceMove(oldMove,new PokemonMove(newMove));
+		}
+
+		/**
+		 * Replaces a given move with another given move.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param oldMove ID of old move.
+		 * @param newMove ID of new move to set.
+		 */
+		public void replaceMove(int oldMove, int newMove){
+			replaceMove(oldMove,new PokemonMove(newMove));
+		}
+	//</editor-fold>
 	
-	public void replaceMove(String oldMove, String newMove){
-		replaceMove(oldMove,new PokemonMove(newMove));
-	}
-	
-	public void replaceMove(int oldMove, String newMove){
-		replaceMove(oldMove,new PokemonMove(newMove));
-	}
-	
-	public void replaceMove(String oldMove, int newMove){
-		replaceMove(oldMove,new PokemonMove(newMove));
-	}
-	
-	public void replaceMove(int oldMove, int newMove){
-		replaceMove(oldMove,new PokemonMove(newMove));
-	}
-	
-	public PokemonMove getMove(int place){
-		return moves[place];
-	}
-	
+	/**
+	 * Update Pokemon stats.
+	 */
 	public void updateStats(){
 		this.statHP = (((2 * this.baseHP + this.IVHP + (this.EVHP/4))*this.level)/100)+this.level+10;
 		this.statAttack = (((2 * this.baseAttack + this.IVAttack + (this.EVAttack/4))*this.level)/100)+5;
@@ -526,17 +779,27 @@ public class Pokemon {
 		}
 	}
 	
+	/**
+	 * Level up Pokemon.
+	 */
 	public void levelUp(){
 		this.curEXP = this.curEXP - this.maxEXP;
 		this.level = this.level + 1;
 	}
 	
+	/**
+	 * Set 'faint' values.
+	 */
 	public void faint(){
 		this.status="";
 		this.isFainted = true;
 		this.curHP = 0;
 	}
 	
+	/**
+	 * Gets Experience value result for winning against this Pokemon.
+	 * @return Experience value to gain.
+	 */
 	public int getExpGain(){
 		double gain = 0;
 		double a = 1;
@@ -548,6 +811,11 @@ public class Pokemon {
 	}
 	
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
+		
+		public PokemonMove getMove(int place){
+			return moves[place];
+		}
+		
 		public PokemonMove[] getMoves(){
 			return moves;
 		}
@@ -590,6 +858,9 @@ public class Pokemon {
 
 		public void setCurHP(int curHP) {
 			this.curHP = curHP;
+			if (this.curHP <= 0){
+				faint();
+			}
 		}
 
 		public int getCurEXP() {
