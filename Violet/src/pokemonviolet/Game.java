@@ -31,6 +31,7 @@ public class Game {
 	
 	public Game() {
 		
+<<<<<<< Updated upstream
             SplashWindow splash = new SplashWindow();
 
             List<String> readInfoP = null;
@@ -73,6 +74,48 @@ public class Game {
 
         //    classTestWindow=new ClassTestWindow();
             gameWindow=new GameWindow();
+=======
+		SplashWindow splash = new SplashWindow();
+		
+		List<String> readInfoP = null;
+		List<String> readInfoI = null;
+		List<String> readInfoM = null;
+		List<String> readInfoT = null;
+		try {
+			File archivo = new File("listPokemon.txt");
+			readInfoP = Files.readAllLines(archivo.toPath());
+			
+			archivo = new File("listItems.txt");
+			readInfoI = Files.readAllLines(archivo.toPath());
+			
+			archivo = new File("listMoves.txt");
+			readInfoM = Files.readAllLines(archivo.toPath());
+			
+			archivo = new File("listTypes.txt");
+			readInfoT = Files.readAllLines(archivo.toPath());
+		} catch (IOException ex) {
+			System.err.println("Couldn't load files!");
+			System.exit(0);
+		}
+		
+		INFOITEMS = readInfoI;
+		INFOPOKEMON = readInfoP;
+		INFOMOVES = readInfoM;
+		INFOTYPES = readInfoT;
+				
+		
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException ex) {
+		}
+		splash.dispose();
+		
+		player = new Player ("Red",1);
+		player.addItem("POKEBALL",15);
+		
+		classTestWindow=new ClassTestWindow();
+		gameWindow=new GameWindow();
+>>>>>>> Stashed changes
 		
 		splash.dispose();
 	}
