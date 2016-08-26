@@ -107,7 +107,7 @@ public class Item {
 		return nameInternal;
 	}
 
-	private int getItemID(String internalName){
+	public static int getItemID(String internalName){
 		int id = 0;
 		
 		boolean foundItem = false;
@@ -137,49 +137,49 @@ public class Item {
 		return id;
 	}
 	
-	// GETTERS AND SETTERS
-	public int getId() {
-		return id;
-	}
+	// <editor-fold defaultstate="collapsed" desc="Getters & Setters"> 
+		public int getId() {
+			return id;
+		}
 
-	public void setAmount(int amount) {
-		this.amount = amount;
-	}
+		public void setAmount(int amount) {
+			this.amount = amount;
+		}
 
-	public String getNameSingular() {
-		return nameSingular;
-	}
+		public String getNameSingular() {
+			return nameSingular;
+		}
 
-	public String getNamePlural() {
-		return namePlural;
-	}
+		public String getNamePlural() {
+			return namePlural;
+		}
 
-	public int getPocket() {
-		return pocket;
-	}
+		public int getPocket() {
+			return pocket;
+		}
 
-	public int getPrice() {
-		return price;
-	}
+		public int getPrice() {
+			return price;
+		}
 
-	public String getDescription() {
-		return description;
-	}
+		public String getDescription() {
+			return description;
+		}
 
-	public int getUseOutBattle() {
-		return useOutBattle;
-	}
+		public int getUseOutBattle() {
+			return useOutBattle;
+		}
 
-	public int getUseInBattle() {
-		return useInBattle;
-	}
+		public int getUseInBattle() {
+			return useInBattle;
+		}
 
-	public double getPokeRate() {
-		return pokeRate;
-	}
+		public double getPokeRate() {
+			return pokeRate;
+		}
 
-	public int getAmount() {
-		return amount;
-	}
-
+		public int getAmount() {
+			return amount;
+		}
+	//</editor-fold>
 }

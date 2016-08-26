@@ -251,10 +251,18 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
         setVisible(true);
     }
 
+	/**
+	 * Displays given event text.
+	 * @param event Text to display on Display.
+	 */
 	public void displayEvent(String event) {
 		eventsTextDisplay.setText(event + "\n" + eventsTextDisplay.getText());
 	}
 	
+	/**
+	 * Walk button press event method.
+	 * Takes a step, spawns Pokemon if need be, updates buttons.
+	 */
 	public void walkBtnPress() {
 		Game.stepsToSpawn = Game.stepsToSpawn - 1;
 		
@@ -271,7 +279,7 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 					
 			displayEvent("A wild " + Game.currentPokemon.getNameSpecies()+ " appeared!");
 			
-			Game.stepsToSpawn = Game.calcSteps();
+			Game.stepsToSpawn = Game.roll(1,2,3);
 		}else{
 			cleanPokemonInfo();
 			
@@ -279,6 +287,9 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 		}
 	}
 	
+	/**
+	 * Update buttons depending on situation.
+	 */
 	public void updateButtons(){
 		if (Game.currentPokemon == null){
 			evolveBtn.setEnabled(false);
@@ -335,6 +346,9 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 		}
 	}
 	
+	/**
+	 * Clean current Pokemon and all UI information about it.
+	 */
 	public void cleanPokemonInfo(){
 		Game.currentPokemon = null;
 		pokemonNameDisplay.setText(" ");
@@ -352,6 +366,11 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 		imgContainerEnemy.setIcon(pokemonImgDisplay);
 	}
 
+	/**
+	 * Throw button press event method.
+	 * Checks if Player can throw given Pokeball, does shake checks and adds Pokemon to player if need be.
+	 * @param ball 
+	 */
 	public void throwBtnPress(Item ball) {
 		boolean canDo = Game.player.subItem(ball.getId());
 		if (canDo){
@@ -405,6 +424,9 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 		}
 	}
 	
+	/**
+	 * Evolves current wild Pokemon.
+	 */
 	public void evolveBtnPress(){
 		String pastName = Game.currentPokemon.getNameSpecies();
 		boolean couldEvolve = Game.currentPokemon.evolve();
@@ -417,6 +439,9 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 		}
 	}
 	
+	/**
+	 * Update UI with current wild Pokemon information.
+	 */
 	public void updateWildPokemon(){
 			
 		pokemonNameDisplay.setText(Game.currentPokemon.getNameSpecies());
@@ -519,6 +544,9 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 		imgContainerEnemy.setIcon(pokemonImgDisplay);
 	}
 	
+	/**
+	 * Update player team UI to accommodate new player team.
+	 */
 	public void updateTeamImg(){
 		for (int i = 0; i < Game.player.getEquipo().length; i++) {
 			if (i < Game.player.getNumPokemonTeam()){
@@ -537,6 +565,9 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 		}
 	}
 	
+	/**
+	 * Update UI with current amount of each type of Pokeball.
+	 */
 	public void updateBallAmounts(){
 		amountDisplayGreat.setText(""+Game.player.getAmountItem("GREATBALL"));
 		amountDisplayPoke.setText(""+Game.player.getAmountItem("POKEBALL"));
@@ -544,71 +575,79 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 		amountDisplayMaster.setText(""+Game.player.getAmountItem("MASTERBALL"));
 	}
 	
+	/**
+	 * Tries to buy item with given internal name, adds item if applicable.
+	 * Updates UI accordingly.
+	 * @param internalName Item internal name to buy.
+	 */
 	public void buyItem(String internalName){
-		Game.player.addItem(internalName);
-		Game.player.setDinero(Game.player.getDinero()-new Item(internalName).getPrice());
-		moneyDialog.setText("$ " + Game.player.getDinero());
-		updateBallAmounts();
-		updateButtons();
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == walkBtn){
-			walkBtnPress();
-		}else if (e.getSource() == evolveBtn){
-			evolveBtnPress();
-		}else if (e.getSource() == throwGreatBtn){
-			throwBtnPress(new Item("GREATBALL"));
-		}else if (e.getSource() == throwPokeBtn){
-			throwBtnPress(new Item("POKEBALL"));
-		}else if (e.getSource() == throwMasterBtn){
-			throwBtnPress(new Item("MASTERBALL"));
-		}else if (e.getSource() == throwUltraBtn){
-			throwBtnPress(new Item("ULTRABALL"));
-		}else if (e.getSource() == buyGreatBtn){
-			buyItem("GREATBALL");
-		}else if (e.getSource() == buyPokeBtn){
-			buyItem("POKEBALL");
-		}else if (e.getSource() == buyMasterBtn){
-			buyItem("MASTERBALL");
-		}else if (e.getSource() == buyUltraBtn){
-			buyItem("ULTRABALL");
+		if (Game.player.reduceMoney(new Item(internalName).getPrice())){
+			Game.player.addItem(internalName);
+			moneyDialog.setText("$ " + Game.player.getDinero());
+			updateBallAmounts();
+			updateButtons();
 		}
 	}
 	
-	@Override
-	public void windowClosing(WindowEvent e) {
-		dispose();
-		System.exit(0);
-	}
+	// <editor-fold defaultstate="collapsed" desc="Overriden JFrame Methods"> 
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == walkBtn){
+				walkBtnPress();
+			}else if (e.getSource() == evolveBtn){
+				evolveBtnPress();
+			}else if (e.getSource() == throwGreatBtn){
+				throwBtnPress(new Item("GREATBALL"));
+			}else if (e.getSource() == throwPokeBtn){
+				throwBtnPress(new Item("POKEBALL"));
+			}else if (e.getSource() == throwMasterBtn){
+				throwBtnPress(new Item("MASTERBALL"));
+			}else if (e.getSource() == throwUltraBtn){
+				throwBtnPress(new Item("ULTRABALL"));
+			}else if (e.getSource() == buyGreatBtn){
+				buyItem("GREATBALL");
+			}else if (e.getSource() == buyPokeBtn){
+				buyItem("POKEBALL");
+			}else if (e.getSource() == buyMasterBtn){
+				buyItem("MASTERBALL");
+			}else if (e.getSource() == buyUltraBtn){
+				buyItem("ULTRABALL");
+			}
+		}
 
-	@Override
-	public void windowOpened(WindowEvent e) {
-	}
+		@Override
+		public void windowClosing(WindowEvent e) {
+			dispose();
+			System.exit(0);
+		}
+
+		@Override
+		public void windowOpened(WindowEvent e) {
+		}
 
 
-	@Override
-	public void windowActivated(WindowEvent e) {
-	}
+		@Override
+		public void windowActivated(WindowEvent e) {
+		}
 
 
-	@Override
-	public void windowIconified(WindowEvent e) {
-	}
+		@Override
+		public void windowIconified(WindowEvent e) {
+		}
 
 
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-	}
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+		}
 
 
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-	}
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+		}
 
 
-	@Override
-	public void windowClosed(WindowEvent e) {
-	}
+		@Override
+		public void windowClosed(WindowEvent e) {
+		}
+		// </editor-fold>
 }

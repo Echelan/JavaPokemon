@@ -24,11 +24,14 @@ public class Game {
 	public static List<String> INFOTYPES;
 	
 	public static Player player;
-	public static int stepsToSpawn = calcSteps();;
+	public static int stepsToSpawn = roll(1,2,3);;
 	public static Pokemon currentPokemon;
 	private static GameWindow gameWindow;
 	private static ClassTestWindow classTestWindow;
 	
+	/**
+	 * Build game.
+	 */
 	public Game() {
 		
 		SplashWindow splash = new SplashWindow();
@@ -75,17 +78,20 @@ public class Game {
 			
 	}
 	
-	public static int calcSteps(){
-		int steps = 1;
-		int numDados = 2;
-		int numLados = 3;
-
+	/**
+	 * Roll given amount of dice with given amount of sides with a starting base value.
+	 * @param value Starting base value.
+	 * @param numDice Number of dice to roll.
+	 * @param numSides Number of sides per die.
+	 * @return Resulting value.
+	 */
+	public static int roll(int value, int numDice, int numSides){
 		Random rnd = new Random();
 
-		for (int i = 0; i < numDados; i++) {
-		  steps = steps + (rnd.nextInt(numLados)+1);
+		for (int i = 0; i < numDice; i++) {
+		  value = value + (rnd.nextInt(numSides)+1);
 		}
 //		System.out.println(steps);
-		return steps;
+		return value;
 	}
 }

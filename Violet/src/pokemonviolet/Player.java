@@ -146,7 +146,7 @@ public final class Player {
 	}
 
 	/**
-	 * [MASTER] Returns amount of item carried by Player.
+	 * [MASTER] Returns amount of item with given ID in Player pocket with given ID.
 	 * @param id Item ID to search for.
 	 * @param pocketID Pocket ID to search in.
 	 * @return amount of Item present.
@@ -191,9 +191,10 @@ public final class Player {
 	}
 	
 	/**
-	 * 
-	 * @param id
-	 * @return 
+	 * Returns amount of item with given ID carried by Player.
+	 * (Sub-process, wraps to a MASTER.)
+	 * @param id Item ID to search for.
+	 * @return amount of Item present.
 	 */
 	public int getAmountItem(int id){
 		int amount;
@@ -204,9 +205,10 @@ public final class Player {
 	}
 	
 	/**
-	 * 
-	 * @param internalName
-	 * @return 
+	 * Returns amount of item with given internal name carried by Player.
+	 * (Sub-process, wraps to a MASTER.)
+	 * @param internalName Item internal name to search for.
+	 * @return amount of Item present.
 	 */
 	public int getAmountItem(String internalName){
 		int amount;
@@ -352,7 +354,6 @@ public final class Player {
 		return success;
 	}
 	
-	
 	/**
 	 * [MASTER] Remove item from Player inventory.
 	 * @param id Item ID to remove.
@@ -450,6 +451,17 @@ public final class Player {
 		boolean success;
 		
 		success = subItem(new Item(internalName).getId());
+		
+		return success;
+	}
+	
+	public boolean reduceMoney(int amount){
+		boolean success = false;
+		
+		if (this.dinero >= amount){
+			this.dinero = this.dinero - amount;
+			success = true;
+		}
 		
 		return success;
 	}
