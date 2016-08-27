@@ -128,7 +128,7 @@ public class PokemonMove {
 	private int getMoveID(String internalName){
 		int id = 0;
 		boolean foundMove = false;
-		System.out.println("Searching for " + internalName);
+	//	System.out.println("Searching for " + internalName);
 		while (foundMove == false && id < Game.INFOMOVES.size()){
 			String[] moveinfo = Game.INFOMOVES.get(id).split(";");
 			int attribComp = 0;
@@ -146,9 +146,9 @@ public class PokemonMove {
 			}
 			id = id + 1;
 		}
-		if (!foundMove){
-			System.err.println("Could not find move " + internalName + ".");
-		}
+	//	if (!foundMove){
+	//		System.err.println("Could not find move " + internalName + ".");
+	//	}
 
 
 		return id;

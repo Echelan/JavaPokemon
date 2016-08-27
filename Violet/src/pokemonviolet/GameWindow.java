@@ -39,7 +39,10 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 		screen.setBackground(Color.black);
 		screen.setFocusable(false);
 		add(screen);
-
+		
+		Movement Mover = new Movement();
+		addKeyListener(Mover);
+		
 		Thread asd = new Thread(screen);
 		asd.start();
 		

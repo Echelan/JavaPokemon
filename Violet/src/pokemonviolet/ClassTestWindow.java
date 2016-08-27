@@ -182,9 +182,9 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 	*/
     public ClassTestWindow(){
         try {
-                allPokemonBig = ImageIO.read(new File("pokemonIconsBig.png"));
-                allPokemonSmall = ImageIO.read(new File("pokemonIconsSmall.png"));
-                allItems = ImageIO.read(new File("itemsIcons.png"));
+			allPokemonBig = ImageIO.read(new File("pokemonIconsBig.png"));
+			allPokemonSmall = ImageIO.read(new File("pokemonIconsSmall.png"));
+			allItems = ImageIO.read(new File("itemsIcons.png"));
         } catch (IOException ex) {
 
         }

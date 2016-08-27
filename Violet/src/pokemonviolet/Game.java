@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Random;
 
-
 /**
  *
  * @author Andres
@@ -72,20 +71,20 @@ public class Game {
 		List<String> readInfoM = null;
 		List<String> readInfoT = null;
 		try {
-				File archivo = new File("listPokemon.txt");
-				readInfoP = Files.readAllLines(archivo.toPath());
+			File archivo = new File("listPokemon.txt");
+			readInfoP = Files.readAllLines(archivo.toPath());
 
-				archivo = new File("listItems.txt");
-				readInfoI = Files.readAllLines(archivo.toPath());
+			archivo = new File("listItems.txt");
+			readInfoI = Files.readAllLines(archivo.toPath());
 
-				archivo = new File("listMoves.txt");
-				readInfoM = Files.readAllLines(archivo.toPath());
+			archivo = new File("listMoves.txt");
+			readInfoM = Files.readAllLines(archivo.toPath());
 
-				archivo = new File("listTypes.txt");
-				readInfoT = Files.readAllLines(archivo.toPath());
+			archivo = new File("listTypes.txt");
+			readInfoT = Files.readAllLines(archivo.toPath());
 		} catch (IOException ex) {
-				System.err.println("Couldn't load files!");
-				System.exit(0);
+			System.err.println("Couldn't load files!");
+			System.exit(0);
 		}
 
 		INFOITEMS = readInfoI;
@@ -100,10 +99,13 @@ public class Game {
 
 		splash.dispose();
 
-		player = new Player ("Red",1);
+		player = new Player ("Red","EEVEE");
 		player.addItem("POKEBALL",15);
-
-	    classTestWindow=new ClassTestWindow();
+		
+		Thread playerThread = new Thread(player);
+		playerThread.start();
+		
+	//    classTestWindow=new ClassTestWindow();
 		gameWindow=new GameWindow();
 			
 	}

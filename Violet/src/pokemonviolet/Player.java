@@ -10,9 +10,19 @@ package pokemonviolet;
  *
  * @author Andres
  */
-public final class Player {
+public final class Player implements Runnable {
 	
 	// <editor-fold defaultstate="collapsed" desc="Attributes">
+		//<editor-fold defaultstate="collapsed" desc="Statics">
+			/**
+			 * Position change interval.
+			 */
+			private static int MOVEPOS = 3;
+			/**
+			 * Running multiplier.
+			 */
+			private static double RUNMULT = 2.0;
+		//</editor-fold>
 		// <editor-fold defaultstate="collapsed" desc="General">
 			/**
 			 * Player funds.
@@ -97,14 +107,32 @@ public final class Player {
 			 */
 			private int x, y;
 			/**
-			 * Player direction booleans.
+			 * Player old coordinates.
 			 */
-			private boolean left, right, up, down;
+			private int xOld, yOld;
+			/**
+			 * Player direction.
+			 */
+			private String direction;
 			/**
 			 * Player running boolean.
 			 */
 			private boolean isRunning;
 		// </editor-fold>
+		// <editor-fold defaultstate="collapsed" desc="Sprite">
+			/**
+			 * Current frame of Player animation.
+			 */
+			private int curFrame;
+			/**
+			 * Max frames of Player animation.
+			 */
+			private int maxFrames;
+			/**
+			 * Current animation of Player.
+			 */
+			private int curAnim;
+		//</editor-fold>
 	// </editor-fold>
 	
 	/**
@@ -173,28 +201,10 @@ public final class Player {
 		this.numMachines = 0;
 		this.numKeys = 0;
 		this.numBattles = 0;
-	}
-
-	public void update(){
-		move();
-	}
-	
-	/**
-	 * Move Player coordinates.
-	 */
-	public void move(){
-		if (left){
-			x = x - 1;
-		}
-		if (right){
-			x = x + 1;
-		}
-		if (up){
-			y = y - 1;
-		}
-		if (down){
-			y = y + 1;
-		}
+		this.direction = "";
+		this.maxFrames = 3;
+		this.curFrame = 1;
+		this.curAnim = 0;
 	}
 	
 	/**
@@ -544,6 +554,46 @@ public final class Player {
 		return success;
 	}
 	
+	@Override
+	public void run() {
+		while(true){
+			move();
+			
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException ex) {
+			}
+		}
+	}
+	
+	/**
+	 * Move Player coordinates.
+	 */
+	public void move(){
+		int amount = MOVEPOS;
+		if (isRunning){
+			amount = (int)(amount * RUNMULT);
+		}
+		
+		xOld = x;
+		yOld = y;
+		
+		switch (direction){
+			case "LEFT":
+				x = x - amount;
+			break;
+			case "RIGHT":
+				x = x + amount;
+			break;
+			case "UP":
+				y = y - amount;
+			break;
+			case "DOWN":
+				y = y + amount;
+			break;
+		}
+	}
+	
 	//<editor-fold defaultstate="collapsed" desc="subItem Sub-Processes">
 		/**
 		 * Remove item from Player inventory.
@@ -566,12 +616,43 @@ public final class Player {
 			return dinero;
 		}
 
+		public int getOldX() {
+			return xOld;
+		}
+
+		public int getCurFrame() {
+			return curFrame;
+		}
+
+		public void setCurFrame(int curFrame) {
+			this.curFrame = curFrame;
+			if (curFrame >= maxFrames){
+				this.curFrame = 0;
+			}
+		}
+
+		public int getMaxFrames() {
+			return maxFrames;
+		}
+
+		public int getCurAnim() {
+			return curAnim;
+		}
+
+		public int getOldY() {
+			return yOld;
+		}
+
 		public String getName() {
 			return name;
 		}
 
 		public int getNumPokemonTeam() {
 			return numPokemonTeam;
+		}
+
+		public String getDirection() {
+			return direction;
 		}
 
 		public void setDinero(int dinero) {
@@ -582,27 +663,26 @@ public final class Player {
 			return equipo;
 		}
 
-		public void setLeft(boolean left) {
-			this.left = left;
-		}
-
-		public void setRight(boolean right) {
-			this.right = right;
-		}
-
-		public void setUp(boolean up) {
-			this.up = up;
-		}
-
-		public void setDown(boolean down) {
-			this.down = down;
+		public void setDirection(String direction) {
+			this.direction = direction;
+			if (direction.compareTo("LEFT") ==0){
+				this.curAnim=2;
+			}else if (direction.compareTo("RIGHT") ==0){
+				this.curAnim=3;
+			}else if (direction.compareTo("UP") ==0){
+				this.curAnim=1;
+			}else if (direction.compareTo("DOWN") ==0){
+				this.curAnim=0;
+			}else{
+				this.curFrame=1;
+			}
 		}
 
 		public void setIsRunning(boolean isRunning) {
 			this.isRunning = isRunning;
 		}
 
-		public boolean isIsRunning() {
+		public boolean isRunning() {
 			return isRunning;
 		}
 
@@ -614,4 +694,5 @@ public final class Player {
 			return y;
 		}
 	//</editor-fold>
+
 }
