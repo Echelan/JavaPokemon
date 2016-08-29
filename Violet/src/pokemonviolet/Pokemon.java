@@ -1,7 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ *  Pokemon Violet - A University Project by Andres Movilla
+ *  Pokemon COPYRIGHT 2002-2016 Pokemon.
+ *  COPYRIGHT 1995-2016 Nintendo/Creatures Inc./GAME FREAK inc. TRADEMARK, REGISTERED TRADEMARK
+ *  and Pokemon character names are trademarks of Nintendo.
+ *  No copyright or trademark infringement is intended in using Pokemon content on Pokemon Violet.
  */
 package pokemonviolet;
 
@@ -286,7 +288,7 @@ public class Pokemon {
 	/**
 	 * Wipe Pokemon EVs.
 	 */
-	private void wipeEVs(){
+	public void wipeEVs(){
 		this.EVHP = 0;
 		this.EVAttack = 0;
 		this.EVDefense = 0;
@@ -682,22 +684,6 @@ public class Pokemon {
 		/**
 		 * Replaces a given move with another given move.
 		 * <p>(Sub-process, wraps to a MASTER.)</p>
-		 * @param oldMove Internal name of old move.
-		 * @param newMove New move to set.
-		 */
-		public void replaceMove(String oldMove, PokemonMove newMove){
-			int place = 0;
-			for (int i = 0; i < moves.length; i++) {
-				if (moves[i].getNameInternal().compareTo(oldMove)== 0){
-					place = i;
-				}
-			}
-			setMove(place,newMove);
-		}
-
-		/**
-		 * Replaces a given move with another given move.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
 		 * @param oldMove ID of old move.
 		 * @param newMove New move to set.
 		 */
@@ -714,10 +700,10 @@ public class Pokemon {
 		/**
 		 * Replaces a given move with another given move.
 		 * <p>(Sub-process, wraps to a MASTER.)</p>
-		 * @param oldMove Internal name of old move.
+		 * @param oldMove ID of old move.
 		 * @param newMove Internal name of new move to set.
 		 */
-		public void replaceMove(String oldMove, String newMove){
+		public void replaceMove(int oldMove, String newMove){
 			replaceMove(oldMove,new PokemonMove(newMove));
 		}
 
@@ -725,9 +711,35 @@ public class Pokemon {
 		 * Replaces a given move with another given move.
 		 * <p>(Sub-process, wraps to a MASTER.)</p>
 		 * @param oldMove ID of old move.
+		 * @param newMove ID of new move to set.
+		 */
+		public void replaceMove(int oldMove, int newMove){
+			replaceMove(oldMove,new PokemonMove(newMove));
+		}
+	
+		/**
+		 * Replaces a given move with another given move.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param oldMove Internal name of old move.
+		 * @param newMove New move to set.
+		 */
+		public void replaceMove(String oldMove, PokemonMove newMove){
+			int place = 0;
+			for (int i = 0; i < moves.length; i++) {
+				if (moves[i].getNameInternal().compareTo(oldMove)== 0){
+					place = i;
+				}
+			}
+			setMove(place,newMove);
+		}
+
+		/**
+		 * Replaces a given move with another given move.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param oldMove Internal name of old move.
 		 * @param newMove Internal name of new move to set.
 		 */
-		public void replaceMove(int oldMove, String newMove){
+		public void replaceMove(String oldMove, String newMove){
 			replaceMove(oldMove,new PokemonMove(newMove));
 		}
 
@@ -740,14 +752,34 @@ public class Pokemon {
 		public void replaceMove(String oldMove, int newMove){
 			replaceMove(oldMove,new PokemonMove(newMove));
 		}
+		
+		/**
+		 * Replaces a given move with another given move.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param oldMove Old move.
+		 * @param newMove New move to set.
+		 */
+		public void replaceMove(PokemonMove oldMove, PokemonMove newMove){
+			replaceMove(oldMove.getId(),newMove);
+		}
 
 		/**
 		 * Replaces a given move with another given move.
 		 * <p>(Sub-process, wraps to a MASTER.)</p>
-		 * @param oldMove ID of old move.
+		 * @param oldMove Old move.
+		 * @param newMove Internal name of new move to set.
+		 */
+		public void replaceMove(PokemonMove oldMove, String newMove){
+			replaceMove(oldMove,new PokemonMove(newMove));
+		}
+
+		/**
+		 * Replaces a given move with another given move.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param oldMove Old move.
 		 * @param newMove ID of new move to set.
 		 */
-		public void replaceMove(int oldMove, int newMove){
+		public void replaceMove(PokemonMove oldMove, int newMove){
 			replaceMove(oldMove,new PokemonMove(newMove));
 		}
 	//</editor-fold>

@@ -1,7 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ *  Pokemon Violet - A University Project by Andres Movilla
+ *  Pokemon COPYRIGHT 2002-2016 Pokemon.
+ *  COPYRIGHT 1995-2016 Nintendo/Creatures Inc./GAME FREAK inc. TRADEMARK, REGISTERED TRADEMARK
+ *  and Pokemon character names are trademarks of Nintendo.
+ *  No copyright or trademark infringement is intended in using Pokemon content on Pokemon Violet.
  */
 package pokemonviolet;
 
@@ -322,6 +324,22 @@ public final class Player implements Runnable {
 
 			return amount;
 		}
+		
+		/**
+		 * Returns amount of item with given ID carried by Player.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param id Item ID to search for.
+		 * @return amount of Item present.
+		 * @see getAmountItem(int, int)
+		 */
+		public int getAmountItem(Item item){
+			int amount;
+
+			amount = getAmountItem(item.getId(),item.getPocket());
+
+			return amount;
+		}
+
 	//</editor-fold>
 	
 	/**
@@ -464,6 +482,38 @@ public final class Player implements Runnable {
 		
 		return success;
 	}
+		
+		/**
+		 * Add item to Player inventory.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param item Item to add.
+		 * @return Success of process.
+		 * @see addItem(int, int)
+		 */
+		public boolean addItem(Item item){
+			boolean success;
+
+			success = addItem(item.getId());
+
+			return success;
+		}
+
+		/**
+		 * Add item to Player inventory.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param item Item to add.
+		 * @param amount Item amount to add.
+		 * @return Success of process.
+		 * @see addItem(int, int)
+		 */
+		public boolean addItem(Item item, int amount){
+		boolean success;
+		
+		success = addItem(item.getId(), amount);
+		
+		return success;
+	}
+	
 	//</editor-fold>
 	
 	/**
@@ -554,6 +604,38 @@ public final class Player implements Runnable {
 		return success;
 	}
 	
+	//<editor-fold defaultstate="collapsed" desc="subItem Sub-Processes">
+		/**
+		 * Remove item from Player inventory.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param internalName Item internal name to remove.
+		 * @return Success of process.
+		 * @see subItem(int)
+		 */
+		public boolean subItem(String internalName){
+			boolean success;
+
+			success = subItem(new Item(internalName).getId());
+
+			return success;
+		}
+		
+		/**
+		 * Remove item from Player inventory.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param item Item to remove.
+		 * @return Success of process.
+		 * @see subItem(int)
+		 */
+		public boolean subItem(Item item){
+			boolean success;
+
+			success = subItem(item.getId());
+
+			return success;
+		}
+	//</editor-fold>
+		
 	@Override
 	public void run() {
 		while(true){
@@ -594,23 +676,6 @@ public final class Player implements Runnable {
 		}
 	}
 	
-	//<editor-fold defaultstate="collapsed" desc="subItem Sub-Processes">
-		/**
-		 * Remove item from Player inventory.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
-		 * @param internalName Item internal name to remove.
-		 * @return Success of process.
-		 * @see subItem(int)
-		 */
-		public boolean subItem(String internalName){
-		boolean success;
-		
-		success = subItem(new Item(internalName).getId());
-		
-		return success;
-	}
-	//</editor-fold>
-		
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
 		public int getDinero() {
 			return dinero;
