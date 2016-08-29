@@ -93,7 +93,7 @@ public class Game {
 		INFOTYPES = readInfoT;
 		
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(100);
 		} catch (InterruptedException ex) {
 		}
 
@@ -106,7 +106,8 @@ public class Game {
 		playerThread.start();
 		
 	//    classTestWindow=new ClassTestWindow();
-		gameWindow=new GameWindow();
+	//	gameWindow=new GameWindow();
+	new MapBuilder();
 			
 	}
 	
