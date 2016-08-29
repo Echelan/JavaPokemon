@@ -106,8 +106,8 @@ public class Game {
 		playerThread.start();
 		
 	//    classTestWindow=new ClassTestWindow();
-	//	gameWindow=new GameWindow();
-	new MapBuilder();
+		gameWindow=new GameWindow();
+	//new MapBuilder();
 			
 	}
 	

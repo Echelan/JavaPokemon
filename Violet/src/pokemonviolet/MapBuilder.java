@@ -102,6 +102,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	private JPanel objPanel;
 	private JPanel genPanel;
 	private final JButton swapInterfaceBtn;
+	private JLabel dimDisplay;
 	
 	public MapBuilder() {
 		setLayout(null);
@@ -269,6 +270,12 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		loadMapBtn.addActionListener(this);
 		loadMapBtn.setFocusable(false);
 		genPanel.add(loadMapBtn);
+		
+		dimDisplay = new JLabel("("+(xEnd+1-xStart)+"x"+(yEnd+1-yStart)+")");
+		dimDisplay.setBounds(75,200,140,20);
+		dimDisplay.setForeground(Color.white);
+		dimDisplay.setFocusable(false);
+		genPanel.add(dimDisplay);
 	}
 	
 	public void createTileInterface(){
@@ -945,8 +952,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					for (int k = 0; k < info.length; k++) {
 						if (info[k].length()==1){
 							info[k]="0"+info[k];
-							bw.write(info[k]);
 						}
+						bw.write(info[k]);
 						if (k!=(info.length-1)){
 							bw.write("-");
 						}
@@ -979,6 +986,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					String[] tileInfo = thisline[j].split("-");
 					for (int k = 0; k < tileInfo.length; k++) {
 						int thisInfo = Integer.parseInt( tileInfo[k], 16);
+						
 						switch(k){
 							case 0:
 								setT[i][j] = thisInfo;
@@ -1094,6 +1102,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 				tileGridLabel[i][j].setBounds(xPos+2, yPos+2, TILERESIZEDHEIGHT-4, TILERESIZEDWIDTH-4);
 			}
 		}
+		dimDisplay.setText("("+(thisEndX+1-thisStartX)+"x"+(thisEndY+1-thisStartY)+")");
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="Mouse Overrides">
