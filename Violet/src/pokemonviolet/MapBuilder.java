@@ -20,6 +20,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -83,6 +86,9 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	private JButton gymDims;
 	private JButton houseDims;
 	private JButton shopDims;
+	private JButton saveMapBtn;
+	private JButton loadMapBtn;
+	
 	private JLabel tileID;
 	private JLabel setID;
 	private JLabel xCoordsDisplay;
@@ -183,8 +189,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 
         }
 		
-		swapInterfaceBtn = new JButton("S");
-		swapInterfaceBtn.setBounds(830,620,50,40);
+		swapInterfaceBtn = new JButton("Swap");
+		swapInterfaceBtn.setBounds(740,620,90,40);
 		swapInterfaceBtn.addActionListener(this);
 		swapInterfaceBtn.setFocusable(false);
 		add(swapInterfaceBtn);
@@ -251,6 +257,18 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		prevTileBtn.addActionListener(this);
 		prevTileBtn.setFocusable(false);
 		genPanel.add(prevTileBtn);
+		
+		saveMapBtn = new JButton("Save");
+		saveMapBtn.setBounds(5,150,90,40);
+		saveMapBtn.addActionListener(this);
+		saveMapBtn.setFocusable(false);
+		genPanel.add(saveMapBtn);
+		
+		loadMapBtn = new JButton("Load");
+		loadMapBtn.setBounds(100,150,90,40);
+		loadMapBtn.addActionListener(this);
+		loadMapBtn.setFocusable(false);
+		genPanel.add(loadMapBtn);
 	}
 	
 	public void createTileInterface(){
@@ -388,10 +406,13 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			setObj(2);
 		}else if (e.getSource() == shopDims){
 			setObj(3);
+		}else if (e.getSource() == saveMapBtn){
+			writeMapFile();
+		}else if (e.getSource() == loadMapBtn){
+			loadMapFile();
 		}else{
 			setTile(e);
 		}
-		writeMapFile();
 	}
 	
 	public void setOutBox(){
@@ -625,7 +646,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 				
 			//	imageInfo[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
 			//	labelInfo[i][j].setIcon(tileGridImage[i][j]);
-				System.out.println(xTile+","+yTile);
+			
 				if (isTiling){
 					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
 				}else{
@@ -912,10 +933,25 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
             fw = new FileWriter(archivo.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
 			
-            
             for(int i = 0; i < MAPROWTILES; i++){
 				for(int j = 0; j < MAPROWTILES; j++){
-					bw.write(Integer.toHexString(setT[i][j])+Integer.toHexString(tile[i][j])+",");
+					String info[] = new String[4];
+					
+					info[0]=Integer.toHexString(setT[i][j]);
+					info[1]=Integer.toHexString(tile[i][j]);
+					info[2]=Integer.toHexString(setO[i][j]);
+					info[3]=Integer.toHexString(obj[i][j]);
+					
+					for (int k = 0; k < info.length; k++) {
+						if (info[k].length()==1){
+							info[k]="0"+info[k];
+							bw.write(info[k]);
+						}
+						if (k!=(info.length-1)){
+							bw.write("-");
+						}
+					}
+					bw.write(",");
 				}
 				bw.newLine();
             }
@@ -928,6 +964,77 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
             } catch (IOException ex) {
             }
         }
+	}
+	
+	public void loadMapFile(){
+		
+		List<String> readMapInfo = null;
+		try {
+			File archivo = new File("map1.txt");
+			readMapInfo = Files.readAllLines(archivo.toPath());
+			
+			for (int i = 0; i < readMapInfo.size(); i++) {
+				String[] thisline = readMapInfo.get(i).split(",");
+				for (int j = 0; j < thisline.length; j++) {
+					String[] tileInfo = thisline[j].split("-");
+					for (int k = 0; k < tileInfo.length; k++) {
+						int thisInfo = Integer.parseInt( tileInfo[k], 16);
+						switch(k){
+							case 0:
+								setT[i][j] = thisInfo;
+							break;
+							case 1:
+								tile[i][j] = thisInfo;
+							break;
+							case 2:
+								setO[i][j] = thisInfo;
+							break;
+							case 3:
+								obj[i][j] = thisInfo;
+							break;
+						}
+					}
+				}
+			}
+			refresh();
+		} catch (IOException ex) {
+		}
+		
+	}
+	
+	public void refresh(){
+		int[][] setInfo=setT;
+		int[][] tileInfo=tile;
+		ImageIcon[][] imageInfo=tileGridImage;
+		JLabel[][] labelInfo=tileGridLabel;
+		for (int i = 0; i < MAPROWTILES; i++) {
+			for (int j = 0; j < MAPROWTILES; j++) {
+				
+				int xTile;
+				int yTile;
+				xTile = getTileX(setInfo[i][j],tileInfo[i][j]);
+				yTile = getTileY(setInfo[i][j],tileInfo[i][j]);
+				
+				imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+				labelInfo[i][j].setIcon(imageInfo[i][j]);
+			}
+		}
+		setInfo=setO;
+		tileInfo=obj;
+		imageInfo=objGridImage;
+		labelInfo=objGridLabel;
+		for (int i = 0; i < MAPROWTILES; i++) {
+			for (int j = 0; j < MAPROWTILES; j++) {
+				
+				int xTile;
+				int yTile;
+				xTile = getObjX(setInfo[i][j],tileInfo[i][j]);
+				yTile = getObjY(setInfo[i][j],tileInfo[i][j]);
+				
+				imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+				labelInfo[i][j].setIcon(imageInfo[i][j]);
+			}
+		}
 	}
 	
 	public int[] getPos(int x, int y){
@@ -992,11 +1099,14 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	//<editor-fold defaultstate="collapsed" desc="Mouse Overrides">
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		modTile(e);
-		/*
+	//	modTile(e);
+		
 		int[] receive = caller(e);
 		xStart = receive[0];
-		yStart = receive[1];*/
+		yStart = receive[1];
+		xEnd = receive[0];
+		yEnd = receive[1];
+		highlight(xEnd,yEnd);
 	}
 
 	@Override
