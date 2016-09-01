@@ -196,7 +196,7 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
         setTitle("Pokemon Violet [CLASS TEST]");
         setResizable(false);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
         throwDialog = new JTextField("Throw:");
         throwDialog.setBounds(10, 260, 60, 50);

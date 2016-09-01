@@ -15,7 +15,10 @@ public class PokemonViolet {
 	
 	public static void main(String[] args) throws InterruptedException{
 		
-		new Game();
+		Game game = new Game();
+		
+		Thread gameThread = new Thread(game);
+		gameThread.start();
 		
     }
 	

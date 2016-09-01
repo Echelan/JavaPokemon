@@ -24,25 +24,12 @@ public class GameDisplay extends Canvas implements Runnable {
 	// <editor-fold defaultstate="collapsed" desc="Attributes">
 		/**
 		 * Sprite for Player.
+		 * <p> One frame dimensions: 20x20. </p>
 		 */
 		BufferedImage playerSprite;
 		/**
-		 * Yellow Ball X Position.
+		 * Current frame on Player Sprite.
 		 */
-		int x = 0;
-		/**
-		 * Yellow Ball Y Position.
-		 */
-		int y = 0;
-		/**
-		 * Yellow Ball X Direction Boolean.
-		 */
-		boolean xUp = false;
-		/**
-		 * Yellow Ball Y Direction Boolean.
-		 */
-		boolean yUp = false;
-		
 		Image currentPlayerFrame;
 	// </editor-fold>
 	
@@ -55,7 +42,11 @@ public class GameDisplay extends Canvas implements Runnable {
 	}
 	
 	public void paint(Graphics g){
-		g.drawImage(currentPlayerFrame, Game.player.getX(), Game.player.getY(), this);
+		if (Game.player.getDirection().compareTo("") != 0){
+			g.drawImage(currentPlayerFrame, Game.player.getX(),Game.player.getY(),this);
+		}else{
+			g.drawImage(currentPlayerFrame, (Game.player.getxTile()*20),(Game.player.getyTile()*20), this);
+		}
 	}
 
     @Override
@@ -63,23 +54,49 @@ public class GameDisplay extends Canvas implements Runnable {
         while (true){
 			requestFocus();
 			
-			int xPlayerIMG = 0;
-			int yPlayerIMG = 0;
-			if (Game.player.getDirection().compareTo("")!=0){
-				Game.player.setCurFrame(Game.player.getCurFrame()+1);
-				if (Game.player.isRunning()){
-					xPlayerIMG = xPlayerIMG + 60;
+			if (Game.player.getDirection().compareTo("") != 0){
+			
+				int xPlayerIMG = 0;
+				int yPlayerIMG = 0;
+				
+			//	if (Game.player.getDirection().compareTo("")!=0){
+					Game.player.setCurFrame(Game.player.getCurFrame()+1);
+					if (Game.player.isRunning()){
+						xPlayerIMG = xPlayerIMG + 60;
+					}
+			//	}
+			
+				xPlayerIMG = xPlayerIMG + (Game.player.getCurFrame()*20);
+				yPlayerIMG = yPlayerIMG + (Game.player.getCurAnim()*20);
+
+				currentPlayerFrame = playerSprite.getSubimage(xPlayerIMG, yPlayerIMG, 20, 20);
+				//repaint(Game.player.getOldX(),Game.player.getOldY()-,50,50);
+			
+				//repaint(Game.player.getX()-15,Game.player.getY()-15,50,50);
+			//	repaint(Game.player.getX()-20,Game.player.getY()-20,60,60);
+				repaint((Game.player.getxTile()*20)-20,(Game.player.getyTile()*20)-20,60,60);
+			}else{
+				if (Game.player.getCurFrame() != 1){
+					//System.out.println("!2");
+					int xPlayerIMG = 0;
+					int yPlayerIMG = 0;
+
+					//Game.player.refreshCoords();
+					
+					Game.player.setCurFrame(1);
+
+					xPlayerIMG = xPlayerIMG + (Game.player.getCurFrame()*20);
+					yPlayerIMG = yPlayerIMG + (Game.player.getCurAnim()*20);
+
+					currentPlayerFrame = playerSprite.getSubimage(xPlayerIMG, yPlayerIMG, 20, 20);
+
+					repaint((Game.player.getxTile()*20)-20,(Game.player.getyTile()*20)-20,60,60);
 				}
 			}
-			xPlayerIMG = xPlayerIMG + (Game.player.getCurFrame()*20);
-			yPlayerIMG = yPlayerIMG + (Game.player.getCurAnim()*20);
 			
-			currentPlayerFrame = playerSprite.getSubimage(xPlayerIMG, yPlayerIMG, 20, 20);
-			//repaint(Game.player.getOldX(),Game.player.getOldY()-,50,50);
-			repaint(Game.player.getX()-15,Game.player.getY()-15,50,50);
            
 			try {
-				Thread.sleep(100);
+				Thread.sleep(50);
 			} catch (InterruptedException ex) {
 			}
         }

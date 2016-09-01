@@ -111,7 +111,7 @@ public final class Player implements Runnable {
 			/**
 			 * Player old coordinates.
 			 */
-			private int xOld, yOld;
+			//private int xOld, yOld;
 			/**
 			 * Player direction.
 			 */
@@ -120,6 +120,10 @@ public final class Player implements Runnable {
 			 * Player running boolean.
 			 */
 			private boolean isRunning;
+			/**
+			 * Player tile coordinates.
+			 */
+			private int xTile, yTile;
 		// </editor-fold>
 		// <editor-fold defaultstate="collapsed" desc="Sprite">
 			/**
@@ -134,6 +138,14 @@ public final class Player implements Runnable {
 			 * Current animation of Player.
 			 */
 			private int curAnim;
+			/**
+			 * Player sprite X dimensions.
+			 */
+			private static int dimX = 20;
+			/**
+			 * Player sprite Y dimensions.
+			 */
+			private static int dimY = 20;
 		//</editor-fold>
 	// </editor-fold>
 	
@@ -207,6 +219,8 @@ public final class Player implements Runnable {
 		this.maxFrames = 3;
 		this.curFrame = 1;
 		this.curAnim = 0;
+		this.xTile = 0;
+		this.yTile = 0;
 	}
 	
 	/**
@@ -657,8 +671,8 @@ public final class Player implements Runnable {
 			amount = (int)(amount * RUNMULT);
 		}
 		
-		xOld = x;
-		yOld = y;
+	//	xOld = x;
+	//	yOld = y;
 		
 		switch (direction){
 			case "LEFT":
@@ -674,17 +688,20 @@ public final class Player implements Runnable {
 				y = y + amount;
 			break;
 		}
+		
+		xTile = (int)Math.floor(x/dimX);
+		yTile = (int)Math.floor(y/dimY);
 	}
 	
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
 		public int getDinero() {
 			return dinero;
 		}
-
+		/*
 		public int getOldX() {
 			return xOld;
 		}
-
+		*/
 		public int getCurFrame() {
 			return curFrame;
 		}
@@ -703,13 +720,21 @@ public final class Player implements Runnable {
 		public int getCurAnim() {
 			return curAnim;
 		}
-
+		/*
 		public int getOldY() {
 			return yOld;
 		}
-
+		*/
 		public String getName() {
 			return name;
+		}
+
+		public int getxTile() {
+			return xTile;
+		}
+
+		public int getyTile() {
+			return yTile;
 		}
 
 		public int getNumPokemonTeam() {
@@ -739,7 +764,11 @@ public final class Player implements Runnable {
 			}else if (direction.compareTo("DOWN") ==0){
 				this.curAnim=0;
 			}else{
-				this.curFrame=1;
+		//		this.curFrame=1;
+				xTile = (int)Math.floor(x/dimX);
+				yTile = (int)Math.floor(y/dimY);
+				x=xTile*dimX;
+				y=yTile*dimY;
 			}
 		}
 
@@ -750,7 +779,7 @@ public final class Player implements Runnable {
 		public boolean isRunning() {
 			return isRunning;
 		}
-
+		
 		public int getX() {
 			return x;
 		}
@@ -758,6 +787,7 @@ public final class Player implements Runnable {
 		public int getY() {
 			return y;
 		}
+		
 	//</editor-fold>
 
 }

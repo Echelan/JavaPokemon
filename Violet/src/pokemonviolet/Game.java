@@ -12,12 +12,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  *
  * @author Andres
  */
-public class Game {
+public class Game implements Runnable{
 	
 	// <editor-fold defaultstate="collapsed" desc="Attributes">
 		// <editor-fold defaultstate="collapsed" desc="Statics">
@@ -98,18 +99,14 @@ public class Game {
 			Thread.sleep(100);
 		} catch (InterruptedException ex) {
 		}
-
+		
 		splash.dispose();
-
+		
 		player = new Player ("Red","EEVEE");
 		player.addItem("POKEBALL",15);
 		
 		Thread playerThread = new Thread(player);
 		playerThread.start();
-		
-	//    classTestWindow=new ClassTestWindow();
-		gameWindow=new GameWindow();
-	//new MapBuilder();
 			
 	}
 	
@@ -128,5 +125,60 @@ public class Game {
 		}
 		
 		return value;
+	}
+
+	@Override
+	public void run() {
+		Scanner s = new Scanner(System.in);
+		System.out.println("1-ClassTest; 2-Game; 4-MapBuilder");
+		while(true){
+			String input = s.next();
+			try{
+				int convertedInput = Integer.parseInt(input);
+				switch(convertedInput){
+					case 1:
+						//classTestWindow=new ClassTestWindow();
+						new ClassTestWindow();
+						
+					break;
+					case 2:
+						//gameWindow=new GameWindow();
+						new GameWindow();
+					break;
+					case 3:
+						//classTestWindow=new ClassTestWindow();
+						new ClassTestWindow();
+						//gameWindow=new GameWindow();
+						new GameWindow();
+					break;
+					case 4:
+						new MapBuilder();
+					break;
+					case 5:
+						new MapBuilder();
+						//classTestWindow=new ClassTestWindow();
+						new ClassTestWindow();
+					break;
+					case 6:
+						new MapBuilder();
+						//gameWindow=new GameWindow();
+						new GameWindow();
+					break;
+					case 7:
+						//classTestWindow=new ClassTestWindow();
+						//gameWindow=new GameWindow();
+						new ClassTestWindow();
+						new GameWindow();
+						new MapBuilder();
+					break;
+					default:
+						System.exit(0);
+					break;
+				}
+			}catch (NumberFormatException ex){
+				
+			}
+			
+		}
 	}
 }

@@ -111,7 +111,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		setSize(900,700);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		JTextField sad = new JTextField();
 		sad.setBounds(800,0,1,1);
@@ -378,7 +378,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		}
 	}
 	
-	public void setObj(int type){
+	public void setObj(int type)
+	{
 		for (int i = xStart; i <= xEnd; i++) {
 			for (int j = yStart; j <= yEnd; j++) {
 				setO[i][j] = type;
