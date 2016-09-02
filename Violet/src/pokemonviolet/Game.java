@@ -10,6 +10,7 @@ package pokemonviolet;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -38,6 +39,14 @@ public class Game implements Runnable{
 			 * Main data for Types.
 			 */
 			public static List<String> INFOTYPES;
+			/**
+			 * Main data for Maps.
+			 */
+			public static ArrayList<List<String>> INFOMAPS;
+			/**
+			 * Amount of Maps.
+			 */
+			public static int NUMMAPS;
 		//</editor-fold>
 		
 		/**
@@ -55,11 +64,15 @@ public class Game implements Runnable{
 		/**
 		 * Game Window. (The one with the canvas.)
 		 */
-		private static GameWindow gameWindow;
+		private static GameWindow windowGame;
 		/**
 		 * Class Test Window. (The one with the buttons and pictures.)
 		 */
-		private static ClassTestWindow classTestWindow;
+		private static ClassTestWindow windowClassTest;
+		/**
+		 * Map Builder Window. (The one with the map.)
+		 */
+		private static MapBuilder windowMapBuilder;
 	// </editor-fold>
 		
 	/**
@@ -67,14 +80,20 @@ public class Game implements Runnable{
 	 */
 	public Game() {
 		
+		NUMMAPS = 2;
+		
 		SplashWindow splash = new SplashWindow();
 
 		List<String> readInfoP = null;
 		List<String> readInfoI = null;
 		List<String> readInfoM = null;
 		List<String> readInfoT = null;
+		ArrayList<List<String>> readMap = new ArrayList();
+		
 		try {
-			File archivo = new File("listPokemon.txt");
+			File archivo;
+			
+			archivo = new File("listPokemon.txt");
 			readInfoP = Files.readAllLines(archivo.toPath());
 
 			archivo = new File("listItems.txt");
@@ -85,6 +104,12 @@ public class Game implements Runnable{
 
 			archivo = new File("listTypes.txt");
 			readInfoT = Files.readAllLines(archivo.toPath());
+			
+			for (int i = 0; i < NUMMAPS; i++) {
+				archivo = new File("Map"+i+".txt");
+				List<String> temp = Files.readAllLines(archivo.toPath());
+				readMap.add(temp);
+			}
 		} catch (IOException ex) {
 			System.err.println("Couldn't load files!");
 			System.exit(0);
@@ -94,6 +119,7 @@ public class Game implements Runnable{
 		INFOPOKEMON = readInfoP;
 		INFOMOVES = readInfoM;
 		INFOTYPES = readInfoT;
+		INFOMAPS = readMap;
 		
 		try {
 			Thread.sleep(100);
@@ -108,6 +134,10 @@ public class Game implements Runnable{
 		Thread playerThread = new Thread(player);
 		playerThread.start();
 			
+		windowClassTest = new ClassTestWindow();
+		windowGame = new GameWindow();
+		windowMapBuilder = new MapBuilder();
+		
 	}
 	
 	/**
@@ -137,39 +167,50 @@ public class Game implements Runnable{
 				int convertedInput = Integer.parseInt(input);
 				switch(convertedInput){
 					case 1:
-						//classTestWindow=new ClassTestWindow();
-						new ClassTestWindow();
-						
+					//	classTestWindow=new ClassTestWindow();
+					//	new ClassTestWindow();
+						windowClassTest.setVisible(true);
 					break;
 					case 2:
-						//gameWindow=new GameWindow();
-						new GameWindow();
+					//	gameWindow=new GameWindow();
+					//	new GameWindow();
+						windowGame.setVisible(true);
 					break;
 					case 3:
-						//classTestWindow=new ClassTestWindow();
-						new ClassTestWindow();
-						//gameWindow=new GameWindow();
-						new GameWindow();
+					//	classTestWindow=new ClassTestWindow();
+					//	new ClassTestWindow();
+						windowClassTest.setVisible(true);
+					//	gameWindow=new GameWindow();
+					//	new GameWindow();
+						windowGame.setVisible(true);
 					break;
 					case 4:
-						new MapBuilder();
+					//	new MapBuilder();
+						windowMapBuilder.setVisible(true);
 					break;
 					case 5:
-						new MapBuilder();
-						//classTestWindow=new ClassTestWindow();
-						new ClassTestWindow();
+					//	new MapBuilder();
+						windowMapBuilder.setVisible(true);
+					//	classTestWindow=new ClassTestWindow();
+					//	new ClassTestWindow();
+						windowClassTest.setVisible(true);
 					break;
 					case 6:
-						new MapBuilder();
+					//	new MapBuilder();
+						windowMapBuilder.setVisible(true);
 						//gameWindow=new GameWindow();
-						new GameWindow();
+					//	new GameWindow();
+						windowGame.setVisible(true);
 					break;
 					case 7:
-						//classTestWindow=new ClassTestWindow();
-						//gameWindow=new GameWindow();
-						new ClassTestWindow();
-						new GameWindow();
-						new MapBuilder();
+					//	classTestWindow=new ClassTestWindow();
+					//	gameWindow=new GameWindow();
+					//	new ClassTestWindow();
+						windowClassTest.setVisible(true);
+					//	new GameWindow();
+						windowGame.setVisible(true);
+					//	new MapBuilder();
+						windowMapBuilder.setVisible(true);
 					break;
 					default:
 						System.exit(0);
@@ -181,4 +222,5 @@ public class Game implements Runnable{
 			
 		}
 	}
+	
 }

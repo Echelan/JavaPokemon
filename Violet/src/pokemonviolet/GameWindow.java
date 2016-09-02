@@ -34,21 +34,25 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 		setTitle("Pokemon Violet [GAME]");
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            
+	//	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+	
+	
 		screen = new GameDisplay();
 		screen.setBounds(1, 1, 592, 469);
-		screen.setBackground(Color.red);
+		screen.setBackground(Color.black);
 		screen.setFocusable(false);
 		add(screen);
 		
-		Movement Mover = new Movement();
-		addKeyListener(Mover);
+		//Movement Mover = new Movement();
+		addKeyListener(new Movement());
 		
-		Thread asd = new Thread(screen);
-		asd.start();
+		Thread screenThread = new Thread(screen);
+		screenThread.start();
 		
-		setVisible(true);
+	//	setVisible(true);
+		setVisible(false);
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="Overriden JFrame Methods">

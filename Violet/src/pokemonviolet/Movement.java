@@ -16,10 +16,7 @@ import java.awt.event.KeyEvent;
  * @author Andres
  */
 public class Movement extends KeyAdapter{
-	
-	public Movement() {
-	}
-	
+		
     public void keyReleased(KeyEvent key) {
 		switch (key.getKeyCode()) {
 			// UP
@@ -68,7 +65,7 @@ public class Movement extends KeyAdapter{
 			break;
 			// INTERACT
 			case KeyEvent.VK_J:
-				Game.player.setIsRunning(false);
+				Game.player.setRunning(false);
 			break;
 		}
     }
@@ -105,7 +102,7 @@ public class Movement extends KeyAdapter{
 			break;
 			// INTERACT
 			case KeyEvent.VK_J:
-				Game.player.setIsRunning(true);
+				Game.player.setRunning(true);
 			break;
 		}
     }

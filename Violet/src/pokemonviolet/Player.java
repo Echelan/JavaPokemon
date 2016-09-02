@@ -29,11 +29,11 @@ public final class Player implements Runnable {
 			/**
 			 * Player funds.
 			 */
-			private int dinero;
+			private int funds;
 			/**
 			 * Player name.
 			 */
-			private String name;
+			private final String name;
 		// </editor-fold>
 		// <editor-fold defaultstate="collapsed" desc="Items">
 			/**
@@ -89,7 +89,7 @@ public final class Player implements Runnable {
 			/**
 			 * Player Pokemon Team.
 			 */
-			private Pokemon[] equipo;
+			private Pokemon[] team;
 			/**
 			 * Player Pokemon PC.
 			 */
@@ -109,17 +109,13 @@ public final class Player implements Runnable {
 			 */
 			private int x, y;
 			/**
-			 * Player old coordinates.
-			 */
-			//private int xOld, yOld;
-			/**
 			 * Player direction.
 			 */
 			private String direction;
 			/**
 			 * Player running boolean.
 			 */
-			private boolean isRunning;
+			private boolean running;
 			/**
 			 * Player tile coordinates.
 			 */
@@ -157,7 +153,7 @@ public final class Player implements Runnable {
 	public Player(String name, Pokemon starterPokemon) {
 		setBasics();
 		this.name = name;
-		this.equipo[0] = starterPokemon;
+		this.team[0] = starterPokemon;
 		this.numPokemonTeam = 1;
 	}
 
@@ -169,7 +165,7 @@ public final class Player implements Runnable {
 	public Player(String name, int starterID) {
 		setBasics();
 		this.name = name;
-		this.equipo[0] = new Pokemon(starterID);
+		this.team[0] = new Pokemon(starterID);
 		this.numPokemonTeam = 1;
 	}
 
@@ -181,7 +177,7 @@ public final class Player implements Runnable {
 	public Player(String name, String internalName) {
 		setBasics();
 		this.name = name;
-		this.equipo[0] = new Pokemon(internalName);
+		this.team[0] = new Pokemon(internalName);
 		this.numPokemonTeam = 1;
 	}
 	
@@ -199,9 +195,9 @@ public final class Player implements Runnable {
 	 * Set Player's main default attributes.
 	 */
 	private void setBasics(){
-		this.equipo = new Pokemon[6];
+		this.team = new Pokemon[6];
 		this.PC = new Pokemon[200];
-		this.dinero = 0;
+		this.setFunds(0);
 		this.pocketBalls = new Item[100];
 		this.pocketBattles = new Item[100];
 		this.pocketItems = new Item[100];
@@ -215,9 +211,9 @@ public final class Player implements Runnable {
 		this.numMachines = 0;
 		this.numKeys = 0;
 		this.numBattles = 0;
-		this.direction = "";
+		this.setDirection("");
 		this.maxFrames = 3;
-		this.curFrame = 1;
+		this.setCurFrame(1);
 		this.curAnim = 0;
 		this.xTile = 0;
 		this.yTile = 0;
@@ -230,18 +226,18 @@ public final class Player implements Runnable {
 	 */
 	public int addPokemon(Pokemon newPokemon){
 		int response = 0;
-		if (numPokemonTeam == 6){
-			if (numPokemonPC == 200){
+		if (getNumPokemonTeam() == 6){
+			if (getNumPokemonPC() == 200){
 				response = 2;
 			}else{
 				response = 1;
-				this.PC[numPokemonPC] = newPokemon;
-				numPokemonPC = numPokemonPC + 1;
+				this.PC[getNumPokemonPC()] = newPokemon;
+				numPokemonPC = getNumPokemonPC() + 1;
 			}
 		}else{
 			response = 0;
-			this.equipo[numPokemonTeam] = newPokemon;
-			numPokemonTeam = numPokemonTeam + 1;
+			this.team[getNumPokemonTeam()] = newPokemon;
+			numPokemonTeam = getNumPokemonTeam() + 1;
 		}
 		return response;
 	}
@@ -254,8 +250,8 @@ public final class Player implements Runnable {
 	public boolean reduceMoney(int amount){
 		boolean success = false;
 		
-		if (this.dinero >= amount){
-			this.dinero = this.dinero - amount;
+		if (this.getFunds() >= amount){
+			this.setFunds(this.getFunds() - amount);
 			success = true;
 		}
 		
@@ -667,127 +663,226 @@ public final class Player implements Runnable {
 	 */
 	public void move(){
 		int amount = MOVEPOS;
-		if (isRunning){
+		if (isRunning()){
 			amount = (int)(amount * RUNMULT);
 		}
 		
-	//	xOld = x;
-	//	yOld = y;
-		
-		switch (direction){
+		switch (getDirection()){
 			case "LEFT":
-				x = x - amount;
+				x = getX() - amount;
 			break;
 			case "RIGHT":
-				x = x + amount;
+				x = getX() + amount;
 			break;
 			case "UP":
-				y = y - amount;
+				y = getY() - amount;
 			break;
 			case "DOWN":
-				y = y + amount;
+				y = getY() + amount;
 			break;
 		}
 		
-		xTile = (int)Math.floor(x/dimX);
-		yTile = (int)Math.floor(y/dimY);
+		
+		refreshTileZ();
+	}
+	
+	private void refreshTileX(){
+		xTile = (int)Math.floor((getX()+(getDimX()/2))/getDimX());
+	}
+	
+	private void refreshTileY(){
+		yTile = (int)Math.floor((getY()+(getDimY()/2))/getDimY());
+	}
+		
+	private void refreshTileZ(){
+		refreshTileY();
+		refreshTileX();
+	}
+	
+	private void snapX(){
+		refreshTileX();
+	//	System.out.println("Snapping X!");
+		x=getxTile()*getDimX();
+	}
+	
+	private void snapY(){
+		refreshTileY();
+	//	System.out.println("Snapping Y!");
+		y=getyTile()*getDimY();
+	}
+	
+	private void snapZ(){
+		snapX();
+		snapY();
 	}
 	
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
-		public int getDinero() {
-			return dinero;
-		}
-		/*
-		public int getOldX() {
-			return xOld;
-		}
-		*/
-		public int getCurFrame() {
-			return curFrame;
-		}
-
-		public void setCurFrame(int curFrame) {
-			this.curFrame = curFrame;
-			if (curFrame >= maxFrames){
-				this.curFrame = 0;
-			}
-		}
-
-		public int getMaxFrames() {
-			return maxFrames;
-		}
-
-		public int getCurAnim() {
-			return curAnim;
-		}
-		/*
-		public int getOldY() {
-			return yOld;
-		}
-		*/
-		public String getName() {
-			return name;
-		}
-
-		public int getxTile() {
-			return xTile;
-		}
-
-		public int getyTile() {
-			return yTile;
-		}
-
-		public int getNumPokemonTeam() {
-			return numPokemonTeam;
-		}
-
-		public String getDirection() {
-			return direction;
-		}
-
-		public void setDinero(int dinero) {
-			this.dinero = dinero;
-		}
-
-		public Pokemon[] getEquipo() {
-			return equipo;
-		}
-
-		public void setDirection(String direction) {
-			this.direction = direction;
-			if (direction.compareTo("LEFT") ==0){
-				this.curAnim=2;
-			}else if (direction.compareTo("RIGHT") ==0){
-				this.curAnim=3;
-			}else if (direction.compareTo("UP") ==0){
-				this.curAnim=1;
-			}else if (direction.compareTo("DOWN") ==0){
-				this.curAnim=0;
-			}else{
-		//		this.curFrame=1;
-				xTile = (int)Math.floor(x/dimX);
-				yTile = (int)Math.floor(y/dimY);
-				x=xTile*dimX;
-				y=yTile*dimY;
-			}
-		}
-
-		public void setIsRunning(boolean isRunning) {
-			this.isRunning = isRunning;
-		}
-
-		public boolean isRunning() {
-			return isRunning;
-		}
 		
+		/**
+		 * @return the funds
+		 */
+		public int getFunds() {
+			return funds;
+		}
+
+		/**
+		 * @param funds the funds to set
+		 */
+		public void setFunds(int funds) {
+			this.funds = funds;
+		}
+
+		/**
+		 * @return the PC
+		 */
+		public Pokemon[] getPC() {
+			return PC;
+		}
+
+		/**
+		 * @return the numPokemonPC
+		 */
+		public int getNumPokemonPC() {
+			return numPokemonPC;
+		}
+
+		/**
+		 * @return the x
+		 */
 		public int getX() {
 			return x;
 		}
 
+		/**
+		 * @return the y
+		 */
 		public int getY() {
 			return y;
 		}
-		
-	//</editor-fold>
 
+		/**
+		 * @return the running
+		 */
+		public boolean isRunning() {
+			return running;
+		}
+
+		/**
+		 * @param running the running to set
+		 */
+		public void setRunning(boolean running) {
+			this.running = running;
+		}
+
+		/**
+		 * @return the name
+		 */
+		public String getName() {
+			return name;
+		}
+
+		/**
+		 * @return the team
+		 */
+		public Pokemon[] getTeam() {
+			return team;
+		}
+
+		/**
+		 * @return the numPokemonTeam
+		 */
+		public int getNumPokemonTeam() {
+			return numPokemonTeam;
+		}
+
+		/**
+		 * @return the direction
+		 */
+		public String getDirection() {
+			return direction;
+		}
+
+		/**
+		 * @return the xTile
+		 */
+		public int getxTile() {
+			return xTile;
+		}
+
+		/**
+		 * @return the yTile
+		 */
+		public int getyTile() {
+			return yTile;
+		}
+
+		/**
+		 * @param direction the direction to set
+		 */
+		public void setDirection(String direction) {
+			this.direction = direction;
+			if (direction.compareTo("LEFT") ==0){
+				this.curAnim=2;
+				snapY();
+			}else if (direction.compareTo("RIGHT") ==0){
+				this.curAnim=3;
+				snapY();
+			}else if (direction.compareTo("UP") ==0){
+				this.curAnim=1;
+				snapX();
+			}else if (direction.compareTo("DOWN") ==0){
+				this.curAnim=0;
+				snapX();
+			}else{
+				this.curFrame=1;
+				snapZ();
+			}
+		}
+
+		/**
+		 * @return the curFrame
+		 */
+		public int getCurFrame() {
+			return curFrame;
+		}
+
+		/**
+		 * @param curFrame the curFrame to set
+		 */
+		public void setCurFrame(int curFrame) {
+			this.curFrame = curFrame;
+			if (curFrame >= getMaxFrames()){
+				this.curFrame = 0;
+			}
+		}
+
+		/**
+		 * @return the maxFrames
+		 */
+		public int getMaxFrames() {
+			return maxFrames;
+		}
+
+		/**
+		 * @return the curAnim
+		 */
+		public int getCurAnim() {
+			return curAnim;
+		}
+		
+		/**
+		 * @return the dimX
+		 */
+		public static int getDimX() {
+			return dimX;
+		}
+
+		/**
+		 * @return the dimY
+		 */
+		public static int getDimY() {
+			return dimY;
+		}
+	//</editor-fold>
+		
 }

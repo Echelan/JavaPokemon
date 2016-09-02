@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -40,78 +39,98 @@ import javax.swing.JTextField;
  */
 public class MapBuilder extends JFrame implements WindowListener, ActionListener, MouseListener, KeyListener {
 
-	private JLabel[][] tileGridLabel;
-	private ImageIcon[][] tileGridImage;
-	private int[][] tile;
-	private int[][] setT;
-	private JLabel[][] objGridLabel;
-	private ImageIcon[][] objGridImage;
-	private int[][] obj;
-	private int[][] setO;
-	
-	//<editor-fold defaultstate="collapsed" desc="statics">
-	private static int TILEWIDTH = 16;
-	private static int TILEHEIGHT = 16;
-	private static int TILERESIZEDWIDTH = 32;
-	private static int TILERESIZEDHEIGHT = 32;
-	
-	private static int MAXTILEINTILESET = 90;
-	private static int MAXTILEINTILESETROW = 15;
-	private static int MAXSETINTILESET = 6;
-	private static int MAXTILEINSET = 15;
-	private static int MAXTILEINSETROW = 5;
-	private static int MAXTILEINSETCOL = 3;
-	private static int MAXSETINTILESETROW = 3;
-	
-	private static int MAPROWTILES = 20;
-	private static int STARTX = 30;
-	private static int STARTY = 10;
+	//<editor-fold defaultstate="collapsed" desc="Statics">
+		private static int TILEWIDTH = 16;
+		private static int TILEHEIGHT = 16;
+		private static int TILERESIZEDWIDTH = 32;
+		private static int TILERESIZEDHEIGHT = 32;
+
+		private static int MAXTILEINTILESET = 90;
+		private static int MAXTILEINTILESETROW = 15;
+		private static int MAXSETINTILESET = 6;
+		private static int MAXTILEINSET = 15;
+		private static int MAXTILEINSETROW = 5;
+		private static int MAXTILEINSETCOL = 3;
+		private static int MAXSETINTILESETROW = 3;
+
+		private static int MAPROWTILES = 20;
+		private static int STARTX = 30;
+		private static int STARTY = 10;
 	//</editor-fold>
 	
-	private static BufferedImage tileset;
-	private static BufferedImage gym;
-	private static BufferedImage center;
-	private static BufferedImage house;
-	private static BufferedImage objects;
-	private static BufferedImage shop;
-	private static BufferedImage[] objSets;
-	
-	private JButton outBoxBtn;
-	private JButton inBoxBtn;
-	private JButton nextSetBtn;
-	private JButton prevSetBtn;
-	private JButton nextTileBtn;
-	private JButton prevTileBtn;
-	private JButton createObjBtn;
-	private JButton clearObjBtn;
-	private JButton centerDims;
-	private JButton gymDims;
-	private JButton houseDims;
-	private JButton shopDims;
-	private JButton saveMapBtn;
-	private JButton loadMapBtn;
-	
-	private JLabel tileID;
-	private JLabel setID;
-	private JLabel xCoordsDisplay;
-	private JLabel yCoordsDisplay;
-	private JButton[][] tileOutSetBtn;
-	private JButton[][] tileInSetBtn;
-	private int xStart, yStart, xEnd, yEnd;
-	private boolean isSelecting = false;
-	private boolean isTiling = true;
-	private JPanel tilePanel;
-	private JPanel objPanel;
-	private JPanel genPanel;
-	private final JButton swapInterfaceBtn;
-	private JLabel dimDisplay;
+	//<editor-fold defaultstate="collapsed" desc="Static Images">
+		private static BufferedImage tileset;
+		private static BufferedImage gym;
+		private static BufferedImage center;
+		private static BufferedImage house;
+		private static BufferedImage objects;
+		private static BufferedImage shop;
+		
+		private static BufferedImage tilesetSMALL;
+		private static BufferedImage gymSMALL;
+		private static BufferedImage centerSMALL;
+		private static BufferedImage houseSMALL;
+		private static BufferedImage objectsSMALL;
+		private static BufferedImage shopSMALL;
+		
+		private static BufferedImage[] objSets;
+		private static BufferedImage[] objSetsSMALL;
+	//</editor-fold>	
+		
+	//<editor-fold defaultstate="collapsed" desc="Vars">
+		private JLabel[][] tileGridLabel;
+		private ImageIcon[][] tileGridImage;
+		private int[][] tile;
+		private int[][] setT;
+		private JLabel[][] objGridLabel;
+		private ImageIcon[][] objGridImage;
+		private int[][] obj;
+		private int[][] setO;
+		private int[][] objDims;
+
+		private JButton[][] tileOutSetBtn;
+		private JButton[][] tileInSetBtn;
+
+		private JButton outBoxBtn;
+		private JButton inBoxBtn;
+		private JButton nextSetBtn;
+		private JButton prevSetBtn;
+		private JButton nextTileBtn;
+		private JButton prevTileBtn;
+		private JButton createObjBtn;
+		private JButton clearObjBtn;
+		private JButton centerDims;
+		private JButton gymDims;
+		private JButton houseDims;
+		private JButton shopDims;
+		private JButton saveMapBtn;
+		private JButton loadMapBtn;
+		private JButton lessID;
+		private JButton moreID;
+		private JButton swapInterfaceBtn;
+
+		private JLabel tileID;
+		private JLabel setID;
+		private JLabel xCoordsDisplay;
+		private JLabel yCoordsDisplay;
+		private JLabel dimDisplay;
+		private JLabel mapLabelID;
+		private JPanel tilePanel;
+		private JPanel objPanel;
+		private JPanel genPanel;
+		private boolean isTiling = true;
+		private boolean isSelecting = false;
+		private int xStart, yStart, xEnd, yEnd;
+	//</editor-fold>
 	
 	public MapBuilder() {
 		setLayout(null);
 		setSize(900,700);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	//	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		
 		JTextField sad = new JTextField();
 		sad.setBounds(800,0,1,1);
@@ -119,25 +138,27 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		add(sad);
 		
         try {
-			BufferedImage oldTileset = ImageIO.read(new File("tileset.png"));
-			tileset = scale(oldTileset,240,96,2.0,2.0);
+			tilesetSMALL = ImageIO.read(new File("tileset.png"));
+			tileset = scale(tilesetSMALL,240,96,2.0,2.0);
 			
-			BufferedImage oldShop = ImageIO.read(new File("shop.png"));
-			shop = scale(oldShop,64,64,2.0,2.0);
+			shopSMALL = ImageIO.read(new File("shop.png"));
+			shop = scale(shopSMALL,64,64,2.0,2.0);
 			
-			BufferedImage oldGym = ImageIO.read(new File("gym.png"));
-			gym = scale(oldGym,96,80,2.0,2.0);
+			gymSMALL = ImageIO.read(new File("gym.png"));
+			gym = scale(gymSMALL,96,80,2.0,2.0);
 			
-			BufferedImage oldCenter = ImageIO.read(new File("center.png"));
-			center = scale(oldCenter,80,80,2.0,2.0);
+			centerSMALL = ImageIO.read(new File("center.png"));
+			center = scale(centerSMALL,80,80,2.0,2.0);
 			
-			BufferedImage oldObjects = ImageIO.read(new File("objects.png"));
-			objects = scale(oldObjects,48,48,2.0,2.0);
+			objectsSMALL = ImageIO.read(new File("objects.png"));
+			objects = scale(objectsSMALL,48,48,2.0,2.0);
 			
-			BufferedImage oldHouse = ImageIO.read(new File("house.png"));
-			house = scale(oldHouse,80,80,2.0,2.0);
+			houseSMALL = ImageIO.read(new File("house.png"));
+			house = scale(houseSMALL,80,80,2.0,2.0);
 			
 			objSets = new BufferedImage[] {objects,house,center,shop,gym};
+			objSetsSMALL = new BufferedImage[] {objectsSMALL,houseSMALL,centerSMALL,shopSMALL,gymSMALL};
+			objDims = new int[][] { {1,1},{5,5},{5,5},{4,4},{6,5} };
 			
 			xStart=0;
 			yStart=0;
@@ -203,9 +224,48 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		createObjInterface();
 		objPanel.setVisible(false);
 		
-		setVisible(true);
+	//	setVisible(true);
+		setVisible(false);
 	}
+	
+	public static BufferedImage getMapRegion(int id){
+		BufferedImage mapRegion = null;
+		
+		if (Game.INFOMAPS.get(id) != null){
+			
+			BufferedImage tempStitched = new BufferedImage( MAPROWTILES*TILEWIDTH , MAPROWTILES*TILEHEIGHT, BufferedImage.TYPE_INT_RGB);
+			Graphics2D g = (Graphics2D) tempStitched.getGraphics();
+			
+			for (int i = 0; i < MAPROWTILES; i++) {
+				String[] thisrow = Game.INFOMAPS.get(id).get(i).split(",");
+				for (int j = 0; j < MAPROWTILES; j++) {
+					int xTile, yTile;
+					
+					int thistileset = Integer.parseInt(thisrow[j].split("-")[0], 16);
+					int thistiletype = Integer.parseInt(thisrow[j].split("-")[1], 16);
+					
+					xTile = getTileXSMALL(thistileset,thistiletype);
+					yTile = getTileYSMALL(thistileset,thistiletype);	
 
+					g.drawImage( tilesetSMALL.getSubimage(xTile, yTile, TILEWIDTH, TILEHEIGHT), i*TILEWIDTH, j*TILEHEIGHT, null);
+					
+					
+					int thisobjset = Integer.parseInt(thisrow[j].split("-")[2], 16);
+					int thisobjtype = Integer.parseInt(thisrow[j].split("-")[3], 16);
+					
+					xTile = getObjXSMALL(thisobjset,thisobjtype);
+					yTile = getObjYSMALL(thisobjset,thisobjtype);	
+
+					g.drawImage( objSetsSMALL[thisobjset].getSubimage(xTile, yTile, TILEWIDTH, TILEHEIGHT), i*TILEWIDTH, j*TILEHEIGHT, null);
+				}
+			}
+			
+			mapRegion = tempStitched;
+		}
+		
+		return mapRegion;
+	}
+			
 	public void createGenInterface(){
 		genPanel = new JPanel();
 		genPanel.setLayout(null);
@@ -274,10 +334,28 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		genPanel.add(loadMapBtn);
 		
 		dimDisplay = new JLabel("("+(xEnd+1-xStart)+"x"+(yEnd+1-yStart)+")");
-		dimDisplay.setBounds(75,200,140,20);
+		dimDisplay.setBounds(75,125,140,20);
 		dimDisplay.setForeground(Color.white);
 		dimDisplay.setFocusable(false);
 		genPanel.add(dimDisplay);
+		
+		mapLabelID = new JLabel("0");
+		mapLabelID.setBounds(95,210,140,20);
+		mapLabelID.setForeground(Color.white);
+		mapLabelID.setFocusable(false);
+		genPanel.add(mapLabelID);
+		
+		lessID = new JButton("-");
+		lessID.setBounds(5,200,60,40);
+		lessID.addActionListener(this);
+		lessID.setFocusable(false);
+		genPanel.add(lessID);
+		
+		moreID = new JButton("+");
+		moreID.setBounds(130,200,60,40);
+		moreID.addActionListener(this);
+		moreID.setFocusable(false);
+		genPanel.add(moreID);
 	}
 	
 	public void createTileInterface(){
@@ -378,50 +456,17 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		}
 	}
 	
-	public void setObj(int type)
-	{
-		for (int i = xStart; i <= xEnd; i++) {
-			for (int j = yStart; j <= yEnd; j++) {
-				setO[i][j] = type;
+	public void setObj(int type){
+		int x = (xEnd-xStart)+1;
+		int y = (yEnd-yStart)+1;
+		if (objDims[type][0]==x && objDims[type][1]==y){
+			for (int i = xStart; i <= xEnd; i++) {
+				for (int j = yStart; j <= yEnd; j++) {
+					setO[i][j] = type;
+				}
 			}
-		}
-		createObj();
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == outBoxBtn){
-			setOutBox();
-		}else if (e.getSource() == inBoxBtn){
-			setInBox();
-		}else if (e.getSource() == nextSetBtn){
-			nextSet();
-		}else if (e.getSource() == prevSetBtn){
-			prevSet();
-		}else if (e.getSource() == prevTileBtn){
-			prevTile();
-		}else if (e.getSource() == nextTileBtn){
-			nextTile();
-		}else if (e.getSource() == swapInterfaceBtn){
-			swapInterfaces();
-		}else if (e.getSource() == clearObjBtn){
-			cleanObj();
-		}else if (e.getSource() == createObjBtn){
+			
 			createObj();
-		}else if (e.getSource() == houseDims){
-			setObj(1);
-		}else if (e.getSource() == gymDims){
-			setObj(4);
-		}else if (e.getSource() == centerDims){
-			setObj(2);
-		}else if (e.getSource() == shopDims){
-			setObj(3);
-		}else if (e.getSource() == saveMapBtn){
-			writeMapFile();
-		}else if (e.getSource() == loadMapBtn){
-			loadMapFile();
-		}else{
-			setTile(e);
 		}
 	}
 	
@@ -866,7 +911,6 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 				if (counter >= maxtile){
 					counter = counter - (maxtile-1) ;
 				}
-				
 
 				int xTile;
 				int yTile;
@@ -922,6 +966,44 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		return regY;
 	}
 	
+	public static int getTileXSMALL(int setinfo, int tileinfo){
+		int regX = (int)(Math.floor((double)tileinfo%MAXTILEINSETROW)*TILEWIDTH);
+		int specialX = (int)(Math.floor((double)setinfo%MAXSETINTILESETROW)*(TILEWIDTH*MAXTILEINSETROW));
+		
+	//	System.out.println("X: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialX+", TILE: "+regX+") = "+(regX+specialX));
+		
+		return regX+specialX;
+	}
+	
+	public static int getTileYSMALL(int setinfo, int tileinfo){
+		int regY = (int)(Math.floor((double)tileinfo/MAXTILEINSETROW)*TILEHEIGHT);
+		int specialY = (int)(Math.floor((double)setinfo/MAXSETINTILESETROW)*(TILEHEIGHT*MAXTILEINSETCOL));
+		
+	//	System.out.println("Y: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialY+", TILE: "+regY+") = "+(regY+specialY));
+		
+		return regY+specialY;
+	}
+	
+	public static int getObjXSMALL(int setinfo, int tileinfo){
+		int maxtileinsetrow = (objSetsSMALL[setinfo].getWidth()/TILEWIDTH);
+		int regX = (int)(Math.floor((double)tileinfo%maxtileinsetrow)*TILEWIDTH);
+	//	int specialX = (int)(Math.floor((double)setinfo%MAXSETINTILESETROW)*(TILERESIZEDWIDTH*MAXTILEINSETROW));
+		
+	//	System.out.println("X: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialX+", TILE: "+regX+") = "+(regX+specialX));
+		
+		return regX;
+	}
+	
+	public static int getObjYSMALL(int setinfo, int tileinfo){
+		int maxtileinsetrow = (objSetsSMALL[setinfo].getWidth()/TILEWIDTH);
+		int regY = (int)(Math.floor((double)tileinfo/maxtileinsetrow)*TILEHEIGHT);
+	//	int specialY = (int)(Math.floor((double)setinfo/MAXSETINTILESETROW)*(TILERESIZEDHEIGHT*MAXTILEINSETCOL));
+		
+	//	System.out.println("Y: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialY+", TILE: "+regY+") = "+(regY+specialY));
+		
+		return regY;
+	}
+	
 	public static BufferedImage scale(BufferedImage imageToScale, int dWidth, int dHeight, double xScale, double yScale) {
         BufferedImage scaledImage = null;
         if (imageToScale != null) {
@@ -939,7 +1021,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	public void writeMapFile(){
         FileWriter fw = null;
         try {
-			File archivo = new File("map1.txt");
+			File archivo = new File("map"+mapLabelID.getText()+".txt");
             fw = new FileWriter(archivo.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
 			
@@ -980,7 +1062,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		
 		List<String> readMapInfo = null;
 		try {
-			File archivo = new File("map1.txt");
+			File archivo = new File("map"+mapLabelID.getText()+".txt");
 			readMapInfo = Files.readAllLines(archivo.toPath());
 			
 			for (int i = 0; i < readMapInfo.size(); i++) {
@@ -1106,6 +1188,47 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			}
 		}
 		dimDisplay.setText("("+(thisEndX+1-thisStartX)+"x"+(thisEndY+1-thisStartY)+")");
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == outBoxBtn){
+			setOutBox();
+		}else if (e.getSource() == inBoxBtn){
+			setInBox();
+		}else if (e.getSource() == nextSetBtn){
+			nextSet();
+		}else if (e.getSource() == prevSetBtn){
+			prevSet();
+		}else if (e.getSource() == prevTileBtn){
+			prevTile();
+		}else if (e.getSource() == nextTileBtn){
+			nextTile();
+		}else if (e.getSource() == swapInterfaceBtn){
+			swapInterfaces();
+		}else if (e.getSource() == clearObjBtn){
+			cleanObj();
+		}else if (e.getSource() == createObjBtn){
+			createObj();
+		}else if (e.getSource() == houseDims){
+			setObj(1);
+		}else if (e.getSource() == gymDims){
+			setObj(4);
+		}else if (e.getSource() == centerDims){
+			setObj(2);
+		}else if (e.getSource() == shopDims){
+			setObj(3);
+		}else if (e.getSource() == saveMapBtn){
+			writeMapFile();
+		}else if (e.getSource() == loadMapBtn){
+			loadMapFile();
+		}else if (e.getSource() == moreID){
+			mapLabelID.setText(""+(Integer.parseInt(mapLabelID.getText())+1));
+		}else if (e.getSource() == lessID){
+			mapLabelID.setText(""+(Integer.parseInt(mapLabelID.getText())-1));
+		}else{
+			setTile(e);
+		}
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="Mouse Overrides">
@@ -1241,19 +1364,20 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	}
 	//</editor-fold>
 	
-	@Override
-	public void keyTyped(KeyEvent e) {
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode()==KeyEvent.VK_ESCAPE){
-			clearHighlight();
+	//<editor-fold defaultstate="collapsed" desc="Key Overrides">
+		@Override
+		public void keyTyped(KeyEvent e) {
 		}
-	}
 
-	@Override
-	public void keyReleased(KeyEvent e) {
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if (e.getKeyCode()==KeyEvent.VK_ESCAPE){
+				clearHighlight();
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
 	}
-	
+	//</editor-fold>
 }
