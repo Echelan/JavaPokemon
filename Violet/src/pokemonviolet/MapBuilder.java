@@ -9,28 +9,13 @@ package pokemonviolet;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.List;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 
 /**
@@ -123,14 +108,15 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		private int xStart, yStart, xEnd, yEnd;
 	//</editor-fold>
 	
-	public MapBuilder() {
+	public MapBuilder(int operation, boolean visible) {
 		setLayout(null);
 		setSize(900,700);
 		setResizable(false);
 		setLocationRelativeTo(null);
 	//	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+	//	setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(operation);
 		
 		JTextField sad = new JTextField();
 		sad.setBounds(800,0,1,1);
@@ -225,7 +211,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		objPanel.setVisible(false);
 		
 	//	setVisible(true);
-		setVisible(false);
+	//	setVisible(false);
+		setVisible(visible);
 	}
 	
 	public static BufferedImage getMapRegion(int id){

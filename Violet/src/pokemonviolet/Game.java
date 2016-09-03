@@ -134,9 +134,9 @@ public class Game implements Runnable{
 		Thread playerThread = new Thread(player);
 		playerThread.start();
 			
-		windowClassTest = new ClassTestWindow();
-		windowGame = new GameWindow();
-		windowMapBuilder = new MapBuilder();
+		windowClassTest = new ClassTestWindow(javax.swing.JFrame.HIDE_ON_CLOSE,false);
+		windowMapBuilder = new MapBuilder(javax.swing.JFrame.HIDE_ON_CLOSE,false);
+		windowGame = new GameWindow(javax.swing.JFrame.HIDE_ON_CLOSE,false);
 		
 	}
 	

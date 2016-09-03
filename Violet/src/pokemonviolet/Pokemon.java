@@ -312,7 +312,7 @@ public class Pokemon {
 			String[] partes = pokeinfo[i].split("=");
 			if (partes[0].compareTo( "Name" )==0){
 				this.nameSpecies = partes[1];
-				this.nameNick = partes[1];
+				this.setNameNick(partes[1]);
 			}else if (partes[0].compareTo("InternalName")==0){
 				this.nameInternal = partes[1];
 			 }else if (partes[0].compareTo("Pokedex")==0){
@@ -356,11 +356,11 @@ public class Pokemon {
 						this.allMoves[position] = readMoves[j+1];
 					}
 				}
-				if (this.level == 0){
+				if (this.getLevel() == 0){
 					Random rnd = new Random();
 					this.level = rnd.nextInt(99)+1;
 					int moveCount = 0;
-					int allMovesCounter = this.level + 1;
+					int allMovesCounter = this.getLevel() + 1;
 					this.moves = new PokemonMove[4];
 					boolean finished = false;
 					while (!finished){
@@ -420,7 +420,7 @@ public class Pokemon {
 				this.weight = partes[1];
 			}else if (partes[0].compareTo("Height")==0){
 				this.height = partes[1];
-			}else if (partes[0].compareTo("GenderRate")==0 && this.gender.compareTo("TBD") == 0){
+			}else if (partes[0].compareTo("GenderRate")==0 && this.getGender().compareTo("TBD") == 0){
 				/*
 					AlwaysMale
 					FemaleOneEighth
@@ -487,7 +487,7 @@ public class Pokemon {
 			}
 		}
 		updateStats();
-		this.curHP = this.statHP;
+		this.setCurHP(this.statHP);
 		success = true;
 		
 		return success;
@@ -522,7 +522,7 @@ public class Pokemon {
 			break;
 		}
 		
-		double alpha = ((((3 * this.statHP) - (2 * this.curHP)) * this.catchRate * bonusball)/(3*this.statHP))*bonusstatus;
+		double alpha = ((((3 * this.statHP) - (2 * this.getCurHP())) * this.getCatchRate() * bonusball)/(3*this.statHP))*bonusstatus;
 		
 		return alpha;
 	}
@@ -639,12 +639,12 @@ public class Pokemon {
 			int roll = rnd.nextInt(this.evolvesInto.length);
 			this.id = getPokemonID(this.evolvesInto[roll]);
 			
-			boolean couldCreate = readInfo( this.id );
+			boolean couldCreate = readInfo(this.getId());
 			
 			success = couldCreate;
 			
 			if (!couldCreate){
-				System.err.println("Error evolving to id " + id + ".");
+				System.err.println("Error evolving to id " + getId() + ".");
 			}
 		}
 		return success;
@@ -788,25 +788,25 @@ public class Pokemon {
 	 * Update Pokemon stats.
 	 */
 	public void updateStats(){
-		this.statHP = (((2 * this.baseHP + this.IVHP + (this.EVHP/4))*this.level)/100)+this.level+10;
-		this.statAttack = (((2 * this.baseAttack + this.IVAttack + (this.EVAttack/4))*this.level)/100)+5;
-		this.statDefense = (((2 * this.baseDefense + this.IVDefense + (this.EVDefense/4))*this.level)/100)+5;
-		this.statSpAtk = (((2 * this.baseSpAtk + this.IVSpAtk + (this.EVSpAtk/4))*this.level)/100)+5;
-		this.statSpDef = (((2 * this.baseSpDef + this.IVSpDef + (this.EVSpDef/4))*this.level)/100)+5;
-		this.statSpeed = (((2 * this.baseSpeed + this.IVSpeed + (this.EVSpeed/4))*this.level)/100)+5;
+		this.statHP = (((2 * this.baseHP + this.IVHP + (this.EVHP/4))*this.getLevel())/100)+this.getLevel()+10;
+		this.statAttack = (((2 * this.baseAttack + this.IVAttack + (this.EVAttack/4))*this.getLevel())/100)+5;
+		this.statDefense = (((2 * this.baseDefense + this.IVDefense + (this.EVDefense/4))*this.getLevel())/100)+5;
+		this.statSpAtk = (((2 * this.baseSpAtk + this.IVSpAtk + (this.EVSpAtk/4))*this.getLevel())/100)+5;
+		this.statSpDef = (((2 * this.baseSpDef + this.IVSpDef + (this.EVSpDef/4))*this.getLevel())/100)+5;
+		this.statSpeed = (((2 * this.baseSpeed + this.IVSpeed + (this.EVSpeed/4))*this.getLevel())/100)+5;
 		
-		switch(this.growthRate){
+		switch(this.getGrowthRate()){
 			case "Parabolic":
-				this.maxEXP = (6/5*(this.level^3)) - (15*(this.level^2)) + (100*this.level) - 140;
+				this.maxEXP = (6/5*(this.getLevel()^3)) - (15*(this.getLevel()^2)) + (100*this.getLevel()) - 140;
 			break;
 			case "Fast":
-				this.maxEXP = (4*(this.level^3))/5;
+				this.maxEXP = (4*(this.getLevel()^3))/5;
 			break;
 			case "Medium":
-				this.maxEXP = this.level^3;
+				this.maxEXP = this.getLevel()^3;
 			break;
 			case "Slow":
-				this.maxEXP = (5*(this.level^3))/4;
+				this.maxEXP = (5*(this.getLevel()^3))/4;
 			break;
 		}
 	}
@@ -815,8 +815,8 @@ public class Pokemon {
 	 * Level up Pokemon.
 	 */
 	public void levelUp(){
-		this.curEXP = this.curEXP - this.maxEXP;
-		this.level = this.level + 1;
+		this.setCurEXP(this.getCurEXP() - this.maxEXP);
+		this.level = this.getLevel() + 1;
 	}
 	
 	/**
@@ -824,8 +824,8 @@ public class Pokemon {
 	 */
 	public void faint(){
 		this.status="";
-		this.isFainted = true;
-		this.curHP = 0;
+		this.setIsFainted(true);
+		this.setCurHP(0);
 	}
 	
 	/**
@@ -835,103 +835,206 @@ public class Pokemon {
 	public int getExpGain(){
 		double gain = 0;
 		double a = 1;
-		if (this.isWild){
+		if (this.isIsWild()){
 			a = 1.5;
 		}
-		gain = (a * this.yieldEXP * this.level)/7;
+		gain = (a * this.yieldEXP * this.getLevel())/7;
 		return (int)gain;
 	}
 	
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
 		
-		public PokemonMove getMove(int place){
-			return moves[place];
+		public boolean getCanEvolve(){
+			return (this.numEvols > 0);
 		}
 		
-		public PokemonMove[] getMoves(){
-			return moves;
+		/**
+		 * @return the isShiny
+		 */
+		public boolean isIsShiny() {
+			return isShiny;
 		}
 
-		public String getColor() {
-			return color;
-		}
-
-		public int getLevel() {
-			return level;
-		}
-
+		/**
+		 * @return the nameSpecies
+		 */
 		public String getNameSpecies() {
 			return nameSpecies;
 		}
 
-		public String getGender() {
-			return gender;
+		/**
+		 * @return the kind
+		 */
+		public String getKind() {
+			return kind;
 		}
 
-		public String getNameNick() {
-			return nameNick;
-		}
-
-		public  String getNameInternal() {
-			return nameInternal;
-		}
-
-		public void setNameNick(String nickname) {
-			this.nameNick = nickname;
-		}
-
+		/**
+		 * @return the pokeEntry
+		 */
 		public String getPokeEntry() {
 			return pokeEntry;
 		}
 
-		public int getCurHP() {
-			return curHP;
+		/**
+		 * @return the catchRate
+		 */
+		public int getCatchRate() {
+			return catchRate;
 		}
 
-		public void setCurHP(int curHP) {
-			this.curHP = curHP;
-			if (this.curHP <= 0){
-				faint();
-			}
+		/**
+		 * @return the growthRate
+		 */
+		public String getGrowthRate() {
+			return growthRate;
 		}
 
-		public int getCurEXP() {
-			return curEXP;
+		/**
+		 * @return the hatchSteps
+		 */
+		public int getHatchSteps() {
+			return hatchSteps;
 		}
 
-		public void setCurEXP(int curEXP) {
-			this.curEXP = curEXP;
-			if (this.curEXP >= this.maxEXP){
-				levelUp();
-			}
+		/**
+		 * @return the color
+		 */
+		public String getColor() {
+			return color;
 		}
 
-		public String getBallType() {
-			return ballType;
+		/**
+		 * @return the habitat
+		 */
+		public String getHabitat() {
+			return habitat;
 		}
 
-		public void setBallType(String ballType) {
-			this.ballType = ballType;
-		}
-
+		/**
+		 * @return the height
+		 */
 		public String getHeight() {
 			return height;
 		}
 
-		public void setIsWild(boolean isWild) {
-			this.isWild = isWild;
-		}
-
+		/**
+		 * @return the weight
+		 */
 		public String getWeight() {
 			return weight;
 		}
 
+		/**
+		 * @return the gender
+		 */
+		public String getGender() {
+			return gender;
+		}
+
+		/**
+		 * @return the nameNick
+		 */
+		public String getNameNick() {
+			return nameNick;
+		}
+
+		/**
+		 * @param nameNick the nameNick to set
+		 */
+		public void setNameNick(String nameNick) {
+			this.nameNick = nameNick;
+		}
+
+		/**
+		 * @return the ballType
+		 */
+		public String getBallType() {
+			return ballType;
+		}
+
+		/**
+		 * @param ballType the ballType to set
+		 */
+		public void setBallType(String ballType) {
+			this.ballType = ballType;
+		}
+
+		/**
+		 * @return the curHP
+		 */
+		public int getCurHP() {
+			return curHP;
+		}
+
+		/**
+		 * @return the curEXP
+		 */
+		public int getCurEXP() {
+			return curEXP;
+		}
+
+		/**
+		 * @return the level
+		 */
+		public int getLevel() {
+			return level;
+		}
+
+		/**
+		 * @return the isWild
+		 */
+		public boolean isIsWild() {
+			return isWild;
+		}
+
+		/**
+		 * @param isWild the isWild to set
+		 */
+		public void setIsWild(boolean isWild) {
+			this.isWild = isWild;
+		}
+
+		/**
+		 * @return the isFainted
+		 */
+		public boolean isIsFainted() {
+			return isFainted;
+		}
+
+		/**
+		 * @param isFainted the isFainted to set
+		 */
+		public void setIsFainted(boolean isFainted) {
+			this.isFainted = isFainted;
+		}
+
+		/**
+		 * @return the id
+		 */
 		public int getId() {
 			return id;
 		}
 
-		public boolean getCanEvolve(){
-			return (this.numEvols > 0);
+		/**
+		 * @param curHP the curHP to set
+		 */
+		public void setCurHP(int curHP) {
+			this.curHP = curHP;
+			if (this.getCurHP() <= 0){
+				faint();
+			}
+		}
+
+		/**
+		 * @param curEXP the curEXP to set
+		 */
+		public void setCurEXP(int curEXP) {
+			this.curEXP = curEXP;
+			if (this.getCurEXP() >= this.maxEXP){
+				levelUp();
+			}
 		}
 	// </editor-fold>
+		
 }

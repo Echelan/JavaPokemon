@@ -27,8 +27,10 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 	
 	/**
 	 * Create a new GameWindow.
+	 * @param operation JFrame default close operation.
+	 * @param visible This JFrame visibility.
 	 */
-	public GameWindow() {
+	public GameWindow(int operation, boolean visible) {
 		setLayout(null);
 		setSize(600,500);
 		setTitle("Pokemon Violet [GAME]");
@@ -36,7 +38,9 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 		setLocationRelativeTo(null);
 	//	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+	//	setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(operation);
+		
 	
 	
 		screen = new GameDisplay();
@@ -52,7 +56,8 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 		screenThread.start();
 		
 	//	setVisible(true);
-		setVisible(false);
+	//	setVisible(false);
+		setVisible(visible);
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="Overriden JFrame Methods">

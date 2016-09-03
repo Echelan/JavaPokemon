@@ -151,20 +151,34 @@ public class PokemonType {
 	}
 
 	//<editor-fold defaultstate="collapsed" desc="Getters & Setters">
+
+		/**
+		 * @return the nameDisplay
+		 */
 		public String getNameDisplay() {
 			return nameDisplay;
 		}
 
+		/**
+		 * @return the weakness
+		 */
 		public String getWeakness() {
 			return weakness;
 		}
 
+		/**
+		 * @return the resistance
+		 */
 		public String getResistance() {
 			return resistance;
 		}
 
+		/**
+		 * @return the immunity
+		 */
 		public String getImmunity() {
 			return immunity;
 		}
 	//</editor-fold>
+		
 }

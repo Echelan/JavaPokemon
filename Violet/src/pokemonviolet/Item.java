@@ -198,52 +198,75 @@ public class Item {
 	}
 	
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
-		public int getId() {
-			return id;
-		}
-
-		public String getNameInternal() {
-			return nameInternal;
-		}
-
-		public void setAmount(int amount) {
-			this.amount = amount;
-		}
-
+		/**
+		 * @return the nameSingular
+		 */
 		public String getNameSingular() {
 			return nameSingular;
 		}
 
+		/**
+		 * @return the namePlural
+		 */
 		public String getNamePlural() {
 			return namePlural;
 		}
 
+		/**
+		 * @return the pocket
+		 */
 		public int getPocket() {
 			return pocket;
 		}
 
+		/**
+		 * @return the price
+		 */
 		public int getPrice() {
 			return price;
 		}
 
+		/**
+		 * @return the description
+		 */
 		public String getDescription() {
 			return description;
 		}
 
-		public int getUseOutBattle() {
-			return useOutBattle;
-		}
-
-		public int getUseInBattle() {
-			return useInBattle;
-		}
-
+		/**
+		 * @return the pokeRate
+		 */
 		public double getPokeRate() {
 			return pokeRate;
 		}
 
+		/**
+		 * @return the amount
+		 */
 		public int getAmount() {
 			return amount;
 		}
+
+		/**
+		 * @param amount the amount to set
+		 */
+		public void setAmount(int amount) {
+			this.amount = amount;
+		}
+		
+		/**
+		 * @return the id
+		 */
+		public int getId() {
+			return id;
+		}
+		
+		/**
+		 * @return the nameInternal
+		 */
+		public String getNameInternal() {
+			return nameInternal;
+		}
 	//</editor-fold>
+
 }

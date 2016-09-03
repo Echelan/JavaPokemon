@@ -686,31 +686,49 @@ public final class Player implements Runnable {
 		refreshTileZ();
 	}
 	
+	/**
+	 * Refreshes xTile according to X positions.
+	 */
 	private void refreshTileX(){
 		xTile = (int)Math.floor((getX()+(getDimX()/2))/getDimX());
 	}
 	
+	/**
+	 * Refreshes yTile according to Y positions.
+	 */
 	private void refreshTileY(){
 		yTile = (int)Math.floor((getY()+(getDimY()/2))/getDimY());
 	}
-		
+	
+	/**
+	 * Refreshes both xTile and yTile according to X and Y positions.
+	 */
 	private void refreshTileZ(){
 		refreshTileY();
 		refreshTileX();
 	}
 	
+	/**
+	 * Refreshes xTile and snaps X position to xTile.
+	 */
 	private void snapX(){
 		refreshTileX();
 	//	System.out.println("Snapping X!");
 		x=getxTile()*getDimX();
 	}
 	
+	/**
+	 * Refreshes yTile and snaps Y position to yTile.
+	 */
 	private void snapY(){
 		refreshTileY();
 	//	System.out.println("Snapping Y!");
 		y=getyTile()*getDimY();
 	}
 	
+	/**
+	 * Refreshes both xTile and yTile and snaps X and Y position to xTile and yTile respectively.
+	 */
 	private void snapZ(){
 		snapX();
 		snapY();

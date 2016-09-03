@@ -66,7 +66,11 @@ public class PokemonMove {
 		 */
 		private String flags;
 	//</editor-fold>
-		
+	
+	/**
+	 * Create PokemonMove based on given ID.
+	 * @param id PokemonMove ID to create.
+	 */
 	public PokemonMove(int id){
 		this.id = id;
 
@@ -77,6 +81,10 @@ public class PokemonMove {
 		}
 	}
 
+	/**
+	 * Create PokemonMove based on given ID.
+	 * @param nameInternal PokemonMove nameInternal to create.
+	 */
 	public PokemonMove(String nameInternal){
 		this.nameInternal = nameInternal;
 		this.id = getMoveID(nameInternal);
@@ -88,6 +96,11 @@ public class PokemonMove {
 		}
 	}
 
+	/**
+	 * Acquire information from main data about Pokemon moves with given ID.
+	 * @param id PokemonMove to search for in main data.
+	 * @return Success of process.
+	 */
 	private boolean readInfo(int id){
 			boolean success = false;
 
@@ -111,7 +124,7 @@ public class PokemonMove {
 					}else if (partes[0].compareTo("accuracy")==0){
 							this.accuracy = Integer.parseInt(partes[1]);
 					}else if (partes[0].compareTo("totalPP")==0){
-							this.PPMax = Integer.parseInt(partes[1]);
+						this.setPPMax(Integer.parseInt(partes[1]));
 					}else if (partes[0].compareTo("effectChance")==0){
 			//		this.dmgBase = Integer.parseInt(partes[1]);
 					}else if (partes[0].compareTo("target")==0){
@@ -126,7 +139,12 @@ public class PokemonMove {
 
 			return success;
 	}
-
+	
+	/**
+	 * Searches in main data for PokemonMove with given internal name, and returns its ID.
+	 * @param internalName PokemonMove internal name to search for.
+	 * @return Move ID.
+	 */
 	private int getMoveID(String internalName){
 		int id = 0;
 		boolean foundMove = false;
@@ -155,7 +173,11 @@ public class PokemonMove {
 
 		return id;
 	}
-  
+	
+	/**
+	 * Calculate damage caused of move.
+	 * @return Damage caused.
+	 */
 	public int calcDaño(){
 	  int daño = dmgBase;
 	  //random rnd = new random();
@@ -169,44 +191,62 @@ public class PokemonMove {
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="Getters & Setters">
+		
+		/**
+		 * @return the id
+		 */
 		public int getId() {
 			return id;
 		}
 
+		/**
+		 * @return the nameDisplay
+		 */
 		public String getNameDisplay() {
 			return nameDisplay;
 		}
 
+		/**
+		 * @return the nameInternal
+		 */
 		public String getNameInternal() {
 			return nameInternal;
 		}
 
-		public PokemonType getType() {
-			return type;
-		}
-
+		/**
+		 * @return the description
+		 */
 		public String getDescription() {
 			return description;
 		}
 
-		public String getCategory() {
-			return category;
-		}
-
+		/**
+		 * @return the PP
+		 */
 		public int getPP() {
 			return PP;
 		}
 
+		/**
+		 * @param PP the PP to set
+		 */
 		public void setPP(int PP) {
 			this.PP = PP;
 		}
 
+		/**
+		 * @return the PPMax
+		 */
 		public int getPPMax() {
 			return PPMax;
 		}
 
+		/**
+		 * @param PPMax the PPMax to set
+		 */
 		public void setPPMax(int PPMax) {
 			this.PPMax = PPMax;
 		}
 	//</editor-fold>
+	
 }

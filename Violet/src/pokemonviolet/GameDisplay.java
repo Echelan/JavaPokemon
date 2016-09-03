@@ -31,11 +31,19 @@ public class GameDisplay extends Canvas implements Runnable {
 		 * Current frame on Player Sprite.
 		 */
 		Image currentPlayerFrame;
+		/**
+		 * Current map.
+		 */
+		BufferedImage mapRegion;
 	// </editor-fold>
 	
+	/**
+	 * Create a GameDisplay custom canvas.
+	 */
 	public GameDisplay(){
 		try {
 			playerSprite = ImageIO.read(new File("player.png"));
+			mapRegion = MapBuilder.getMapRegion(1);
 		} catch (IOException ex) {
 		}
 	}
@@ -54,7 +62,7 @@ public class GameDisplay extends Canvas implements Runnable {
 			}
 		}
 		*/
-		g.drawImage(MapBuilder.getMapRegion(1), 0, 0, this);
+		g.drawImage(mapRegion, 0, 0, this);
 		g.drawImage(currentPlayerFrame, Game.player.getX(),Game.player.getY(),this);
 	}
 

@@ -178,19 +178,13 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 			private final JTextArea eventsTextDisplay;
 		//</editor-fold>
 	//</editor-fold>
-		
-    /**
-	* Create a new ClassTestWindow.
-	*/
-    public ClassTestWindow(){
-        try {
-			allPokemonBig = ImageIO.read(new File("pokemonIconsBig.png"));
-			allPokemonSmall = ImageIO.read(new File("pokemonIconsSmall.png"));
-			allItems = ImageIO.read(new File("itemsIcons.png"));
-        } catch (IOException ex) {
-
-        }
-		
+	
+	/**
+	 * Create a new ClassTestWindow.
+	 * @param operation JFrame default close operation.
+	 * @param visible This JFrame visibility.
+	 */
+    public ClassTestWindow(int operation, boolean visible){
         setLayout(null);
         setSize(600,500);
         setTitle("Pokemon Violet [CLASS TEST]");
@@ -198,7 +192,16 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
         setLocationRelativeTo(null);
 	//	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+	//	setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(operation);
+		
+        try {
+			allPokemonBig = ImageIO.read(new File("pokemonIconsBig.png"));
+			allPokemonSmall = ImageIO.read(new File("pokemonIconsSmall.png"));
+			allItems = ImageIO.read(new File("itemsIcons.png"));
+        } catch (IOException ex) {
+
+        }
 		
 		//<editor-fold defaultstate="collapsed" desc="Formatting Code">
 			throwDialog = new JTextField("Throw:");
@@ -376,7 +379,8 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
         updateButtons();
 		
 	//	setVisible(true);
-		setVisible(false);
+	//	setVisible(false);
+		setVisible(visible);
     }
 
 	/**
