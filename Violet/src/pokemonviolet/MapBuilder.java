@@ -25,22 +25,24 @@ import javax.swing.*;
 public class MapBuilder extends JFrame implements WindowListener, ActionListener, MouseListener, KeyListener {
 
 	//<editor-fold defaultstate="collapsed" desc="Statics">
-		private static int TILEWIDTH = 16;
-		private static int TILEHEIGHT = 16;
-		private static int TILERESIZEDWIDTH = 32;
-		private static int TILERESIZEDHEIGHT = 32;
+		private static int TILE_WIDTH = 16;
+		private static int TILE_HEIGHT = 16;
+		private static int TILE_RESIZED_WIDTH = 32;
+		private static int TILE_RESIZED_HEIGHT = 32;
 
-		private static int MAXTILEINTILESET = 90;
-		private static int MAXTILEINTILESETROW = 15;
-		private static int MAXSETINTILESET = 6;
-		private static int MAXTILEINSET = 15;
-		private static int MAXTILEINSETROW = 5;
-		private static int MAXTILEINSETCOL = 3;
-		private static int MAXSETINTILESETROW = 3;
+		private static int MAX_TILE_IN_TILESET = 90;
+		private static int MAX_TILE_IN_TILESET_ROW = 15;
+		private static int MAX_SET_IN_TILESET = 6;
+		private static int MAX_TILE_IN_SET = 15;
+		private static int MAX_TILE_IN_SET_ROW = 5;
+		private static int MAX_TILE_IN_SET_COL = 3;
+		private static int MAX_SET_IN_TILE_SET_ROW = 3;
 
-		private static int MAPROWTILES = 20;
-		private static int STARTX = 30;
-		private static int STARTY = 10;
+		private static int MAP_ROW_TILES = 20;
+		private static int START_X = 30;
+		private static int START_Y = 10;
+		
+		private static double MAP_MULT = 2.0;
 	//</editor-fold>
 	
 	//<editor-fold defaultstate="collapsed" desc="Static Images">
@@ -148,19 +150,19 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			
 			xStart=0;
 			yStart=0;
-			xEnd=MAPROWTILES-1;
-			yEnd=MAPROWTILES-1;
+			xEnd=MAP_ROW_TILES-1;
+			yEnd=MAP_ROW_TILES-1;
 			
-			tileGridLabel = new JLabel[MAPROWTILES][MAPROWTILES];
-			tileGridImage = new ImageIcon[MAPROWTILES][MAPROWTILES];
-			objGridLabel = new JLabel[MAPROWTILES][MAPROWTILES];
-			objGridImage = new ImageIcon[MAPROWTILES][MAPROWTILES];
-			tile = new int[MAPROWTILES][MAPROWTILES];
-			setT = new int[MAPROWTILES][MAPROWTILES];
-			obj = new int[MAPROWTILES][MAPROWTILES];
-			setO = new int[MAPROWTILES][MAPROWTILES];
-			for (int i = 0; i < MAPROWTILES; i++) {
-				for (int j = 0; j < MAPROWTILES; j++) {
+			tileGridLabel = new JLabel[MAP_ROW_TILES][MAP_ROW_TILES];
+			tileGridImage = new ImageIcon[MAP_ROW_TILES][MAP_ROW_TILES];
+			objGridLabel = new JLabel[MAP_ROW_TILES][MAP_ROW_TILES];
+			objGridImage = new ImageIcon[MAP_ROW_TILES][MAP_ROW_TILES];
+			tile = new int[MAP_ROW_TILES][MAP_ROW_TILES];
+			setT = new int[MAP_ROW_TILES][MAP_ROW_TILES];
+			obj = new int[MAP_ROW_TILES][MAP_ROW_TILES];
+			setO = new int[MAP_ROW_TILES][MAP_ROW_TILES];
+			for (int i = 0; i < MAP_ROW_TILES; i++) {
+				for (int j = 0; j < MAP_ROW_TILES; j++) {
 					int xTile,yTile,xPos,yPos;
 					
 					obj[i][j] = 0;
@@ -169,13 +171,13 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					xTile = getObjX(setO[i][j],obj[i][j]);
 					yTile = getObjY(setO[i][j],obj[i][j]);					
 					
-					objGridImage[i][j] = new ImageIcon(objSets[obj[i][j]].getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+					objGridImage[i][j] = new ImageIcon(objSets[obj[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 					
-					xPos = STARTX+(i*TILERESIZEDWIDTH);
-					yPos = STARTY+(j*TILERESIZEDHEIGHT);
+					xPos = START_X+(i*TILE_RESIZED_WIDTH);
+					yPos = START_Y+(j*TILE_RESIZED_HEIGHT);
 					objGridLabel[i][j] = new JLabel(objGridImage[i][j]);
 					objGridLabel[i][j].addMouseListener(this);
-					objGridLabel[i][j].setBounds(xPos,yPos,TILERESIZEDWIDTH,TILERESIZEDHEIGHT);
+					objGridLabel[i][j].setBounds(xPos,yPos,TILE_RESIZED_WIDTH,TILE_RESIZED_HEIGHT);
 					add(objGridLabel[i][j]);
 					
 					tile[i][j] = 0;
@@ -184,13 +186,13 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					xTile = getTileX(setT[i][j],tile[i][j]);
 					yTile = getTileY(setT[i][j],tile[i][j]);					
 					
-					tileGridImage[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+					tileGridImage[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 					
-					xPos = STARTX+(i*TILERESIZEDWIDTH);
-					yPos = STARTY+(j*TILERESIZEDHEIGHT);
+					xPos = START_X+(i*TILE_RESIZED_WIDTH);
+					yPos = START_Y+(j*TILE_RESIZED_HEIGHT);
 					tileGridLabel[i][j] = new JLabel(tileGridImage[i][j]);
 					tileGridLabel[i][j].addMouseListener(this);
-					tileGridLabel[i][j].setBounds(xPos,yPos,TILERESIZEDWIDTH,TILERESIZEDHEIGHT);
+					tileGridLabel[i][j].setBounds(xPos,yPos,TILE_RESIZED_WIDTH,TILE_RESIZED_HEIGHT);
 					add(tileGridLabel[i][j]);
 					
 				}
@@ -218,14 +220,14 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	public static BufferedImage getMapRegion(int id){
 		BufferedImage mapRegion = null;
 		
-		if (Game.INFOMAPS.get(id) != null){
+		if (Game.INFO_MAPS.get(id) != null){
 			
-			BufferedImage tempStitched = new BufferedImage( MAPROWTILES*TILEWIDTH , MAPROWTILES*TILEHEIGHT, BufferedImage.TYPE_INT_RGB);
+			BufferedImage tempStitched = new BufferedImage( MAP_ROW_TILES*TILE_WIDTH*2 , MAP_ROW_TILES*TILE_HEIGHT*2, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g = (Graphics2D) tempStitched.getGraphics();
 			
-			for (int i = 0; i < MAPROWTILES; i++) {
-				String[] thisrow = Game.INFOMAPS.get(id).get(i).split(",");
-				for (int j = 0; j < MAPROWTILES; j++) {
+			for (int i = 0; i < MAP_ROW_TILES; i++) {
+				String[] thisrow = Game.INFO_MAPS.get(id).get(i).split(",");
+				for (int j = 0; j < MAP_ROW_TILES; j++) {
 					int xTile, yTile;
 					
 					int thistileset = Integer.parseInt(thisrow[j].split("-")[0], 16);
@@ -234,7 +236,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					xTile = getTileXSMALL(thistileset,thistiletype);
 					yTile = getTileYSMALL(thistileset,thistiletype);	
 
-					g.drawImage( tilesetSMALL.getSubimage(xTile, yTile, TILEWIDTH, TILEHEIGHT), i*TILEWIDTH, j*TILEHEIGHT, null);
+					g.drawImage( tilesetSMALL.getSubimage(xTile, yTile, TILE_WIDTH, TILE_HEIGHT), (int)(i*TILE_WIDTH*MAP_MULT), (int)(j*TILE_HEIGHT*MAP_MULT), (int)(TILE_WIDTH*MAP_MULT), (int)(TILE_HEIGHT*MAP_MULT), null);
 					
 					
 					int thisobjset = Integer.parseInt(thisrow[j].split("-")[2], 16);
@@ -243,7 +245,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					xTile = getObjXSMALL(thisobjset,thisobjtype);
 					yTile = getObjYSMALL(thisobjset,thisobjtype);	
 
-					g.drawImage( objSetsSMALL[thisobjset].getSubimage(xTile, yTile, TILEWIDTH, TILEHEIGHT), i*TILEWIDTH, j*TILEHEIGHT, null);
+					g.drawImage( objSetsSMALL[thisobjset].getSubimage(xTile, yTile, TILE_WIDTH, TILE_HEIGHT), (int)(i*MAP_MULT*TILE_WIDTH), (int)(j*MAP_MULT*TILE_HEIGHT),(int)(TILE_WIDTH*2), (int)(TILE_HEIGHT*MAP_MULT), null);
 				}
 			}
 			
@@ -468,14 +470,14 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					}
 				}
 				if (j>yStart){
-					tile[i][j]=tile[i][j]+MAXTILEINSETROW;
+					tile[i][j]=tile[i][j]+MAX_TILE_IN_SET_ROW;
 					if (j==yEnd){
-						tile[i][j]=tile[i][j]+MAXTILEINSETROW;
+						tile[i][j]=tile[i][j]+MAX_TILE_IN_SET_ROW;
 					}
 				}
 				int xTile = getTileX(setT[i][j],tile[i][j]);
 				int yTile = getTileY(setT[i][j],tile[i][j]);
-				tileGridImage[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+				tileGridImage[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				tileGridLabel[i][j].setIcon(tileGridImage[i][j]);
 			}
 		}
@@ -492,9 +494,9 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					}
 				}
 				if (j>yStart){
-					tile[i][j]=tile[i][j]-MAXTILEINSETROW;
+					tile[i][j]=tile[i][j]-MAX_TILE_IN_SET_ROW;
 					if (j==yEnd){
-						tile[i][j]=tile[i][j]-MAXTILEINSETROW;
+						tile[i][j]=tile[i][j]-MAX_TILE_IN_SET_ROW;
 					}
 				}
 				if (i == xStart && j == yStart){
@@ -508,7 +510,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 				}
 				int xTile = getTileX(setT[i][j],tile[i][j]);
 				int yTile = getTileY(setT[i][j],tile[i][j]);
-				tileGridImage[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+				tileGridImage[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				tileGridLabel[i][j].setIcon(tileGridImage[i][j]);
 			}
 		}
@@ -534,15 +536,15 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			for (int j = yStart; j <= yEnd; j++) {
 				setInfo[i][j]=setInfo[i][j]-1;
 				if (isTiling){
-					if (tileInfo[i][j] >= MAXTILEINSET){
-						tileInfo[i][j] = tileInfo[i][j] - MAXTILEINSET ;
+					if (tileInfo[i][j] >= MAX_TILE_IN_SET){
+						tileInfo[i][j] = tileInfo[i][j] - MAX_TILE_IN_SET ;
 					}else if (tile[i][j] < 0){
-						tileInfo[i][j] = MAXTILEINSET + tileInfo[i][j];
+						tileInfo[i][j] = MAX_TILE_IN_SET + tileInfo[i][j];
 					}
-					if (setInfo[i][j] >= MAXSETINTILESET){
-						setInfo[i][j] = setInfo[i][j] - MAXSETINTILESET ;
+					if (setInfo[i][j] >= MAX_SET_IN_TILESET){
+						setInfo[i][j] = setInfo[i][j] - MAX_SET_IN_TILESET ;
 					}else if (setInfo[i][j] < 0){
-						setInfo[i][j] = MAXSETINTILESET + setInfo[i][j];
+						setInfo[i][j] = MAX_SET_IN_TILESET + setInfo[i][j];
 					}
 				}else{
 					int maxset = objSets.length;
@@ -551,7 +553,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					}else if (setInfo[i][j] < 0){
 						setInfo[i][j] = maxset + setInfo[i][j];
 					}
-					int maxtile = (objSets[setInfo[i][j]].getWidth()/TILERESIZEDWIDTH)*(objSets[setInfo[i][j]].getHeight()/TILERESIZEDHEIGHT);
+					int maxtile = (objSets[setInfo[i][j]].getWidth()/TILE_RESIZED_WIDTH)*(objSets[setInfo[i][j]].getHeight()/TILE_RESIZED_HEIGHT);
 					if (tileInfo[i][j] >= maxtile){
 						tileInfo[i][j] = tileInfo[i][j] - maxtile ;
 					}else if (tile[i][j] < 0){
@@ -569,9 +571,9 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					yTile = getObjY(setInfo[i][j],tileInfo[i][j]);
 				}
 				if (isTiling){
-					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				}else{
-					imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+					imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				}
 				labelInfo[i][j].setIcon(imageInfo[i][j]);
 			}
@@ -598,15 +600,15 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			for (int j = yStart; j <= yEnd; j++) {
 				setInfo[i][j]=setInfo[i][j]+1;
 				if (isTiling){
-					if (tileInfo[i][j] >= MAXTILEINSET){
-						tileInfo[i][j] = tileInfo[i][j] - MAXTILEINSET ;
+					if (tileInfo[i][j] >= MAX_TILE_IN_SET){
+						tileInfo[i][j] = tileInfo[i][j] - MAX_TILE_IN_SET ;
 					}else if (tile[i][j] < 0){
-						tileInfo[i][j] = MAXTILEINSET + tileInfo[i][j];
+						tileInfo[i][j] = MAX_TILE_IN_SET + tileInfo[i][j];
 					}
-					if (setInfo[i][j] >= MAXSETINTILESET){
-						setInfo[i][j] = setInfo[i][j] - MAXSETINTILESET ;
+					if (setInfo[i][j] >= MAX_SET_IN_TILESET){
+						setInfo[i][j] = setInfo[i][j] - MAX_SET_IN_TILESET ;
 					}else if (setInfo[i][j] < 0){
-						setInfo[i][j] = MAXSETINTILESET + setInfo[i][j];
+						setInfo[i][j] = MAX_SET_IN_TILESET + setInfo[i][j];
 					}
 				}else{
 					int maxset = objSets.length;
@@ -615,7 +617,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					}else if (setInfo[i][j] < 0){
 						setInfo[i][j] = maxset + setInfo[i][j];
 					}
-					int maxtile = (objSets[setInfo[i][j]].getWidth()/TILERESIZEDWIDTH)*(objSets[setInfo[i][j]].getHeight()/TILERESIZEDHEIGHT);
+					int maxtile = (objSets[setInfo[i][j]].getWidth()/TILE_RESIZED_WIDTH)*(objSets[setInfo[i][j]].getHeight()/TILE_RESIZED_HEIGHT);
 					if (tileInfo[i][j] >= maxtile){
 						tileInfo[i][j] = tileInfo[i][j] - maxtile ;
 					}else if (tile[i][j] < 0){
@@ -633,9 +635,9 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					yTile = getObjY(setInfo[i][j],tileInfo[i][j]);
 				}
 				if (isTiling){
-					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				}else{
-					imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+					imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				}
 				labelInfo[i][j].setIcon(imageInfo[i][j]);
 			}
@@ -662,13 +664,13 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			for (int j = yStart; j <= yEnd; j++) {
 				tileInfo[i][j]=tileInfo[i][j]-1;
 				if (isTiling){
-					if (tileInfo[i][j] >= MAXTILEINSET){
-						tileInfo[i][j] = tileInfo[i][j] - MAXTILEINSET ;
+					if (tileInfo[i][j] >= MAX_TILE_IN_SET){
+						tileInfo[i][j] = tileInfo[i][j] - MAX_TILE_IN_SET ;
 					}else if (tileInfo[i][j] < 0){
-						tileInfo[i][j] = MAXTILEINSET + tileInfo[i][j];
+						tileInfo[i][j] = MAX_TILE_IN_SET + tileInfo[i][j];
 					}
 				}else{
-					int maxtile = (objSets[setInfo[i][j]].getWidth()/TILERESIZEDWIDTH)*(objSets[setInfo[i][j]].getHeight()/TILERESIZEDHEIGHT);
+					int maxtile = (objSets[setInfo[i][j]].getWidth()/TILE_RESIZED_WIDTH)*(objSets[setInfo[i][j]].getHeight()/TILE_RESIZED_HEIGHT);
 					if (tileInfo[i][j] >= maxtile){
 						tileInfo[i][j] = tileInfo[i][j] - maxtile ;
 					}else if (tileInfo[i][j] < 0){
@@ -690,9 +692,9 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			//	labelInfo[i][j].setIcon(tileGridImage[i][j]);
 			
 				if (isTiling){
-					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				}else{
-					imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+					imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				}
 				labelInfo[i][j].setIcon(imageInfo[i][j]);
 			}
@@ -719,13 +721,13 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			for (int j = yStart; j <= yEnd; j++) {
 				tileInfo[i][j]=tileInfo[i][j]+1;
 				if (isTiling){
-					if (tileInfo[i][j] >= MAXTILEINSET){
-						tileInfo[i][j] = tileInfo[i][j] - MAXTILEINSET ;
+					if (tileInfo[i][j] >= MAX_TILE_IN_SET){
+						tileInfo[i][j] = tileInfo[i][j] - MAX_TILE_IN_SET ;
 					}else if (tileInfo[i][j] < 0){
-						tileInfo[i][j] = MAXTILEINSET + tileInfo[i][j];
+						tileInfo[i][j] = MAX_TILE_IN_SET + tileInfo[i][j];
 					}
 				}else{
-					int maxtile = (objSets[setInfo[i][j]].getWidth()/TILERESIZEDWIDTH)*(objSets[setInfo[i][j]].getHeight()/TILERESIZEDHEIGHT);
+					int maxtile = (objSets[setInfo[i][j]].getWidth()/TILE_RESIZED_WIDTH)*(objSets[setInfo[i][j]].getHeight()/TILE_RESIZED_HEIGHT);
 					if (tileInfo[i][j] >= maxtile){
 						tileInfo[i][j] = tileInfo[i][j] - maxtile ;
 					}else if (tileInfo[i][j] < 0){
@@ -746,9 +748,9 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			//	imageInfo[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
 			//	labelInfo[i][j].setIcon(imageInfo[i][j]);
 				if (isTiling){
-					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				}else{
-					imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+					imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				}
 				labelInfo[i][j].setIcon(imageInfo[i][j]);
 			}
@@ -783,7 +785,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 				int xTile = getTileX(setT[i][j],tile[i][j]);
 				int yTile = getTileY(setT[i][j],tile[i][j]);
 				
-				tileGridImage[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+				tileGridImage[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				tileGridLabel[i][j].setIcon(tileGridImage[i][j]);
 			}
 		}
@@ -819,18 +821,18 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 				}
 					
 				if (isTiling){
-					if (tileInfo[i][j] >= MAXTILEINSET){
-						tileInfo[i][j] = tileInfo[i][j] - MAXTILEINSET ;
+					if (tileInfo[i][j] >= MAX_TILE_IN_SET){
+						tileInfo[i][j] = tileInfo[i][j] - MAX_TILE_IN_SET ;
 					}else if (tileInfo[i][j] < 0){
-						tileInfo[i][j] = MAXTILEINSET + tileInfo[i][j];
+						tileInfo[i][j] = MAX_TILE_IN_SET + tileInfo[i][j];
 					}
-					if (setInfo[i][j] >= MAXSETINTILESET){
-						setInfo[i][j] = setInfo[i][j] - MAXSETINTILESET ;
+					if (setInfo[i][j] >= MAX_SET_IN_TILESET){
+						setInfo[i][j] = setInfo[i][j] - MAX_SET_IN_TILESET ;
 					}else if (setInfo[i][j] < 0){
-						setInfo[i][j] = MAXSETINTILESET + setInfo[i][j];
+						setInfo[i][j] = MAX_SET_IN_TILESET + setInfo[i][j];
 					}
 				}else{
-					int maxtile = (objSets[setInfo[i][j]].getWidth()/TILERESIZEDWIDTH)*(objSets[setInfo[i][j]].getHeight()/TILERESIZEDHEIGHT);
+					int maxtile = (objSets[setInfo[i][j]].getWidth()/TILE_RESIZED_WIDTH)*(objSets[setInfo[i][j]].getHeight()/TILE_RESIZED_HEIGHT);
 					if (tileInfo[i][j] >= maxtile){
 						tileInfo[i][j] = tileInfo[i][j] - maxtile ;
 					}else if (tile[i][j] < 0){
@@ -854,9 +856,9 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 				}
 				
 				if (isTiling){
-					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				}else{
-					imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+					imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				}
 				labelInfo[i][j].setIcon(imageInfo[i][j]);
 			}
@@ -879,7 +881,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					yTile = getObjY(setO[i][j],obj[i][j]);
 				}
 				
-				objGridImage[i][j]= new ImageIcon(objSets[setO[i][j]].getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+				objGridImage[i][j]= new ImageIcon(objSets[setO[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				objGridLabel[i][j].setIcon(objGridImage[i][j]);				
 			}
 		}
@@ -891,10 +893,10 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			for (int j = yStart; j <= yEnd; j++) {
 				
 				obj[i][j] =  counter;
-				int rowtile = (objSets[setO[i][j]].getWidth()/TILERESIZEDWIDTH);
+				int rowtile = (objSets[setO[i][j]].getWidth()/TILE_RESIZED_WIDTH);
 				counter = counter+rowtile;
 				
-				int maxtile = (objSets[setO[i][j]].getWidth()/TILERESIZEDWIDTH)*(objSets[setO[i][j]].getHeight()/TILERESIZEDHEIGHT);
+				int maxtile = (objSets[setO[i][j]].getWidth()/TILE_RESIZED_WIDTH)*(objSets[setO[i][j]].getHeight()/TILE_RESIZED_HEIGHT);
 				if (counter >= maxtile){
 					counter = counter - (maxtile-1) ;
 				}
@@ -909,15 +911,15 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					yTile = getObjY(setO[i][j],obj[i][j]);
 				}
 				
-				objGridImage[i][j]= new ImageIcon(objSets[setO[i][j]].getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+				objGridImage[i][j]= new ImageIcon(objSets[setO[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				objGridLabel[i][j].setIcon(objGridImage[i][j]);
 			}
 		}
 	}
 	
 	public static int getTileX(int setinfo, int tileinfo){
-		int regX = (int)(Math.floor((double)tileinfo%MAXTILEINSETROW)*TILERESIZEDWIDTH);
-		int specialX = (int)(Math.floor((double)setinfo%MAXSETINTILESETROW)*(TILERESIZEDWIDTH*MAXTILEINSETROW));
+		int regX = (int)(Math.floor((double)tileinfo%MAX_TILE_IN_SET_ROW)*TILE_RESIZED_WIDTH);
+		int specialX = (int)(Math.floor((double)setinfo%MAX_SET_IN_TILE_SET_ROW)*(TILE_RESIZED_WIDTH*MAX_TILE_IN_SET_ROW));
 		
 	//	System.out.println("X: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialX+", TILE: "+regX+") = "+(regX+specialX));
 		
@@ -925,8 +927,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	}
 	
 	public static int getTileY(int setinfo, int tileinfo){
-		int regY = (int)(Math.floor((double)tileinfo/MAXTILEINSETROW)*TILERESIZEDHEIGHT);
-		int specialY = (int)(Math.floor((double)setinfo/MAXSETINTILESETROW)*(TILERESIZEDHEIGHT*MAXTILEINSETCOL));
+		int regY = (int)(Math.floor((double)tileinfo/MAX_TILE_IN_SET_ROW)*TILE_RESIZED_HEIGHT);
+		int specialY = (int)(Math.floor((double)setinfo/MAX_SET_IN_TILE_SET_ROW)*(TILE_RESIZED_HEIGHT*MAX_TILE_IN_SET_COL));
 		
 	//	System.out.println("Y: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialY+", TILE: "+regY+") = "+(regY+specialY));
 		
@@ -934,8 +936,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	}
 	
 	public static int getObjX(int setinfo, int tileinfo){
-		int maxtileinsetrow = (objSets[setinfo].getWidth()/TILERESIZEDWIDTH);
-		int regX = (int)(Math.floor((double)tileinfo%maxtileinsetrow)*TILERESIZEDWIDTH);
+		int maxtileinsetrow = (objSets[setinfo].getWidth()/TILE_RESIZED_WIDTH);
+		int regX = (int)(Math.floor((double)tileinfo%maxtileinsetrow)*TILE_RESIZED_WIDTH);
 	//	int specialX = (int)(Math.floor((double)setinfo%MAXSETINTILESETROW)*(TILERESIZEDWIDTH*MAXTILEINSETROW));
 		
 	//	System.out.println("X: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialX+", TILE: "+regX+") = "+(regX+specialX));
@@ -944,8 +946,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	}
 	
 	public static int getObjY(int setinfo, int tileinfo){
-		int maxtileinsetrow = (objSets[setinfo].getWidth()/TILERESIZEDWIDTH);
-		int regY = (int)(Math.floor((double)tileinfo/maxtileinsetrow)*TILERESIZEDHEIGHT);
+		int maxtileinsetrow = (objSets[setinfo].getWidth()/TILE_RESIZED_WIDTH);
+		int regY = (int)(Math.floor((double)tileinfo/maxtileinsetrow)*TILE_RESIZED_HEIGHT);
 	//	int specialY = (int)(Math.floor((double)setinfo/MAXSETINTILESETROW)*(TILERESIZEDHEIGHT*MAXTILEINSETCOL));
 		
 	//	System.out.println("Y: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialY+", TILE: "+regY+") = "+(regY+specialY));
@@ -954,8 +956,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	}
 	
 	public static int getTileXSMALL(int setinfo, int tileinfo){
-		int regX = (int)(Math.floor((double)tileinfo%MAXTILEINSETROW)*TILEWIDTH);
-		int specialX = (int)(Math.floor((double)setinfo%MAXSETINTILESETROW)*(TILEWIDTH*MAXTILEINSETROW));
+		int regX = (int)(Math.floor((double)tileinfo%MAX_TILE_IN_SET_ROW)*TILE_WIDTH);
+		int specialX = (int)(Math.floor((double)setinfo%MAX_SET_IN_TILE_SET_ROW)*(TILE_WIDTH*MAX_TILE_IN_SET_ROW));
 		
 	//	System.out.println("X: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialX+", TILE: "+regX+") = "+(regX+specialX));
 		
@@ -963,8 +965,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	}
 	
 	public static int getTileYSMALL(int setinfo, int tileinfo){
-		int regY = (int)(Math.floor((double)tileinfo/MAXTILEINSETROW)*TILEHEIGHT);
-		int specialY = (int)(Math.floor((double)setinfo/MAXSETINTILESETROW)*(TILEHEIGHT*MAXTILEINSETCOL));
+		int regY = (int)(Math.floor((double)tileinfo/MAX_TILE_IN_SET_ROW)*TILE_HEIGHT);
+		int specialY = (int)(Math.floor((double)setinfo/MAX_SET_IN_TILE_SET_ROW)*(TILE_HEIGHT*MAX_TILE_IN_SET_COL));
 		
 	//	System.out.println("Y: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialY+", TILE: "+regY+") = "+(regY+specialY));
 		
@@ -972,8 +974,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	}
 	
 	public static int getObjXSMALL(int setinfo, int tileinfo){
-		int maxtileinsetrow = (objSetsSMALL[setinfo].getWidth()/TILEWIDTH);
-		int regX = (int)(Math.floor((double)tileinfo%maxtileinsetrow)*TILEWIDTH);
+		int maxtileinsetrow = (objSetsSMALL[setinfo].getWidth()/TILE_WIDTH);
+		int regX = (int)(Math.floor((double)tileinfo%maxtileinsetrow)*TILE_WIDTH);
 	//	int specialX = (int)(Math.floor((double)setinfo%MAXSETINTILESETROW)*(TILERESIZEDWIDTH*MAXTILEINSETROW));
 		
 	//	System.out.println("X: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialX+", TILE: "+regX+") = "+(regX+specialX));
@@ -982,8 +984,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	}
 	
 	public static int getObjYSMALL(int setinfo, int tileinfo){
-		int maxtileinsetrow = (objSetsSMALL[setinfo].getWidth()/TILEWIDTH);
-		int regY = (int)(Math.floor((double)tileinfo/maxtileinsetrow)*TILEHEIGHT);
+		int maxtileinsetrow = (objSetsSMALL[setinfo].getWidth()/TILE_WIDTH);
+		int regY = (int)(Math.floor((double)tileinfo/maxtileinsetrow)*TILE_HEIGHT);
 	//	int specialY = (int)(Math.floor((double)setinfo/MAXSETINTILESETROW)*(TILERESIZEDHEIGHT*MAXTILEINSETCOL));
 		
 	//	System.out.println("Y: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialY+", TILE: "+regY+") = "+(regY+specialY));
@@ -1012,8 +1014,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
             fw = new FileWriter(archivo.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
 			
-            for(int i = 0; i < MAPROWTILES; i++){
-				for(int j = 0; j < MAPROWTILES; j++){
+            for(int i = 0; i < MAP_ROW_TILES; i++){
+				for(int j = 0; j < MAP_ROW_TILES; j++){
 					String info[] = new String[4];
 					
 					info[0]=Integer.toHexString(setT[i][j]);
@@ -1087,15 +1089,15 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		int[][] tileInfo=tile;
 		ImageIcon[][] imageInfo=tileGridImage;
 		JLabel[][] labelInfo=tileGridLabel;
-		for (int i = 0; i < MAPROWTILES; i++) {
-			for (int j = 0; j < MAPROWTILES; j++) {
+		for (int i = 0; i < MAP_ROW_TILES; i++) {
+			for (int j = 0; j < MAP_ROW_TILES; j++) {
 				
 				int xTile;
 				int yTile;
 				xTile = getTileX(setInfo[i][j],tileInfo[i][j]);
 				yTile = getTileY(setInfo[i][j],tileInfo[i][j]);
 				
-				imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+				imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				labelInfo[i][j].setIcon(imageInfo[i][j]);
 			}
 		}
@@ -1103,15 +1105,15 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		tileInfo=obj;
 		imageInfo=objGridImage;
 		labelInfo=objGridLabel;
-		for (int i = 0; i < MAPROWTILES; i++) {
-			for (int j = 0; j < MAPROWTILES; j++) {
+		for (int i = 0; i < MAP_ROW_TILES; i++) {
+			for (int j = 0; j < MAP_ROW_TILES; j++) {
 				
 				int xTile;
 				int yTile;
 				xTile = getObjX(setInfo[i][j],tileInfo[i][j]);
 				yTile = getObjY(setInfo[i][j],tileInfo[i][j]);
 				
-				imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
+				imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				labelInfo[i][j].setIcon(imageInfo[i][j]);
 			}
 		}
@@ -1120,8 +1122,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	public int[] getPos(int x, int y){
 		int[] pos = new int[2];
 		
-		for (int i = 0; i < MAPROWTILES; i++) {
-			for (int j = 0; j < MAPROWTILES; j++) {
+		for (int i = 0; i < MAP_ROW_TILES; i++) {
+			for (int j = 0; j < MAP_ROW_TILES; j++) {
 				
 			//	System.out.println("X: "+ gridLabel[i][j].getX()+"-"+x+"-"+(gridLabel[i][j].getX()+gridLabel[i][j].getWidth()) );
 				if (tileGridLabel[i][j].getX()<=x && x<=(tileGridLabel[i][j].getX()+tileGridLabel[i][j].getWidth())){
@@ -1141,11 +1143,11 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	}
 	
 	public void clearHighlight(){
-		for (int i = 0; i < MAPROWTILES; i++) {
-			for (int j = 0; j < MAPROWTILES; j++) {
-				int xPos = STARTX+(i*TILERESIZEDWIDTH);
-				int yPos = STARTY+(j*TILERESIZEDHEIGHT);
-				tileGridLabel[i][j].setBounds(xPos, yPos, TILERESIZEDHEIGHT, TILERESIZEDWIDTH);
+		for (int i = 0; i < MAP_ROW_TILES; i++) {
+			for (int j = 0; j < MAP_ROW_TILES; j++) {
+				int xPos = START_X+(i*TILE_RESIZED_WIDTH);
+				int yPos = START_Y+(j*TILE_RESIZED_HEIGHT);
+				tileGridLabel[i][j].setBounds(xPos, yPos, TILE_RESIZED_HEIGHT, TILE_RESIZED_WIDTH);
 			}
 		}
 	}
@@ -1169,9 +1171,9 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		}
 		for (int i = thisStartX; i <= thisEndX; i++) {
 			for (int j = thisStartY; j <= thisEndY; j++) {
-				int xPos = STARTX+(i*TILERESIZEDWIDTH);
-				int yPos = STARTY+(j*TILERESIZEDHEIGHT);
-				tileGridLabel[i][j].setBounds(xPos+2, yPos+2, TILERESIZEDHEIGHT-4, TILERESIZEDWIDTH-4);
+				int xPos = START_X+(i*TILE_RESIZED_WIDTH);
+				int yPos = START_Y+(j*TILE_RESIZED_HEIGHT);
+				tileGridLabel[i][j].setBounds(xPos+2, yPos+2, TILE_RESIZED_HEIGHT-4, TILE_RESIZED_WIDTH-4);
 			}
 		}
 		dimDisplay.setText("("+(thisEndX+1-thisStartX)+"x"+(thisEndY+1-thisStartY)+")");

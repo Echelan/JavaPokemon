@@ -16,9 +16,9 @@ public class Pokemon {
 	
 	//<editor-fold defaultstate="collapsed" desc="Attributes">
 		// 'GLOBAL'
-		static final private int NUMATTRIB = 40;
-		static final private int MAXTOTALEV = 510;
-		static final private int MAXSINGLEEV = 252;
+		static final private int NUM_ATTRIB = 40;
+		static final private int MAX_TOTAL_EV = 510;
+		static final private int MAX_SINGLE_EV = 252;
 
 		private int id;
 		private final boolean isShiny;
@@ -306,9 +306,9 @@ public class Pokemon {
 		boolean success = false;
 		
 		
-		String[] pokeinfo = Game.INFOPOKEMON.get(id-1).split(";");
+		String[] pokeinfo = Game.INFO_POKEMON.get(id-1).split(";");
 		
-		for (int i = 0; i < NUMATTRIB; i++){
+		for (int i = 0; i < NUM_ATTRIB; i++){
 			String[] partes = pokeinfo[i].split("=");
 			if (partes[0].compareTo( "Name" )==0){
 				this.nameSpecies = partes[1];
@@ -603,10 +603,10 @@ public class Pokemon {
 		int id = 0;
 		boolean foundPokemon = false;
 
-		while (foundPokemon == false && id < Game.INFOPOKEMON.size()){
-			String[] pokeinfo = Game.INFOPOKEMON.get(id).split(";");
+		while (foundPokemon == false && id < Game.INFO_POKEMON.size()){
+			String[] pokeinfo = Game.INFO_POKEMON.get(id).split(";");
 			int attribComp = 0;
-			while (attribComp < NUMATTRIB && foundPokemon == false){
+			while (attribComp < NUM_ATTRIB && foundPokemon == false){
 				String[] partes = pokeinfo[attribComp].split("=");
 				if (partes[0].compareTo("InternalName")==0){
 			//		System.out.println("Comparing " + partes[1] + "...");

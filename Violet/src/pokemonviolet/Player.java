@@ -19,11 +19,11 @@ public final class Player implements Runnable {
 			/**
 			 * Position change interval.
 			 */
-			private static int MOVEPOS = 3;
+			private static int MOVE_POS = 4;
 			/**
 			 * Running multiplier.
 			 */
-			private static double RUNMULT = 2.0;
+			private static double RUN_MULT = 2.0;
 		//</editor-fold>
 		// <editor-fold defaultstate="collapsed" desc="General">
 			/**
@@ -113,6 +113,10 @@ public final class Player implements Runnable {
 			 */
 			private String direction;
 			/**
+			 * Player visual direction.
+			 */
+			private String vDirection;
+			/**
 			 * Player running boolean.
 			 */
 			private boolean running;
@@ -137,11 +141,15 @@ public final class Player implements Runnable {
 			/**
 			 * Player sprite X dimensions.
 			 */
-			private static int dimX = 20;
+			public static int SPRITE_X = 20;
 			/**
 			 * Player sprite Y dimensions.
 			 */
-			private static int dimY = 20;
+			public static int SPRITE_Y = 20;
+			/**
+			 * Player sprite multiplier.
+			 */
+			public static double SPRITE_RESIZE = 1.6;
 		//</editor-fold>
 	// </editor-fold>
 	
@@ -212,11 +220,14 @@ public final class Player implements Runnable {
 		this.numKeys = 0;
 		this.numBattles = 0;
 		this.setDirection("");
+		this.setvDirection("");
 		this.maxFrames = 3;
 		this.setCurFrame(1);
 		this.curAnim = 0;
-		this.xTile = 0;
-		this.yTile = 0;
+		this.xTile=10;
+		this.yTile=10;
+		this.x =(int)(getxTile()*(SPRITE_X*SPRITE_RESIZE));
+		this.y =(int)(getyTile()*(SPRITE_Y*SPRITE_RESIZE));
 	}
 	
 	/**
@@ -662,76 +673,62 @@ public final class Player implements Runnable {
 	 * Move Player coordinates.
 	 */
 	public void move(){
-		int amount = MOVEPOS;
-		if (isRunning()){
-			amount = (int)(amount * RUNMULT);
+		int baseX, baseY, diff;
+		baseX =(int)(getxTile()*(SPRITE_X*SPRITE_RESIZE));
+		baseY =(int)(getyTile()*(SPRITE_Y*SPRITE_RESIZE));
+		diff = 2;
+		
+		boolean passX, passY;
+		passX = (x<baseX+diff && x>baseX-diff);
+		passY = (y<baseY+diff && y>baseY-diff);
+		
+		if (passX && passY){
+			switch (getDirection()){
+				case "LEFT":
+					setvDirection(getDirection());
+					xTile = (getxTile()-1);
+				break;
+				case "RIGHT":
+					setvDirection(getDirection());
+					xTile = (getxTile()+1);
+				break;
+				case "UP":
+					setvDirection(getDirection());
+					yTile = (getyTile()-1);
+				break;
+				case "DOWN":
+					setvDirection(getDirection());
+					yTile = (getyTile()+1);
+				break;
+				default:
+					setvDirection(getDirection());
+				break;
+			}
+		}else{
+			int amount = MOVE_POS;
+			if (isRunning()){
+				amount = (int)(amount * RUN_MULT);
+			}
+			
+			switch (getvDirection()){
+				case "LEFT":
+					x = getX() - amount;
+				break;
+				case "RIGHT":
+					x = getX() + amount;
+				break;
+				case "UP":
+					y = getY() - amount;
+				break;
+				case "DOWN":
+					y = getY() + amount;
+				break;
+			}
+			
 		}
 		
-		switch (getDirection()){
-			case "LEFT":
-				x = getX() - amount;
-			break;
-			case "RIGHT":
-				x = getX() + amount;
-			break;
-			case "UP":
-				y = getY() - amount;
-			break;
-			case "DOWN":
-				y = getY() + amount;
-			break;
-		}
+		//refreshTileZ();
 		
-		
-		refreshTileZ();
-	}
-	
-	/**
-	 * Refreshes xTile according to X positions.
-	 */
-	private void refreshTileX(){
-		xTile = (int)Math.floor((getX()+(getDimX()/2))/getDimX());
-	}
-	
-	/**
-	 * Refreshes yTile according to Y positions.
-	 */
-	private void refreshTileY(){
-		yTile = (int)Math.floor((getY()+(getDimY()/2))/getDimY());
-	}
-	
-	/**
-	 * Refreshes both xTile and yTile according to X and Y positions.
-	 */
-	private void refreshTileZ(){
-		refreshTileY();
-		refreshTileX();
-	}
-	
-	/**
-	 * Refreshes xTile and snaps X position to xTile.
-	 */
-	private void snapX(){
-		refreshTileX();
-	//	System.out.println("Snapping X!");
-		x=getxTile()*getDimX();
-	}
-	
-	/**
-	 * Refreshes yTile and snaps Y position to yTile.
-	 */
-	private void snapY(){
-		refreshTileY();
-	//	System.out.println("Snapping Y!");
-		y=getyTile()*getDimY();
-	}
-	
-	/**
-	 * Refreshes both xTile and yTile and snaps X and Y position to xTile and yTile respectively.
-	 */
-	private void snapZ(){
-		snapX();
-		snapY();
 	}
 	
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
@@ -839,22 +836,6 @@ public final class Player implements Runnable {
 		 */
 		public void setDirection(String direction) {
 			this.direction = direction;
-			if (direction.compareTo("LEFT") ==0){
-				this.curAnim=2;
-				snapY();
-			}else if (direction.compareTo("RIGHT") ==0){
-				this.curAnim=3;
-				snapY();
-			}else if (direction.compareTo("UP") ==0){
-				this.curAnim=1;
-				snapX();
-			}else if (direction.compareTo("DOWN") ==0){
-				this.curAnim=0;
-				snapX();
-			}else{
-				this.curFrame=1;
-				snapZ();
-			}
 		}
 
 		/**
@@ -889,18 +870,28 @@ public final class Player implements Runnable {
 		}
 		
 		/**
-		 * @return the dimX
+		 * @return the vDirection
 		 */
-		public static int getDimX() {
-			return dimX;
+		public String getvDirection() {
+			return vDirection;
 		}
 
 		/**
-		 * @return the dimY
+		 * @param vDirection the vDirection to set
 		 */
-		public static int getDimY() {
-			return dimY;
+		public void setvDirection(String vDirection) {
+			this.vDirection = vDirection;
+			if (vDirection.compareTo("LEFT") ==0){
+				this.curAnim=2;
+			}else if (vDirection.compareTo("RIGHT") ==0){
+				this.curAnim=3;
+			}else if (vDirection.compareTo("UP") ==0){
+				this.curAnim=1;
+			}else if (vDirection.compareTo("DOWN") ==0){
+				this.curAnim=0;
+			}else{
+				this.curFrame=1;
+			}
 		}
 	//</editor-fold>
-		
 }

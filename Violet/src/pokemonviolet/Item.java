@@ -17,7 +17,7 @@ public class Item {
 		/**
 		 * Number of attributes per Item.
 		 */
-		static int NUMATTRIB = 10;
+		static int NUM_ATTRIB = 10;
 		/**
 		 * ID of Item.
 		 */
@@ -134,8 +134,8 @@ public class Item {
 	private boolean readInfo(int id){
 		boolean success = false;
 		
-		String[] iteminfo = Game.INFOITEMS.get(id-1).split(";");
-		for (int i = 0; i < NUMATTRIB; i++){
+		String[] iteminfo = Game.INFO_ITEMS.get(id-1).split(";");
+		for (int i = 0; i < NUM_ATTRIB; i++){
 			String[] partes = iteminfo[i].split("=");
 			if (partes[0].compareTo("internalName")==0){
 				this.nameInternal = partes[1];
@@ -172,10 +172,10 @@ public class Item {
 		
 		boolean foundItem = false;
 
-		while (foundItem == false && id < Game.INFOITEMS.size()){
-			String[] iteminfo = Game.INFOITEMS.get(id).split(";");
+		while (foundItem == false && id < Game.INFO_ITEMS.size()){
+			String[] iteminfo = Game.INFO_ITEMS.get(id).split(";");
 			int attribComp = 0;
-			while (attribComp < NUMATTRIB && foundItem == false){
+			while (attribComp < NUM_ATTRIB && foundItem == false){
 				String[] partes = iteminfo[attribComp].split("=");
 				if (partes[0].compareTo("internalName")==0){
 					if (partes[1].compareTo(internalName)==0){

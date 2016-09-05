@@ -18,7 +18,7 @@ public class PokemonType {
 		/**
 		 * Number of Attributes per Type.
 		 */
-		static final private int NUMATTRIB = 7;
+		static final private int NUM_ATTRIB = 7;
 		
 		/**
 		 * ID of Type.
@@ -91,8 +91,8 @@ public class PokemonType {
 	private boolean readInfo(int id){
 		boolean success = false;
 		
-		String[] iteminfo = Game.	INFOTYPES.get(id-1).split(";");
-		for (int i = 0; i < NUMATTRIB; i++){
+		String[] iteminfo = Game.	INFO_TYPES.get(id-1).split(";");
+		for (int i = 0; i < NUM_ATTRIB; i++){
 			String[] partes = iteminfo[i].split("=");
 			if (partes[0].compareTo("InternalName")==0){
 				this.nameInternal = partes[1];
@@ -126,9 +126,9 @@ public class PokemonType {
 		boolean foundItem = false;
 
 		while (foundItem == false){
-			String[] iteminfo = Game.INFOITEMS.get(id).split(";");
+			String[] iteminfo = Game.INFO_ITEMS.get(id).split(";");
 			int attribComp = 0;
-			while (attribComp < NUMATTRIB && foundItem == false){
+			while (attribComp < NUM_ATTRIB && foundItem == false){
 				String[] partes = iteminfo[attribComp].split("=");
 				if (partes[0].compareTo("internalName")==0){
 					if (partes[1].compareTo(internalName)==0){

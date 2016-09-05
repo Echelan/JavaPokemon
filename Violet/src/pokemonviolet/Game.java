@@ -26,27 +26,27 @@ public class Game implements Runnable{
 			/**
 			 * Main data for Pokemon.
 			 */
-			public static List<String> INFOPOKEMON;
+			public static List<String> INFO_POKEMON;
 			/**
 			 * Main data for Items.
 			 */
-			public static List<String> INFOITEMS;
+			public static List<String> INFO_ITEMS;
 			/**
 			 * Main data for Moves.
 			 */
-			public static List<String> INFOMOVES;
+			public static List<String> INFO_MOVES;
 			/**
 			 * Main data for Types.
 			 */
-			public static List<String> INFOTYPES;
+			public static List<String> INFO_TYPES;
 			/**
 			 * Main data for Maps.
 			 */
-			public static ArrayList<List<String>> INFOMAPS;
+			public static ArrayList<List<String>> INFO_MAPS;
 			/**
 			 * Amount of Maps.
 			 */
-			public static int NUMMAPS;
+			public static int NUM_MAPS;
 		//</editor-fold>
 		
 		/**
@@ -80,7 +80,7 @@ public class Game implements Runnable{
 	 */
 	public Game() {
 		
-		NUMMAPS = 2;
+		NUM_MAPS = 2;
 		
 		SplashWindow splash = new SplashWindow();
 
@@ -105,7 +105,7 @@ public class Game implements Runnable{
 			archivo = new File("listTypes.txt");
 			readInfoT = Files.readAllLines(archivo.toPath());
 			
-			for (int i = 0; i < NUMMAPS; i++) {
+			for (int i = 0; i < NUM_MAPS; i++) {
 				archivo = new File("Map"+i+".txt");
 				List<String> temp = Files.readAllLines(archivo.toPath());
 				readMap.add(temp);
@@ -115,11 +115,11 @@ public class Game implements Runnable{
 			System.exit(0);
 		}
 
-		INFOITEMS = readInfoI;
-		INFOPOKEMON = readInfoP;
-		INFOMOVES = readInfoM;
-		INFOTYPES = readInfoT;
-		INFOMAPS = readMap;
+		INFO_ITEMS = readInfoI;
+		INFO_POKEMON = readInfoP;
+		INFO_MOVES = readInfoM;
+		INFO_TYPES = readInfoT;
+		INFO_MAPS = readMap;
 		
 		try {
 			Thread.sleep(100);

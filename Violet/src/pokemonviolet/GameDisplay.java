@@ -26,15 +26,15 @@ public class GameDisplay extends Canvas implements Runnable {
 		 * Sprite for Player.
 		 * <p> One frame dimensions: 20x20. </p>
 		 */
-		BufferedImage playerSprite;
+		private static BufferedImage playerSprite;
 		/**
 		 * Current frame on Player Sprite.
 		 */
-		Image currentPlayerFrame;
+		private static Image currentPlayerFrame;
 		/**
 		 * Current map.
 		 */
-		BufferedImage mapRegion;
+		private BufferedImage mapRegion;
 	// </editor-fold>
 	
 	/**
@@ -63,7 +63,8 @@ public class GameDisplay extends Canvas implements Runnable {
 		}
 		*/
 		g.drawImage(mapRegion, 0, 0, this);
-		g.drawImage(currentPlayerFrame, Game.player.getX(),Game.player.getY(),this);
+		g.drawImage(currentPlayerFrame, Game.player.getX(),Game.player.getY(),(int)(Player.SPRITE_X*Player.SPRITE_RESIZE),(int)(Player.SPRITE_Y*Player.SPRITE_RESIZE),this);
+		g.fillOval((int)(Game.player.getxTile()*Game.player.SPRITE_RESIZE*Game.player.SPRITE_X)+3, (int)(Game.player.getyTile()*Game.player.SPRITE_RESIZE*Game.player.SPRITE_Y)+3, 14, 14);
 	}
 
     @Override
@@ -73,7 +74,7 @@ public class GameDisplay extends Canvas implements Runnable {
 			
 			int xPlayerIMG = 0;
 			int yPlayerIMG = 0;
-			if (Game.player.getDirection().compareTo("") != 0){
+			if (Game.player.getvDirection().compareTo("") != 0){
 				Game.player.setCurFrame(Game.player.getCurFrame()+1);
 				if (Game.player.isRunning()){
 					xPlayerIMG = xPlayerIMG + 60;
@@ -89,7 +90,7 @@ public class GameDisplay extends Canvas implements Runnable {
 			repaint((Game.player.getX()-20), (Game.player.getY()-20), 60, 60);
            
 			try {
-				Thread.sleep(50);
+				Thread.sleep(80);
 			} catch (InterruptedException ex) {
 			}
         }
