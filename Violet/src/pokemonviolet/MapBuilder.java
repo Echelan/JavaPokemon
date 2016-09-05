@@ -255,6 +255,47 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		return mapRegion;
 	}
 			
+	public static String[][] getMapBounds(int id){
+		String[][] bounds = null;
+		
+		if (Game.INFO_MAPS.get(id) != null){
+			bounds = new String[MAP_ROW_TILES][MAP_ROW_TILES];
+			
+			for (int i = 0; i < MAP_ROW_TILES; i++) {
+				String[] thisrow = Game.INFO_MAPS.get(id).get(i).split(",");
+				for (int j = 0; j < MAP_ROW_TILES; j++) {
+					
+					int thistileset = Integer.parseInt(thisrow[j].split("-")[0], 16);
+				//	int thistiletype = Integer.parseInt(thisrow[j].split("-")[1], 16);
+					
+					int thisobjset = Integer.parseInt(thisrow[j].split("-")[2], 16);
+					int thisobjtype = Integer.parseInt(thisrow[j].split("-")[3], 16);
+
+					if (thistileset == 2){
+						bounds[i][j] = "2";
+					}else{
+						bounds[i][j] = "0";
+					}
+					// objects, house, center, shop, gym
+					if (thisobjset == 0){
+						if (thisobjtype==0 || thisobjtype==3 || thisobjtype==8){
+							
+						}else if (thisobjtype == 7){
+							bounds[i][j] = bounds[i][j] + "1";
+						}else{
+							bounds[i][j] = "1";
+						}
+					}else{
+						bounds[i][j] = "1";
+					}
+					
+				}
+			}
+		}
+		
+		return bounds;
+	}
+	
 	public void createGenInterface(){
 		genPanel = new JPanel();
 		genPanel.setLayout(null);

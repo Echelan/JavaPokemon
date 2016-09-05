@@ -19,7 +19,7 @@ public final class Player implements Runnable {
 			/**
 			 * Position change interval.
 			 */
-			private static int MOVE_POS = 4;
+			private static int MOVE_POS = 5;
 			/**
 			 * Running multiplier.
 			 */
@@ -663,7 +663,7 @@ public final class Player implements Runnable {
 			move();
 			
 			try {
-				Thread.sleep(50);
+				Thread.sleep(30);
 			} catch (InterruptedException ex) {
 			}
 		}
@@ -676,29 +676,33 @@ public final class Player implements Runnable {
 		int baseX, baseY, diff;
 		baseX =(int)(getxTile()*(SPRITE_X*SPRITE_RESIZE));
 		baseY =(int)(getyTile()*(SPRITE_Y*SPRITE_RESIZE));
-		diff = 2;
+		diff = MOVE_POS/2;
 		
-		boolean passX, passY;
-		passX = (x<baseX+diff && x>baseX-diff);
-		passY = (y<baseY+diff && y>baseY-diff);
-		
-		if (passX && passY){
+		if (x == baseX && y == baseY){
 			switch (getDirection()){
 				case "LEFT":
 					setvDirection(getDirection());
-					xTile = (getxTile()-1);
+					if (GameDisplay.getCanMove(getDirection())){
+						xTile = (getxTile()-1);
+					}
 				break;
 				case "RIGHT":
 					setvDirection(getDirection());
-					xTile = (getxTile()+1);
+					if (GameDisplay.getCanMove(getDirection())){
+						xTile = (getxTile()+1);
+					}
 				break;
 				case "UP":
 					setvDirection(getDirection());
-					yTile = (getyTile()-1);
+					if (GameDisplay.getCanMove(getDirection())){
+						yTile = (getyTile()-1);
+					}
 				break;
 				case "DOWN":
 					setvDirection(getDirection());
-					yTile = (getyTile()+1);
+					if (GameDisplay.getCanMove(getDirection())){
+						yTile = (getyTile()+1);
+					}
 				break;
 				default:
 					setvDirection(getDirection());
@@ -712,16 +716,32 @@ public final class Player implements Runnable {
 			
 			switch (getvDirection()){
 				case "LEFT":
-					x = getX() - amount;
+					if (Math.abs(baseX-x) >= amount){
+						x = getX() - amount;
+					}else{
+						x = baseX;
+					}
 				break;
 				case "RIGHT":
-					x = getX() + amount;
+					if (Math.abs(baseX-x) >= amount){
+						x = getX() + amount;
+					}else{
+						x = baseX;
+					}
 				break;
 				case "UP":
-					y = getY() - amount;
+					if (Math.abs(baseY-y) >= amount){
+						y = getY() - amount;
+					}else{
+						y = baseY;
+					}
 				break;
 				case "DOWN":
-					y = getY() + amount;
+					if (Math.abs(baseY-y) >= amount){
+						y = getY() + amount;
+					}else{
+						y = baseY;
+					}
 				break;
 			}
 			
