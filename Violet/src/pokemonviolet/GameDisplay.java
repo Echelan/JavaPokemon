@@ -11,9 +11,6 @@ import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 /**
  *
@@ -45,12 +42,12 @@ public class GameDisplay extends Canvas implements Runnable {
 	 * Create a GameDisplay custom canvas.
 	 */
 	public GameDisplay(){
-		try {
-			playerSprite = ImageIO.read(new File("player.png"));
-			mapRegion = MapBuilder.getMapRegion(1);
-			bounds = MapBuilder.getMapBounds(1);
-		} catch (IOException ex) {
-		}
+	//	try {
+	//		playerSprite = ImageIO.read(new File("player.png"));
+	//		mapRegion = MapBuilder.getMapRegion(1);
+	//		bounds = MapBuilder.getMapBounds(1);
+	//	} catch (IOException ex) {
+	//	}
 	}
 	
 	public static boolean getCanMove(String direction){
@@ -119,7 +116,7 @@ public class GameDisplay extends Canvas implements Runnable {
 			xPlayerIMG = xPlayerIMG + (Game.player.getCurFrame()*20);
 			yPlayerIMG = yPlayerIMG + (Game.player.getCurAnim()*20);
 
-			currentPlayerFrame = playerSprite.getSubimage(xPlayerIMG, yPlayerIMG, 20, 20);
+			currentPlayerFrame = Game.player.SPRITE_SHEET.getSubimage(xPlayerIMG, yPlayerIMG, 20, 20);
 
 			repaint((int)(Game.player.getX()-(Game.player.SPRITE_X*Game.player.SPRITE_RESIZE)),
 					(int)(Game.player.getY()-(Game.player.SPRITE_Y*Game.player.SPRITE_RESIZE)),

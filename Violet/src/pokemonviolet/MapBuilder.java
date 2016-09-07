@@ -7,7 +7,6 @@
  */
 package pokemonviolet;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -30,40 +29,61 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		private static int TILE_RESIZED_WIDTH = 32;
 		private static int TILE_RESIZED_HEIGHT = 32;
 
-		private static int MAX_TILE_IN_TILESET = 90;
-		private static int MAX_TILE_IN_TILESET_ROW = 15;
-		private static int MAX_SET_IN_TILESET = 6;
+		private static int MAX_TILE_IN_TILESET = 120;
+		private static int MAX_TILE_IN_TILESET_ROW = 20;
+		private static int MAX_SET_IN_TILESET = 8;
 		private static int MAX_TILE_IN_SET = 15;
 		private static int MAX_TILE_IN_SET_ROW = 5;
 		private static int MAX_TILE_IN_SET_COL = 3;
-		private static int MAX_SET_IN_TILE_SET_ROW = 3;
+		private static int MAX_SET_IN_TILE_SET_ROW = 4;
 
 		private static int MAP_ROW_TILES = 20;
-		private static int START_X = 30;
-		private static int START_Y = 10;
+		private static int START_X = 5;
+		private static int START_Y = 5;
 		
-		private static double MAP_MULT = 2.0;
+		private static int WINDOW_X = 10;
+		private static int WINDOW_Y = 10;
+		
+		private static int MAIN_WINDOW_WIDTH = 655;
+		private static int MAIN_WINDOW_HEIGHT = 680;
+		
+		private static int TOP_WINDOW_WIDTH = 200;
+		private static int TOP_WINDOW_HEIGHT = 350;
+		
+		private static int BOT_WINDOW_WIDTH = 200;
+		private static int BOT_WINDOW_HEIGHT = 300;
+		
+		private static int WINDOW_GAP = 20;
 	//</editor-fold>
-	
 	//<editor-fold defaultstate="collapsed" desc="Static Images">
 		private static BufferedImage tileset;
 		private static BufferedImage gym;
 		private static BufferedImage center;
 		private static BufferedImage house;
+		private static BufferedImage house2;
+		private static BufferedImage house3;
 		private static BufferedImage objects;
 		private static BufferedImage shop;
+		private static BufferedImage tree;
+		private static BufferedImage tree2;
+		private static BufferedImage wstone;
+		private static BufferedImage wstone2;
 		
 		private static BufferedImage tilesetSMALL;
 		private static BufferedImage gymSMALL;
 		private static BufferedImage centerSMALL;
 		private static BufferedImage houseSMALL;
+		private static BufferedImage house2SMALL;
+		private static BufferedImage house3SMALL;
 		private static BufferedImage objectsSMALL;
 		private static BufferedImage shopSMALL;
+		private static BufferedImage treeSMALL;
+		private static BufferedImage tree2SMALL;
+		private static BufferedImage wstoneSMALL;
+		private static BufferedImage wstone2SMALL;
 		
 		private static BufferedImage[] objSets;
-		private static BufferedImage[] objSetsSMALL;
-	//</editor-fold>	
-		
+	//</editor-fold>
 	//<editor-fold defaultstate="collapsed" desc="Vars">
 		private JLabel[][] tileGridLabel;
 		private ImageIcon[][] tileGridImage;
@@ -74,79 +94,74 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		private int[][] obj;
 		private int[][] setO;
 		private int[][] objDims;
-
-		private JButton[][] tileOutSetBtn;
-		private JButton[][] tileInSetBtn;
-
-		private JButton outBoxBtn;
-		private JButton inBoxBtn;
-		private JButton nextSetBtn;
-		private JButton prevSetBtn;
-		private JButton nextTileBtn;
-		private JButton prevTileBtn;
-		private JButton createObjBtn;
-		private JButton clearObjBtn;
-		private JButton centerDims;
-		private JButton gymDims;
-		private JButton houseDims;
-		private JButton shopDims;
-		private JButton saveMapBtn;
-		private JButton loadMapBtn;
-		private JButton lessID;
-		private JButton moreID;
-		private JButton swapInterfaceBtn;
-
-		private JLabel tileID;
-		private JLabel setID;
-		private JLabel xCoordsDisplay;
-		private JLabel yCoordsDisplay;
-		private JLabel dimDisplay;
-		private JLabel mapLabelID;
-		private JPanel tilePanel;
-		private JPanel objPanel;
-		private JPanel genPanel;
-		private boolean isTiling = true;
+		
 		private boolean isSelecting = false;
 		private int xStart, yStart, xEnd, yEnd;
+		
+		private final pokemonManager windowPokemon;
+		private final objectManager windowObject;
+		private final tileManager windowTile;
+		private final generalControls windowGeneral;
+		
 	//</editor-fold>
 	
 	public MapBuilder(int operation, boolean visible) {
 		setLayout(null);
-		setSize(900,700);
+		setSize(MAIN_WINDOW_WIDTH,MAIN_WINDOW_HEIGHT);
 		setResizable(false);
-		setLocationRelativeTo(null);
+	//	setLocationRelativeTo(null);
+		setLocation(WINDOW_X,WINDOW_Y);
+		setTitle("Map Builder");
+		addWindowListener(this);
 	//	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	//	setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setDefaultCloseOperation(operation);
 		
-		JTextField sad = new JTextField();
-		sad.setBounds(800,0,1,1);
-		sad.addKeyListener(this);
-		add(sad);
+		JTextField hiddenListener = new JTextField();
+		hiddenListener.setBounds(800,0,1,1);
+		hiddenListener.addKeyListener(this);
+		add(hiddenListener);
 		
         try {
 			tilesetSMALL = ImageIO.read(new File("tileset.png"));
-			tileset = scale(tilesetSMALL,240,96,2.0,2.0);
+			tileset = scale(tilesetSMALL,tilesetSMALL.getWidth(),tilesetSMALL.getHeight(),2.0,2.0);
 			
 			shopSMALL = ImageIO.read(new File("shop.png"));
-			shop = scale(shopSMALL,64,64,2.0,2.0);
+			shop = scale(shopSMALL,shopSMALL.getWidth(),shopSMALL.getHeight(),2.0,2.0);
 			
 			gymSMALL = ImageIO.read(new File("gym.png"));
-			gym = scale(gymSMALL,96,80,2.0,2.0);
+			gym = scale(gymSMALL,gymSMALL.getWidth(),gymSMALL.getHeight(),2.0,2.0);
 			
 			centerSMALL = ImageIO.read(new File("center.png"));
-			center = scale(centerSMALL,80,80,2.0,2.0);
+			center = scale(centerSMALL,centerSMALL.getWidth(),centerSMALL.getHeight(),2.0,2.0);
 			
 			objectsSMALL = ImageIO.read(new File("objects.png"));
-			objects = scale(objectsSMALL,48,48,2.0,2.0);
+			objects = scale(objectsSMALL,objectsSMALL.getWidth(),objectsSMALL.getHeight(),2.0,2.0);
 			
 			houseSMALL = ImageIO.read(new File("house.png"));
-			house = scale(houseSMALL,80,80,2.0,2.0);
+			house = scale(houseSMALL,houseSMALL.getWidth(),houseSMALL.getHeight(),2.0,2.0);
 			
-			objSets = new BufferedImage[] {objects,house,center,shop,gym};
-			objSetsSMALL = new BufferedImage[] {objectsSMALL,houseSMALL,centerSMALL,shopSMALL,gymSMALL};
-			objDims = new int[][] { {1,1},{5,5},{5,5},{4,4},{6,5} };
+			treeSMALL = ImageIO.read(new File("tree.png"));
+			tree = scale(treeSMALL,treeSMALL.getWidth(),treeSMALL.getHeight(),2.0,2.0);
+			
+			tree2SMALL = ImageIO.read(new File("tree2.png"));
+			tree2 = scale(tree2SMALL,tree2SMALL.getWidth(),tree2SMALL.getHeight(),2.0,2.0);
+			
+			house2SMALL = ImageIO.read(new File("house2.png"));
+			house2 = scale(house2SMALL,house2SMALL.getWidth(),house2SMALL.getHeight(),2.0,2.0);
+			
+			house3SMALL = ImageIO.read(new File("house3.png"));
+			house3 = scale(house3SMALL,house3SMALL.getWidth(),house3SMALL.getHeight(),2.0,2.0);
+			
+			wstoneSMALL = ImageIO.read(new File("wstone.png"));
+			wstone = scale(wstoneSMALL,wstoneSMALL.getWidth(),wstoneSMALL.getHeight(),2.0,2.0);
+			
+			wstone2SMALL = ImageIO.read(new File("wstone2.png"));
+			wstone2 = scale(wstone2SMALL,wstone2SMALL.getWidth(),wstone2SMALL.getHeight(),2.0,2.0);
+			
+			objSets = new BufferedImage[] {objects,house,house2,house3,center,shop,gym,tree,tree2,wstone,wstone2};
+			objDims = new int[][] { {1,1},{5,5},{5,3},{6,4},{5,5},{4,4},{6,5},{2,3},{2,3},{2,2},{2,2} };
 			
 			xStart=0;
 			yStart=0;
@@ -161,6 +176,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			setT = new int[MAP_ROW_TILES][MAP_ROW_TILES];
 			obj = new int[MAP_ROW_TILES][MAP_ROW_TILES];
 			setO = new int[MAP_ROW_TILES][MAP_ROW_TILES];
+			
 			for (int i = 0; i < MAP_ROW_TILES; i++) {
 				for (int j = 0; j < MAP_ROW_TILES; j++) {
 					int xTile,yTile,xPos,yPos;
@@ -201,289 +217,14 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 
         }
 		
-		swapInterfaceBtn = new JButton("Swap");
-		swapInterfaceBtn.setBounds(740,620,90,40);
-		swapInterfaceBtn.addActionListener(this);
-		swapInterfaceBtn.setFocusable(false);
-		add(swapInterfaceBtn);
-		
-		createGenInterface();
-		createTileInterface();
-		createObjInterface();
-		objPanel.setVisible(false);
-		
 	//	setVisible(true);
 	//	setVisible(false);
 		setVisible(visible);
-	}
-	
-	public static BufferedImage getMapRegion(int id){
-		BufferedImage mapRegion = null;
 		
-		if (Game.INFO_MAPS.get(id) != null){
-			
-			BufferedImage tempStitched = new BufferedImage( MAP_ROW_TILES*TILE_WIDTH*2 , MAP_ROW_TILES*TILE_HEIGHT*2, BufferedImage.TYPE_INT_RGB);
-			Graphics2D g = (Graphics2D) tempStitched.getGraphics();
-			
-			for (int i = 0; i < MAP_ROW_TILES; i++) {
-				String[] thisrow = Game.INFO_MAPS.get(id).get(i).split(",");
-				for (int j = 0; j < MAP_ROW_TILES; j++) {
-					int xTile, yTile;
-					
-					int thistileset = Integer.parseInt(thisrow[j].split("-")[0], 16);
-					int thistiletype = Integer.parseInt(thisrow[j].split("-")[1], 16);
-					
-					xTile = getTileXSMALL(thistileset,thistiletype);
-					yTile = getTileYSMALL(thistileset,thistiletype);	
-
-					g.drawImage( tilesetSMALL.getSubimage(xTile, yTile, TILE_WIDTH, TILE_HEIGHT), (int)(i*TILE_WIDTH*MAP_MULT), (int)(j*TILE_HEIGHT*MAP_MULT), (int)(TILE_WIDTH*MAP_MULT), (int)(TILE_HEIGHT*MAP_MULT), null);
-					
-					
-					int thisobjset = Integer.parseInt(thisrow[j].split("-")[2], 16);
-					int thisobjtype = Integer.parseInt(thisrow[j].split("-")[3], 16);
-					
-					xTile = getObjXSMALL(thisobjset,thisobjtype);
-					yTile = getObjYSMALL(thisobjset,thisobjtype);	
-
-					g.drawImage( objSetsSMALL[thisobjset].getSubimage(xTile, yTile, TILE_WIDTH, TILE_HEIGHT), (int)(i*MAP_MULT*TILE_WIDTH), (int)(j*MAP_MULT*TILE_HEIGHT),(int)(TILE_WIDTH*2), (int)(TILE_HEIGHT*MAP_MULT), null);
-				}
-			}
-			
-			mapRegion = tempStitched;
-		}
-		
-		return mapRegion;
-	}
-			
-	public static String[][] getMapBounds(int id){
-		String[][] bounds = null;
-		
-		if (Game.INFO_MAPS.get(id) != null){
-			bounds = new String[MAP_ROW_TILES][MAP_ROW_TILES];
-			
-			for (int i = 0; i < MAP_ROW_TILES; i++) {
-				String[] thisrow = Game.INFO_MAPS.get(id).get(i).split(",");
-				for (int j = 0; j < MAP_ROW_TILES; j++) {
-					
-					int thistileset = Integer.parseInt(thisrow[j].split("-")[0], 16);
-				//	int thistiletype = Integer.parseInt(thisrow[j].split("-")[1], 16);
-					
-					int thisobjset = Integer.parseInt(thisrow[j].split("-")[2], 16);
-					int thisobjtype = Integer.parseInt(thisrow[j].split("-")[3], 16);
-
-					if (thistileset == 2){
-						bounds[i][j] = "2";
-					}else{
-						bounds[i][j] = "0";
-					}
-					// objects, house, center, shop, gym
-					if (thisobjset == 0){
-						if (thisobjtype==0 || thisobjtype==3 || thisobjtype==8){
-							
-						}else if (thisobjtype == 7){
-							bounds[i][j] = bounds[i][j] + "1";
-						}else{
-							bounds[i][j] = "1";
-						}
-					}else{
-						bounds[i][j] = "1";
-					}
-					
-				}
-			}
-		}
-		
-		return bounds;
-	}
-	
-	public void createGenInterface(){
-		genPanel = new JPanel();
-		genPanel.setLayout(null);
-		genPanel.setBounds(680,5,200,250);
-		genPanel.setBackground(Color.blue);
-		add(genPanel);
-		
-		xCoordsDisplay = new JLabel("START: ("+xStart+","+yStart+")");
-		xCoordsDisplay.setBounds(10,10,140,20);
-		xCoordsDisplay.setForeground(Color.white);
-		xCoordsDisplay.setFocusable(false);
-		genPanel.add(xCoordsDisplay);
-		
-		yCoordsDisplay = new JLabel("END: ("+xEnd+","+yEnd+")");
-		yCoordsDisplay.setBounds(10,30,140,20);
-		yCoordsDisplay.setForeground(Color.white);
-		yCoordsDisplay.setFocusable(false);
-		genPanel.add(yCoordsDisplay);
-		
-		tileID = new JLabel("Tile ID: 0");
-		tileID.setBounds(110,10,140,20);
-		tileID.setForeground(Color.white);
-		tileID.setFocusable(false);
-		genPanel.add(tileID);
-		
-		setID = new JLabel("Set ID: 0");
-		setID.setBounds(110,30,140,20);
-		setID.setForeground(Color.white);
-		setID.setFocusable(false);
-		genPanel.add(setID);
-			
-		nextSetBtn = new JButton("Next Set");
-		nextSetBtn.setBounds(100,50,90,30);
-		nextSetBtn.addActionListener(this);
-		nextSetBtn.setFocusable(false);
-		genPanel.add(nextSetBtn);
-			
-		prevSetBtn = new JButton("Prev Set");
-		prevSetBtn.setBounds(5,50,90,30);
-		prevSetBtn.addActionListener(this);
-		prevSetBtn.setFocusable(false);
-		genPanel.add(prevSetBtn);
-			
-		nextTileBtn = new JButton("Next Tile");
-		nextTileBtn.setBounds(100,90,90,30);
-		nextTileBtn.addActionListener(this);
-		nextTileBtn.setFocusable(false);
-		genPanel.add(nextTileBtn);
-			
-		prevTileBtn = new JButton("Prev Tile");
-		prevTileBtn.setBounds(5,90,90,30);
-		prevTileBtn.addActionListener(this);
-		prevTileBtn.setFocusable(false);
-		genPanel.add(prevTileBtn);
-		
-		saveMapBtn = new JButton("Save");
-		saveMapBtn.setBounds(5,150,90,40);
-		saveMapBtn.addActionListener(this);
-		saveMapBtn.setFocusable(false);
-		genPanel.add(saveMapBtn);
-		
-		loadMapBtn = new JButton("Load");
-		loadMapBtn.setBounds(100,150,90,40);
-		loadMapBtn.addActionListener(this);
-		loadMapBtn.setFocusable(false);
-		genPanel.add(loadMapBtn);
-		
-		dimDisplay = new JLabel("("+(xEnd+1-xStart)+"x"+(yEnd+1-yStart)+")");
-		dimDisplay.setBounds(75,125,140,20);
-		dimDisplay.setForeground(Color.white);
-		dimDisplay.setFocusable(false);
-		genPanel.add(dimDisplay);
-		
-		mapLabelID = new JLabel("0");
-		mapLabelID.setBounds(95,210,140,20);
-		mapLabelID.setForeground(Color.white);
-		mapLabelID.setFocusable(false);
-		genPanel.add(mapLabelID);
-		
-		lessID = new JButton("-");
-		lessID.setBounds(5,200,60,40);
-		lessID.addActionListener(this);
-		lessID.setFocusable(false);
-		genPanel.add(lessID);
-		
-		moreID = new JButton("+");
-		moreID.setBounds(130,200,60,40);
-		moreID.addActionListener(this);
-		moreID.setFocusable(false);
-		genPanel.add(moreID);
-	}
-	
-	public void createTileInterface(){
-		tilePanel = new JPanel();
-		tilePanel.setLayout(null);
-		tilePanel.setBounds(680,260,200,350);
-		tilePanel.setBackground(Color.orange);
-		add(tilePanel);
-			
-		outBoxBtn = new JButton("Set Outer Box");
-		outBoxBtn.setBounds(40,10,120,30);
-		outBoxBtn.addActionListener(this);
-		outBoxBtn.setFocusable(false);
-		tilePanel.add(outBoxBtn);
-			
-		inBoxBtn = new JButton("Set Inner Box");
-		inBoxBtn.setBounds(40,50,120,30);
-		inBoxBtn.addActionListener(this);
-		inBoxBtn.setFocusable(false);
-		tilePanel.add(inBoxBtn);
-		
-		tileOutSetBtn = new JButton[3][3];
-		for (int i = 0; i < tileOutSetBtn.length; i++) {
-			for (int j = 0; j < tileOutSetBtn[i].length; j++) {
-				tileOutSetBtn[i][j] = new JButton();
-				tileOutSetBtn[i][j].setBounds(35+(i*45),90+(j*45),40,40);
-				tileOutSetBtn[i][j].addActionListener(this);
-				tileOutSetBtn[i][j].setFocusable(false);
-				tilePanel.add(tileOutSetBtn[i][j]);
-			}
-		}
-		
-		tileInSetBtn = new JButton[2][2];
-		for (int i = 0; i < tileInSetBtn.length; i++) {
-			for (int j = 0; j < tileInSetBtn[i].length; j++) {
-				tileInSetBtn[i][j] = new JButton();
-				tileInSetBtn[i][j].setBounds(60+(i*45),230+(j*45),40,40);
-				tileInSetBtn[i][j].addActionListener(this);
-				tileInSetBtn[i][j].setFocusable(false);
-				tilePanel.add(tileInSetBtn[i][j]);
-			}
-		}
-	}
-	
-	public void createObjInterface(){
-		objPanel = new JPanel();
-		objPanel.setLayout(null);
-		objPanel.setBounds(680,260,200,350);
-		objPanel.setBackground(Color.green);
-		add(objPanel);
-		
-		createObjBtn = new JButton("Create Object");
-		createObjBtn.setBounds(40,10,120,30);
-		createObjBtn.addActionListener(this);
-		createObjBtn.setFocusable(false);
-		objPanel.add(createObjBtn);
-			
-		clearObjBtn = new JButton("Clear Object");
-		clearObjBtn.setBounds(40,50,120,30);
-		clearObjBtn.addActionListener(this);
-		clearObjBtn.setFocusable(false);
-		objPanel.add(clearObjBtn);
-		
-		centerDims = new JButton("PC(5x5)");
-		centerDims.setBounds(5,90,90,30);
-		centerDims.addActionListener(this);
-		centerDims.setFocusable(false);
-		objPanel.add(centerDims);
-		
-		shopDims = new JButton("MRT(4x4)");
-		shopDims.setBounds(105,90,90,30);
-		shopDims.addActionListener(this);
-		shopDims.setFocusable(false);
-		objPanel.add(shopDims);
-		
-		gymDims = new JButton("GYM(6x5)");
-		gymDims.setBounds(5,130,90,30);
-		gymDims.addActionListener(this);
-		gymDims.setFocusable(false);
-		objPanel.add(gymDims);
-		
-		houseDims = new JButton("HSE(5x5)");
-		houseDims.setBounds(105,130,90,30);
-		houseDims.addActionListener(this);
-		houseDims.setFocusable(false);	
-		objPanel.add(houseDims);
-	}
-	
-	public void swapInterfaces(){
-		if (isTiling){
-			isTiling = false;
-			tilePanel.setVisible(false);
-			objPanel.setVisible(true);
-		}else{
-			isTiling = true;
-			tilePanel.setVisible(true);
-			objPanel.setVisible(false);
-		}
+		windowPokemon = new pokemonManager();
+		windowGeneral = new generalControls();
+		windowObject = new objectManager();
+		windowTile = new tileManager();
 	}
 	
 	public void setObj(int type){
@@ -557,261 +298,291 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		}
 	}
 	
-	public void prevSet(){
+	public void prevSet(String reference){
 		int[][] tileInfo;
 		int[][] setInfo;
 		ImageIcon[][] imageInfo;
 		JLabel[][] labelInfo;
-		if (isTiling){
+		boolean canContinue = true;
+		
+		if (reference.compareTo("Tile")==0){
 			tileInfo = tile;
 			setInfo = setT;
 			imageInfo = tileGridImage;
 			labelInfo = tileGridLabel;
-		}else{
+		}else if (reference.compareTo("Object")==0){
 			tileInfo = obj;
 			setInfo = setO;
 			imageInfo = objGridImage;
 			labelInfo = objGridLabel;
+		}else{
+			canContinue = false;
+			setInfo = null;
+			tileInfo = null;
+			imageInfo = null;
+			labelInfo = null;
 		}
-		for (int i = xStart; i <= xEnd; i++) {
-			for (int j = yStart; j <= yEnd; j++) {
-				setInfo[i][j]=setInfo[i][j]-1;
-				if (isTiling){
-					if (tileInfo[i][j] >= MAX_TILE_IN_SET){
-						tileInfo[i][j] = tileInfo[i][j] - MAX_TILE_IN_SET ;
-					}else if (tile[i][j] < 0){
-						tileInfo[i][j] = MAX_TILE_IN_SET + tileInfo[i][j];
+		if (canContinue){
+			for (int i = xStart; i <= xEnd; i++) {
+				for (int j = yStart; j <= yEnd; j++) {
+					setInfo[i][j]=setInfo[i][j]-1;
+					if (reference.compareTo("Tile")==0){
+						if (tileInfo[i][j] >= MAX_TILE_IN_SET){
+							tileInfo[i][j] = tileInfo[i][j] - MAX_TILE_IN_SET ;
+						}else if (tile[i][j] < 0){
+							tileInfo[i][j] = MAX_TILE_IN_SET + tileInfo[i][j];
+						}
+						if (setInfo[i][j] >= MAX_SET_IN_TILESET){
+							setInfo[i][j] = setInfo[i][j] - MAX_SET_IN_TILESET ;
+						}else if (setInfo[i][j] < 0){
+							setInfo[i][j] = MAX_SET_IN_TILESET + setInfo[i][j];
+						}
+					}else if (reference.compareTo("Object")==0){
+						int maxset = objSets.length;
+						if (setInfo[i][j] >= maxset){
+							setInfo[i][j] = setInfo[i][j] - maxset ;
+						}else if (setInfo[i][j] < 0){
+							setInfo[i][j] = maxset + setInfo[i][j];
+						}
+						int maxtile = (objSets[setInfo[i][j]].getWidth()/TILE_RESIZED_WIDTH)*(objSets[setInfo[i][j]].getHeight()/TILE_RESIZED_HEIGHT);
+						if (tileInfo[i][j] >= maxtile){
+							tileInfo[i][j] = tileInfo[i][j] - maxtile ;
+						}else if (tile[i][j] < 0){
+							tileInfo[i][j] = maxtile + tileInfo[i][j];
+						}
 					}
-					if (setInfo[i][j] >= MAX_SET_IN_TILESET){
-						setInfo[i][j] = setInfo[i][j] - MAX_SET_IN_TILESET ;
-					}else if (setInfo[i][j] < 0){
-						setInfo[i][j] = MAX_SET_IN_TILESET + setInfo[i][j];
-					}
-				}else{
-					int maxset = objSets.length;
-					if (setInfo[i][j] >= maxset){
-						setInfo[i][j] = setInfo[i][j] - maxset ;
-					}else if (setInfo[i][j] < 0){
-						setInfo[i][j] = maxset + setInfo[i][j];
-					}
-					int maxtile = (objSets[setInfo[i][j]].getWidth()/TILE_RESIZED_WIDTH)*(objSets[setInfo[i][j]].getHeight()/TILE_RESIZED_HEIGHT);
-					if (tileInfo[i][j] >= maxtile){
-						tileInfo[i][j] = tileInfo[i][j] - maxtile ;
-					}else if (tile[i][j] < 0){
-						tileInfo[i][j] = maxtile + tileInfo[i][j];
-					}
-				}
 
-				int xTile;
-				int yTile;
-				if (isTiling){
-					xTile = getTileX(setInfo[i][j],tileInfo[i][j]);
-					yTile = getTileY(setInfo[i][j],tileInfo[i][j]);
-				}else{
-					xTile = getObjX(setInfo[i][j],tileInfo[i][j]);
-					yTile = getObjY(setInfo[i][j],tileInfo[i][j]);
+					int xTile = 0;
+					int yTile = 0;
+					if (reference.compareTo("Tile")==0){
+						xTile = getTileX(setInfo[i][j],tileInfo[i][j]);
+						yTile = getTileY(setInfo[i][j],tileInfo[i][j]);
+						imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
+					}else if (reference.compareTo("Object")==0){
+						xTile = getObjX(setInfo[i][j],tileInfo[i][j]);
+						yTile = getObjY(setInfo[i][j],tileInfo[i][j]);
+						imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
+					}
+					
+					labelInfo[i][j].setIcon(imageInfo[i][j]);
 				}
-				if (isTiling){
-					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
-				}else{
-					imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
-				}
-				labelInfo[i][j].setIcon(imageInfo[i][j]);
 			}
 		}
 	}
 	
-	public void nextSet(){
+	public void nextSet(String reference){
 		int[][] tileInfo;
 		int[][] setInfo;
 		ImageIcon[][] imageInfo;
 		JLabel[][] labelInfo;
-		if (isTiling){
+		boolean canContinue = true;
+		
+		if (reference.compareTo("Tile")==0){
 			tileInfo = tile;
 			setInfo = setT;
 			imageInfo = tileGridImage;
 			labelInfo = tileGridLabel;
-		}else{
+		}else if (reference.compareTo("Object")==0){
 			tileInfo = obj;
 			setInfo = setO;
 			imageInfo = objGridImage;
 			labelInfo = objGridLabel;
+		}else{
+			canContinue = false;
+			tileInfo = null;
+			setInfo = null;
+			imageInfo = null;
+			labelInfo = null;
 		}
-		for (int i = xStart; i <= xEnd; i++) {
-			for (int j = yStart; j <= yEnd; j++) {
-				setInfo[i][j]=setInfo[i][j]+1;
-				if (isTiling){
-					if (tileInfo[i][j] >= MAX_TILE_IN_SET){
-						tileInfo[i][j] = tileInfo[i][j] - MAX_TILE_IN_SET ;
-					}else if (tile[i][j] < 0){
-						tileInfo[i][j] = MAX_TILE_IN_SET + tileInfo[i][j];
+		if (canContinue){
+			for (int i = xStart; i <= xEnd; i++) {
+				for (int j = yStart; j <= yEnd; j++) {
+					setInfo[i][j]=setInfo[i][j]+1;
+					if (reference.compareTo("Tile")==0){
+						if (tileInfo[i][j] >= MAX_TILE_IN_SET){
+							tileInfo[i][j] = tileInfo[i][j] - MAX_TILE_IN_SET ;
+						}else if (tile[i][j] < 0){
+							tileInfo[i][j] = MAX_TILE_IN_SET + tileInfo[i][j];
+						}
+						if (setInfo[i][j] >= MAX_SET_IN_TILESET){
+							setInfo[i][j] = setInfo[i][j] - MAX_SET_IN_TILESET ;
+						}else if (setInfo[i][j] < 0){
+							setInfo[i][j] = MAX_SET_IN_TILESET + setInfo[i][j];
+						}
+					}else if (reference.compareTo("Object")==0){
+						int maxset = objSets.length;
+						if (setInfo[i][j] >= maxset){
+							setInfo[i][j] = setInfo[i][j] - maxset ;
+						}else if (setInfo[i][j] < 0){
+							setInfo[i][j] = maxset + setInfo[i][j];
+						}
+						int maxtile = (objSets[setInfo[i][j]].getWidth()/TILE_RESIZED_WIDTH)*(objSets[setInfo[i][j]].getHeight()/TILE_RESIZED_HEIGHT);
+						if (tileInfo[i][j] >= maxtile){
+							tileInfo[i][j] = tileInfo[i][j] - maxtile ;
+						}else if (tile[i][j] < 0){
+							tileInfo[i][j] = maxtile + tileInfo[i][j];
+						}
 					}
-					if (setInfo[i][j] >= MAX_SET_IN_TILESET){
-						setInfo[i][j] = setInfo[i][j] - MAX_SET_IN_TILESET ;
-					}else if (setInfo[i][j] < 0){
-						setInfo[i][j] = MAX_SET_IN_TILESET + setInfo[i][j];
-					}
-				}else{
-					int maxset = objSets.length;
-					if (setInfo[i][j] >= maxset){
-						setInfo[i][j] = setInfo[i][j] - maxset ;
-					}else if (setInfo[i][j] < 0){
-						setInfo[i][j] = maxset + setInfo[i][j];
-					}
-					int maxtile = (objSets[setInfo[i][j]].getWidth()/TILE_RESIZED_WIDTH)*(objSets[setInfo[i][j]].getHeight()/TILE_RESIZED_HEIGHT);
-					if (tileInfo[i][j] >= maxtile){
-						tileInfo[i][j] = tileInfo[i][j] - maxtile ;
-					}else if (tile[i][j] < 0){
-						tileInfo[i][j] = maxtile + tileInfo[i][j];
-					}
-				}
 
-				int xTile;
-				int yTile;
-				if (isTiling){
-					xTile = getTileX(setInfo[i][j],tileInfo[i][j]);
-					yTile = getTileY(setInfo[i][j],tileInfo[i][j]);
-				}else{
-					xTile = getObjX(setInfo[i][j],tileInfo[i][j]);
-					yTile = getObjY(setInfo[i][j],tileInfo[i][j]);
+					int xTile;
+					int yTile;
+					if (reference.compareTo("Tile")==0){
+						xTile = getTileX(setInfo[i][j],tileInfo[i][j]);
+						yTile = getTileY(setInfo[i][j],tileInfo[i][j]);
+						imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
+					}else if (reference.compareTo("Object")==0){
+						xTile = getObjX(setInfo[i][j],tileInfo[i][j]);
+						yTile = getObjY(setInfo[i][j],tileInfo[i][j]);
+						imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
+					}
+
+					labelInfo[i][j].setIcon(imageInfo[i][j]);
 				}
-				if (isTiling){
-					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
-				}else{
-					imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
-				}
-				labelInfo[i][j].setIcon(imageInfo[i][j]);
 			}
 		}
 	}
 	
-	public void prevTile(){
+	public void prevTile(String reference){
 		int[][] tileInfo;
 		int[][] setInfo;
 		ImageIcon[][] imageInfo;
 		JLabel[][] labelInfo;
-		if (isTiling){
+		boolean canContinue = true;
+		if (reference.compareTo("Tile")==0){
 			tileInfo = tile;
 			setInfo = setT;
 			imageInfo = tileGridImage;
 			labelInfo = tileGridLabel;
-		}else{
+		}else if (reference.compareTo("Object")==0){
 			tileInfo = obj;
 			setInfo = setO;
 			imageInfo = objGridImage;
 			labelInfo = objGridLabel;
+		}else{
+			canContinue=false;
+			tileInfo = null;
+			setInfo = null;
+			imageInfo = null;
+			labelInfo = null;
 		}
-		for (int i = xStart; i <= xEnd; i++) {
-			for (int j = yStart; j <= yEnd; j++) {
-				tileInfo[i][j]=tileInfo[i][j]-1;
-				if (isTiling){
-					if (tileInfo[i][j] >= MAX_TILE_IN_SET){
-						tileInfo[i][j] = tileInfo[i][j] - MAX_TILE_IN_SET ;
-					}else if (tileInfo[i][j] < 0){
-						tileInfo[i][j] = MAX_TILE_IN_SET + tileInfo[i][j];
+		if (canContinue){
+			for (int i = xStart; i <= xEnd; i++) {
+				for (int j = yStart; j <= yEnd; j++) {
+					tileInfo[i][j]=tileInfo[i][j]-1;
+					if (reference.compareTo("Tile")==0){
+						if (tileInfo[i][j] >= MAX_TILE_IN_SET){
+							tileInfo[i][j] = tileInfo[i][j] - MAX_TILE_IN_SET ;
+						}else if (tileInfo[i][j] < 0){
+							tileInfo[i][j] = MAX_TILE_IN_SET + tileInfo[i][j];
+						}
+					}else if (reference.compareTo("Object")==0){
+						int maxtile = (objSets[setInfo[i][j]].getWidth()/TILE_RESIZED_WIDTH)*(objSets[setInfo[i][j]].getHeight()/TILE_RESIZED_HEIGHT);
+						if (tileInfo[i][j] >= maxtile){
+							tileInfo[i][j] = tileInfo[i][j] - maxtile ;
+						}else if (tileInfo[i][j] < 0){
+							tileInfo[i][j] = maxtile + tileInfo[i][j];
+						}
 					}
-				}else{
-					int maxtile = (objSets[setInfo[i][j]].getWidth()/TILE_RESIZED_WIDTH)*(objSets[setInfo[i][j]].getHeight()/TILE_RESIZED_HEIGHT);
-					if (tileInfo[i][j] >= maxtile){
-						tileInfo[i][j] = tileInfo[i][j] - maxtile ;
-					}else if (tileInfo[i][j] < 0){
-						tileInfo[i][j] = maxtile + tileInfo[i][j];
-					}
-				}
 
-				int xTile;
-				int yTile;
-				if (isTiling){
-					xTile = getTileX(setInfo[i][j],tileInfo[i][j]);
-					yTile = getTileY(setInfo[i][j],tileInfo[i][j]);
-				}else{
-					xTile = getObjX(setInfo[i][j],tileInfo[i][j]);
-					yTile = getObjY(setInfo[i][j],tileInfo[i][j]);
+					int xTile;
+					int yTile;
+					if (reference.compareTo("Tile")==0){
+						xTile = getTileX(setInfo[i][j],tileInfo[i][j]);
+						yTile = getTileY(setInfo[i][j],tileInfo[i][j]);
+						imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
+					}else if (reference.compareTo("Object")==0){
+						xTile = getObjX(setInfo[i][j],tileInfo[i][j]);
+						yTile = getObjY(setInfo[i][j],tileInfo[i][j]);
+						imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
+					}
+					
+					
+					labelInfo[i][j].setIcon(imageInfo[i][j]);
 				}
-				
-			//	imageInfo[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
-			//	labelInfo[i][j].setIcon(tileGridImage[i][j]);
-			
-				if (isTiling){
-					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
-				}else{
-					imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
-				}
-				labelInfo[i][j].setIcon(imageInfo[i][j]);
 			}
 		}
 	}
 	
-	public void nextTile(){
+	public void nextTile(String reference){
 		int[][] tileInfo;
 		int[][] setInfo;
 		ImageIcon[][] imageInfo;
 		JLabel[][] labelInfo;
-		if (isTiling){
+		boolean canContinue = true;
+		
+		if (reference.compareTo("Tile")==0){
 			tileInfo = tile;
 			setInfo = setT;
 			imageInfo = tileGridImage;
 			labelInfo = tileGridLabel;
-		}else{
+		}else if (reference.compareTo("Object")==0){
 			tileInfo = obj;
 			setInfo = setO;
 			imageInfo = objGridImage;
 			labelInfo = objGridLabel;
+		}else{
+			canContinue = false;
+			tileInfo = null;
+			setInfo = null;
+			imageInfo = null;
+			labelInfo = null;
 		}
-		for (int i = xStart; i <= xEnd; i++) {
-			for (int j = yStart; j <= yEnd; j++) {
-				tileInfo[i][j]=tileInfo[i][j]+1;
-				if (isTiling){
-					if (tileInfo[i][j] >= MAX_TILE_IN_SET){
-						tileInfo[i][j] = tileInfo[i][j] - MAX_TILE_IN_SET ;
-					}else if (tileInfo[i][j] < 0){
-						tileInfo[i][j] = MAX_TILE_IN_SET + tileInfo[i][j];
+		if (canContinue){
+			for (int i = xStart; i <= xEnd; i++) {
+				for (int j = yStart; j <= yEnd; j++) {
+					
+					tileInfo[i][j]=tileInfo[i][j]+1;
+					if (reference.compareTo("Tile")==0){
+						if (tileInfo[i][j] >= MAX_TILE_IN_SET){
+							tileInfo[i][j] = tileInfo[i][j] - MAX_TILE_IN_SET ;
+						}else if (tileInfo[i][j] < 0){
+							tileInfo[i][j] = MAX_TILE_IN_SET + tileInfo[i][j];
+						}
+					}else if (reference.compareTo("Object")==0){
+						if (setInfo[i][j] != 0){
+							tileInfo[i][j]=tileInfo[i][j]-1;
+						}else{
+							int maxtile = (objSets[setInfo[i][j]].getWidth()/TILE_RESIZED_WIDTH)*(objSets[setInfo[i][j]].getHeight()/TILE_RESIZED_HEIGHT);
+							if (tileInfo[i][j] >= maxtile){
+								tileInfo[i][j] = tileInfo[i][j] - maxtile ;
+							}else if (tileInfo[i][j] < 0){
+								tileInfo[i][j] = maxtile + tileInfo[i][j];
+							}
+						}
 					}
-				}else{
-					int maxtile = (objSets[setInfo[i][j]].getWidth()/TILE_RESIZED_WIDTH)*(objSets[setInfo[i][j]].getHeight()/TILE_RESIZED_HEIGHT);
-					if (tileInfo[i][j] >= maxtile){
-						tileInfo[i][j] = tileInfo[i][j] - maxtile ;
-					}else if (tileInfo[i][j] < 0){
-						tileInfo[i][j] = maxtile + tileInfo[i][j];
-					}
-				}
 
-				int xTile;
-				int yTile;
-				if (isTiling){
-					xTile = getTileX(setInfo[i][j],tileInfo[i][j]);
-					yTile = getTileY(setInfo[i][j],tileInfo[i][j]);
-				}else{
-					xTile = getObjX(setInfo[i][j],tileInfo[i][j]);
-					yTile = getObjY(setInfo[i][j],tileInfo[i][j]);
+					int xTile;
+					int yTile;
+					if (reference.compareTo("Tile")==0){
+						xTile = getTileX(setInfo[i][j],tileInfo[i][j]);
+						yTile = getTileY(setInfo[i][j],tileInfo[i][j]);
+						imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
+					}else if (reference.compareTo("Object")==0){
+						xTile = getObjX(setInfo[i][j],tileInfo[i][j]);
+						yTile = getObjY(setInfo[i][j],tileInfo[i][j]);
+						imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
+					}
+					
+					labelInfo[i][j].setIcon(imageInfo[i][j]);
 				}
-				
-			//	imageInfo[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILERESIZEDWIDTH, TILERESIZEDHEIGHT));
-			//	labelInfo[i][j].setIcon(imageInfo[i][j]);
-				if (isTiling){
-					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
-				}else{
-					imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
-				}
-				labelInfo[i][j].setIcon(imageInfo[i][j]);
 			}
 		}
 	}
 	
 	public void setTile(ActionEvent e){
 		int tileX=0, tileY=0, base=0;
-		for (int i = 0; i < tileOutSetBtn.length; i++) {
-			for (int j = 0; j < tileOutSetBtn[i].length; j++) {
-				if (tileOutSetBtn[i][j] == e.getSource()){
+		for (int i = 0; i < windowTile.tileOutSetBtn.length; i++) {
+			for (int j = 0; j < windowTile.tileOutSetBtn[i].length; j++) {
+				if (windowTile.tileOutSetBtn[i][j] == e.getSource()){
 					tileX = i;
 					tileY = j;
 					base = 0;
 				}
 			}
 		}
-		for (int i = 0; i < tileInSetBtn.length; i++) {
-			for (int j = 0; j < tileInSetBtn[i].length; j++) {
-				if (tileInSetBtn[i][j] == e.getSource()){
+		for (int i = 0; i < windowTile.tileInSetBtn.length; i++) {
+			for (int j = 0; j < windowTile.tileInSetBtn[i].length; j++) {
+				if (windowTile.tileInSetBtn[i][j] == e.getSource()){
 					tileX = i;
 					tileY = j;
 					base = 8;
@@ -832,95 +603,14 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		}
 	}
 	
-	public void modTile(MouseEvent e){
-		int[][] tileInfo;
-		int[][] setInfo;
-		ImageIcon[][] imageInfo;
-		JLabel[][] labelInfo;
-		if (isTiling){
-			tileInfo = tile;
-			setInfo = setT;
-			imageInfo = tileGridImage;
-			labelInfo = tileGridLabel;
-		}else{
-			tileInfo = obj;
-			setInfo = setO;
-			imageInfo = objGridImage;
-			labelInfo = objGridLabel;
-		}
-		for (int i = xStart; i <= xEnd; i++) {
-			for (int j = yStart; j <= yEnd; j++) {int mods = (int)((long)(e.getModifiers()-e.MOUSE_EVENT_MASK));
-
-				if (mods == e.CTRL_MASK + e.ALT_MASK){
-					setInfo[i][j]=setInfo[i][j] - 1;
-				}else if (mods == e.CTRL_MASK){
-					setInfo[i][j] = setInfo[i][j] + 1;
-				}else if (mods == e.ALT_MASK){
-					tileInfo[i][j]=tileInfo[i][j] - 1;
-				}else{
-					tileInfo[i][j]=tileInfo[i][j] + 1;
-				}
-					
-				if (isTiling){
-					if (tileInfo[i][j] >= MAX_TILE_IN_SET){
-						tileInfo[i][j] = tileInfo[i][j] - MAX_TILE_IN_SET ;
-					}else if (tileInfo[i][j] < 0){
-						tileInfo[i][j] = MAX_TILE_IN_SET + tileInfo[i][j];
-					}
-					if (setInfo[i][j] >= MAX_SET_IN_TILESET){
-						setInfo[i][j] = setInfo[i][j] - MAX_SET_IN_TILESET ;
-					}else if (setInfo[i][j] < 0){
-						setInfo[i][j] = MAX_SET_IN_TILESET + setInfo[i][j];
-					}
-				}else{
-					int maxtile = (objSets[setInfo[i][j]].getWidth()/TILE_RESIZED_WIDTH)*(objSets[setInfo[i][j]].getHeight()/TILE_RESIZED_HEIGHT);
-					if (tileInfo[i][j] >= maxtile){
-						tileInfo[i][j] = tileInfo[i][j] - maxtile ;
-					}else if (tile[i][j] < 0){
-						tileInfo[i][j] = maxtile + tileInfo[i][j];
-					}
-					if (setInfo[i][j] >= objSets.length){
-						setInfo[i][j] = setInfo[i][j] - objSets.length ;
-					}else if (setInfo[i][j] < 0){
-						setInfo[i][j] = objSets.length + setInfo[i][j];
-					}
-				}
-
-				int xTile;
-				int yTile;
-				if (isTiling){
-					xTile = getTileX(setInfo[i][j],tileInfo[i][j]);
-					yTile = getTileY(setInfo[i][j],tileInfo[i][j]);
-				}else{
-					xTile = getObjX(setInfo[i][j],tileInfo[i][j]);
-					yTile = getObjY(setInfo[i][j],tileInfo[i][j]);
-				}
-				
-				if (isTiling){
-					imageInfo[i][j]= new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
-				}else{
-					imageInfo[i][j]= new ImageIcon(objSets[setInfo[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
-				}
-				labelInfo[i][j].setIcon(imageInfo[i][j]);
-			}
-		}
-	}
-	
 	public void cleanObj(){
 		for (int i = xStart; i <= xEnd; i++) {
 			for (int j = yStart; j <= yEnd; j++) {
 				obj[i][j] = 0;
 				setO[i][j] = 0;
 
-				int xTile;
-				int yTile;
-				if (isTiling){
-					xTile = getTileX(setO[i][j],obj[i][j]);
-					yTile = getTileY(setO[i][j],obj[i][j]);
-				}else{
-					xTile = getObjX(setO[i][j],obj[i][j]);
-					yTile = getObjY(setO[i][j],obj[i][j]);
-				}
+				int xTile = getObjX(setO[i][j],obj[i][j]);;
+				int yTile = getObjY(setO[i][j],obj[i][j]);;
 				
 				objGridImage[i][j]= new ImageIcon(objSets[setO[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				objGridLabel[i][j].setIcon(objGridImage[i][j]);				
@@ -942,15 +632,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					counter = counter - (maxtile-1) ;
 				}
 
-				int xTile;
-				int yTile;
-				if (isTiling){
-					xTile = getTileX(setO[i][j],obj[i][j]);
-					yTile = getTileY(setO[i][j],obj[i][j]);
-				}else{
-					xTile = getObjX(setO[i][j],obj[i][j]);
-					yTile = getObjY(setO[i][j],obj[i][j]);
-				}
+				int xTile = getObjX(setO[i][j],obj[i][j]);
+				int yTile = getObjY(setO[i][j],obj[i][j]);
 				
 				objGridImage[i][j]= new ImageIcon(objSets[setO[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
 				objGridLabel[i][j].setIcon(objGridImage[i][j]);
@@ -996,44 +679,6 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		return regY;
 	}
 	
-	public static int getTileXSMALL(int setinfo, int tileinfo){
-		int regX = (int)(Math.floor((double)tileinfo%MAX_TILE_IN_SET_ROW)*TILE_WIDTH);
-		int specialX = (int)(Math.floor((double)setinfo%MAX_SET_IN_TILE_SET_ROW)*(TILE_WIDTH*MAX_TILE_IN_SET_ROW));
-		
-	//	System.out.println("X: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialX+", TILE: "+regX+") = "+(regX+specialX));
-		
-		return regX+specialX;
-	}
-	
-	public static int getTileYSMALL(int setinfo, int tileinfo){
-		int regY = (int)(Math.floor((double)tileinfo/MAX_TILE_IN_SET_ROW)*TILE_HEIGHT);
-		int specialY = (int)(Math.floor((double)setinfo/MAX_SET_IN_TILE_SET_ROW)*(TILE_HEIGHT*MAX_TILE_IN_SET_COL));
-		
-	//	System.out.println("Y: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialY+", TILE: "+regY+") = "+(regY+specialY));
-		
-		return regY+specialY;
-	}
-	
-	public static int getObjXSMALL(int setinfo, int tileinfo){
-		int maxtileinsetrow = (objSetsSMALL[setinfo].getWidth()/TILE_WIDTH);
-		int regX = (int)(Math.floor((double)tileinfo%maxtileinsetrow)*TILE_WIDTH);
-	//	int specialX = (int)(Math.floor((double)setinfo%MAXSETINTILESETROW)*(TILERESIZEDWIDTH*MAXTILEINSETROW));
-		
-	//	System.out.println("X: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialX+", TILE: "+regX+") = "+(regX+specialX));
-		
-		return regX;
-	}
-	
-	public static int getObjYSMALL(int setinfo, int tileinfo){
-		int maxtileinsetrow = (objSetsSMALL[setinfo].getWidth()/TILE_WIDTH);
-		int regY = (int)(Math.floor((double)tileinfo/maxtileinsetrow)*TILE_HEIGHT);
-	//	int specialY = (int)(Math.floor((double)setinfo/MAXSETINTILESETROW)*(TILERESIZEDHEIGHT*MAXTILEINSETCOL));
-		
-	//	System.out.println("Y: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialY+", TILE: "+regY+") = "+(regY+specialY));
-		
-		return regY;
-	}
-	
 	public static BufferedImage scale(BufferedImage imageToScale, int dWidth, int dHeight, double xScale, double yScale) {
         BufferedImage scaledImage = null;
         if (imageToScale != null) {
@@ -1048,12 +693,85 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
         return scaledImage;
     }
 
+	public void createForest(){
+		//	single tree = 7; cluster tree = 8;
+		int objID = 0;
+		int maxClusterID = 3;
+		int maxSingleID = 5;
+		int lastX = xStart;
+		int thisStartX,thisStartY,thisEndX,thisEndY;
+		thisStartX=xStart;
+		thisStartY=yStart;
+		thisEndX=xEnd+1;
+		thisEndY=yEnd+1;
+		
+		if ((thisEndX-thisStartX)%2==1){
+			thisEndX=thisEndX-1;
+		}
+		
+		if ((thisEndY-thisStartY)%2==0){
+			thisEndY=thisEndY-1;
+			if ((thisEndY-thisStartY) < 3){
+				thisEndX=thisStartX;
+			}
+		}
+		
+		for (int i = thisStartX; i < thisEndX; i++) {
+			if (lastX != i){
+				objID=objID+1;
+				if (objID==2){
+					objID=0;
+				}
+			}
+			for (int j = thisStartY; j < thisEndY; j++) {
+				if (j==thisStartY || j==thisEndY-2 || j==thisEndY-1){
+					setO[i][j] = 7;
+					obj[i][j] = objID;
+					objID = objID+2;
+					if (objID>maxSingleID){
+						objID=objID-(maxSingleID+1);
+					}
+				}else{
+					setO[i][j] = 8;
+					obj[i][j] = objID;
+					objID = objID+2;
+					if (objID>maxClusterID){
+						objID=objID-(maxClusterID+1);
+					}
+				}
+			}
+		}
+		
+		refresh();
+		
+	}
+	
 	public void writeMapFile(){
         FileWriter fw = null;
         try {
-			File archivo = new File("map"+mapLabelID.getText()+".txt");
+			File archivo = new File("mapX"+windowGeneral.mapIDx.getText()+"Y"+windowGeneral.mapIDy.getText()+".txt");
             fw = new FileWriter(archivo.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
+			
+			if (windowPokemon.pokemonListDisplay.getText().compareTo("")==0){
+				windowPokemon.pokemonListDisplay.setText("1;4;7");
+			}
+			if (windowPokemon.minLevField.getText().compareTo("")==0){
+				windowPokemon.minLevField.setText("1");
+			}
+			if (windowPokemon.maxLevField.getText().compareTo("")==0){
+				windowPokemon.maxLevField.setText("100");
+			}
+	
+			bw.write(windowGeneral.mapIDx.getText()+";"+windowGeneral.mapIDy.getText());
+			bw.newLine();
+			
+			bw.write(windowPokemon.pokemonListDisplay.getText());
+			bw.newLine();
+			
+			bw.write(windowPokemon.minLevField.getText()+"-"+windowPokemon.maxLevField.getText());
+			bw.newLine();
+			
 			
             for(int i = 0; i < MAP_ROW_TILES; i++){
 				for(int j = 0; j < MAP_ROW_TILES; j++){
@@ -1092,29 +810,39 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		
 		List<String> readMapInfo = null;
 		try {
-			File archivo = new File("map"+mapLabelID.getText()+".txt");
+			File archivo = new File("mapX"+windowGeneral.mapIDx.getText()+"Y"+windowGeneral.mapIDy.getText()+".txt");
 			readMapInfo = Files.readAllLines(archivo.toPath());
 			
 			for (int i = 0; i < readMapInfo.size(); i++) {
-				String[] thisline = readMapInfo.get(i).split(",");
-				for (int j = 0; j < thisline.length; j++) {
-					String[] tileInfo = thisline[j].split("-");
-					for (int k = 0; k < tileInfo.length; k++) {
-						int thisInfo = Integer.parseInt( tileInfo[k], 16);
-						
-						switch(k){
-							case 0:
-								setT[i][j] = thisInfo;
-							break;
-							case 1:
-								tile[i][j] = thisInfo;
-							break;
-							case 2:
-								setO[i][j] = thisInfo;
-							break;
-							case 3:
-								obj[i][j] = thisInfo;
-							break;
+				if (i<3){
+					if (i==0){
+					}else if (i==1){
+						windowPokemon.refreshPokemonList(readMapInfo.get(i));
+					}else if (i==2){
+						windowPokemon.minLevField.setText(readMapInfo.get(i).split("-")[0]);
+						windowPokemon.maxLevField.setText(readMapInfo.get(i).split("-")[1]);
+					}
+				}else{
+					String[] thisline = readMapInfo.get(i).split(",");
+					for (int j = 0; j < thisline.length; j++) {
+						String[] tileInfo = thisline[j].split("-");
+						for (int k = 0; k < tileInfo.length; k++) {
+							int thisInfo = Integer.parseInt( tileInfo[k], 16);
+
+							switch(k){
+								case 0:
+									setT[i][j] = thisInfo;
+								break;
+								case 1:
+									tile[i][j] = thisInfo;
+								break;
+								case 2:
+									setO[i][j] = thisInfo;
+								break;
+								case 3:
+									obj[i][j] = thisInfo;
+								break;
+							}
 						}
 					}
 				}
@@ -1217,55 +945,438 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 				tileGridLabel[i][j].setBounds(xPos+2, yPos+2, TILE_RESIZED_HEIGHT-4, TILE_RESIZED_WIDTH-4);
 			}
 		}
-		dimDisplay.setText("("+(thisEndX+1-thisStartX)+"x"+(thisEndY+1-thisStartY)+")");
+		windowGeneral.dimDisplay.setText("("+(thisEndX+1-thisStartX)+"x"+(thisEndY+1-thisStartY)+")");
+	}
+
+	class objectManager extends JFrame implements ActionListener{
+
+		private JButton createObjBtn;
+		private JButton clearObjBtn;
+		private JButton buildCenter;
+		private JButton buildGym;
+		private JButton buildHouse;
+		private JButton buildHouse2;
+		private JButton buildHouse3;
+		private JButton buildShop;
+		private JButton buildTree;
+		private JButton buildTree2;
+		private JButton buildWStone;
+		private JButton buildWStone2;
+		private JButton buildForest;
+		
+		public objectManager(){
+			setLayout(null);
+			setSize(TOP_WINDOW_WIDTH,TOP_WINDOW_HEIGHT);
+			setResizable(false);
+			//setLocationRelativeTo(null);
+			setLocation(WINDOW_X+WINDOW_GAP+MAIN_WINDOW_WIDTH,WINDOW_Y);
+			setTitle("Object Manager");
+			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			
+			createObjBtn = new JButton("Create Object");
+			createObjBtn.setBounds(40,10,120,30);
+			createObjBtn.addActionListener(this);
+			add(createObjBtn);
+
+			clearObjBtn = new JButton("Clear Object");
+			clearObjBtn.setBounds(40,50,120,30);
+			clearObjBtn.addActionListener(this);
+			add(clearObjBtn);
+
+			buildCenter = new JButton("PC(5x5)");
+			buildCenter.setBounds(0,90,95,30);
+			buildCenter.addActionListener(this);
+			add(buildCenter);
+
+			buildShop = new JButton("MRT(4x4)");
+			buildShop.setBounds(buildCenter.getX()+99,buildCenter.getY(),buildCenter.getWidth(),buildCenter.getHeight());
+			buildShop.addActionListener(this);
+			add(buildShop);
+
+			buildGym = new JButton("GYM(6x5)");
+			buildGym.setBounds(buildCenter.getX(),buildCenter.getY()+40,buildCenter.getWidth(),buildCenter.getHeight());
+			buildGym.addActionListener(this);
+			add(buildGym);
+
+			buildHouse = new JButton("HSE(5x5)");
+			buildHouse.setBounds(buildShop.getX(),buildGym.getY(),buildCenter.getWidth(),buildCenter.getHeight());
+			buildHouse.addActionListener(this);
+			add(buildHouse);
+
+			buildHouse2 = new JButton("HSE2(5x3)");
+			buildHouse2.setBounds(buildCenter.getX(),buildGym.getY()+40,buildCenter.getWidth(),buildCenter.getHeight());
+			buildHouse2.addActionListener(this);
+			add(buildHouse2);
+
+			buildHouse3 = new JButton("HSE3(6x4)");
+			buildHouse3.setBounds(buildShop.getX(),buildHouse2.getY(),buildCenter.getWidth(),buildCenter.getHeight());
+			buildHouse3.addActionListener(this);
+			add(buildHouse3);
+
+			buildTree = new JButton("TRE(2x3)");
+			buildTree.setBounds(buildCenter.getX(),buildHouse2.getY()+40,buildCenter.getWidth(),buildCenter.getHeight());
+			buildTree.addActionListener(this);
+			add(buildTree);
+
+			buildTree2 = new JButton("TRE2(2x3)");
+			buildTree2.setBounds(buildShop.getX(),buildTree.getY(),buildCenter.getWidth(),buildCenter.getHeight());
+			buildTree2.addActionListener(this);
+			add(buildTree2);
+
+			buildWStone = new JButton("STN(2x2)");
+			buildWStone.setBounds(buildCenter.getX(),buildTree.getY()+40,buildCenter.getWidth(),buildCenter.getHeight());
+			buildWStone.addActionListener(this);
+			add(buildWStone);
+
+			buildWStone2 = new JButton("STN2(2x2)");
+			buildWStone2.setBounds(buildShop.getX(),buildWStone.getY(),buildCenter.getWidth(),buildCenter.getHeight());
+			buildWStone2.addActionListener(this);
+			add(buildWStone2);
+
+			buildForest = new JButton("Forest");
+			buildForest.setBounds(40,buildWStone2.getY()+40,120,30);
+			buildForest.addActionListener(this);
+			add(buildForest);
+			
+			setVisible(true);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == clearObjBtn){
+				cleanObj();
+			}else if (e.getSource() == createObjBtn){
+				createObj();
+			}else if (e.getSource() == buildHouse){
+				setObj(1);
+			}else if (e.getSource() == buildHouse2){
+				setObj(2);
+			}else if (e.getSource() == buildHouse3){
+				setObj(3);
+			}else if (e.getSource() == buildCenter){
+				setObj(4);
+			}else if (e.getSource() == buildShop){
+				setObj(5);
+			}else if (e.getSource() == buildGym){
+				setObj(6);
+			}else if (e.getSource() == buildTree){
+				setObj(7);
+			}else if (e.getSource() == buildTree2){
+				setObj(8);
+			}else if (e.getSource() == buildWStone){
+				setObj(9);
+			}else if (e.getSource() == buildWStone2){
+				setObj(10);
+			}else if (e.getSource() == buildForest){
+				createForest();
+			}
+		}
+		
+	}
+	
+	class tileManager extends JFrame implements ActionListener{
+
+		private JButton[][] tileOutSetBtn;
+		private JButton[][] tileInSetBtn;
+		private JButton outBoxBtn;
+		private JButton inBoxBtn;
+		
+		public tileManager(){
+			setLayout(null);
+			setSize(TOP_WINDOW_WIDTH,TOP_WINDOW_HEIGHT);
+			setResizable(false);
+			setTitle("Tile Manager");
+			//setLocationRelativeTo(null);
+			setLocation(WINDOW_X+WINDOW_GAP+WINDOW_GAP+MAIN_WINDOW_WIDTH+TOP_WINDOW_WIDTH,WINDOW_Y);
+			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+			outBoxBtn = new JButton("Set Outer Box");
+			outBoxBtn.setBounds(40,10,120,30);
+			outBoxBtn.addActionListener(this);
+			add(outBoxBtn);
+
+			inBoxBtn = new JButton("Set Inner Box");
+			inBoxBtn.setBounds(40,50,120,30);
+			inBoxBtn.addActionListener(this);
+			add(inBoxBtn);
+
+			tileOutSetBtn = new JButton[3][3];
+			for (int i = 0; i < tileOutSetBtn.length; i++) {
+				for (int j = 0; j < tileOutSetBtn[i].length; j++) {
+					tileOutSetBtn[i][j] = new JButton();
+					tileOutSetBtn[i][j].setBounds(35+(i*45),90+(j*45),40,40);
+					tileOutSetBtn[i][j].addActionListener(this);
+					add(tileOutSetBtn[i][j]);
+				}
+			}
+
+			tileInSetBtn = new JButton[2][2];
+			for (int i = 0; i < tileInSetBtn.length; i++) {
+				for (int j = 0; j < tileInSetBtn[i].length; j++) {
+					tileInSetBtn[i][j] = new JButton();
+					tileInSetBtn[i][j].setBounds(60+(i*45),230+(j*45),40,40);
+					tileInSetBtn[i][j].addActionListener(this);
+					add(tileInSetBtn[i][j]);
+				}
+			}
+			
+			setVisible(true);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == outBoxBtn){
+				setOutBox();
+			}else if (e.getSource() == inBoxBtn){
+				setInBox();
+			}else{
+				setTile(e);
+			}
+		}
+		
+	}
+	
+	class pokemonManager extends JFrame implements ActionListener{
+
+		private boolean[] pokemonList = new boolean[151];
+		
+		private JButton addPokemonBtn;
+		private JButton delPokemonBtn;
+		private JTextField minLevField;
+		private JTextField maxLevField;
+		private JTextField newPokemonField;
+		private JTextArea pokemonListDisplay;
+		
+		public pokemonManager() {
+			setLayout(null);
+			setSize(BOT_WINDOW_WIDTH,BOT_WINDOW_HEIGHT);
+			setResizable(false);
+			setTitle("Pokemon Manager");
+			setLocation(WINDOW_X+WINDOW_GAP+WINDOW_GAP+MAIN_WINDOW_WIDTH+BOT_WINDOW_WIDTH,WINDOW_Y+WINDOW_GAP+TOP_WINDOW_HEIGHT);
+			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			
+			pokemonListDisplay = new JTextArea();
+			pokemonListDisplay.setBounds(5,5,180,100);
+			pokemonListDisplay.setEditable(false);
+			add(pokemonListDisplay);
+			
+			newPokemonField = new JTextField();
+			newPokemonField.setBounds(60,110,80,30);
+			add(newPokemonField);
+			
+			addPokemonBtn = new JButton("Add");
+			addPokemonBtn.setBounds(10,150,80,30);
+			addPokemonBtn.addActionListener(this);
+			add(addPokemonBtn);
+			
+			delPokemonBtn = new JButton("Del");
+			delPokemonBtn.setBounds(100,150,80,30);
+			delPokemonBtn.addActionListener(this);
+			add(delPokemonBtn);
+			
+			minLevField = new JTextField();
+			minLevField.setBounds(10,190,80,30);
+			add(minLevField);
+			
+			maxLevField = new JTextField();
+			maxLevField.setBounds(100,190,80,30);
+			add(maxLevField);
+			
+			for (int i = 0; i < pokemonList.length; i++) {
+				pokemonList[i] = false;
+			}
+			minLevField.setText("1");
+			maxLevField.setText("100");
+				
+			refreshField();
+			
+			setVisible(true);
+		}
+		
+		public void refreshPokemonList(String info){
+			String[] list = info.split(";");
+			for (int i = 0; i < list.length; i++) {
+				pokemonList[Integer.parseInt(list[i])] = true;
+			}
+			refreshField();
+		}
+		
+		public void refreshField(){
+			pokemonListDisplay.setText("");
+			for (int i = 0; i < pokemonList.length; i++) {
+				if (pokemonList[i]){
+					pokemonListDisplay.setText(pokemonListDisplay.getText()+i+",");
+				}
+			}
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == addPokemonBtn){
+				try{
+					int num = Integer.parseInt(newPokemonField.getText());
+					pokemonList[num] = true;
+					newPokemonField.setText("");
+					refreshField();
+				}catch (NumberFormatException ex){
+				}
+			}else if (e.getSource() == delPokemonBtn){
+				try{
+					int num = Integer.parseInt(newPokemonField.getText());
+					pokemonList[num] = false;
+					newPokemonField.setText("");
+					refreshField();
+				}catch (NumberFormatException ex){
+				}
+			}
+		}
+		
+	}
+	
+	class generalControls extends JFrame implements ActionListener{
+		
+		private JLabel xCoordsDisplay;
+		private JLabel yCoordsDisplay;
+		private JButton saveMapBtn;
+		private JButton loadMapBtn;
+		private JButton nextSetBtn;
+		private JButton prevSetBtn;
+		private JButton nextTileBtn;
+		private JButton prevTileBtn;
+		private JLabel dimDisplay;
+		private JTextField mapIDx;
+		private JTextField mapIDy;
+
+		public generalControls(){
+			setLayout(null);
+			setSize(BOT_WINDOW_WIDTH,BOT_WINDOW_HEIGHT);
+			setResizable(false);
+			setTitle("General Controls");
+		//	setLocationRelativeTo(null);
+			setLocation(WINDOW_X+WINDOW_GAP+MAIN_WINDOW_WIDTH,WINDOW_Y+WINDOW_GAP+TOP_WINDOW_HEIGHT);
+			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			
+			xCoordsDisplay = new JLabel("START: ("+xStart+","+yStart+")");
+			xCoordsDisplay.setBounds(10,10,140,20);
+			add(xCoordsDisplay);
+
+			yCoordsDisplay = new JLabel("END: ("+xEnd+","+yEnd+")");
+			yCoordsDisplay.setBounds(10,30,140,20);
+			add(yCoordsDisplay);
+
+			nextSetBtn = new JButton("Next Set");
+			nextSetBtn.setBounds(100,50,90,30);
+			nextSetBtn.addActionListener(this);
+			add(nextSetBtn);
+
+			prevSetBtn = new JButton("Prev Set");
+			prevSetBtn.setBounds(5,50,90,30);
+			prevSetBtn.addActionListener(this);
+			add(prevSetBtn);
+
+			nextTileBtn = new JButton("Next Obj");
+			nextTileBtn.setBounds(100,90,90,30);
+			nextTileBtn.addActionListener(this);
+			add(nextTileBtn);
+
+			prevTileBtn = new JButton("Prev Obj");
+			prevTileBtn.setBounds(5,90,90,30);
+			prevTileBtn.addActionListener(this);
+			add(prevTileBtn);
+
+			mapIDx = new JTextField("0");
+			mapIDx.setBounds(5,150,90,40);
+			add(mapIDx);
+
+			mapIDy = new JTextField("0");
+			mapIDy.setBounds(100,150,90,40);
+			add(mapIDy);
+
+			saveMapBtn = new JButton("Save");
+			saveMapBtn.setBounds(5,200,90,40);
+			saveMapBtn.addActionListener(this);
+			add(saveMapBtn);
+
+			loadMapBtn = new JButton("Load");
+			loadMapBtn.setBounds(100,200,90,40);
+			loadMapBtn.addActionListener(this);
+			add(loadMapBtn);
+
+			dimDisplay = new JLabel("("+(xEnd+1-xStart)+"x"+(yEnd+1-yStart)+")");
+			dimDisplay.setBounds(75,125,140,20);
+			add(dimDisplay);
+			
+			setVisible(true);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == nextSetBtn){
+				nextSet("Tile");
+			}else if (e.getSource() == prevSetBtn){
+				prevSet("Tile");
+			}else if (e.getSource() == prevTileBtn){
+				prevTile("Object");
+			}else if (e.getSource() == nextTileBtn){
+				nextTile("Object");
+			}else if (e.getSource() == saveMapBtn){
+				writeMapFile();
+			}else if (e.getSource() == loadMapBtn){
+				loadMapFile();
+			}
+		}
+		
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == outBoxBtn){
-			setOutBox();
-		}else if (e.getSource() == inBoxBtn){
-			setInBox();
-		}else if (e.getSource() == nextSetBtn){
-			nextSet();
-		}else if (e.getSource() == prevSetBtn){
-			prevSet();
-		}else if (e.getSource() == prevTileBtn){
-			prevTile();
-		}else if (e.getSource() == nextTileBtn){
-			nextTile();
-		}else if (e.getSource() == swapInterfaceBtn){
-			swapInterfaces();
-		}else if (e.getSource() == clearObjBtn){
-			cleanObj();
-		}else if (e.getSource() == createObjBtn){
-			createObj();
-		}else if (e.getSource() == houseDims){
-			setObj(1);
-		}else if (e.getSource() == gymDims){
-			setObj(4);
-		}else if (e.getSource() == centerDims){
-			setObj(2);
-		}else if (e.getSource() == shopDims){
-			setObj(3);
-		}else if (e.getSource() == saveMapBtn){
-			writeMapFile();
-		}else if (e.getSource() == loadMapBtn){
-			loadMapFile();
-		}else if (e.getSource() == moreID){
-			mapLabelID.setText(""+(Integer.parseInt(mapLabelID.getText())+1));
-		}else if (e.getSource() == lessID){
-			mapLabelID.setText(""+(Integer.parseInt(mapLabelID.getText())-1));
-		}else{
-			setTile(e);
-		}
 	}
+	
+	//<editor-fold defaultstate="collapsed" desc="Window Overrides">
+		@Override
+		public void windowOpened(WindowEvent e) {
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e) {
+			windowTile.dispose();
+			windowPokemon.dispose();
+			windowGeneral.dispose();
+			windowObject.dispose();
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e) {
+			windowTile.setState(JFrame.ICONIFIED);
+			windowPokemon.setState(JFrame.ICONIFIED);
+			windowGeneral.setState(JFrame.ICONIFIED);
+			windowObject.setState(JFrame.ICONIFIED);
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+			windowTile.setState(JFrame.NORMAL);
+			windowPokemon.setState(JFrame.NORMAL);
+			windowGeneral.setState(JFrame.NORMAL);
+			windowObject.setState(JFrame.NORMAL);
+		}
+
+		@Override
+		public void windowActivated(WindowEvent e) {
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+		}
+	//</editor-fold>
 	
 	//<editor-fold defaultstate="collapsed" desc="Mouse Overrides">
 	@Override
-	public void mouseClicked(MouseEvent e) {
-	//	modTile(e);
-		
+	public void mouseClicked(MouseEvent e) {		
 		int[] receive = caller(e);
 		xStart = receive[0];
 		yStart = receive[1];
@@ -1300,8 +1411,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			yStart=temp;
 		}
 		
-		xCoordsDisplay.setText("START: ("+xStart+","+yStart+")");
-		yCoordsDisplay.setText("END: ("+xEnd+","+yEnd+")");
+		windowGeneral.xCoordsDisplay.setText("START: ("+xStart+","+yStart+")");
+		windowGeneral.yCoordsDisplay.setText("END: ("+xEnd+","+yEnd+")");
 		
 		isSelecting = false;
 		//highlight();
@@ -1363,37 +1474,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		return getPos(e.getComponent().getX()+e.getX(),e.getComponent().getY()+e.getY());
 	}
 	//</editor-fold>
-	
-	//<editor-fold defaultstate="collapsed" desc="Window Overrides">
-	@Override
-	public void windowOpened(WindowEvent e) {
-	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-	}
-	//</editor-fold>
-	
+		
 	//<editor-fold defaultstate="collapsed" desc="Key Overrides">
 		@Override
 		public void keyTyped(KeyEvent e) {
@@ -1403,6 +1484,12 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode()==KeyEvent.VK_ESCAPE){
 				clearHighlight();
+			}else if (e.getKeyCode()==KeyEvent.VK_SPACE){
+				xStart = 0;
+				yStart = 0;
+				xEnd = 19;
+				yEnd = 19;
+				highlight(xEnd,yEnd);
 			}
 		}
 

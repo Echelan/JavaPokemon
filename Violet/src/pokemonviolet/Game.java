@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -44,9 +43,13 @@ public class Game implements Runnable{
 			 */
 			public static ArrayList<List<String>> INFO_MAPS;
 			/**
-			 * Amount of Maps.
+			 * Amount of Maps in X.
 			 */
-			public static int NUM_MAPS;
+			public static int NUM_MAPS_X;
+			/**
+			 * Amount of Maps in Y.
+			 */
+			public static int NUM_MAPS_Y;
 		//</editor-fold>
 		
 		/**
@@ -56,23 +59,27 @@ public class Game implements Runnable{
 		/**
 		 * Steps needed to spawn a Pokemon.
 		 */
-		public static int stepsToSpawn = roll(1,2,3);;
+	//	public static int stepsToSpawn = roll(1,2,3);
 		/**
 		 * Current Pokemon in game.
 		 */
-		public static Pokemon currentPokemon;
+		public static Pokemon enemyPokemon;
 		/**
 		 * Game Window. (The one with the canvas.)
 		 */
-		private static GameWindow windowGame;
+	//	private static GameWindow windowGame;
 		/**
 		 * Class Test Window. (The one with the buttons and pictures.)
 		 */
-		private static ClassTestWindow windowClassTest;
+	//	private static ClassTestWindow windowClassTest;
 		/**
 		 * Map Builder Window. (The one with the map.)
 		 */
-		private static MapBuilder windowMapBuilder;
+	//	private static MapBuilder windowMapBuilder;
+		/**
+		 * Maps displayed.
+		 */
+		private static Map[][] displayedMaps;
 	// </editor-fold>
 		
 	/**
@@ -80,7 +87,8 @@ public class Game implements Runnable{
 	 */
 	public Game() {
 		
-		NUM_MAPS = 2;
+		NUM_MAPS_X = 0;
+		NUM_MAPS_Y = 0;
 		
 		SplashWindow splash = new SplashWindow();
 
@@ -105,11 +113,14 @@ public class Game implements Runnable{
 			archivo = new File("listTypes.txt");
 			readInfoT = Files.readAllLines(archivo.toPath());
 			
-			for (int i = 0; i < NUM_MAPS; i++) {
-				archivo = new File("Map"+i+".txt");
-				List<String> temp = Files.readAllLines(archivo.toPath());
-				readMap.add(temp);
+			for (int x = 0; x < NUM_MAPS_X; x++) {
+				for (int y = 0; y < NUM_MAPS_Y; y++) {
+					archivo = new File("mapX"+x+"Y"+y+".txt");
+					List<String> temp = Files.readAllLines(archivo.toPath());
+					readMap.add(temp);
+				}
 			}
+			
 		} catch (IOException ex) {
 			System.err.println("Couldn't load files!");
 			System.exit(0);
@@ -134,9 +145,9 @@ public class Game implements Runnable{
 		Thread playerThread = new Thread(player);
 		playerThread.start();
 			
-		windowClassTest = new ClassTestWindow(javax.swing.JFrame.HIDE_ON_CLOSE,false);
-		windowMapBuilder = new MapBuilder(javax.swing.JFrame.HIDE_ON_CLOSE,false);
-		windowGame = new GameWindow(javax.swing.JFrame.HIDE_ON_CLOSE,false);
+	//	windowClassTest = new ClassTestWindow(javax.swing.JFrame.HIDE_ON_CLOSE,false);
+	//	windowMapBuilder = new MapBuilder(javax.swing.JFrame.HIDE_ON_CLOSE,false);
+	//	windowGame = new GameWindow(javax.swing.JFrame.HIDE_ON_CLOSE,false);
 		
 	}
 	
@@ -147,6 +158,7 @@ public class Game implements Runnable{
 	 * @param numSides Number of sides per die.
 	 * @return Resulting value.
 	 */
+	/*
 	public static int roll(int value, int numDice, int numSides){
 		Random rnd = new Random();
 
@@ -156,7 +168,7 @@ public class Game implements Runnable{
 		
 		return value;
 	}
-
+	*/
 	@Override
 	public void run() {
 		Scanner s = new Scanner(System.in);
@@ -169,48 +181,60 @@ public class Game implements Runnable{
 					case 1:
 					//	classTestWindow=new ClassTestWindow();
 					//	new ClassTestWindow();
-						windowClassTest.setVisible(true);
+						new ClassTestWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
+					//	windowClassTest.setVisible(true);
 					break;
 					case 2:
 					//	gameWindow=new GameWindow();
 					//	new GameWindow();
-						windowGame.setVisible(true);
+						new GameWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
+					//	windowGame.setVisible(true);
 					break;
 					case 3:
 					//	classTestWindow=new ClassTestWindow();
 					//	new ClassTestWindow();
-						windowClassTest.setVisible(true);
+						new ClassTestWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
+					//	windowClassTest.setVisible(true);
 					//	gameWindow=new GameWindow();
 					//	new GameWindow();
-						windowGame.setVisible(true);
+						new GameWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
+					//	windowGame.setVisible(true);
 					break;
 					case 4:
 					//	new MapBuilder();
-						windowMapBuilder.setVisible(true);
+					//	windowMapBuilder.setVisible(true);
+						new MapBuilder(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
 					break;
 					case 5:
 					//	new MapBuilder();
-						windowMapBuilder.setVisible(true);
+					//	windowMapBuilder.setVisible(true);
+						new MapBuilder(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
 					//	classTestWindow=new ClassTestWindow();
 					//	new ClassTestWindow();
-						windowClassTest.setVisible(true);
+						new ClassTestWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
+					//	windowClassTest.setVisible(true);
 					break;
 					case 6:
 					//	new MapBuilder();
-						windowMapBuilder.setVisible(true);
-						//gameWindow=new GameWindow();
+					//	windowMapBuilder.setVisible(true);
+						new MapBuilder(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
+					//	gameWindow=new GameWindow();
 					//	new GameWindow();
-						windowGame.setVisible(true);
+						new GameWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
+					//	windowGame.setVisible(true);
 					break;
 					case 7:
 					//	classTestWindow=new ClassTestWindow();
 					//	gameWindow=new GameWindow();
 					//	new ClassTestWindow();
-						windowClassTest.setVisible(true);
+						new ClassTestWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
+					//	windowClassTest.setVisible(true);
 					//	new GameWindow();
-						windowGame.setVisible(true);
+						new GameWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
+					//	windowGame.setVisible(true);
 					//	new MapBuilder();
-						windowMapBuilder.setVisible(true);
+						new MapBuilder(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
+					//	windowMapBuilder.setVisible(true);
 					break;
 					default:
 						System.exit(0);

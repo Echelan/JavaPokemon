@@ -7,6 +7,12 @@
  */
 package pokemonviolet;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Random;
+import javax.imageio.ImageIO;
+
 
 /**
  *
@@ -124,6 +130,10 @@ public final class Player implements Runnable {
 			 * Player tile coordinates.
 			 */
 			private int xTile, yTile;
+			/**
+			 * Player steps missing to spawn.
+			 */
+			private int spawnSteps;
 		// </editor-fold>
 		// <editor-fold defaultstate="collapsed" desc="Sprite">
 			/**
@@ -150,6 +160,10 @@ public final class Player implements Runnable {
 			 * Player sprite multiplier.
 			 */
 			public static double SPRITE_RESIZE = 1.6;
+			/**
+			 * Player sprite sheet.
+			 */
+			public static BufferedImage SPRITE_SHEET;
 		//</editor-fold>
 	// </editor-fold>
 	
@@ -203,6 +217,10 @@ public final class Player implements Runnable {
 	 * Set Player's main default attributes.
 	 */
 	private void setBasics(){
+		try {
+			this.SPRITE_SHEET = ImageIO.read(new File("player.png"));
+		} catch (IOException ex) {
+		}
 		this.team = new Pokemon[6];
 		this.PC = new Pokemon[200];
 		this.setFunds(0);
@@ -751,6 +769,16 @@ public final class Player implements Runnable {
 		
 	}
 	
+	public static int roll(int value, int numDice, int numSides){
+		Random rnd = new Random();
+
+		for (int i = 0; i < numDice; i++) {
+		  value = value + (rnd.nextInt(numSides)+1);
+		}
+		
+		return value;
+	}
+	
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
 		
 		/**
@@ -913,5 +941,20 @@ public final class Player implements Runnable {
 				this.curFrame=1;
 			}
 		}
+		
+		/**
+		 * @return the spawnSteps
+		 */
+		public int getSpawnSteps() {
+			return spawnSteps;
+		}
+
+		/**
+		 * @param spawnSteps the spawnSteps to set
+		 */
+		public void setSpawnSteps(int spawnSteps) {
+			this.spawnSteps = spawnSteps;
+		}
 	//</editor-fold>
+
 }

@@ -396,22 +396,22 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 	 * Takes a step, spawns Pokemon if need be, updates buttons.
 	 */
 	public void walkBtnPress() {
-		Game.stepsToSpawn = Game.stepsToSpawn - 1;
+		Game.player.setSpawnSteps(Game.player.getSpawnSteps()-1);
 		
 		Game.player.setFunds(Game.player.getFunds()+100);
 		moneyDialog.setText("$ " + Game.player.getFunds());
 		
 		updateButtons();
 		
-		if (Game.stepsToSpawn == 0){
+		if (Game.player.getSpawnSteps() == 0){
 			Random rnd = new Random();
-			Game.currentPokemon = new Pokemon(rnd.nextInt(150)+1);
+			Game.enemyPokemon = new Pokemon(rnd.nextInt(150)+1);
 			
 			updateWildPokemon();
 					
-			displayEvent("A wild " + Game.currentPokemon.getNameSpecies()+ " appeared!");
+			displayEvent("A wild " + Game.enemyPokemon.getNameSpecies()+ " appeared!");
 			
-			Game.stepsToSpawn = Game.roll(1,2,3);
+			Game.player.setSpawnSteps(Game.player.roll(1,2,3));
 		}else{
 			cleanPokemonInfo();
 			
@@ -423,14 +423,14 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 	 * Update buttons depending on situation.
 	 */
 	public void updateButtons(){
-		if (Game.currentPokemon == null){
+		if (Game.enemyPokemon == null){
 			evolveBtn.setEnabled(false);
 			throwGreatBtn.setEnabled(false);
 			throwMasterBtn.setEnabled(false);
 			throwPokeBtn.setEnabled(false);
 			throwUltraBtn.setEnabled(false);
 		}else{
-			if (Game.currentPokemon.getCanEvolve()){
+			if (Game.enemyPokemon.getCanEvolve()){
 				evolveBtn.setEnabled(true);
 			}else{
 				evolveBtn.setEnabled(false);
@@ -482,7 +482,7 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 	 * Clean current Pokemon and all UI information about it.
 	 */
 	public void cleanPokemonInfo(){
-		Game.currentPokemon = null;
+		Game.enemyPokemon = null;
 		pokemonNameDisplay.setText(" ");
 		pokemonHeightDisplay.setText(" ");
 		pokemonWeightDisplay.setText(" ");
@@ -508,38 +508,38 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 		if (canDo){
 			displayEvent("You throw a " + ball.getNameSingular() + "!");
 			int shakes = 0;
-			boolean caught = Game.currentPokemon.tryCatch(ball.getPokeRate());
+			boolean caught = Game.enemyPokemon.tryCatch(ball.getPokeRate());
 
 			if (caught){
-				caught = Game.currentPokemon.tryCatch(ball.getPokeRate());
+				caught = Game.enemyPokemon.tryCatch(ball.getPokeRate());
 				shakes = shakes + 1;
 
 				if (caught){
-					caught = Game.currentPokemon.tryCatch(ball.getPokeRate());
+					caught = Game.enemyPokemon.tryCatch(ball.getPokeRate());
 					shakes = shakes + 1;
 
 					if (caught){
-						caught = Game.currentPokemon.tryCatch(ball.getPokeRate());
+						caught = Game.enemyPokemon.tryCatch(ball.getPokeRate());
 						shakes = shakes + 1;
 
 						if (caught){
-							displayEvent("Gotcha! " + Game.currentPokemon.getNameSpecies()+ " was caught!");
+							displayEvent("Gotcha! " + Game.enemyPokemon.getNameSpecies()+ " was caught!");
 
-							Game.currentPokemon.setBallType(ball.getNameInternal());
-							int result = Game.player.addPokemon(Game.currentPokemon);
+							Game.enemyPokemon.setBallType(ball.getNameInternal());
+							int result = Game.player.addPokemon(Game.enemyPokemon);
 							switch (result) {
 								case 1:
-									displayEvent(Game.currentPokemon.getNameSpecies()+ " was sent to the PC.");
+									displayEvent(Game.enemyPokemon.getNameSpecies()+ " was sent to the PC.");
 								break;
 								case 2:
-									displayEvent("PC full! " + Game.currentPokemon.getNameSpecies()+ " was released.");
+									displayEvent("PC full! " + Game.enemyPokemon.getNameSpecies()+ " was released.");
 								break;
 								default:
 									updateTeamImg();
 								break;
 							}
 							
-							Game.player.setFunds(Game.player.getFunds() + (int)(((float)Math.floor(Game.currentPokemon.getId()/10))*100));
+							Game.player.setFunds(Game.player.getFunds() + (int)(((float)Math.floor(Game.enemyPokemon.getId()/10))*100));
 							moneyDialog.setText("$ " + Game.player.getFunds());
 							
 							cleanPokemonInfo();
@@ -560,14 +560,14 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 	 * Evolves current wild Pokemon.
 	 */
 	public void evolveBtnPress(){
-		String pastName = Game.currentPokemon.getNameSpecies();
-		boolean couldEvolve = Game.currentPokemon.evolve();
+		String pastName = Game.enemyPokemon.getNameSpecies();
+		boolean couldEvolve = Game.enemyPokemon.evolve();
 		
 		if (couldEvolve){
 			updateWildPokemon();
-			displayEvent(pastName + " evolved to a " + Game.currentPokemon.getNameSpecies() + "!");
+			displayEvent(pastName + " evolved to a " + Game.enemyPokemon.getNameSpecies() + "!");
 		}else{
-			displayEvent(Game.currentPokemon.getNameSpecies() + " couldn't evolve!");
+			displayEvent(Game.enemyPokemon.getNameSpecies() + " couldn't evolve!");
 		}
 	}
 	
@@ -576,12 +576,12 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 	 */
 	public void updateWildPokemon(){
 			
-		pokemonNameDisplay.setText(Game.currentPokemon.getNameSpecies());
-		pokemonHeightDisplay.setText(Game.currentPokemon.getHeight() + " m.");
-		pokemonWeightDisplay.setText(Game.currentPokemon.getWeight() + " kg.");
+		pokemonNameDisplay.setText(Game.enemyPokemon.getNameSpecies());
+		pokemonHeightDisplay.setText(Game.enemyPokemon.getHeight() + " m.");
+		pokemonWeightDisplay.setText(Game.enemyPokemon.getWeight() + " kg.");
 		
 		float hue, saturation, brightness;
-		switch(Game.currentPokemon.getColor()){
+		switch(Game.enemyPokemon.getColor()){
 			case "Black":
 				hue = (float)0/360;
 				saturation = (float)0/100;
@@ -670,8 +670,8 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 		
 		updateButtons();
 		
-		int xBig = (int)(Math.floor((double)(Game.currentPokemon.getId()-1)%10)*POKE_IMG_BIG_WIDTH);
-		int yBig = (int)(Math.floor((double)(Game.currentPokemon.getId()-1)/10)*POKE_IMG_BIG_HEIGHT);
+		int xBig = (int)(Math.floor((double)(Game.enemyPokemon.getId()-1)%10)*POKE_IMG_BIG_WIDTH);
+		int yBig = (int)(Math.floor((double)(Game.enemyPokemon.getId()-1)/10)*POKE_IMG_BIG_HEIGHT);
 		pokemonImgDisplay = new ImageIcon (allPokemonBig.getSubimage(xBig, yBig, POKE_IMG_BIG_WIDTH, POKE_IMG_BIG_HEIGHT));
 		imgContainerEnemy.setIcon(pokemonImgDisplay);
 	}
