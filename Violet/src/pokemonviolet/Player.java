@@ -111,9 +111,17 @@ public final class Player implements Runnable {
 		// </editor-fold>
 		// <editor-fold defaultstate="collapsed" desc="Movement">
 			/**
-			 * Player coordinates.
+			 * Player global tile coordinates.
 			 */
-			private int x, y;
+			private int xTile, yTile;
+			/**
+			 * Player local tile coordinates.
+			 */
+		//	private int xTileMap, yTileMap;
+			/**
+			 * Player map coordinates.
+			 */
+		//	private int xMap, yMap;
 			/**
 			 * Player direction.
 			 */
@@ -126,10 +134,6 @@ public final class Player implements Runnable {
 			 * Player running boolean.
 			 */
 			private boolean running;
-			/**
-			 * Player tile coordinates.
-			 */
-			private int xTile, yTile;
 			/**
 			 * Player steps missing to spawn.
 			 */
@@ -242,10 +246,8 @@ public final class Player implements Runnable {
 		this.maxFrames = 3;
 		this.setCurFrame(1);
 		this.curAnim = 0;
-		this.xTile=10;
-		this.yTile=10;
-		this.x =(int)(getxTile()*(SPRITE_X*SPRITE_RESIZE));
-		this.y =(int)(getyTile()*(SPRITE_Y*SPRITE_RESIZE));
+		this.xTile=30;
+		this.yTile=30;
 	}
 	
 	/**
@@ -678,7 +680,7 @@ public final class Player implements Runnable {
 	@Override
 	public void run() {
 		while(true){
-			move();
+//			move();
 			
 			try {
 				Thread.sleep(30);
@@ -690,6 +692,7 @@ public final class Player implements Runnable {
 	/**
 	 * Move Player coordinates.
 	 */
+	/*
 	public void move(){
 		int baseX, baseY, diff;
 		baseX =(int)(getxTile()*(SPRITE_X*SPRITE_RESIZE));
@@ -768,6 +771,7 @@ public final class Player implements Runnable {
 		//refreshTileZ();
 		
 	}
+	*/
 	
 	public static int roll(int value, int numDice, int numSides){
 		Random rnd = new Random();
@@ -812,17 +816,19 @@ public final class Player implements Runnable {
 		/**
 		 * @return the x
 		 */
+		/*
 		public int getX() {
 			return x;
 		}
-
+*/
 		/**
 		 * @return the y
 		 */
+		/*
 		public int getY() {
 			return y;
 		}
-
+*/
 		/**
 		 * @return the running
 		 */

@@ -9,8 +9,6 @@ package pokemonviolet;
 
 import java.awt.Canvas;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 
 /**
  *
@@ -23,19 +21,19 @@ public class GameDisplay extends Canvas implements Runnable {
 		 * Sprite for Player.
 		 * <p> One frame dimensions: 20x20. </p>
 		 */
-		private static BufferedImage playerSprite;
+	//	private static BufferedImage playerSprite;
 		/**
 		 * Current frame on Player Sprite.
 		 */
-		private static Image currentPlayerFrame;
+	//	private static Image currentPlayerFrame;
 		/**
 		 * Current map.
 		 */
-		private static BufferedImage mapRegion;
+	//	private static BufferedImage mapRegion;
 		/**
 		 * Current bounds.
 		 */
-		private static String[][] bounds;
+	//	private static String[][] bounds;
 	// </editor-fold>
 	
 	/**
@@ -52,7 +50,7 @@ public class GameDisplay extends Canvas implements Runnable {
 	
 	public static boolean getCanMove(String direction){
 		boolean canMove = false;
-		
+		/*
 		switch (direction){
 			case "LEFT":
 				if (bounds[Game.player.getxTile()-1][Game.player.getyTile()].substring(0, 1).compareTo("0")==0){
@@ -76,6 +74,7 @@ public class GameDisplay extends Canvas implements Runnable {
 			break;
 		}
 		
+	*/
 		return canMove;
 	}
 	
@@ -93,11 +92,19 @@ public class GameDisplay extends Canvas implements Runnable {
 			}
 		}
 		*/
+		/*
 		g.drawImage(mapRegion, 0, 0, this);
 		g.drawImage(currentPlayerFrame, Game.player.getX(),Game.player.getY(),(int)(Player.SPRITE_X*Player.SPRITE_RESIZE),(int)(Player.SPRITE_Y*Player.SPRITE_RESIZE),this);
 		
+	*/
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				g.drawImage(Game.displayedMaps[i][j].getImage(), Game.displayedMaps[i][j].getX(), Game.displayedMaps[i][j].getY(), this);
+			}
+		}
+			
 	}
-
+	
     @Override
     public void run() {
         while (true){
@@ -115,7 +122,7 @@ public class GameDisplay extends Canvas implements Runnable {
 
 			xPlayerIMG = xPlayerIMG + (Game.player.getCurFrame()*20);
 			yPlayerIMG = yPlayerIMG + (Game.player.getCurAnim()*20);
-
+/*
 			currentPlayerFrame = Game.player.SPRITE_SHEET.getSubimage(xPlayerIMG, yPlayerIMG, 20, 20);
 
 			repaint((int)(Game.player.getX()-(Game.player.SPRITE_X*Game.player.SPRITE_RESIZE)),
@@ -123,7 +130,7 @@ public class GameDisplay extends Canvas implements Runnable {
 					(int)(Game.player.SPRITE_X*3*Game.player.SPRITE_RESIZE),
 					(int)(Game.player.SPRITE_Y*3*Game.player.SPRITE_RESIZE)
 				);
-           
+           */
 			try {
 				Thread.sleep(60);
 			} catch (InterruptedException ex) {

@@ -44,7 +44,7 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 	
 	
 		screen = new GameDisplay();
-		screen.setBounds(1, 1, 592, 469);
+		screen.setBounds(1, 1, Game.SCREEN_SIZE_X, Game.SCREEN_SIZE_Y);
 		screen.setBackground(Color.black);
 		screen.setFocusable(false);
 		add(screen);

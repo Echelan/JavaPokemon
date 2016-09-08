@@ -752,28 +752,20 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			File archivo = new File("mapX"+windowGeneral.mapIDx.getText()+"Y"+windowGeneral.mapIDy.getText()+".txt");
             fw = new FileWriter(archivo.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
-			
+			/*
 			if (windowPokemon.pokemonListDisplay.getText().compareTo("")==0){
 				windowPokemon.pokemonListDisplay.setText("1;4;7");
 			}
-			if (windowPokemon.minLevField.getText().compareTo("")==0){
-				windowPokemon.minLevField.setText("1");
-			}
-			if (windowPokemon.maxLevField.getText().compareTo("")==0){
-				windowPokemon.maxLevField.setText("100");
-			}
-	
+			*/
 			bw.write(windowGeneral.mapIDx.getText()+";"+windowGeneral.mapIDy.getText());
 			bw.newLine();
 			
 			bw.write(windowPokemon.pokemonListDisplay.getText());
-			bw.newLine();
-			
-			bw.write(windowPokemon.minLevField.getText()+"-"+windowPokemon.maxLevField.getText());
-			bw.newLine();
+		//	bw.newLine();
 			
 			
             for(int i = 0; i < MAP_ROW_TILES; i++){
+				bw.newLine();
 				for(int j = 0; j < MAP_ROW_TILES; j++){
 					String info[] = new String[4];
 					
@@ -793,7 +785,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					}
 					bw.write(",");
 				}
-				bw.newLine();
+			//	bw.newLine();
             }
             bw.close();
             
@@ -813,36 +805,33 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			File archivo = new File("mapX"+windowGeneral.mapIDx.getText()+"Y"+windowGeneral.mapIDy.getText()+".txt");
 			readMapInfo = Files.readAllLines(archivo.toPath());
 			
+			if (readMapInfo.get(1).compareTo("")!=0){
+				windowPokemon.refreshPokemonList(readMapInfo.get(1));
+			}
+				
+			readMapInfo.remove(1);
+			readMapInfo.remove(0);
+			
 			for (int i = 0; i < readMapInfo.size(); i++) {
-				if (i<3){
-					if (i==0){
-					}else if (i==1){
-						windowPokemon.refreshPokemonList(readMapInfo.get(i));
-					}else if (i==2){
-						windowPokemon.minLevField.setText(readMapInfo.get(i).split("-")[0]);
-						windowPokemon.maxLevField.setText(readMapInfo.get(i).split("-")[1]);
-					}
-				}else{
-					String[] thisline = readMapInfo.get(i).split(",");
-					for (int j = 0; j < thisline.length; j++) {
-						String[] tileInfo = thisline[j].split("-");
-						for (int k = 0; k < tileInfo.length; k++) {
-							int thisInfo = Integer.parseInt( tileInfo[k], 16);
+				String[] thisline = readMapInfo.get(i).split(",");
+				for (int j = 0; j < thisline.length; j++) {
+					String[] tileInfo = thisline[j].split("-");
+					for (int k = 0; k < tileInfo.length; k++) {
+						int thisInfo = Integer.parseInt( tileInfo[k], 16);
 
-							switch(k){
-								case 0:
-									setT[i][j] = thisInfo;
-								break;
-								case 1:
-									tile[i][j] = thisInfo;
-								break;
-								case 2:
-									setO[i][j] = thisInfo;
-								break;
-								case 3:
-									obj[i][j] = thisInfo;
-								break;
-							}
+						switch(k){
+							case 0:
+								setT[i][j] = thisInfo;
+							break;
+							case 1:
+								tile[i][j] = thisInfo;
+							break;
+							case 2:
+								setO[i][j] = thisInfo;
+							break;
+							case 3:
+								obj[i][j] = thisInfo;
+							break;
 						}
 					}
 				}
@@ -894,15 +883,12 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		for (int i = 0; i < MAP_ROW_TILES; i++) {
 			for (int j = 0; j < MAP_ROW_TILES; j++) {
 				
-			//	System.out.println("X: "+ gridLabel[i][j].getX()+"-"+x+"-"+(gridLabel[i][j].getX()+gridLabel[i][j].getWidth()) );
 				if (tileGridLabel[i][j].getX()<=x && x<=(tileGridLabel[i][j].getX()+tileGridLabel[i][j].getWidth())){
 					pos[0] = i;
 				}
 				
-			//	System.out.println("Y: "+ gridLabel[i][j].getY()+"-"+y+"-"+(gridLabel[i][j].getY()+gridLabel[i][j].getHeight()) );
 				if (tileGridLabel[i][j].getY()<=y && y<=(tileGridLabel[i][j].getY()+tileGridLabel[i][j].getHeight())){
 					pos[1] = j;
-					
 				}
 				
 			}
@@ -1138,7 +1124,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	
 	class pokemonManager extends JFrame implements ActionListener{
 
-		private boolean[] pokemonList = new boolean[151];
+		private int[][] pokemonList = new int[151][7];
 		
 		private JButton addPokemonBtn;
 		private JButton delPokemonBtn;
@@ -1158,6 +1144,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			pokemonListDisplay = new JTextArea();
 			pokemonListDisplay.setBounds(5,5,180,100);
 			pokemonListDisplay.setEditable(false);
+			//pokemonListDisplay.setWrapStyleWord(true);
+			pokemonListDisplay.setLineWrap(true);
 			add(pokemonListDisplay);
 			
 			newPokemonField = new JTextField();
@@ -1183,10 +1171,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			add(maxLevField);
 			
 			for (int i = 0; i < pokemonList.length; i++) {
-				pokemonList[i] = false;
+				pokemonList[i][0] = 0;
 			}
-			minLevField.setText("1");
-			maxLevField.setText("100");
 				
 			refreshField();
 			
@@ -1196,7 +1182,18 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		public void refreshPokemonList(String info){
 			String[] list = info.split(";");
 			for (int i = 0; i < list.length; i++) {
-				pokemonList[Integer.parseInt(list[i])] = true;
+				int num = Integer.parseInt(list[i].split(":")[0]);
+				num = num - 1;
+				String[] clusterFuck = list[i].split(":")[1].split(",");
+				
+				pokemonList[num][0] = 1;
+				
+				pokemonList[num][1] = Integer.parseInt(clusterFuck[0].split("-")[0]);
+				pokemonList[num][2] = Integer.parseInt(clusterFuck[0].split("-")[1]);
+				pokemonList[num][3] = Integer.parseInt(clusterFuck[1].split("-")[0]);
+				pokemonList[num][4] = Integer.parseInt(clusterFuck[1].split("-")[1]);
+				pokemonList[num][5] = Integer.parseInt(clusterFuck[2].split("-")[0]);
+				pokemonList[num][6] = Integer.parseInt(clusterFuck[2].split("-")[1]);
 			}
 			refreshField();
 		}
@@ -1204,8 +1201,9 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		public void refreshField(){
 			pokemonListDisplay.setText("");
 			for (int i = 0; i < pokemonList.length; i++) {
-				if (pokemonList[i]){
-					pokemonListDisplay.setText(pokemonListDisplay.getText()+i+",");
+				if (pokemonList[i][0]==1){
+					String represent = pokemonList[i][1]+"-"+pokemonList[i][2]+","+pokemonList[i][3]+"-"+pokemonList[i][4]+","+pokemonList[i][5]+"-"+pokemonList[i][6]+":"+(i+1);
+					pokemonListDisplay.setText(pokemonListDisplay.getText()+represent+";");
 				}
 			}
 		}
@@ -1215,7 +1213,14 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			if (e.getSource() == addPokemonBtn){
 				try{
 					int num = Integer.parseInt(newPokemonField.getText());
-					pokemonList[num] = true;
+					num = num - 1;
+					pokemonList[num][0] = 1;
+					pokemonList[num][1] = Integer.parseInt(minLevField.getText());
+					pokemonList[num][2] = Integer.parseInt(maxLevField.getText());
+					pokemonList[num][3] = xStart;
+					pokemonList[num][4] = xEnd;
+					pokemonList[num][5] = yStart;
+					pokemonList[num][6] = yEnd;
 					newPokemonField.setText("");
 					refreshField();
 				}catch (NumberFormatException ex){
@@ -1223,7 +1228,9 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			}else if (e.getSource() == delPokemonBtn){
 				try{
 					int num = Integer.parseInt(newPokemonField.getText());
-					pokemonList[num] = false;
+					num = num - 1;
+					pokemonList[num][0] = 0;
+					
 					newPokemonField.setText("");
 					refreshField();
 				}catch (NumberFormatException ex){

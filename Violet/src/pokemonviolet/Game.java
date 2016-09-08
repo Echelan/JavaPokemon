@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  *
@@ -42,6 +41,10 @@ public class Game implements Runnable{
 			 * Main data for Maps.
 			 */
 			public static ArrayList<List<String>> INFO_MAPS;
+			/**
+			 * Blank map data.
+			 */
+			public static List<String> INFO_BLANK_MAP;
 			/**
 			 * Amount of Maps in X.
 			 */
@@ -79,16 +82,30 @@ public class Game implements Runnable{
 		/**
 		 * Maps displayed.
 		 */
-		private static Map[][] displayedMaps;
+		public static Map[][] displayedMaps;
+		/**
+		 * Canvas size in X dimension.
+		 */
+		public static int SCREEN_SIZE_X;
+		/**
+		 * Canvas size in Y dimension.
+		 */
+		public static int SCREEN_SIZE_Y;
 	// </editor-fold>
 		
 	/**
 	 * Build game.
+	 * @param openID ID of window to open.
 	 */
-	public Game() {
+	public Game(String openID) {
 		
-		NUM_MAPS_X = 0;
-		NUM_MAPS_Y = 0;
+		NUM_MAPS_X = 3;
+		NUM_MAPS_Y = 3;
+		
+		SCREEN_SIZE_X = 592;
+		SCREEN_SIZE_Y = 469;
+		
+		displayedMaps = new Map[3][3];
 		
 		SplashWindow splash = new SplashWindow();
 
@@ -96,59 +113,136 @@ public class Game implements Runnable{
 		List<String> readInfoI = null;
 		List<String> readInfoM = null;
 		List<String> readInfoT = null;
+		List<String> readInfoB = null;
 		ArrayList<List<String>> readMap = new ArrayList();
 		
+		File archivo;
+		
 		try {
-			File archivo;
 			
 			archivo = new File("listPokemon.txt");
 			readInfoP = Files.readAllLines(archivo.toPath());
-
-			archivo = new File("listItems.txt");
-			readInfoI = Files.readAllLines(archivo.toPath());
-
-			archivo = new File("listMoves.txt");
-			readInfoM = Files.readAllLines(archivo.toPath());
-
-			archivo = new File("listTypes.txt");
-			readInfoT = Files.readAllLines(archivo.toPath());
-			
-			for (int x = 0; x < NUM_MAPS_X; x++) {
-				for (int y = 0; y < NUM_MAPS_Y; y++) {
-					archivo = new File("mapX"+x+"Y"+y+".txt");
-					List<String> temp = Files.readAllLines(archivo.toPath());
-					readMap.add(temp);
-				}
-			}
 			
 		} catch (IOException ex) {
 			System.err.println("Couldn't load files!");
 			System.exit(0);
 		}
 
+		try {
+			archivo = new File("listItems.txt");
+			readInfoI = Files.readAllLines(archivo.toPath());
+			
+		} catch (IOException ex) {
+			System.err.println("Couldn't load files!");
+			System.exit(0);
+		}
+
+		try {
+			archivo = new File("listMoves.txt");
+			readInfoM = Files.readAllLines(archivo.toPath());
+			
+		} catch (IOException ex) {
+			System.err.println("Couldn't load files!");
+			System.exit(0);
+		}
+
+		try {
+			archivo = new File("listTypes.txt");
+			readInfoT = Files.readAllLines(archivo.toPath());
+		} catch (IOException ex) {
+			System.err.println("Couldn't load files!");
+			System.exit(0);
+		}
+
+		try {
+			archivo = new File("mapBLANK.txt");
+			readInfoB = Files.readAllLines(archivo.toPath());
+		} catch (IOException ex) {
+			System.err.println("Couldn't load files!");
+			System.exit(0);
+		}
+			
+		
+		for (int y = 0; y < NUM_MAPS_Y; y++) {
+			for (int x = 0; x < NUM_MAPS_X; x++) {
+				List<String> temp = null;
+				try {
+					archivo = new File("mapX"+x+"Y"+y+".txt");
+					temp = Files.readAllLines(archivo.toPath());
+				} catch (IOException ex1) {
+				//	System.err.println("Couldn't load files!");
+					try {
+						archivo = new File("mapBLANK.txt");
+						temp = Files.readAllLines(archivo.toPath());
+					} catch (IOException ex2) {
+
+					}
+				}
+				readMap.add(temp);
+			}
+		}
+		
+
 		INFO_ITEMS = readInfoI;
 		INFO_POKEMON = readInfoP;
 		INFO_MOVES = readInfoM;
 		INFO_TYPES = readInfoT;
 		INFO_MAPS = readMap;
-		
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException ex) {
-		}
-		
-		splash.dispose();
+		INFO_BLANK_MAP = readInfoB;
 		
 		player = new Player ("Red","EEVEE");
 		player.addItem("POKEBALL",15);
 		
 		Thread playerThread = new Thread(player);
 		playerThread.start();
-			
+		
 	//	windowClassTest = new ClassTestWindow(javax.swing.JFrame.HIDE_ON_CLOSE,false);
 	//	windowMapBuilder = new MapBuilder(javax.swing.JFrame.HIDE_ON_CLOSE,false);
 	//	windowGame = new GameWindow(javax.swing.JFrame.HIDE_ON_CLOSE,false);
 		
+	
+		if (openID.compareTo("0") == 0){
+			new ClassTestWindow(javax.swing.JFrame.EXIT_ON_CLOSE,true);
+		}else{
+			Map.loadImages();
+		
+			int playerMapX, playerMapY;
+
+			playerMapX = ((int)Math.floor(player.getxTile()/Map.MAP_ROW_TILES))+1;
+			playerMapY = ((int)Math.floor(player.getyTile()/Map.MAP_ROW_TILES))+1;
+			
+			for (int j = playerMapY-1; j < playerMapY+2; j++) {
+				for (int i = playerMapX-1; i < playerMapX+2; i++) {
+					List<String> thisMapInfo;
+					
+					if (i<1 || i>NUM_MAPS_X || j<1 || j>NUM_MAPS_Y){
+						thisMapInfo = INFO_BLANK_MAP;
+					}else{
+						int mapID = ((j-1)*NUM_MAPS_X)+i-1;
+						thisMapInfo = INFO_MAPS.get(mapID);
+					}
+					
+					int mapIDx, mapIDy;
+					mapIDy = j-(playerMapY-2)-1;
+					mapIDx = i-(playerMapX-2)-1;
+					
+					int baseX, baseY;
+					baseX = (int)(((i-1)*Map.MAP_TOTAL_SIZE_X)-(Map.MAP_TOTAL_SIZE_X*(playerMapX/Map.MAP_ROW_TILES)));
+					baseY = (int)(((j-1)*Map.MAP_TOTAL_SIZE_Y)-(Map.MAP_TOTAL_SIZE_Y*(playerMapY/Map.MAP_ROW_TILES)));
+					
+					displayedMaps[mapIDx][mapIDy] = new Map(thisMapInfo, baseX, baseY);
+				}
+			}
+			
+			new GameWindow(javax.swing.JFrame.EXIT_ON_CLOSE,true);
+		}
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException ex) {
+		}
+		
+		splash.dispose();
 	}
 	
 	/**
@@ -169,6 +263,17 @@ public class Game implements Runnable{
 		return value;
 	}
 	*/
+	
+	@Override
+	public void run(){
+		
+	}
+		
+	public void movePlayer(){
+		
+	}
+	
+	/*
 	@Override
 	public void run() {
 		Scanner s = new Scanner(System.in);
@@ -246,5 +351,6 @@ public class Game implements Runnable{
 			
 		}
 	}
+	*/
 	
 }
