@@ -242,58 +242,62 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	}
 	
 	public void setOutBox(){
-		for (int i = xStart; i <= xEnd; i++) {
-			for (int j = yStart; j <= yEnd; j++) {
-				tile[i][j]=0;
-				if (i>xStart){
-					tile[i][j]=tile[i][j]+1;
-					if (i==xEnd){
+		if (xStart-xEnd != 0 && yStart-yEnd != 0){
+			for (int i = xStart; i <= xEnd; i++) {
+				for (int j = yStart; j <= yEnd; j++) {
+					tile[i][j]=0;
+					if (i>xStart){
 						tile[i][j]=tile[i][j]+1;
+						if (i==xEnd){
+							tile[i][j]=tile[i][j]+1;
+						}
 					}
-				}
-				if (j>yStart){
-					tile[i][j]=tile[i][j]+MAX_TILE_IN_SET_ROW;
-					if (j==yEnd){
+					if (j>yStart){
 						tile[i][j]=tile[i][j]+MAX_TILE_IN_SET_ROW;
+						if (j==yEnd){
+							tile[i][j]=tile[i][j]+MAX_TILE_IN_SET_ROW;
+						}
 					}
+					int xTile = getTileX(setT[i][j],tile[i][j]);
+					int yTile = getTileY(setT[i][j],tile[i][j]);
+					tileGridImage[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
+					tileGridLabel[i][j].setIcon(tileGridImage[i][j]);
 				}
-				int xTile = getTileX(setT[i][j],tile[i][j]);
-				int yTile = getTileY(setT[i][j],tile[i][j]);
-				tileGridImage[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
-				tileGridLabel[i][j].setIcon(tileGridImage[i][j]);
 			}
 		}
 	}
 	
 	public void setInBox(){
-		for (int i = xStart; i <= xEnd; i++) {
-			for (int j = yStart; j <= yEnd; j++) {
-				tile[i][j]=12;
-				if (i>xStart){
-					tile[i][j]=tile[i][j]-1;
-					if (i==xEnd){
+		if (xStart-xEnd != 0 && yStart-yEnd != 0){
+			for (int i = xStart; i <= xEnd; i++) {
+				for (int j = yStart; j <= yEnd; j++) {
+					tile[i][j]=12;
+					if (i>xStart){
 						tile[i][j]=tile[i][j]-1;
+						if (i==xEnd){
+							tile[i][j]=tile[i][j]-1;
+						}
 					}
-				}
-				if (j>yStart){
-					tile[i][j]=tile[i][j]-MAX_TILE_IN_SET_ROW;
-					if (j==yEnd){
+					if (j>yStart){
 						tile[i][j]=tile[i][j]-MAX_TILE_IN_SET_ROW;
+						if (j==yEnd){
+							tile[i][j]=tile[i][j]-MAX_TILE_IN_SET_ROW;
+						}
 					}
+					if (i == xStart && j == yStart){
+						tile[i][j]=8;
+					}else if (i == xStart && j == yEnd){
+						tile[i][j]=13;
+					}else if (i == xEnd && j == yStart){
+						tile[i][j]=9;
+					}else if (i == xEnd && j == yEnd){
+						tile[i][j]=14;
+					}
+					int xTile = getTileX(setT[i][j],tile[i][j]);
+					int yTile = getTileY(setT[i][j],tile[i][j]);
+					tileGridImage[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
+					tileGridLabel[i][j].setIcon(tileGridImage[i][j]);
 				}
-				if (i == xStart && j == yStart){
-					tile[i][j]=8;
-				}else if (i == xStart && j == yEnd){
-					tile[i][j]=13;
-				}else if (i == xEnd && j == yStart){
-					tile[i][j]=9;
-				}else if (i == xEnd && j == yEnd){
-					tile[i][j]=14;
-				}
-				int xTile = getTileX(setT[i][j],tile[i][j]);
-				int yTile = getTileY(setT[i][j],tile[i][j]);
-				tileGridImage[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
-				tileGridLabel[i][j].setIcon(tileGridImage[i][j]);
 			}
 		}
 	}

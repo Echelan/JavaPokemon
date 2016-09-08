@@ -7,6 +7,7 @@
  */
 package pokemonviolet;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -687,6 +688,27 @@ public final class Player implements Runnable {
 			} catch (InterruptedException ex) {
 			}
 		}
+	}
+	
+	public Image getCurFrameImage(){
+		Image frameImg = null;
+		
+		int xPlayerIMG = 0;
+		int yPlayerIMG = 0;
+		if (Game.player.getvDirection().compareTo("") != 0){
+			Game.player.setCurFrame(Game.player.getCurFrame()+1);
+			if (Game.player.isRunning()){
+				xPlayerIMG = xPlayerIMG + 60;
+			}
+		}
+
+		xPlayerIMG = xPlayerIMG + (Game.player.getCurFrame()*20);
+		yPlayerIMG = yPlayerIMG + (Game.player.getCurAnim()*20);
+			
+		frameImg = SPRITE_SHEET.getSubimage(xPlayerIMG, yPlayerIMG, 20, 20);
+		
+		
+		return frameImg;
 	}
 	
 	/**

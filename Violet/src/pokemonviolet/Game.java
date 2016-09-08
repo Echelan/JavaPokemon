@@ -206,33 +206,7 @@ public class Game implements Runnable{
 		}else{
 			Map.loadImages();
 		
-			int playerMapX, playerMapY;
-
-			playerMapX = ((int)Math.floor(player.getxTile()/Map.MAP_ROW_TILES))+1;
-			playerMapY = ((int)Math.floor(player.getyTile()/Map.MAP_ROW_TILES))+1;
-			
-			for (int j = playerMapY-1; j < playerMapY+2; j++) {
-				for (int i = playerMapX-1; i < playerMapX+2; i++) {
-					List<String> thisMapInfo;
-					
-					if (i<1 || i>NUM_MAPS_X || j<1 || j>NUM_MAPS_Y){
-						thisMapInfo = INFO_BLANK_MAP;
-					}else{
-						int mapID = ((j-1)*NUM_MAPS_X)+i-1;
-						thisMapInfo = INFO_MAPS.get(mapID);
-					}
-					
-					int mapIDx, mapIDy;
-					mapIDy = j-(playerMapY-2)-1;
-					mapIDx = i-(playerMapX-2)-1;
-					
-					int baseX, baseY;
-					baseX = (int)(((i-1)*Map.MAP_TOTAL_SIZE_X)-(Map.MAP_TOTAL_SIZE_X*(playerMapX/Map.MAP_ROW_TILES)));
-					baseY = (int)(((j-1)*Map.MAP_TOTAL_SIZE_Y)-(Map.MAP_TOTAL_SIZE_Y*(playerMapY/Map.MAP_ROW_TILES)));
-					
-					displayedMaps[mapIDx][mapIDy] = new Map(thisMapInfo, baseX, baseY);
-				}
-			}
+			setMaps();
 			
 			new GameWindow(javax.swing.JFrame.EXIT_ON_CLOSE,true);
 		}
@@ -243,6 +217,51 @@ public class Game implements Runnable{
 		}
 		
 		splash.dispose();
+	}
+	
+	private void setMaps(){
+		int playerMapX, playerMapY;
+
+		playerMapX = ((int)Math.floor(player.getxTile()/Map.MAP_ROW_TILES))+1;
+		playerMapY = ((int)Math.floor(player.getyTile()/Map.MAP_ROW_TILES))+1;
+
+		int playerXinMap, playerYinMap;
+
+		playerXinMap = player.getxTile()-((playerMapX-1)*Map.MAP_ROW_TILES);
+		playerYinMap = player.getyTile()-((playerMapY-1)*Map.MAP_ROW_TILES);
+
+		for (int j = playerMapY-1; j < playerMapY+2; j++) {
+			for (int i = playerMapX-1; i < playerMapX+2; i++) {
+				List<String> thisMapInfo;
+
+				if (i<1 || i>NUM_MAPS_X || j<1 || j>NUM_MAPS_Y){
+					thisMapInfo = INFO_BLANK_MAP;
+				}else{
+					int mapID = ((j-1)*NUM_MAPS_X)+i-1;
+					thisMapInfo = INFO_MAPS.get(mapID);
+				}
+
+				int mapIDx, mapIDy;
+				mapIDy = j-(playerMapY-2)-1;
+				mapIDx = i-(playerMapX-2)-1;
+
+				int baseX, baseY;
+				baseX = (int)((i-1)*Map.MAP_TOTAL_SIZE_X);
+				baseY = (int)((j-1)*Map.MAP_TOTAL_SIZE_Y);
+				
+				double percentX, percentY;
+				
+				percentX = (double)((double)playerXinMap/(double)Map.MAP_ROW_TILES);
+				percentY = (double)((double)playerYinMap/(double)Map.MAP_ROW_TILES);
+				
+				int displacementX, displacementY;
+				
+				displacementX = (int)(Map.MAP_TOTAL_SIZE_X*(percentX))+Map.MAP_TOTAL_SIZE_X-(int)(SCREEN_SIZE_X/2);
+				displacementY = (int)(Map.MAP_TOTAL_SIZE_Y*(percentY))+Map.MAP_TOTAL_SIZE_Y-(int)(SCREEN_SIZE_Y/2);
+				
+				displayedMaps[mapIDx][mapIDy] = new Map(thisMapInfo, baseX-displacementX, baseY-displacementY);
+			}
+		}
 	}
 	
 	/**

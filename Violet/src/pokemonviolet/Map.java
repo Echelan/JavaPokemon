@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import static pokemonviolet.MapBuilder.scale;
 
 
 /**
@@ -31,6 +32,12 @@ public class Map {
 		private static BufferedImage house;
 		private static BufferedImage objects;
 		private static BufferedImage shop;
+		private static BufferedImage house2;
+		private static BufferedImage house3;
+		private static BufferedImage wstone;
+		private static BufferedImage wstone2;
+		private static BufferedImage tree;
+		private static BufferedImage tree2;
 		private static BufferedImage[] objSets;
 	//</editor-fold>
 
@@ -38,20 +45,20 @@ public class Map {
 		private static int TILE_WIDTH = 16;
 		private static int TILE_HEIGHT = 16;
 
-		private static int MAX_TILE_IN_TILESET = 90;
-		private static int MAX_TILE_IN_TILESET_ROW = 15;
-		private static int MAX_SET_IN_TILESET = 6;
+		private static int MAX_TILE_IN_TILESET = 120;
+		private static int MAX_TILE_IN_TILESET_ROW = 20;
+		private static int MAX_SET_IN_TILESET = 8;
 		private static int MAX_TILE_IN_SET = 15;
 		private static int MAX_TILE_IN_SET_ROW = 5;
 		private static int MAX_TILE_IN_SET_COL = 3;
-		private static int MAX_SET_IN_TILE_SET_ROW = 3;
+		private static int MAX_SET_IN_TILE_SET_ROW = 4;
 		
 		public static int MAP_TOTAL_SIZE_X;
 		public static int MAP_TOTAL_SIZE_Y;
 
 		public static int MAP_ROW_TILES = 20;
 		
-		private static double MAP_MULT = 0.5;
+		private static double MAP_MULT = 2.0;
 	//</editor-fold>
 		
 	//<editor-fold defaultstate="collapsed" desc="Vars">
@@ -76,7 +83,19 @@ public class Map {
 			
 			house = ImageIO.read(new File("house.png"));
 			
-			objSets = new BufferedImage[] {objects,house,center,shop,gym};
+			tree = ImageIO.read(new File("tree.png"));
+			
+			tree2 = ImageIO.read(new File("tree2.png"));
+			
+			house2 = ImageIO.read(new File("house2.png"));
+			
+			house3 = ImageIO.read(new File("house3.png"));
+			
+			wstone = ImageIO.read(new File("wstone.png"));
+			
+			wstone2 = ImageIO.read(new File("wstone2.png"));
+			
+			objSets = new BufferedImage[] {objects,house,house2,house3,center,shop,gym,tree,tree2,wstone,wstone2};
 		}catch (IOException ex){
 		}
 		
@@ -100,9 +119,9 @@ public class Map {
 		if (info.get(1).compareTo("")!=0){
 			String[] list = info.get(1).split(";");
 			for (int i = 0; i < list.length; i++) {
-				int num = Integer.parseInt(list[i].split(":")[0]);
+				int num = Integer.parseInt(list[i].split(":")[1]);
 				num = num - 1;
-				String[] clusterFuck = list[i].split(":")[1].split(",");
+				String[] clusterFuck = list[i].split(":")[0].split(",");
 
 				pokemonInMap[num][0] = 1;
 
@@ -122,7 +141,6 @@ public class Map {
 		this.bounds = createMapBounds(info);
 	}
 	
-	
 	private BufferedImage createMapRegion(List<String> info){
 		BufferedImage mapRegion;
 		
@@ -138,10 +156,9 @@ public class Map {
 				int thistiletype = Integer.parseInt(thisrow[j].split("-")[1], 16);
 
 				xTile = getTileXinImage(thistileset,thistiletype);
-				yTile = getTileYinImage(thistileset,thistiletype);	
-
+				yTile = getTileYinImage(thistileset,thistiletype);
+				
 				g.drawImage( tileset.getSubimage(xTile, yTile, TILE_WIDTH, TILE_HEIGHT), (int)(i*TILE_WIDTH*MAP_MULT), (int)(j*TILE_HEIGHT*MAP_MULT), (int)(TILE_WIDTH*MAP_MULT), (int)(TILE_HEIGHT*MAP_MULT), null);
-
 
 				int thisobjset = Integer.parseInt(thisrow[j].split("-")[2], 16);
 				int thisobjtype = Integer.parseInt(thisrow[j].split("-")[3], 16);
@@ -149,7 +166,7 @@ public class Map {
 				xTile = getObjXinImage(thisobjset,thisobjtype);
 				yTile = getObjYinImage(thisobjset,thisobjtype);	
 
-				g.drawImage( objSets[thisobjset].getSubimage(xTile, yTile, TILE_WIDTH, TILE_HEIGHT), (int)(i*MAP_MULT*TILE_WIDTH), (int)(j*MAP_MULT*TILE_HEIGHT),(int)(TILE_WIDTH*2), (int)(TILE_HEIGHT*MAP_MULT), null);
+				g.drawImage( objSets[thisobjset].getSubimage(xTile, yTile, TILE_WIDTH, TILE_HEIGHT), (int)(i*MAP_MULT*TILE_WIDTH*MAP_MULT), (int)(j*MAP_MULT*TILE_HEIGHT*MAP_MULT),(int)(TILE_WIDTH*MAP_MULT), (int)(TILE_HEIGHT*MAP_MULT), null);
 			}
 		}
 
@@ -202,36 +219,44 @@ public class Map {
 		return bounds;
 	}
 	
-	private static int getTileXinImage(int setinfo, int tileinfo){
+	public static int getTileXinImage(int setinfo, int tileinfo){
 		int regX = (int)(Math.floor((double)tileinfo%MAX_TILE_IN_SET_ROW)*TILE_WIDTH);
 		int specialX = (int)(Math.floor((double)setinfo%MAX_SET_IN_TILE_SET_ROW)*(TILE_WIDTH*MAX_TILE_IN_SET_ROW));
 		
+	//	System.out.println("X: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialX+", TILE: "+regX+") = "+(regX+specialX));
 		
 		return regX+specialX;
 	}
 	
-	private static int getTileYinImage(int setinfo, int tileinfo){
+	public static int getTileYinImage(int setinfo, int tileinfo){
 		int regY = (int)(Math.floor((double)tileinfo/MAX_TILE_IN_SET_ROW)*TILE_HEIGHT);
 		int specialY = (int)(Math.floor((double)setinfo/MAX_SET_IN_TILE_SET_ROW)*(TILE_HEIGHT*MAX_TILE_IN_SET_COL));
 		
+	//	System.out.println("Y: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialY+", TILE: "+regY+") = "+(regY+specialY));
 		
 		return regY+specialY;
 	}
 	
-	private static int getObjXinImage(int setinfo, int tileinfo){
+	public static int getObjXinImage(int setinfo, int tileinfo){
 		int maxtileinsetrow = (objSets[setinfo].getWidth()/TILE_WIDTH);
 		int regX = (int)(Math.floor((double)tileinfo%maxtileinsetrow)*TILE_WIDTH);
+	//	int specialX = (int)(Math.floor((double)setinfo%MAXSETINTILESETROW)*(TILERESIZEDWIDTH*MAXTILEINSETROW));
+		
+	//	System.out.println("X: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialX+", TILE: "+regX+") = "+(regX+specialX));
 		
 		return regX;
 	}
 	
-	private static int getObjYinImage(int setinfo, int tileinfo){
+	public static int getObjYinImage(int setinfo, int tileinfo){
 		int maxtileinsetrow = (objSets[setinfo].getWidth()/TILE_WIDTH);
 		int regY = (int)(Math.floor((double)tileinfo/maxtileinsetrow)*TILE_HEIGHT);
+	//	int specialY = (int)(Math.floor((double)setinfo/MAXSETINTILESETROW)*(TILERESIZEDHEIGHT*MAXTILEINSETCOL));
+		
+	//	System.out.println("Y: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialY+", TILE: "+regY+") = "+(regY+specialY));
 		
 		return regY;
 	}
-
+	
 	/**
 	 * @return the x
 	 */

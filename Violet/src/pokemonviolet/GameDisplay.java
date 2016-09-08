@@ -50,31 +50,31 @@ public class GameDisplay extends Canvas implements Runnable {
 	
 	public static boolean getCanMove(String direction){
 		boolean canMove = false;
-		/*
+		
 		switch (direction){
 			case "LEFT":
-				if (bounds[Game.player.getxTile()-1][Game.player.getyTile()].substring(0, 1).compareTo("0")==0){
+				if (Game.displayedMaps[1][1].getBounds()[Game.player.getxTile()-1][Game.player.getyTile()].substring(0, 1).compareTo("0")==0){
 					canMove = true;
 				}
 			break;
 			case "RIGHT":
-				if (bounds[Game.player.getxTile()+1][Game.player.getyTile()].substring(0, 1).compareTo("0")==0){
+				if (Game.displayedMaps[1][1].getBounds()[Game.player.getxTile()+1][Game.player.getyTile()].substring(0, 1).compareTo("0")==0){
 					canMove = true;
 				}
 			break;
 			case "UP":
-				if (bounds[Game.player.getxTile()][Game.player.getyTile()-1].substring(0, 1).compareTo("0")==0){
+				if (Game.displayedMaps[1][1].getBounds()[Game.player.getxTile()][Game.player.getyTile()-1].substring(0, 1).compareTo("0")==0){
 					canMove = true;
 				}
 			break;
 			case "DOWN":
-				if (bounds[Game.player.getxTile()][Game.player.getyTile()+1].substring(0, 1).compareTo("0")==0){
+				if (Game.displayedMaps[1][1].getBounds()[Game.player.getxTile()][Game.player.getyTile()+1].substring(0, 1).compareTo("0")==0){
 					canMove = true;
 				}
 			break;
 		}
 		
-	*/
+	
 		return canMove;
 	}
 	
@@ -102,13 +102,14 @@ public class GameDisplay extends Canvas implements Runnable {
 				g.drawImage(Game.displayedMaps[i][j].getImage(), Game.displayedMaps[i][j].getX(), Game.displayedMaps[i][j].getY(), this);
 			}
 		}
-			
+		g.drawImage(Game.player.getCurFrameImage(), this.getWidth()/2, this.getHeight()/2,(int)(Game.player.SPRITE_X*Game.player.SPRITE_RESIZE),(int)(Game.player.SPRITE_Y*Game.player.SPRITE_RESIZE), this);
 	}
 	
     @Override
     public void run() {
         while (true){
 			requestFocus();
+/*
 			
 			int xPlayerIMG = 0;
 			int yPlayerIMG = 0;
@@ -122,15 +123,12 @@ public class GameDisplay extends Canvas implements Runnable {
 
 			xPlayerIMG = xPlayerIMG + (Game.player.getCurFrame()*20);
 			yPlayerIMG = yPlayerIMG + (Game.player.getCurAnim()*20);
-/*
 			currentPlayerFrame = Game.player.SPRITE_SHEET.getSubimage(xPlayerIMG, yPlayerIMG, 20, 20);
 
-			repaint((int)(Game.player.getX()-(Game.player.SPRITE_X*Game.player.SPRITE_RESIZE)),
-					(int)(Game.player.getY()-(Game.player.SPRITE_Y*Game.player.SPRITE_RESIZE)),
-					(int)(Game.player.SPRITE_X*3*Game.player.SPRITE_RESIZE),
-					(int)(Game.player.SPRITE_Y*3*Game.player.SPRITE_RESIZE)
 				);
            */
+
+			repaint();
 			try {
 				Thread.sleep(60);
 			} catch (InterruptedException ex) {
