@@ -193,8 +193,8 @@ public class Game implements Runnable{
 		player = new Player ("Red","EEVEE");
 		player.addItem("POKEBALL",15);
 		
-		Thread playerThread = new Thread(player);
-		playerThread.start();
+	//	Thread playerThread = new Thread(player);
+	//	playerThread.start();
 		
 	//	windowClassTest = new ClassTestWindow(javax.swing.JFrame.HIDE_ON_CLOSE,false);
 	//	windowMapBuilder = new MapBuilder(javax.swing.JFrame.HIDE_ON_CLOSE,false);
@@ -225,11 +225,6 @@ public class Game implements Runnable{
 		playerMapX = ((int)Math.floor(player.getxTile()/Map.MAP_ROW_TILES))+1;
 		playerMapY = ((int)Math.floor(player.getyTile()/Map.MAP_ROW_TILES))+1;
 
-		int playerXinMap, playerYinMap;
-
-		playerXinMap = player.getxTile()-((playerMapX-1)*Map.MAP_ROW_TILES);
-		playerYinMap = player.getyTile()-((playerMapY-1)*Map.MAP_ROW_TILES);
-
 		for (int j = playerMapY-1; j < playerMapY+2; j++) {
 			for (int i = playerMapX-1; i < playerMapX+2; i++) {
 				List<String> thisMapInfo;
@@ -244,132 +239,127 @@ public class Game implements Runnable{
 				int mapIDx, mapIDy;
 				mapIDy = j-(playerMapY-2)-1;
 				mapIDx = i-(playerMapX-2)-1;
-
-				int baseX, baseY;
-				baseX = (int)((i-1)*Map.MAP_TOTAL_SIZE_X);
-				baseY = (int)((j-1)*Map.MAP_TOTAL_SIZE_Y);
 				
-				double percentX, percentY;
-				
-				percentX = (double)((double)playerXinMap/(double)Map.MAP_ROW_TILES);
-				percentY = (double)((double)playerYinMap/(double)Map.MAP_ROW_TILES);
-				
-				int displacementX, displacementY;
-				
-				displacementX = (int)(Map.MAP_TOTAL_SIZE_X*(percentX))+Map.MAP_TOTAL_SIZE_X-(int)(SCREEN_SIZE_X/2);
-				displacementY = (int)(Map.MAP_TOTAL_SIZE_Y*(percentY))+Map.MAP_TOTAL_SIZE_Y-(int)(SCREEN_SIZE_Y/2);
-				
-				displayedMaps[mapIDx][mapIDy] = new Map(thisMapInfo, baseX-displacementX, baseY-displacementY);
+				displayedMaps[mapIDx][mapIDy] = new Map(thisMapInfo,player.getxTile(),player.getyTile());
+			}
+		}
+	}
+		
+	@Override
+	public void run(){
+		for (int i = 0; i < displayedMaps.length; i++) {
+			for (int j = 0; j < displayedMaps[i].length; j++) {
+				move(displayedMaps[i][j]);
 			}
 		}
 	}
 	
-	/**
-	 * Roll given amount of dice with given amount of sides with a starting base value.
-	 * @param value Starting base value.
-	 * @param numDice Number of dice to roll.
-	 * @param numSides Number of sides per die.
-	 * @return Resulting value.
-	 */
-	/*
-	public static int roll(int value, int numDice, int numSides){
-		Random rnd = new Random();
-
-		for (int i = 0; i < numDice; i++) {
-		  value = value + (rnd.nextInt(numSides)+1);
+	public boolean getCanMove(String direction){
+		boolean canMove = false;
+		
+		switch (direction){
+			case "LEFT":
+				if (Game.displayedMaps[1][1].getBounds()[Game.player.getxTile()-1][Game.player.getyTile()].substring(0, 1).compareTo("0")==0){
+					canMove = true;
+				}
+			break;
+			case "RIGHT":
+				if (Game.displayedMaps[1][1].getBounds()[Game.player.getxTile()+1][Game.player.getyTile()].substring(0, 1).compareTo("0")==0){
+					canMove = true;
+				}
+			break;
+			case "UP":
+				if (Game.displayedMaps[1][1].getBounds()[Game.player.getxTile()][Game.player.getyTile()-1].substring(0, 1).compareTo("0")==0){
+					canMove = true;
+				}
+			break;
+			case "DOWN":
+				if (Game.displayedMaps[1][1].getBounds()[Game.player.getxTile()][Game.player.getyTile()+1].substring(0, 1).compareTo("0")==0){
+					canMove = true;
+				}
+			break;
 		}
 		
-		return value;
-	}
-	*/
 	
-	@Override
-	public void run(){
+		return canMove;
+	}
+	
+	public void move(Map map){
+				
+		int diff = player.MOVE_POS/2;
+		
+		int baseX, baseY;
+		
+		baseX = map.calcX(player.getxTile());
+		baseY = map.calcY(player.getxTile());
+		
+		if (map.getX() == baseX && map.getY() == baseY){
+			switch (player.getDirection()){
+				case "LEFT":
+					if (getCanMove(player.getDirection())){
+						player.setxTile(player.getxTile()-1);
+					}
+				break;
+				case "RIGHT":
+					if (getCanMove(player.getDirection())){
+						player.setxTile(player.getxTile()+1);
+					}
+				break;
+				case "UP":
+					if (getCanMove(player.getDirection())){
+						player.setyTile(player.getyTile()-1);
+					}
+				break;
+				case "DOWN":
+					if (getCanMove(player.getDirection())){
+						player.setyTile(player.getyTile()+1);
+					}
+				break;
+			}
+		}else{
+			int amount = player.MOVE_POS;
+			if (player.isRunning()){
+				amount = (int)(amount * player.RUN_MULT);
+			}
+			
+			switch (player.getvDirection()){
+				case "LEFT":
+					if (Math.abs(baseX-map.getX()) >= amount){
+						map.setX(map.getX() - amount);
+					}else{
+						map.setX(baseX);
+					}
+				break;
+				case "RIGHT":
+					if (Math.abs(baseX-map.getX()) >= amount){
+						map.setX(map.getX() + amount);
+					}else{
+						map.setX(baseX);
+					}
+				break;
+				case "UP":
+					if (Math.abs(baseY-map.getY()) >= amount){
+						map.setY(map.getY() - amount);
+					}else{
+						map.setY(baseY);
+					}
+				break;
+				case "DOWN":
+					if (Math.abs(baseY-map.getY()) >= amount){
+						map.setY(map.getY() - amount);
+					}else{
+						map.setY(baseY);
+					}
+				break;
+			}
+			
+		}
 		
 	}
-		
+	
 	public void movePlayer(){
 		
 	}
 	
-	/*
-	@Override
-	public void run() {
-		Scanner s = new Scanner(System.in);
-		System.out.println("1-ClassTest; 2-Game; 4-MapBuilder");
-		while(true){
-			String input = s.next();
-			try{
-				int convertedInput = Integer.parseInt(input);
-				switch(convertedInput){
-					case 1:
-					//	classTestWindow=new ClassTestWindow();
-					//	new ClassTestWindow();
-						new ClassTestWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
-					//	windowClassTest.setVisible(true);
-					break;
-					case 2:
-					//	gameWindow=new GameWindow();
-					//	new GameWindow();
-						new GameWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
-					//	windowGame.setVisible(true);
-					break;
-					case 3:
-					//	classTestWindow=new ClassTestWindow();
-					//	new ClassTestWindow();
-						new ClassTestWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
-					//	windowClassTest.setVisible(true);
-					//	gameWindow=new GameWindow();
-					//	new GameWindow();
-						new GameWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
-					//	windowGame.setVisible(true);
-					break;
-					case 4:
-					//	new MapBuilder();
-					//	windowMapBuilder.setVisible(true);
-						new MapBuilder(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
-					break;
-					case 5:
-					//	new MapBuilder();
-					//	windowMapBuilder.setVisible(true);
-						new MapBuilder(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
-					//	classTestWindow=new ClassTestWindow();
-					//	new ClassTestWindow();
-						new ClassTestWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
-					//	windowClassTest.setVisible(true);
-					break;
-					case 6:
-					//	new MapBuilder();
-					//	windowMapBuilder.setVisible(true);
-						new MapBuilder(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
-					//	gameWindow=new GameWindow();
-					//	new GameWindow();
-						new GameWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
-					//	windowGame.setVisible(true);
-					break;
-					case 7:
-					//	classTestWindow=new ClassTestWindow();
-					//	gameWindow=new GameWindow();
-					//	new ClassTestWindow();
-						new ClassTestWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
-					//	windowClassTest.setVisible(true);
-					//	new GameWindow();
-						new GameWindow(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
-					//	windowGame.setVisible(true);
-					//	new MapBuilder();
-						new MapBuilder(javax.swing.JFrame.DISPOSE_ON_CLOSE,true);
-					//	windowMapBuilder.setVisible(true);
-					break;
-					default:
-						System.exit(0);
-					break;
-				}
-			}catch (NumberFormatException ex){
-				
-			}
-			
-		}
-	}
-	*/
 	
 }

@@ -26,11 +26,11 @@ public final class Player implements Runnable {
 			/**
 			 * Position change interval.
 			 */
-			private static int MOVE_POS = 5;
+			public static int MOVE_POS = 5;
 			/**
 			 * Running multiplier.
 			 */
-			private static double RUN_MULT = 2.0;
+			public static double RUN_MULT = 2.0;
 		//</editor-fold>
 		// <editor-fold defaultstate="collapsed" desc="General">
 			/**
@@ -247,8 +247,8 @@ public final class Player implements Runnable {
 		this.maxFrames = 3;
 		this.setCurFrame(1);
 		this.curAnim = 0;
-		this.xTile=30;
-		this.yTile=30;
+		this.setxTile(30);
+		this.setyTile(30);
 	}
 	
 	/**
@@ -695,106 +695,23 @@ public final class Player implements Runnable {
 		
 		int xPlayerIMG = 0;
 		int yPlayerIMG = 0;
-		if (Game.player.getvDirection().compareTo("") != 0){
-			Game.player.setCurFrame(Game.player.getCurFrame()+1);
-			if (Game.player.isRunning()){
+		if (getvDirection().compareTo("") != 0){
+			setCurFrame(getCurFrame()+1);
+			if (isRunning()){
 				xPlayerIMG = xPlayerIMG + 60;
 			}
 		}
 
-		xPlayerIMG = xPlayerIMG + (Game.player.getCurFrame()*20);
-		yPlayerIMG = yPlayerIMG + (Game.player.getCurAnim()*20);
+		xPlayerIMG = xPlayerIMG + (getCurFrame()*20);
+		yPlayerIMG = yPlayerIMG + (getCurAnim()*20);
 			
 		frameImg = SPRITE_SHEET.getSubimage(xPlayerIMG, yPlayerIMG, 20, 20);
-		
+		System.out.println(getvDirection());
+		System.out.println(xPlayerIMG+","+yPlayerIMG);
 		
 		return frameImg;
 	}
-	
-	/**
-	 * Move Player coordinates.
-	 */
-	/*
-	public void move(){
-		int baseX, baseY, diff;
-		baseX =(int)(getxTile()*(SPRITE_X*SPRITE_RESIZE));
-		baseY =(int)(getyTile()*(SPRITE_Y*SPRITE_RESIZE));
-		diff = MOVE_POS/2;
 		
-		if (x == baseX && y == baseY){
-			switch (getDirection()){
-				case "LEFT":
-					setvDirection(getDirection());
-					if (GameDisplay.getCanMove(getDirection())){
-						xTile = (getxTile()-1);
-					}
-				break;
-				case "RIGHT":
-					setvDirection(getDirection());
-					if (GameDisplay.getCanMove(getDirection())){
-						xTile = (getxTile()+1);
-					}
-				break;
-				case "UP":
-					setvDirection(getDirection());
-					if (GameDisplay.getCanMove(getDirection())){
-						yTile = (getyTile()-1);
-					}
-				break;
-				case "DOWN":
-					setvDirection(getDirection());
-					if (GameDisplay.getCanMove(getDirection())){
-						yTile = (getyTile()+1);
-					}
-				break;
-				default:
-					setvDirection(getDirection());
-				break;
-			}
-		}else{
-			int amount = MOVE_POS;
-			if (isRunning()){
-				amount = (int)(amount * RUN_MULT);
-			}
-			
-			switch (getvDirection()){
-				case "LEFT":
-					if (Math.abs(baseX-x) >= amount){
-						x = getX() - amount;
-					}else{
-						x = baseX;
-					}
-				break;
-				case "RIGHT":
-					if (Math.abs(baseX-x) >= amount){
-						x = getX() + amount;
-					}else{
-						x = baseX;
-					}
-				break;
-				case "UP":
-					if (Math.abs(baseY-y) >= amount){
-						y = getY() - amount;
-					}else{
-						y = baseY;
-					}
-				break;
-				case "DOWN":
-					if (Math.abs(baseY-y) >= amount){
-						y = getY() + amount;
-					}else{
-						y = baseY;
-					}
-				break;
-			}
-			
-		}
-		
-		//refreshTileZ();
-		
-	}
-	*/
-	
 	public static int roll(int value, int numDice, int numSides){
 		Random rnd = new Random();
 
@@ -984,5 +901,19 @@ public final class Player implements Runnable {
 			this.spawnSteps = spawnSteps;
 		}
 	//</editor-fold>
+
+	/**
+	 * @param xTile the xTile to set
+	 */
+	public void setxTile(int xTile) {
+		this.xTile = xTile;
+	}
+
+	/**
+	 * @param yTile the yTile to set
+	 */
+	public void setyTile(int yTile) {
+		this.yTile = yTile;
+	}
 
 }

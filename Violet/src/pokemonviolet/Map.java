@@ -106,11 +106,11 @@ public class Map {
 	public Map(List<String> info, int x, int y) {
 		pokemonInMap = new int[151][7];
 		
-		this.x = x;
-		this.y = y;
-		
 		this.xMap = Integer.parseInt(info.get(0).split(";")[0]);
 		this.yMap = Integer.parseInt(info.get(0).split(";")[1]);
+		
+		this.x = calcX(x);
+		this.y = calcY(y);
 		
 		for (int i = 0; i < pokemonInMap.length; i++) {
 			pokemonInMap[i][0] = 0;
@@ -140,7 +140,7 @@ public class Map {
 		this.image = createMapRegion(info);
 		this.bounds = createMapBounds(info);
 	}
-	
+		
 	private BufferedImage createMapRegion(List<String> info){
 		BufferedImage mapRegion;
 		
@@ -278,6 +278,41 @@ public class Map {
 		return y;
 	}
 
+	public int calcX(int xTile){
+		int playerMapX,playerXinMap,baseX,displacementX;
+		double percentX;
+
+		playerMapX = ((int)Math.floor(xTile/Map.MAP_ROW_TILES))+1;
+
+		playerXinMap = xTile-((playerMapX-1)*Map.MAP_ROW_TILES);
+		
+		baseX = (int)((getxMap()-1)*Map.MAP_TOTAL_SIZE_X);
+
+		percentX = (double)((double)playerXinMap/(double)Map.MAP_ROW_TILES);
+
+		displacementX = (int)(Map.MAP_TOTAL_SIZE_X*(percentX))+Map.MAP_TOTAL_SIZE_X-(int)(Game.SCREEN_SIZE_X/2);
+		
+		return (baseX-displacementX);
+	}
+	
+	public int calcY(int yTile){
+		int playerMapY,playerYinMap,baseY,displacementY;
+		double percentY;
+
+		playerMapY = ((int)Math.floor(yTile/Map.MAP_ROW_TILES))+1;
+
+		playerYinMap = yTile-((playerMapY-1)*Map.MAP_ROW_TILES);
+		
+		baseY = (int)((getyMap()-1)*Map.MAP_TOTAL_SIZE_Y);
+
+		percentY = (double)((double)playerYinMap/(double)Map.MAP_ROW_TILES);
+
+		displacementY = (int)(Map.MAP_TOTAL_SIZE_Y*(percentY))+Map.MAP_TOTAL_SIZE_Y-(int)(Game.SCREEN_SIZE_Y/2);
+		
+		return (baseY-displacementY);
+		
+	}
+	
 	/**
 	 * @param y the y to set
 	 */
@@ -304,6 +339,20 @@ public class Map {
 	 */
 	public int[][] getPokemonInMap() {
 		return pokemonInMap;
+	}
+
+	/**
+	 * @return the xMap
+	 */
+	public int getxMap() {
+		return xMap;
+	}
+
+	/**
+	 * @return the yMap
+	 */
+	public int getyMap() {
+		return yMap;
 	}
 	
 	
