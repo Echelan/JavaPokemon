@@ -99,8 +99,8 @@ public class Game implements Runnable{
 	 */
 	public Game(String openID) {
 		
-		NUM_MAPS_X = 3;
-		NUM_MAPS_Y = 3;
+		NUM_MAPS_X = 4;
+		NUM_MAPS_Y = 4;
 		
 		SCREEN_SIZE_X = 592;
 		SCREEN_SIZE_Y = 469;
@@ -170,19 +170,12 @@ public class Game implements Runnable{
 					archivo = new File("mapX"+x+"Y"+y+".txt");
 					temp = Files.readAllLines(archivo.toPath());
 				} catch (IOException ex1) {
-				//	System.err.println("Couldn't load files!");
-					try {
-						archivo = new File("mapBLANK.txt");
-						temp = Files.readAllLines(archivo.toPath());
-					} catch (IOException ex2) {
-
-					}
+					temp = readInfoB;
 				}
 				readMap.add(temp);
 			}
 		}
 		
-
 		INFO_ITEMS = readInfoI;
 		INFO_POKEMON = readInfoP;
 		INFO_MOVES = readInfoM;
@@ -230,10 +223,15 @@ public class Game implements Runnable{
 				List<String> thisMapInfo;
 
 				if (i<1 || i>NUM_MAPS_X || j<1 || j>NUM_MAPS_Y){
-					thisMapInfo = INFO_BLANK_MAP;
+					thisMapInfo = new ArrayList<String>(INFO_BLANK_MAP);
 				}else{
-					int mapID = ((j-1)*NUM_MAPS_X)+i-1;
-					thisMapInfo = INFO_MAPS.get(mapID);
+					int mapID = ((j)*NUM_MAPS_X)+i;
+					thisMapInfo = new ArrayList<String>(INFO_MAPS.get(mapID));
+					System.out.println(i+","+j);
+				}
+				if (thisMapInfo.get(0).split(";")[0].compareTo("#")==0){
+					thisMapInfo.remove(0);
+					thisMapInfo.add(0,i+";"+j);
 				}
 
 				int mapIDx, mapIDy;
@@ -247,9 +245,18 @@ public class Game implements Runnable{
 		
 	@Override
 	public void run(){
-		for (int i = 0; i < displayedMaps.length; i++) {
-			for (int j = 0; j < displayedMaps[i].length; j++) {
-				move(displayedMaps[i][j]);
+		while(true){
+		//	//System.out.println(player.getxTile()+","+player.getyTile());
+			
+			for (int i = 0; i < displayedMaps.length; i++) {
+				for (int j = 0; j < displayedMaps[i].length; j++) {
+					move(displayedMaps[i][j]);
+				}
+			}
+		
+			try {
+				Thread.sleep(80);
+			} catch (InterruptedException ex) {
 			}
 		}
 	}
@@ -259,35 +266,38 @@ public class Game implements Runnable{
 		
 		switch (direction){
 			case "LEFT":
-				if (Game.displayedMaps[1][1].getBounds()[Game.player.getxTile()-1][Game.player.getyTile()].substring(0, 1).compareTo("0")==0){
+				if (Game.displayedMaps[1][1].getBounds()[Game.player.calcXinMap()-1][Game.player.calcYinMap()].substring(0, 1).compareTo("0")==0){
 					canMove = true;
 				}
 			break;
 			case "RIGHT":
-				if (Game.displayedMaps[1][1].getBounds()[Game.player.getxTile()+1][Game.player.getyTile()].substring(0, 1).compareTo("0")==0){
+				if (Game.displayedMaps[1][1].getBounds()[Game.player.calcXinMap()+1][Game.player.calcYinMap()].substring(0, 1).compareTo("0")==0){
 					canMove = true;
 				}
 			break;
 			case "UP":
-				if (Game.displayedMaps[1][1].getBounds()[Game.player.getxTile()][Game.player.getyTile()-1].substring(0, 1).compareTo("0")==0){
+				if (Game.displayedMaps[1][1].getBounds()[Game.player.calcXinMap()][Game.player.calcYinMap()-1].substring(0, 1).compareTo("0")==0){
 					canMove = true;
 				}
 			break;
 			case "DOWN":
-				if (Game.displayedMaps[1][1].getBounds()[Game.player.getxTile()][Game.player.getyTile()+1].substring(0, 1).compareTo("0")==0){
+				if (Game.displayedMaps[1][1].getBounds()[Game.player.calcXinMap()][Game.player.calcYinMap()+1].substring(0, 1).compareTo("0")==0){
 					canMove = true;
 				}
 			break;
 		}
-		
-	
+		/*
+		if (!canMove){
+			System.out.println("Player is in map coordinates:");
+			System.out.println(Game.player.calcXinMap()+","+Game.player.calcYinMap());
+			System.out.println("Moving "+direction);
+			System.out.println("But he's blocked.");
+		}
+		*/
 		return canMove;
 	}
 	
-	public void move(Map map){
-				
-		int diff = player.MOVE_POS/2;
-		
+	public void move(Map map){		
 		int baseX, baseY;
 		
 		baseX = map.calcX(player.getxTile());
@@ -298,21 +308,29 @@ public class Game implements Runnable{
 				case "LEFT":
 					if (getCanMove(player.getDirection())){
 						player.setxTile(player.getxTile()-1);
+					}else{
+						player.setDirection("");
 					}
 				break;
 				case "RIGHT":
 					if (getCanMove(player.getDirection())){
 						player.setxTile(player.getxTile()+1);
+					}else{
+						player.setDirection("");
 					}
 				break;
 				case "UP":
 					if (getCanMove(player.getDirection())){
 						player.setyTile(player.getyTile()-1);
+					}else{
+						player.setDirection("");
 					}
 				break;
 				case "DOWN":
 					if (getCanMove(player.getDirection())){
 						player.setyTile(player.getyTile()+1);
+					}else{
+						player.setDirection("");
 					}
 				break;
 			}
@@ -321,27 +339,30 @@ public class Game implements Runnable{
 			if (player.isRunning()){
 				amount = (int)(amount * player.RUN_MULT);
 			}
-			
+						
 			switch (player.getvDirection()){
 				case "LEFT":
-					if (Math.abs(baseX-map.getX()) >= amount){
-						map.setX(map.getX() - amount);
-					}else{
-						map.setX(baseX);
-					}
-				break;
-				case "RIGHT":
 					if (Math.abs(baseX-map.getX()) >= amount){
 						map.setX(map.getX() + amount);
 					}else{
 						map.setX(baseX);
+						player.setvDirection("");
+					}
+				break;
+				case "RIGHT":
+					if (Math.abs(baseX-map.getX()) >= amount){
+						map.setX(map.getX() - amount);
+					}else{
+						map.setX(baseX);
+						player.setvDirection("");
 					}
 				break;
 				case "UP":
 					if (Math.abs(baseY-map.getY()) >= amount){
-						map.setY(map.getY() - amount);
+						map.setY(map.getY() + amount);
 					}else{
 						map.setY(baseY);
+						player.setvDirection("");
 					}
 				break;
 				case "DOWN":
@@ -349,15 +370,12 @@ public class Game implements Runnable{
 						map.setY(map.getY() - amount);
 					}else{
 						map.setY(baseY);
+						player.setvDirection("");
 					}
 				break;
 			}
 			
 		}
-		
-	}
-	
-	public void movePlayer(){
 		
 	}
 	

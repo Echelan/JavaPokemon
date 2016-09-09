@@ -26,7 +26,7 @@ public final class Player implements Runnable {
 			/**
 			 * Position change interval.
 			 */
-			public static int MOVE_POS = 5;
+			public static int MOVE_POS = 7;
 			/**
 			 * Running multiplier.
 			 */
@@ -677,6 +677,22 @@ public final class Player implements Runnable {
 			return success;
 		}
 	//</editor-fold>
+	
+	public int calcXinMap(){
+		int playerMapX, playerXinMap;
+		playerMapX = ((int)Math.floor(xTile/Map.MAP_ROW_TILES))+1;
+		playerXinMap = xTile-((playerMapX-1)*Map.MAP_ROW_TILES);
+		
+		return playerXinMap;
+	}
+	
+	public int calcYinMap(){
+		int playerMapY, playerYinMap;
+		playerMapY = ((int)Math.floor(yTile/Map.MAP_ROW_TILES))+1;
+		playerYinMap = yTile-((playerMapY-1)*Map.MAP_ROW_TILES);
+		
+		return playerYinMap;
+	}
 		
 	@Override
 	public void run() {
@@ -706,8 +722,6 @@ public final class Player implements Runnable {
 		yPlayerIMG = yPlayerIMG + (getCurAnim()*20);
 			
 		frameImg = SPRITE_SHEET.getSubimage(xPlayerIMG, yPlayerIMG, 20, 20);
-		System.out.println(getvDirection());
-		System.out.println(xPlayerIMG+","+yPlayerIMG);
 		
 		return frameImg;
 	}

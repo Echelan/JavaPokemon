@@ -138,6 +138,7 @@ public class Map {
 		info.remove(0);
 		
 		this.image = createMapRegion(info);
+		
 		this.bounds = createMapBounds(info);
 	}
 		
@@ -166,7 +167,7 @@ public class Map {
 				xTile = getObjXinImage(thisobjset,thisobjtype);
 				yTile = getObjYinImage(thisobjset,thisobjtype);	
 
-				g.drawImage( objSets[thisobjset].getSubimage(xTile, yTile, TILE_WIDTH, TILE_HEIGHT), (int)(i*MAP_MULT*TILE_WIDTH*MAP_MULT), (int)(j*MAP_MULT*TILE_HEIGHT*MAP_MULT),(int)(TILE_WIDTH*MAP_MULT), (int)(TILE_HEIGHT*MAP_MULT), null);
+				g.drawImage( objSets[thisobjset].getSubimage(xTile, yTile, TILE_WIDTH, TILE_HEIGHT), (int)(i*TILE_WIDTH*MAP_MULT), (int)(j*TILE_HEIGHT*MAP_MULT),(int)(TILE_WIDTH*MAP_MULT), (int)(TILE_HEIGHT*MAP_MULT), null);
 			}
 		}
 
@@ -283,13 +284,11 @@ public class Map {
 		double percentX;
 
 		playerMapX = ((int)Math.floor(xTile/Map.MAP_ROW_TILES))+1;
-
 		playerXinMap = xTile-((playerMapX-1)*Map.MAP_ROW_TILES);
 		
 		baseX = (int)((getxMap()-1)*Map.MAP_TOTAL_SIZE_X);
 
 		percentX = (double)((double)playerXinMap/(double)Map.MAP_ROW_TILES);
-
 		displacementX = (int)(Map.MAP_TOTAL_SIZE_X*(percentX))+Map.MAP_TOTAL_SIZE_X-(int)(Game.SCREEN_SIZE_X/2);
 		
 		return (baseX-displacementX);
@@ -300,13 +299,11 @@ public class Map {
 		double percentY;
 
 		playerMapY = ((int)Math.floor(yTile/Map.MAP_ROW_TILES))+1;
-
 		playerYinMap = yTile-((playerMapY-1)*Map.MAP_ROW_TILES);
 		
 		baseY = (int)((getyMap()-1)*Map.MAP_TOTAL_SIZE_Y);
 
 		percentY = (double)((double)playerYinMap/(double)Map.MAP_ROW_TILES);
-
 		displacementY = (int)(Map.MAP_TOTAL_SIZE_Y*(percentY))+Map.MAP_TOTAL_SIZE_Y-(int)(Game.SCREEN_SIZE_Y/2);
 		
 		return (baseY-displacementY);

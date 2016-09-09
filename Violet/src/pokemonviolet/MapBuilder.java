@@ -1186,9 +1186,9 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		public void refreshPokemonList(String info){
 			String[] list = info.split(";");
 			for (int i = 0; i < list.length; i++) {
-				int num = Integer.parseInt(list[i].split(":")[0]);
+				int num = Integer.parseInt(list[i].split(":")[1]);
 				num = num - 1;
-				String[] clusterFuck = list[i].split(":")[1].split(",");
+				String[] clusterFuck = list[i].split(":")[0].split(",");
 				
 				pokemonList[num][0] = 1;
 				
