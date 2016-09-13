@@ -53,11 +53,12 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 		addKeyListener(new Movement());
 		
 		Thread screenThread = new Thread(screen);
-		screenThread.start();
 		
 	//	setVisible(true);
 	//	setVisible(false);
 		setVisible(visible);
+		
+		screenThread.start();
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="Overriden JFrame Methods">

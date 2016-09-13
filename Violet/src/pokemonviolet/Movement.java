@@ -19,19 +19,19 @@ public class Movement extends KeyAdapter{
 		
     public void keyReleased(KeyEvent key) {
 		if (key.getKeyCode() == KeyEvent.VK_UP || key.getKeyCode() == KeyEvent.VK_W){
-			if (Game.player.getvDirection().compareTo("UP")==0){
+			if (Game.player.getDirection().compareTo("UP")==0){
 				Game.player.setDirection("");
 			}
 		}else if(key.getKeyCode() == KeyEvent.VK_DOWN || key.getKeyCode() == KeyEvent.VK_S){
-			if (Game.player.getvDirection().compareTo("DOWN")==0){
+			if (Game.player.getDirection().compareTo("DOWN")==0){
 				Game.player.setDirection("");
 			}
 		}else if(key.getKeyCode() == KeyEvent.VK_LEFT || key.getKeyCode() == KeyEvent.VK_A){
-			if (Game.player.getvDirection().compareTo("LEFT")==0){
+			if (Game.player.getDirection().compareTo("LEFT")==0){
 				Game.player.setDirection("");
 			}
 		}else if(key.getKeyCode() == KeyEvent.VK_RIGHT || key.getKeyCode() == KeyEvent.VK_D){
-			if (Game.player.getvDirection().compareTo("RIGHT")==0){
+			if (Game.player.getDirection().compareTo("RIGHT")==0){
 				Game.player.setDirection("");
 			}
 		}else if(key.getKeyCode() == KeyEvent.VK_J){
@@ -41,17 +41,25 @@ public class Movement extends KeyAdapter{
   
     public void keyPressed(KeyEvent key) {
 		if (key.getKeyCode() == KeyEvent.VK_UP || key.getKeyCode() == KeyEvent.VK_W){
-			Game.player.setvDirection("UP");
-			Game.player.setDirection("UP");
+			if (Game.player.getvDirection().compareTo("")==0){
+				Game.player.setvDirection("UP");
+				Game.player.setDirection("UP");
+			}
 		}else if(key.getKeyCode() == KeyEvent.VK_DOWN || key.getKeyCode() == KeyEvent.VK_S){
-			Game.player.setvDirection("DOWN");
-			Game.player.setDirection("DOWN");
+			if (Game.player.getvDirection().compareTo("")==0){
+				Game.player.setvDirection("DOWN");
+				Game.player.setDirection("DOWN");
+			}
 		}else if(key.getKeyCode() == KeyEvent.VK_LEFT || key.getKeyCode() == KeyEvent.VK_A){
-			Game.player.setvDirection("LEFT");
-			Game.player.setDirection("LEFT");
+			if (Game.player.getvDirection().compareTo("")==0){
+				Game.player.setvDirection("LEFT");
+				Game.player.setDirection("LEFT");
+			}
 		}else if(key.getKeyCode() == KeyEvent.VK_RIGHT || key.getKeyCode() == KeyEvent.VK_D){
-			Game.player.setvDirection("RIGHT");
-			Game.player.setDirection("RIGHT");
+			if (Game.player.getvDirection().compareTo("")==0){
+				Game.player.setvDirection("RIGHT");
+				Game.player.setDirection("RIGHT");
+			}
 		}else if(key.getKeyCode() == KeyEvent.VK_J){
 			Game.player.setRunning(true);
 		}

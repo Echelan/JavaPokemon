@@ -23,7 +23,7 @@ public class GameDisplay extends Canvas implements Runnable {
 	}
 	
 	public void paint(Graphics g){
-		
+		/*
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				g.drawImage(Game.displayedMaps[i][j].getImage(), Game.displayedMaps[i][j].getX(), Game.displayedMaps[i][j].getY(), this);
@@ -31,17 +31,35 @@ public class GameDisplay extends Canvas implements Runnable {
 		}
 		
 		g.drawImage(Game.player.getCurFrameImage(), this.getWidth()/2, this.getHeight()/2,(int)(Game.player.SPRITE_X*Game.player.SPRITE_RESIZE),(int)(Game.player.SPRITE_Y*Game.player.SPRITE_RESIZE), this);
+		*/
+		getBufferStrategy().show();
 	}
 	
     @Override
     public void run() {
+		createBufferStrategy(2);
         while (true){
-			requestFocus();
-
+		//	requestFocus();
+			Graphics g = getBufferStrategy().getDrawGraphics();
+			
+			/*
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 3; j++) {
+					if (Game.displayedMaps[i][j]!=null){
+						g.drawImage(Game.displayedMaps[i][j].getImage(), Game.displayedMaps[i][j].getX(), Game.displayedMaps[i][j].getY(), this);
+					}
+				}
+			}
+			*/
+			
+			g.drawImage(Game.ALL_MAPS, 0, 0, Game.ALL_MAPS_WIDTH, Game.ALL_MAPS_HEIGHT, this);
+			
+			g.drawImage(Game.player.getCurFrameImage(), this.getWidth()/2, this.getHeight()/2,(int)(Game.player.SPRITE_X*Game.player.SPRITE_RESIZE),(int)(Game.player.SPRITE_Y*Game.player.SPRITE_RESIZE), this);
+			
 			repaint();
 			
 			try {
-				Thread.sleep(60);
+				Thread.sleep(80);
 			} catch (InterruptedException ex) {
 			}
         }

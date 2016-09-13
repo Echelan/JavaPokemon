@@ -7,16 +7,11 @@
  */
 package pokemonviolet;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.Files;
 import java.util.List;
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import static pokemonviolet.MapBuilder.scale;
 
 
 /**
@@ -67,6 +62,7 @@ public class Map {
 		private final BufferedImage image;
 		private final String[][] bounds;
 		private int[][] pokemonInMap;
+		private List<String> tileInformation;
 	//</editor-fold>
 	
 	public static void loadImages(){
@@ -103,14 +99,14 @@ public class Map {
 		MAP_TOTAL_SIZE_Y = (int)(MAP_ROW_TILES*TILE_HEIGHT*MAP_MULT);
 	}
 		
-	public Map(List<String> info, int x, int y) {
+	public Map(List<String> info, int x, int y, int posX, int posY) {
 		pokemonInMap = new int[151][7];
 		
 		this.xMap = Integer.parseInt(info.get(0).split(";")[0]);
 		this.yMap = Integer.parseInt(info.get(0).split(";")[1]);
 		
-		this.x = calcX(x);
-		this.y = calcY(y);
+		this.x = calcX(x,posX);
+		this.y = calcY(y,posY);
 		
 		for (int i = 0; i < pokemonInMap.length; i++) {
 			pokemonInMap[i][0] = 0;
@@ -140,6 +136,8 @@ public class Map {
 		this.image = createMapRegion(info);
 		
 		this.bounds = createMapBounds(info);
+		
+		this.tileInformation = info;
 	}
 		
 	private BufferedImage createMapRegion(List<String> info){
@@ -279,14 +277,14 @@ public class Map {
 		return y;
 	}
 
-	public int calcX(int xTile){
+	public int calcX(int xTile, int posMap){
 		int playerMapX,playerXinMap,baseX,displacementX;
 		double percentX;
 
 		playerMapX = ((int)Math.floor(xTile/Map.MAP_ROW_TILES))+1;
 		playerXinMap = xTile-((playerMapX-1)*Map.MAP_ROW_TILES);
 		
-		baseX = (int)((getxMap()-1)*Map.MAP_TOTAL_SIZE_X);
+		baseX = (int)((posMap)*Map.MAP_TOTAL_SIZE_X);
 
 		percentX = (double)((double)playerXinMap/(double)Map.MAP_ROW_TILES);
 		displacementX = (int)(Map.MAP_TOTAL_SIZE_X*(percentX))+Map.MAP_TOTAL_SIZE_X-(int)(Game.SCREEN_SIZE_X/2);
@@ -294,20 +292,26 @@ public class Map {
 		return (baseX-displacementX);
 	}
 	
-	public int calcY(int yTile){
+	public int calcY(int yTile, int posMap){
 		int playerMapY,playerYinMap,baseY,displacementY;
 		double percentY;
 
 		playerMapY = ((int)Math.floor(yTile/Map.MAP_ROW_TILES))+1;
 		playerYinMap = yTile-((playerMapY-1)*Map.MAP_ROW_TILES);
 		
-		baseY = (int)((getyMap()-1)*Map.MAP_TOTAL_SIZE_Y);
+		baseY = (int)((posMap)*Map.MAP_TOTAL_SIZE_Y);
 
 		percentY = (double)((double)playerYinMap/(double)Map.MAP_ROW_TILES);
 		displacementY = (int)(Map.MAP_TOTAL_SIZE_Y*(percentY))+Map.MAP_TOTAL_SIZE_Y-(int)(Game.SCREEN_SIZE_Y/2);
 		
-		return (baseY-displacementY);
+	//	System.out.println(playerMapY+" - "+playerYinMap+" - "+baseY+" - "+displacementY);
 		
+		return (baseY-displacementY); 
+	}
+	
+	public String[] getTileInformation(int x, int y){
+		
+		return (this.tileInformation.get(y).split(",")[x].split("-"));
 	}
 	
 	/**

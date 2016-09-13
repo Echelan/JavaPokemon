@@ -19,19 +19,9 @@ import javax.imageio.ImageIO;
  *
  * @author Andres
  */
-public final class Player implements Runnable {
+public final class Player {
 	
 	// <editor-fold defaultstate="collapsed" desc="Attributes">
-		//<editor-fold defaultstate="collapsed" desc="Statics">
-			/**
-			 * Position change interval.
-			 */
-			public static int MOVE_POS = 7;
-			/**
-			 * Running multiplier.
-			 */
-			public static double RUN_MULT = 2.0;
-		//</editor-fold>
 		// <editor-fold defaultstate="collapsed" desc="General">
 			/**
 			 * Player funds.
@@ -41,6 +31,10 @@ public final class Player implements Runnable {
 			 * Player name.
 			 */
 			private final String name;
+			/**
+			 * Player combat toggle.
+			 */
+			private boolean inCombat;
 		// </editor-fold>
 		// <editor-fold defaultstate="collapsed" desc="Items">
 			/**
@@ -112,17 +106,17 @@ public final class Player implements Runnable {
 		// </editor-fold>
 		// <editor-fold defaultstate="collapsed" desc="Movement">
 			/**
+			 * Position change interval.
+			 */
+			public static int MOVE_POS = 9;
+			/**
+			 * Running multiplier.
+			 */
+			public static double RUN_MULT = 2.0;
+			/**
 			 * Player global tile coordinates.
 			 */
 			private int xTile, yTile;
-			/**
-			 * Player local tile coordinates.
-			 */
-		//	private int xTileMap, yTileMap;
-			/**
-			 * Player map coordinates.
-			 */
-		//	private int xMap, yMap;
 			/**
 			 * Player direction.
 			 */
@@ -247,8 +241,9 @@ public final class Player implements Runnable {
 		this.maxFrames = 3;
 		this.setCurFrame(1);
 		this.curAnim = 0;
-		this.setxTile(30);
-		this.setyTile(30);
+		this.setxTile(10);
+		this.setyTile(10);
+		this.setInCombat(false);
 	}
 	
 	/**
@@ -693,18 +688,6 @@ public final class Player implements Runnable {
 		
 		return playerYinMap;
 	}
-		
-	@Override
-	public void run() {
-		while(true){
-//			move();
-			
-			try {
-				Thread.sleep(30);
-			} catch (InterruptedException ex) {
-			}
-		}
-	}
 	
 	public Image getCurFrameImage(){
 		Image frameImg = null;
@@ -766,22 +749,6 @@ public final class Player implements Runnable {
 			return numPokemonPC;
 		}
 
-		/**
-		 * @return the x
-		 */
-		/*
-		public int getX() {
-			return x;
-		}
-*/
-		/**
-		 * @return the y
-		 */
-		/*
-		public int getY() {
-			return y;
-		}
-*/
 		/**
 		 * @return the running
 		 */
@@ -928,6 +895,20 @@ public final class Player implements Runnable {
 	 */
 	public void setyTile(int yTile) {
 		this.yTile = yTile;
+	}
+
+	/**
+	 * @return the inCombat
+	 */
+	public boolean isInCombat() {
+		return inCombat;
+	}
+
+	/**
+	 * @param inCombat the inCombat to set
+	 */
+	public void setInCombat(boolean inCombat) {
+		this.inCombat = inCombat;
 	}
 
 }
