@@ -112,7 +112,8 @@ public class Game implements Runnable{
 	 * Build game.
 	 * @param openID ID of window to open.
 	 */
-	public Game(String openID) {
+	public Game() {
+		Map.loadImages();
 		
 		NUM_MAPS_X = 4;
 		NUM_MAPS_Y = 4;
@@ -211,16 +212,12 @@ public class Game implements Runnable{
 	//	windowMapBuilder = new MapBuilder(javax.swing.JFrame.HIDE_ON_CLOSE,false);
 	//	windowGame = new GameWindow(javax.swing.JFrame.HIDE_ON_CLOSE,false);
 		
-	
-		if (openID.compareTo("0") == 0){
-			new ClassTestWindow(javax.swing.JFrame.EXIT_ON_CLOSE,true);
-		}else{
-			Map.loadImages();
 		
 			setMaps();
 			
-			new GameWindow(javax.swing.JFrame.EXIT_ON_CLOSE,true);
-		}
+			new GameWindow(javax.swing.JFrame.EXIT_ON_CLOSE);
+			
+		//	new ClassTestWindow(javax.swing.JFrame.EXIT_ON_CLOSE);
 		
 		try {
 			Thread.sleep(1000);
@@ -233,9 +230,10 @@ public class Game implements Runnable{
 	private void setMaps(){
 		int playerMapX, playerMapY;
 
-		playerMapX = ((int)Math.floor(player.getxTile()/Map.MAP_ROW_TILES))+1;
-		playerMapY = ((int)Math.floor(player.getyTile()/Map.MAP_ROW_TILES))+1;
-
+		playerMapX = ((int)Math.floor(player.getxTile()/Map.MAP_ROW_TILES));
+		playerMapY = ((int)Math.floor(player.getyTile()/Map.MAP_ROW_TILES));
+		
+		
 		for (int j = playerMapY-1; j < playerMapY+2; j++) {
 			for (int i = playerMapX-1; i < playerMapX+2; i++) {
 				List<String> thisMapInfo;
@@ -269,6 +267,9 @@ public class Game implements Runnable{
 		}
 		
 		ALL_MAPS = tempStitched;
+		
+		ALL_MAPS_X = calcX();
+		ALL_MAPS_Y = calcY();
 	}
 		
 	@Override
@@ -276,16 +277,8 @@ public class Game implements Runnable{
 		while(true){
 			if (!player.isInCombat()){
 				if (player.getvDirection().compareTo("")!=0){
-					boolean finished = true;
-					for (int i = 0; i < displayedMaps.length; i++) {
-						for (int j = 0; j < displayedMaps[i].length; j++) {
-							boolean thisMap = moveMap(displayedMaps[i][j],i,j);
-							if (!thisMap){
-								finished = false;
-							}
-						}
-					}
-
+					boolean finished = moveMap();
+					
 					if (finished){
 						player.setvDirection("");
 					}
@@ -300,10 +293,36 @@ public class Game implements Runnable{
 		}
 	}
 	
+	private int calcX(){
+		
+		int xTile, xDisplace, xTotal;
+		
+		xTile = player.getxTile();
+		
+		xDisplace = xTile * (Map.MAP_TOTAL_SIZE_X/Map.MAP_ROW_TILES);
+		
+		xTotal = (xDisplace*-1)+(SCREEN_SIZE_X/2);
+		
+		return xTotal;
+	}
+	
+	private int calcY(){
+		
+		int yTile, yTotal, yDisplace;
+		
+		yTile = player.getyTile();
+		
+		yDisplace = yTile * (Map.MAP_TOTAL_SIZE_Y/Map.MAP_ROW_TILES);
+		
+		yTotal = (yDisplace*-1)+(SCREEN_SIZE_Y/2);
+		
+		return yTotal;
+	}
+			
 	public void mapCheck(){
 		int playerMapX, playerMapY;
-		playerMapX = ((int)Math.floor(player.getxTile()/Map.MAP_ROW_TILES))+1;
-		playerMapY = ((int)Math.floor(player.getyTile()/Map.MAP_ROW_TILES))+1;
+		playerMapX = ((int)Math.floor(player.getxTile()/Map.MAP_ROW_TILES));
+		playerMapY = ((int)Math.floor(player.getyTile()/Map.MAP_ROW_TILES));
 		
 		if (playerMapX != displayedMaps[1][1].getxMap() || playerMapY != displayedMaps[1][1].getyMap()){
 			cleanMaps();
@@ -312,9 +331,28 @@ public class Game implements Runnable{
 	}
 	
 	public void tileCheck(){
-		String[] tileInfo = displayedMaps[1][1].getTileInformation(player.getxTile(), player.getyTile());
+		int xTile, yTile;
+		xTile=player.getxTile();
+		yTile=player.getyTile();
+		while (xTile>20){
+			xTile=xTile-20;
+		}
+		while (xTile<0){
+			xTile=xTile+20;
+		}
+		while (yTile>20){
+			yTile=yTile-20;
+		}
+		while (yTile<0){
+			yTile=yTile+20;
+		}
+		
+		String[] tileInfo = displayedMaps[1][1].getTileInformation(yTile, xTile);
 		if (Integer.parseInt(tileInfo[2]) == 0 && Integer.parseInt(tileInfo[3]) == 1){
-			System.out.println("En gramita!");
+			player.setSpawnSteps(player.getSpawnSteps()-1);
+			if (player.getSpawnSteps() == 0){
+				player.setInCombat(true);
+			}
 		}
 	}
 	
@@ -391,14 +429,14 @@ public class Game implements Runnable{
 		return canMove;
 	}
 		
-	public boolean moveMap(Map map, int mapIDx, int mapIDy){		
+	public boolean moveMap(){		
 		int baseX, baseY;
 		boolean isDone = true;
 		
-		baseX = map.calcX(player.getxTile(),mapIDx);
-		baseY = map.calcY(player.getyTile(),mapIDy);
+		baseX = calcX();
+		baseY = calcY();
 		
-		if (map.getX() == baseX && map.getY() == baseY){
+		if (ALL_MAPS_X == baseX && ALL_MAPS_Y == baseY){
 			switch (player.getDirection()){
 				case "LEFT":
 					if (getCanMove(player.getDirection())){
@@ -422,50 +460,55 @@ public class Game implements Runnable{
 				break;
 			}
 			mapCheck();
-			tileCheck();
 		}
 		
-		if (map.getX() != baseX || map.getY() != baseY){
+		baseX = calcX();
+		baseY = calcY();
+		
+		if (ALL_MAPS_X != baseX || ALL_MAPS_Y != baseY){
 			int amount = player.MOVE_POS;
 			if (player.isRunning()){
 				amount = (int)(amount * player.RUN_MULT);
 			}
-						
+			
+			
 			switch (player.getvDirection()){
 				case "LEFT":
-					if (Math.abs(baseX-map.getX()) >= amount){
-						map.setX(map.getX() + amount);
+					if (Math.abs(baseX-ALL_MAPS_X) >= amount){
+						ALL_MAPS_X = ALL_MAPS_X + amount;
 						isDone=false;
 					}else{
-						map.setX(baseX);
+						ALL_MAPS_X = baseX;
 					}
-				break;
+					break;
 				case "RIGHT":
-					if (Math.abs(baseX-map.getX()) >= amount){
-						map.setX(map.getX() - amount);
+					if (Math.abs(baseX-ALL_MAPS_X) >= amount){
+						ALL_MAPS_X = ALL_MAPS_X - amount;
 						isDone=false;
 					}else{
-						map.setX(baseX);
+						ALL_MAPS_X = baseX;
 					}
-				break;
+					break;
 				case "UP":
-					if (Math.abs(baseY-map.getY()) >= amount){
-						map.setY(map.getY() + amount);
+					if (Math.abs(baseY-ALL_MAPS_Y) >= amount){
+						ALL_MAPS_Y = ALL_MAPS_Y + amount;
 						isDone=false;
 					}else{
-						map.setY(baseY);
+						ALL_MAPS_Y = baseY;
 					}
-				break;
+					break;
 				case "DOWN":
-					if (Math.abs(baseY-map.getY()) >= amount){
-						map.setY(map.getY() - amount);
+					if (Math.abs(baseY-ALL_MAPS_Y) >= amount){
+						ALL_MAPS_Y = ALL_MAPS_Y - amount;
 						isDone=false;
 					}else{
-						map.setY(baseY);
+						ALL_MAPS_Y = baseY;
 					}
-				break;
+					break;
 			}
-			
+			if (isDone){
+				tileCheck();
+			}
 		}
 		
 		return isDone;

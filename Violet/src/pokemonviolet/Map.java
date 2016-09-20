@@ -58,7 +58,7 @@ public class Map {
 		
 	//<editor-fold defaultstate="collapsed" desc="Vars">
 		private final int xMap, yMap;
-		private int x,y;
+	//	private int x,y;
 		private final BufferedImage image;
 		private final String[][] bounds;
 		private int[][] pokemonInMap;
@@ -104,10 +104,10 @@ public class Map {
 		
 		this.xMap = Integer.parseInt(info.get(0).split(";")[0]);
 		this.yMap = Integer.parseInt(info.get(0).split(";")[1]);
-		
+		/*
 		this.x = calcX(x,posX);
 		this.y = calcY(y,posY);
-		
+		*/
 		for (int i = 0; i < pokemonInMap.length; i++) {
 			pokemonInMap[i][0] = 0;
 		}
@@ -259,24 +259,28 @@ public class Map {
 	/**
 	 * @return the x
 	 */
+	/*
 	public int getX() {
 		return x;
 	}
-
+	*/
 	/**
 	 * @param x the x to set
 	 */
+	/*
 	public void setX(int x) {
 		this.x = x;
 	}
-
+	*/
 	/**
 	 * @return the y
 	 */
+	/*
 	public int getY() {
 		return y;
 	}
-
+	*/
+/*
 	public int calcX(int xTile, int posMap){
 		int playerMapX,playerXinMap,baseX,displacementX;
 		double percentX;
@@ -308,7 +312,7 @@ public class Map {
 		
 		return (baseY-displacementY); 
 	}
-	
+*/	
 	public String[] getTileInformation(int x, int y){
 		
 		return (this.tileInformation.get(y).split(",")[x].split("-"));
@@ -317,10 +321,11 @@ public class Map {
 	/**
 	 * @param y the y to set
 	 */
+	/*
 	public void setY(int y) {
 		this.y = y;
 	}
-
+*/
 	/**
 	 * @return the image
 	 */

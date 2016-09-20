@@ -7,7 +7,6 @@
  */
 package pokemonviolet;
 
-import java.util.Scanner;
 
 /**
  *
@@ -17,19 +16,12 @@ public class PokemonViolet {
 	
 	public static void main(String[] args) throws InterruptedException{
 		
-		
-		Scanner s = new Scanner(System.in);
-		System.out.println("0-ClassTest; 1-Builder; ?-Game");
-		String input = s.next();
-		
-		if (input.compareTo("1")==0){
-			new MapBuilder(javax.swing.JFrame.EXIT_ON_CLOSE,true);
-		}else{
-			Game game = new Game(input);
-		
+		//	new MapBuilder(javax.swing.JFrame.EXIT_ON_CLOSE);
+			
+			Game game = new Game();
+
 			Thread gameThread = new Thread(game);
 			gameThread.start();
-		}
 		
     }
 	

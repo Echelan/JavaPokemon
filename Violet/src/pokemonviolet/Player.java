@@ -241,8 +241,8 @@ public final class Player {
 		this.maxFrames = 3;
 		this.setCurFrame(1);
 		this.curAnim = 0;
-		this.setxTile(10);
-		this.setyTile(10);
+		this.setxTile(30);
+		this.setyTile(30);
 		this.setInCombat(false);
 	}
 	
@@ -881,34 +881,34 @@ public final class Player {
 		public void setSpawnSteps(int spawnSteps) {
 			this.spawnSteps = spawnSteps;
 		}
+
+		/**
+		 * @param xTile the xTile to set
+		 */
+		public void setxTile(int xTile) {
+			this.xTile = xTile;
+		}
+
+		/**
+		 * @param yTile the yTile to set
+		 */
+		public void setyTile(int yTile) {
+			this.yTile = yTile;
+		}
+
+		/**
+		 * @return the inCombat
+		 */
+		public boolean isInCombat() {
+			return inCombat;
+		}
+
+		/**
+		 * @param inCombat the inCombat to set
+		 */
+		public void setInCombat(boolean inCombat) {
+			this.inCombat = inCombat;
+		}
+
 	//</editor-fold>
-
-	/**
-	 * @param xTile the xTile to set
-	 */
-	public void setxTile(int xTile) {
-		this.xTile = xTile;
-	}
-
-	/**
-	 * @param yTile the yTile to set
-	 */
-	public void setyTile(int yTile) {
-		this.yTile = yTile;
-	}
-
-	/**
-	 * @return the inCombat
-	 */
-	public boolean isInCombat() {
-		return inCombat;
-	}
-
-	/**
-	 * @param inCombat the inCombat to set
-	 */
-	public void setInCombat(boolean inCombat) {
-		this.inCombat = inCombat;
-	}
-
 }

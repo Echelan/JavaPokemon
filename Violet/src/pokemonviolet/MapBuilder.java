@@ -105,7 +105,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		
 	//</editor-fold>
 	
-	public MapBuilder(int operation, boolean visible) {
+	public MapBuilder(int operation) {
 		setLayout(null);
 		setSize(MAIN_WINDOW_WIDTH,MAIN_WINDOW_HEIGHT);
 		setResizable(false);
@@ -124,41 +124,44 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		add(hiddenListener);
 		
         try {
-			tilesetSMALL = ImageIO.read(new File("tileset.png"));
-			tileset = scale(tilesetSMALL,tilesetSMALL.getWidth(),tilesetSMALL.getHeight(),2.0,2.0);
 			
-			shopSMALL = ImageIO.read(new File("shop.png"));
-			shop = scale(shopSMALL,shopSMALL.getWidth(),shopSMALL.getHeight(),2.0,2.0);
-			
-			gymSMALL = ImageIO.read(new File("gym.png"));
-			gym = scale(gymSMALL,gymSMALL.getWidth(),gymSMALL.getHeight(),2.0,2.0);
-			
-			centerSMALL = ImageIO.read(new File("center.png"));
-			center = scale(centerSMALL,centerSMALL.getWidth(),centerSMALL.getHeight(),2.0,2.0);
-			
-			objectsSMALL = ImageIO.read(new File("objects.png"));
-			objects = scale(objectsSMALL,objectsSMALL.getWidth(),objectsSMALL.getHeight(),2.0,2.0);
-			
-			houseSMALL = ImageIO.read(new File("house.png"));
-			house = scale(houseSMALL,houseSMALL.getWidth(),houseSMALL.getHeight(),2.0,2.0);
-			
-			treeSMALL = ImageIO.read(new File("tree.png"));
-			tree = scale(treeSMALL,treeSMALL.getWidth(),treeSMALL.getHeight(),2.0,2.0);
-			
-			tree2SMALL = ImageIO.read(new File("tree2.png"));
-			tree2 = scale(tree2SMALL,tree2SMALL.getWidth(),tree2SMALL.getHeight(),2.0,2.0);
-			
-			house2SMALL = ImageIO.read(new File("house2.png"));
-			house2 = scale(house2SMALL,house2SMALL.getWidth(),house2SMALL.getHeight(),2.0,2.0);
-			
-			house3SMALL = ImageIO.read(new File("house3.png"));
-			house3 = scale(house3SMALL,house3SMALL.getWidth(),house3SMALL.getHeight(),2.0,2.0);
-			
-			wstoneSMALL = ImageIO.read(new File("wstone.png"));
-			wstone = scale(wstoneSMALL,wstoneSMALL.getWidth(),wstoneSMALL.getHeight(),2.0,2.0);
-			
-			wstone2SMALL = ImageIO.read(new File("wstone2.png"));
-			wstone2 = scale(wstone2SMALL,wstone2SMALL.getWidth(),wstone2SMALL.getHeight(),2.0,2.0);
+			//<editor-fold defaultstate="collapsed" desc="Image Load">
+				tilesetSMALL = ImageIO.read(new File("tileset.png"));
+				tileset = scale(tilesetSMALL,tilesetSMALL.getWidth(),tilesetSMALL.getHeight(),2.0,2.0);
+
+				shopSMALL = ImageIO.read(new File("shop.png"));
+				shop = scale(shopSMALL,shopSMALL.getWidth(),shopSMALL.getHeight(),2.0,2.0);
+
+				gymSMALL = ImageIO.read(new File("gym.png"));
+				gym = scale(gymSMALL,gymSMALL.getWidth(),gymSMALL.getHeight(),2.0,2.0);
+
+				centerSMALL = ImageIO.read(new File("center.png"));
+				center = scale(centerSMALL,centerSMALL.getWidth(),centerSMALL.getHeight(),2.0,2.0);
+
+				objectsSMALL = ImageIO.read(new File("objects.png"));
+				objects = scale(objectsSMALL,objectsSMALL.getWidth(),objectsSMALL.getHeight(),2.0,2.0);
+
+				houseSMALL = ImageIO.read(new File("house.png"));
+				house = scale(houseSMALL,houseSMALL.getWidth(),houseSMALL.getHeight(),2.0,2.0);
+
+				treeSMALL = ImageIO.read(new File("tree.png"));
+				tree = scale(treeSMALL,treeSMALL.getWidth(),treeSMALL.getHeight(),2.0,2.0);
+
+				tree2SMALL = ImageIO.read(new File("tree2.png"));
+				tree2 = scale(tree2SMALL,tree2SMALL.getWidth(),tree2SMALL.getHeight(),2.0,2.0);
+
+				house2SMALL = ImageIO.read(new File("house2.png"));
+				house2 = scale(house2SMALL,house2SMALL.getWidth(),house2SMALL.getHeight(),2.0,2.0);
+
+				house3SMALL = ImageIO.read(new File("house3.png"));
+				house3 = scale(house3SMALL,house3SMALL.getWidth(),house3SMALL.getHeight(),2.0,2.0);
+
+				wstoneSMALL = ImageIO.read(new File("wstone.png"));
+				wstone = scale(wstoneSMALL,wstoneSMALL.getWidth(),wstoneSMALL.getHeight(),2.0,2.0);
+
+				wstone2SMALL = ImageIO.read(new File("wstone2.png"));
+				wstone2 = scale(wstone2SMALL,wstone2SMALL.getWidth(),wstone2SMALL.getHeight(),2.0,2.0);
+			//</editor-fold>
 			
 			objSets = new BufferedImage[] {objects,house,house2,house3,center,shop,gym,tree,tree2,wstone,wstone2};
 			objDims = new int[][] { {1,1},{5,5},{5,3},{6,4},{5,5},{4,4},{6,5},{2,3},{2,3},{2,2},{2,2} };
@@ -177,49 +180,51 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			obj = new int[MAP_ROW_TILES][MAP_ROW_TILES];
 			setO = new int[MAP_ROW_TILES][MAP_ROW_TILES];
 			
-			for (int i = 0; i < MAP_ROW_TILES; i++) {
-				for (int j = 0; j < MAP_ROW_TILES; j++) {
-					int xTile,yTile,xPos,yPos;
-					
-					obj[i][j] = 0;
-					setO[i][j] = 0;
-					
-					xTile = getObjX(setO[i][j],obj[i][j]);
-					yTile = getObjY(setO[i][j],obj[i][j]);					
-					
-					objGridImage[i][j] = new ImageIcon(objSets[obj[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
-					
-					xPos = START_X+(i*TILE_RESIZED_WIDTH);
-					yPos = START_Y+(j*TILE_RESIZED_HEIGHT);
-					objGridLabel[i][j] = new JLabel(objGridImage[i][j]);
-					objGridLabel[i][j].addMouseListener(this);
-					objGridLabel[i][j].setBounds(xPos,yPos,TILE_RESIZED_WIDTH,TILE_RESIZED_HEIGHT);
-					add(objGridLabel[i][j]);
-					
-					tile[i][j] = 0;
-					setT[i][j] = 0;
-					
-					xTile = getTileX(setT[i][j],tile[i][j]);
-					yTile = getTileY(setT[i][j],tile[i][j]);					
-					
-					tileGridImage[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
-					
-					xPos = START_X+(i*TILE_RESIZED_WIDTH);
-					yPos = START_Y+(j*TILE_RESIZED_HEIGHT);
-					tileGridLabel[i][j] = new JLabel(tileGridImage[i][j]);
-					tileGridLabel[i][j].addMouseListener(this);
-					tileGridLabel[i][j].setBounds(xPos,yPos,TILE_RESIZED_WIDTH,TILE_RESIZED_HEIGHT);
-					add(tileGridLabel[i][j]);
-					
+			//<editor-fold defaultstate="collapsed" desc="Label & Icon Setup">
+				for (int i = 0; i < MAP_ROW_TILES; i++) {
+					for (int j = 0; j < MAP_ROW_TILES; j++) {
+						int xTile,yTile,xPos,yPos;
+
+						obj[i][j] = 0;
+						setO[i][j] = 0;
+
+						xTile = getObjX(setO[i][j],obj[i][j]);
+						yTile = getObjY(setO[i][j],obj[i][j]);					
+
+						objGridImage[i][j] = new ImageIcon(objSets[obj[i][j]].getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
+
+						xPos = START_X+(i*TILE_RESIZED_WIDTH);
+						yPos = START_Y+(j*TILE_RESIZED_HEIGHT);
+						objGridLabel[i][j] = new JLabel(objGridImage[i][j]);
+						objGridLabel[i][j].addMouseListener(this);
+						objGridLabel[i][j].setBounds(xPos,yPos,TILE_RESIZED_WIDTH,TILE_RESIZED_HEIGHT);
+						add(objGridLabel[i][j]);
+
+						tile[i][j] = 0;
+						setT[i][j] = 0;
+
+						xTile = getTileX(setT[i][j],tile[i][j]);
+						yTile = getTileY(setT[i][j],tile[i][j]);					
+
+						tileGridImage[i][j] = new ImageIcon(tileset.getSubimage(xTile, yTile, TILE_RESIZED_WIDTH, TILE_RESIZED_HEIGHT));
+
+						xPos = START_X+(i*TILE_RESIZED_WIDTH);
+						yPos = START_Y+(j*TILE_RESIZED_HEIGHT);
+						tileGridLabel[i][j] = new JLabel(tileGridImage[i][j]);
+						tileGridLabel[i][j].addMouseListener(this);
+						tileGridLabel[i][j].setBounds(xPos,yPos,TILE_RESIZED_WIDTH,TILE_RESIZED_HEIGHT);
+						add(tileGridLabel[i][j]);
+
+					}
 				}
-			}
+			//</editor-fold>
         } catch (IOException ex) {
 
         }
 		
-	//	setVisible(true);
+		setVisible(true);
 	//	setVisible(false);
-		setVisible(visible);
+	//	setVisible(visible);
 		
 		windowPokemon = new pokemonManager();
 		windowGeneral = new generalControls();

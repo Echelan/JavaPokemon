@@ -184,7 +184,7 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
 	 * @param operation JFrame default close operation.
 	 * @param visible This JFrame visibility.
 	 */
-    public ClassTestWindow(int operation, boolean visible){
+    public ClassTestWindow(int operation){
         setLayout(null);
         setSize(600,500);
         setTitle("Pokemon Violet [CLASS TEST]");
@@ -378,9 +378,9 @@ public class ClassTestWindow extends JFrame implements WindowListener, ActionLis
         updateBallAmounts();
         updateButtons();
 		
-	//	setVisible(true);
+		setVisible(true);
 	//	setVisible(false);
-		setVisible(visible);
+	//	setVisible(visible);
     }
 
 	/**

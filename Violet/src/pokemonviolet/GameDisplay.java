@@ -52,7 +52,7 @@ public class GameDisplay extends Canvas implements Runnable {
 			}
 			*/
 			
-			g.drawImage(Game.ALL_MAPS, 0, 0, Game.ALL_MAPS_WIDTH, Game.ALL_MAPS_HEIGHT, this);
+			g.drawImage(Game.ALL_MAPS, Game.ALL_MAPS_X, Game.ALL_MAPS_Y, Game.ALL_MAPS_WIDTH, Game.ALL_MAPS_HEIGHT, this);
 			
 			g.drawImage(Game.player.getCurFrameImage(), this.getWidth()/2, this.getHeight()/2,(int)(Game.player.SPRITE_X*Game.player.SPRITE_RESIZE),(int)(Game.player.SPRITE_Y*Game.player.SPRITE_RESIZE), this);
 			
