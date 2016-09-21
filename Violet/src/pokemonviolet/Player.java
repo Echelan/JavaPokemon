@@ -103,6 +103,10 @@ public final class Player {
 			 * Number of Pokemon in Player PC.
 			 */
 			private int numPokemonPC;
+			/**
+			 * Current active Pokemon.
+			 */
+			private int currentPokemon;
 		// </editor-fold>
 		// <editor-fold defaultstate="collapsed" desc="Movement">
 			/**
@@ -217,7 +221,7 @@ public final class Player {
 	 */
 	private void setBasics(){
 		try {
-			this.SPRITE_SHEET = ImageIO.read(new File("player.png"));
+			this.SPRITE_SHEET = ImageIO.read(new File("assets/player.png"));
 		} catch (IOException ex) {
 		}
 		this.team = new Pokemon[6];
@@ -244,6 +248,8 @@ public final class Player {
 		this.setxTile(30);
 		this.setyTile(30);
 		this.setInCombat(false);
+		this.currentPokemon = 0;
+		setSpawnSteps(roll(1, 2, 3));
 	}
 	
 	/**

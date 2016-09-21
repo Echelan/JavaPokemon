@@ -68,19 +68,11 @@ public class Game implements Runnable{
 		/**
 		 * Current Pokemon in game.
 		 */
-		public static Pokemon enemyPokemon;
+		//public static Pokemon enemyPokemon;
 		/**
-		 * Game Window. (The one with the canvas.)
+		 * Current enemy trainer in game.
 		 */
-	//	private static GameWindow windowGame;
-		/**
-		 * Class Test Window. (The one with the buttons and pictures.)
-		 */
-	//	private static ClassTestWindow windowClassTest;
-		/**
-		 * Map Builder Window. (The one with the map.)
-		 */
-	//	private static MapBuilder windowMapBuilder;
+		public static Trainer enemyTrainer;
 		/**
 		 * Maps displayed.
 		 */
@@ -349,11 +341,40 @@ public class Game implements Runnable{
 		
 		String[] tileInfo = displayedMaps[1][1].getTileInformation(yTile, xTile);
 		if (Integer.parseInt(tileInfo[2]) == 0 && Integer.parseInt(tileInfo[3]) == 1){
-			player.setSpawnSteps(player.getSpawnSteps()-1);
-			if (player.getSpawnSteps() == 0){
-				player.setInCombat(true);
-			}
+			steppedGrass();
 		}
+	}
+	
+	public void steppedGrass(){
+		player.setSpawnSteps(player.getSpawnSteps()-1);
+		if (player.getSpawnSteps() == 0){
+			player.setInCombat(true);
+
+			int[][] enemyTeam = new int[6][2];
+
+			enemyTeam[0] = getWildPokemon();
+
+			enemyTrainer = new Trainer("DAT BOI", "AYY WHADDUP", enemyTeam,1);
+		}
+	}
+	
+	private int[] getWildPokemon(){
+		int xTile, yTile;
+		xTile=player.getxTile();
+		yTile=player.getyTile();
+		while (xTile>20){
+			xTile=xTile-20;
+		}
+		while (xTile<0){
+			xTile=xTile+20;
+		}
+		while (yTile>20){
+			yTile=yTile-20;
+		}
+		while (yTile<0){
+			yTile=yTile+20;
+		}
+		return displayedMaps[1][1].getWildPokemon(xTile,yTile);
 	}
 	
 	public void cleanMaps(){

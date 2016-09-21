@@ -21,7 +21,7 @@ public class Pokemon {
 		static final private int MAX_SINGLE_EV = 252;
 
 		private int id;
-		private final boolean isShiny;
+		private final boolean shiny;
 		private String nameSpecies;
 		private String nameInternal;
 		private String kind;
@@ -90,8 +90,8 @@ public class Pokemon {
 		private int curEXP;
 		private int maxEXP;
 		private int level;
-		private boolean isWild;
-		private boolean isFainted;
+		private boolean wild;
+		private boolean fainted;
 		private String status;
 	//</editor-fold>
 	
@@ -101,11 +101,11 @@ public class Pokemon {
 	 */
 	public Pokemon(int id) {
 		this.id = id;
-		this.isShiny = false;
+		this.shiny = false;
 		this.gender = "TBD";
 		this.level = 0;
 		this.ballType = "POKEBALL";
-		this.isWild = true;
+		this.wild = true;
 		this.status="";
 		
 		genIVs();
@@ -124,11 +124,11 @@ public class Pokemon {
 	public Pokemon(String nameInternal) {
 		this.nameInternal = nameInternal;
 		this.id = getPokemonID(nameInternal);
-		this.isShiny = false;
+		this.shiny = false;
 		this.gender = "TBD";
 		this.level = 0;
 		this.ballType = "POKEBALL";
-		this.isWild = true;
+		this.wild = true;
 		this.status="";
 		
 		genIVs();
@@ -148,7 +148,7 @@ public class Pokemon {
 	public Pokemon(String nameInternal, String ballType) {
 		this.nameInternal = nameInternal;
 		this.id = getPokemonID(nameInternal);
-		this.isShiny = false;
+		this.shiny = false;
 		this.gender = "TBD";
 		this.level = 0;
 		this.ballType = ballType;
@@ -169,10 +169,12 @@ public class Pokemon {
 	 */
 	public Pokemon(int id, String ballType) {
 		this.id = id;
-		this.isShiny = false;
+		this.shiny = false;
 		this.gender = "TBD";
 		this.level = 0;
-		this.ballType = ballType;
+		if (ballType.compareTo("WILD") != 0){
+			this.ballType = ballType;
+		}
 		
 		genIVs();
 		
@@ -191,7 +193,7 @@ public class Pokemon {
 	public Pokemon(String nameInternal, int ballType) {
 		this.nameInternal = nameInternal;
 		this.id = getPokemonID(nameInternal);
-		this.isShiny = false;
+		this.shiny = false;
 		this.gender = "TBD";
 		this.level = 0;
 		this.ballType = new Item(ballType).getNameInternal();
@@ -212,7 +214,7 @@ public class Pokemon {
 	 */
 	public Pokemon(int id, int ballType) {
 		this.id = id;
-		this.isShiny = false;
+		this.shiny = false;
 		this.gender = "TBD";
 		this.level = 0;
 		this.ballType = new Item(ballType).getNameInternal();
@@ -234,7 +236,7 @@ public class Pokemon {
 	public Pokemon(String nameInternal, Item ball) {
 		this.nameInternal = nameInternal;
 		this.id = getPokemonID(nameInternal);
-		this.isShiny = false;
+		this.shiny = false;
 		this.gender = "TBD";
 		this.level = 0;
 		this.ballType = ball.getNameInternal();
@@ -255,9 +257,146 @@ public class Pokemon {
 	 */
 	public Pokemon(int id, Item ball) {
 		this.id = id;
-		this.isShiny = false;
+		this.shiny = false;
 		this.gender = "TBD";
 		this.level = 0;
+		this.ballType = ball.getNameInternal();
+		
+		genIVs();
+		
+		boolean couldCreate = readInfo( this.id );
+		
+		if (!couldCreate){
+			System.err.println("Could not find Pokemon with id " + id + ".");
+		}
+	}
+	
+	/**
+	 * Create Pokemon based on given internal name and given ball type internal name.
+	 * @param nameInternal Pokemon internal name to create.
+	 * @param ballType Pokemon Pokeball internal name.
+	 * @param level Pokemon level to set.
+	 */
+	public Pokemon(String nameInternal, String ballType, int level) {
+		this.nameInternal = nameInternal;
+		this.id = getPokemonID(nameInternal);
+		this.shiny = false;
+		this.gender = "TBD";
+		this.level = level;
+		this.ballType = ballType;
+		
+		genIVs();
+		
+		boolean couldCreate = readInfo( this.id );
+		
+		if (!couldCreate){
+			System.err.println("Could not find Pokemon with id " + id + ".");
+		}
+	}
+	
+	/**
+	 * Create Pokemon based on given id and given ball type internal name.
+	 * @param id Pokemon ID to create.
+	 * @param ballType Pokemon Pokeball internal name.
+	 * @param level Pokemon level to set.
+	 */
+	public Pokemon(int id, String ballType, int level) {
+		this.id = id;
+		this.shiny = false;
+		this.gender = "TBD";
+		this.level = level;
+		if (ballType.compareTo("WILD") != 0){
+			this.ballType = ballType;
+		}
+		
+		genIVs();
+		
+		boolean couldCreate = readInfo( this.id );
+		
+		if (!couldCreate){
+			System.err.println("Could not find Pokemon with id " + id + ".");
+		}
+	}
+	
+	/**
+	 * Create Pokemon based on given internal name and given ball type ID.
+	 * @param nameInternal Pokemon internal name to create.
+	 * @param ballType Pokemon Pokeball ID.
+	 * @param level Pokemon level to set.
+	 */
+	public Pokemon(String nameInternal, int ballType, int level) {
+		this.nameInternal = nameInternal;
+		this.id = getPokemonID(nameInternal);
+		this.shiny = false;
+		this.gender = "TBD";
+		this.level = level;
+		this.ballType = new Item(ballType).getNameInternal();
+		
+		genIVs();
+		
+		boolean couldCreate = readInfo( this.id );
+		
+		if (!couldCreate){
+			System.err.println("Could not find Pokemon with id " + id + ".");
+		}
+	}
+	
+	/**
+	 * Create Pokemon based on given id and given ball type ID.
+	 * @param id Pokemon ID to create.
+	 * @param ballType Pokemon Pokeball ID.
+	 * @param level Pokemon level to set.
+	 */
+	public Pokemon(int id, int ballType, int level) {
+		this.id = id;
+		this.shiny = false;
+		this.gender = "TBD";
+		this.level = level;
+		this.ballType = new Item(ballType).getNameInternal();
+		
+		genIVs();
+		
+		boolean couldCreate = readInfo( this.id );
+		
+		if (!couldCreate){
+			System.err.println("Could not find Pokemon with id " + id + ".");
+		}
+	}
+	
+	/**
+	 * Create Pokemon based on given internal name and given ball item.
+	 * @param nameInternal Pokemon internal name to create.
+	 * @param ball Pokemon Pokeball Item.
+	 * @param level Pokemon level to set.
+	 */
+	public Pokemon(String nameInternal, Item ball, int level) {
+		this.nameInternal = nameInternal;
+		this.id = getPokemonID(nameInternal);
+		this.shiny = false;
+		this.gender = "TBD";
+		this.level = level;
+		this.ballType = ball.getNameInternal();
+		
+		genIVs();
+		
+		boolean couldCreate = readInfo( this.id );
+		
+		if (!couldCreate){
+			System.err.println("Could not find Pokemon with id " + id + ".");
+		}
+	}
+	
+	/**
+	 * Create Pokemon based on given id and given ball item.
+	 * @param id Pokemon ID to create.
+	 * @param ball Pokemon Pokeball Item
+	 * @param level Pokemon level to set.
+	 */
+	public Pokemon(int id, Item ball, int level) {
+		this.id = id;
+		this.shiny = false;
+		this.gender = "TBD";
+		this.level = level;
 		this.ballType = ball.getNameInternal();
 		
 		genIVs();
@@ -824,7 +963,7 @@ public class Pokemon {
 	 */
 	public void faint(){
 		this.status="";
-		this.setIsFainted(true);
+		this.setFainted(true);
 		this.setCurHP(0);
 	}
 	
@@ -835,7 +974,7 @@ public class Pokemon {
 	public int getExpGain(){
 		double gain = 0;
 		double a = 1;
-		if (this.isIsWild()){
+		if (this.isWild()){
 			a = 1.5;
 		}
 		gain = (a * this.yieldEXP * this.getLevel())/7;
@@ -847,12 +986,19 @@ public class Pokemon {
 		public boolean getCanEvolve(){
 			return (this.numEvols > 0);
 		}
+
+		/**
+		 * @return the nameInternal
+		 */
+		public String getNameInternal() {
+			return nameInternal;
+		};
 		
 		/**
-		 * @return the isShiny
+		 * @return the shiny
 		 */
-		public boolean isIsShiny() {
-			return isShiny;
+		public boolean isShiny() {
+			return shiny;
 		}
 
 		/**
@@ -982,31 +1128,31 @@ public class Pokemon {
 		}
 
 		/**
-		 * @return the isWild
+		 * @return the wild
 		 */
-		public boolean isIsWild() {
-			return isWild;
+		public boolean isWild() {
+			return wild;
 		}
 
 		/**
-		 * @param isWild the isWild to set
+		 * @param wild the wild to set
 		 */
-		public void setIsWild(boolean isWild) {
-			this.isWild = isWild;
+		public void setWild(boolean wild) {
+			this.wild = wild;
 		}
 
 		/**
-		 * @return the isFainted
+		 * @return the fainted
 		 */
-		public boolean isIsFainted() {
-			return isFainted;
+		public boolean isFainted() {
+			return fainted;
 		}
 
 		/**
-		 * @param isFainted the isFainted to set
+		 * @param fainted the fainted to set
 		 */
-		public void setIsFainted(boolean isFainted) {
-			this.isFainted = isFainted;
+		public void setFainted(boolean fainted) {
+			this.fainted = fainted;
 		}
 
 		/**

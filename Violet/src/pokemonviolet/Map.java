@@ -11,6 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.List;
+import java.util.Random;
 import javax.imageio.ImageIO;
 
 
@@ -67,29 +68,29 @@ public class Map {
 	
 	public static void loadImages(){
 		try{
-			tileset = ImageIO.read(new File("tileset.png"));
+			tileset = ImageIO.read(new File("assets/tileset.png"));
 			
-			shop = ImageIO.read(new File("shop.png"));
+			shop = ImageIO.read(new File("assets/shop.png"));
 			
-			gym = ImageIO.read(new File("gym.png"));
+			gym = ImageIO.read(new File("assets/gym.png"));
 			
-			center = ImageIO.read(new File("center.png"));
+			center = ImageIO.read(new File("assets/center.png"));
 			
-			objects = ImageIO.read(new File("objects.png"));
+			objects = ImageIO.read(new File("assets/objects.png"));
 			
-			house = ImageIO.read(new File("house.png"));
+			house = ImageIO.read(new File("assets/house.png"));
 			
-			tree = ImageIO.read(new File("tree.png"));
+			tree = ImageIO.read(new File("assets/tree.png"));
 			
-			tree2 = ImageIO.read(new File("tree2.png"));
+			tree2 = ImageIO.read(new File("assets/tree2.png"));
 			
-			house2 = ImageIO.read(new File("house2.png"));
+			house2 = ImageIO.read(new File("assets/house2.png"));
 			
-			house3 = ImageIO.read(new File("house3.png"));
+			house3 = ImageIO.read(new File("assets/house3.png"));
 			
-			wstone = ImageIO.read(new File("wstone.png"));
+			wstone = ImageIO.read(new File("assets/wstone.png"));
 			
-			wstone2 = ImageIO.read(new File("wstone2.png"));
+			wstone2 = ImageIO.read(new File("assets/wstone2.png"));
 			
 			objSets = new BufferedImage[] {objects,house,house2,house3,center,shop,gym,tree,tree2,wstone,wstone2};
 		}catch (IOException ex){
@@ -256,76 +257,11 @@ public class Map {
 		return regY;
 	}
 	
-	/**
-	 * @return the x
-	 */
-	/*
-	public int getX() {
-		return x;
-	}
-	*/
-	/**
-	 * @param x the x to set
-	 */
-	/*
-	public void setX(int x) {
-		this.x = x;
-	}
-	*/
-	/**
-	 * @return the y
-	 */
-	/*
-	public int getY() {
-		return y;
-	}
-	*/
-/*
-	public int calcX(int xTile, int posMap){
-		int playerMapX,playerXinMap,baseX,displacementX;
-		double percentX;
-
-		playerMapX = ((int)Math.floor(xTile/Map.MAP_ROW_TILES))+1;
-		playerXinMap = xTile-((playerMapX-1)*Map.MAP_ROW_TILES);
-		
-		baseX = (int)((posMap)*Map.MAP_TOTAL_SIZE_X);
-
-		percentX = (double)((double)playerXinMap/(double)Map.MAP_ROW_TILES);
-		displacementX = (int)(Map.MAP_TOTAL_SIZE_X*(percentX))+Map.MAP_TOTAL_SIZE_X-(int)(Game.SCREEN_SIZE_X/2);
-		
-		return (baseX-displacementX);
-	}
-	
-	public int calcY(int yTile, int posMap){
-		int playerMapY,playerYinMap,baseY,displacementY;
-		double percentY;
-
-		playerMapY = ((int)Math.floor(yTile/Map.MAP_ROW_TILES))+1;
-		playerYinMap = yTile-((playerMapY-1)*Map.MAP_ROW_TILES);
-		
-		baseY = (int)((posMap)*Map.MAP_TOTAL_SIZE_Y);
-
-		percentY = (double)((double)playerYinMap/(double)Map.MAP_ROW_TILES);
-		displacementY = (int)(Map.MAP_TOTAL_SIZE_Y*(percentY))+Map.MAP_TOTAL_SIZE_Y-(int)(Game.SCREEN_SIZE_Y/2);
-		
-	//	System.out.println(playerMapY+" - "+playerYinMap+" - "+baseY+" - "+displacementY);
-		
-		return (baseY-displacementY); 
-	}
-*/	
 	public String[] getTileInformation(int x, int y){
 		
 		return (this.tileInformation.get(y).split(",")[x].split("-"));
 	}
 	
-	/**
-	 * @param y the y to set
-	 */
-	/*
-	public void setY(int y) {
-		this.y = y;
-	}
-*/
 	/**
 	 * @return the image
 	 */
@@ -346,7 +282,32 @@ public class Map {
 	public int[][] getPokemonInMap() {
 		return pokemonInMap;
 	}
-
+	
+	public int[] getWildPokemon(int x, int y){
+		int[][] pokemonInTile = new int[100][2];
+		int numPokemon=0;
+		
+		Random rnd = new Random();
+		
+		for (int i = 0; i < pokemonInMap.length; i++) {
+			if (pokemonInMap[i][0]==1){
+				if (pokemonInMap[i][3] <= x &&  x <= pokemonInMap[i][4] && pokemonInMap[i][5] <= y &&  y <= pokemonInMap[i][6]){
+					pokemonInTile[numPokemon][0] = i+1;
+					pokemonInTile[numPokemon][1] = rnd.nextInt(pokemonInMap[i][2]-pokemonInMap[i][1])+pokemonInMap[i][2];
+					
+					numPokemon = numPokemon + 1;
+				}
+			}
+		}
+		
+		if (numPokemon == 0){
+			pokemonInTile[0][0] = 1;
+			pokemonInTile[0][1] = 5;
+			numPokemon = numPokemon+1;
+		}
+		return pokemonInTile[rnd.nextInt(numPokemon)];
+	}
+	
 	/**
 	 * @return the xMap
 	 */

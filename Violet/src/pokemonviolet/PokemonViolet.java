@@ -17,7 +17,7 @@ public class PokemonViolet {
 	public static void main(String[] args) throws InterruptedException{
 		
 		//	new MapBuilder(javax.swing.JFrame.EXIT_ON_CLOSE);
-			
+		
 			Game game = new Game();
 
 			Thread gameThread = new Thread(game);
