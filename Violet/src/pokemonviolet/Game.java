@@ -55,6 +55,22 @@ public class Game implements Runnable{
 			 * Amount of Maps in Y.
 			 */
 			public static int NUM_MAPS_Y;
+			/**
+			 * Canvas size in X dimension.
+			 */
+			public static int SCREEN_SIZE_X;
+			/**
+			 * Canvas size in Y dimension.
+			 */
+			public static int SCREEN_SIZE_Y;
+			/**
+			 * All maps dimensions.
+			 */
+			public static int ALL_MAPS_WIDTH, ALL_MAPS_HEIGHT;
+			/**
+			 * Current map position.
+			 */
+			public static int ALL_MAPS_X, ALL_MAPS_Y;
 		//</editor-fold>
 		
 		/**
@@ -62,47 +78,22 @@ public class Game implements Runnable{
 		 */
 		public static Player player;
 		/**
-		 * Steps needed to spawn a Pokemon.
-		 */
-	//	public static int stepsToSpawn = roll(1,2,3);
-		/**
-		 * Current Pokemon in game.
-		 */
-		//public static Pokemon enemyPokemon;
-		/**
-		 * Current enemy trainer in game.
-		 */
-		public static Trainer enemyTrainer;
-		/**
 		 * Maps displayed.
 		 */
 		public static Map[][] displayedMaps;
-		/**
-		 * Canvas size in X dimension.
-		 */
-		public static int SCREEN_SIZE_X;
-		/**
-		 * Canvas size in Y dimension.
-		 */
-		public static int SCREEN_SIZE_Y;
 		/**
 		 * All maps in one Buffered Image!
 		 * <p>(What a time to be alive.)</p>
 		 */
 		public static BufferedImage ALL_MAPS;
 		/**
-		 * All maps dimensions.
+		 * Current battle handler.
 		 */
-		public static int ALL_MAPS_WIDTH, ALL_MAPS_HEIGHT;
-		/**
-		 * Current map position.
-		 */
-		public static int ALL_MAPS_X, ALL_MAPS_Y;
+		public static Combat currentBattle;
 	// </editor-fold>
 		
 	/**
 	 * Build game.
-	 * @param openID ID of window to open.
 	 */
 	public Game() {
 		Map.loadImages();
@@ -110,8 +101,8 @@ public class Game implements Runnable{
 		NUM_MAPS_X = 4;
 		NUM_MAPS_Y = 4;
 		
-		SCREEN_SIZE_X = 592;
-		SCREEN_SIZE_Y = 469;
+		SCREEN_SIZE_X = 480;
+		SCREEN_SIZE_Y = 320;
 		
 		ALL_MAPS_WIDTH = Map.MAP_TOTAL_SIZE_X*3;
 		ALL_MAPS_HEIGHT = Map.MAP_TOTAL_SIZE_Y*3;
@@ -207,9 +198,9 @@ public class Game implements Runnable{
 		
 			setMaps();
 			
-			new GameWindow(javax.swing.JFrame.EXIT_ON_CLOSE);
+			new GameWindow();
 			
-		//	new ClassTestWindow(javax.swing.JFrame.EXIT_ON_CLOSE);
+		//	new ClassTestWindow();
 		
 		try {
 			Thread.sleep(1000);
@@ -348,13 +339,14 @@ public class Game implements Runnable{
 	public void steppedGrass(){
 		player.setSpawnSteps(player.getSpawnSteps()-1);
 		if (player.getSpawnSteps() == 0){
-			player.setInCombat(true);
-
+			
 			int[][] enemyTeam = new int[6][2];
 
 			enemyTeam[0] = getWildPokemon();
 
-			enemyTrainer = new Trainer("DAT BOI", "AYY WHADDUP", enemyTeam,1);
+			System.out.println(new Pokemon(enemyTeam[0][1]).getNameInternal()+ " "+new Pokemon(enemyTeam[0][1]).getNameNick()+" "+new Pokemon(enemyTeam[0][1]).getNameSpecies());
+			
+			currentBattle = new Combat(player,new Trainer("DAT BOI", "AYY WHADDUP", enemyTeam,1));
 		}
 	}
 	

@@ -248,7 +248,7 @@ public final class Player {
 		this.setxTile(30);
 		this.setyTile(30);
 		this.setInCombat(false);
-		this.currentPokemon = 0;
+		this.setCurrentPokemon(0);
 		setSpawnSteps(roll(1, 2, 3));
 	}
 	
@@ -916,5 +916,18 @@ public final class Player {
 			this.inCombat = inCombat;
 		}
 
+		/**
+		 * @return the currentPokemon
+		 */
+		public int getCurrentPokemon() {
+			return currentPokemon;
+		}
+
+		/**
+		 * @param currentPokemon the currentPokemon to set
+		 */
+		public void setCurrentPokemon(int currentPokemon) {
+			this.currentPokemon = currentPokemon;
+		}
 	//</editor-fold>
 }

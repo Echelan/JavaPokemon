@@ -67,5 +67,48 @@ public class Trainer {
 		
 		this.reward = 100;
 	}
-	
+
+	//<editor-fold defaultstate="collapsed" desc="Getters & Setters">
+		/**
+		 * @return the reward
+		 */
+		public int getReward() {
+			return reward;
+		}
+
+		/**
+		 * @return the name
+		 */
+		public String getName() {
+			return name;
+		}
+
+		/**
+		 * @return the type
+		 */
+		public String getType() {
+			return type;
+		}
+
+		/**
+		 * @return the team
+		 */
+		public Pokemon[] getTeam() {
+			return team;
+		}
+
+		/**
+		 * @return the currentPokemon
+		 */
+		public int getCurrentPokemon() {
+			return currentPokemon;
+		}
+
+		/**
+		 * @param currentPokemon the currentPokemon to set
+		 */
+		public void setCurrentPokemon(int currentPokemon) {
+			this.currentPokemon = currentPokemon;
+		}
+	//</editor-fold>
 }
