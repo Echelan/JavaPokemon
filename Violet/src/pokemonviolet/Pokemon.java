@@ -85,7 +85,7 @@ public class Pokemon {
 		private String gender;
 		private String nameNick;
 		private String ballType;
-		private PokemonMove[] moves;
+		private PokemonMove[] moveSet;
 		private int curHP;
 		private int curEXP;
 		private int maxEXP;
@@ -93,6 +93,7 @@ public class Pokemon {
 		private boolean wild;
 		private boolean fainted;
 		private String status;
+		private int numMoves;
 	//</editor-fold>
 	
 	/**
@@ -498,22 +499,21 @@ public class Pokemon {
 				if (this.getLevel() == 0){
 					Random rnd = new Random();
 					this.level = rnd.nextInt(99)+1;
-					int moveCount = 0;
 					int allMovesCounter = this.getLevel() + 1;
-					this.moves = new PokemonMove[4];
+					this.moveSet = new PokemonMove[4];
 					boolean finished = false;
 					while (!finished){
 						allMovesCounter = allMovesCounter - 1;
 						if (this.allMoves[allMovesCounter] != null){
 							String[] thisLevelMoves = this.allMoves[allMovesCounter].split(",");
 							for (int j = 0; j < thisLevelMoves.length; j++) {
-								if (moveCount < 4){
-									this.moves[moveCount] = new PokemonMove(thisLevelMoves[j]);
-									moveCount = moveCount + 1;
+								if (numMoves < 4){
+									this.moveSet[numMoves] = new PokemonMove(thisLevelMoves[j]);
+									numMoves = numMoves + 1;
 								}
 							}
 						}
-						if (moveCount == 4 || allMovesCounter == 1){
+						if (numMoves == 4 || allMovesCounter == 1){
 							finished = true;
 						}
 					}
@@ -796,7 +796,7 @@ public class Pokemon {
 	 * @param newMove New move to set.
 	 */
 	public void setMove(int place, PokemonMove newMove){
-		moves[place] = newMove;
+		moveSet[place] = newMove;
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="setMove Sub-Processes">
@@ -828,8 +828,8 @@ public class Pokemon {
 		 */
 		public void replaceMove(int oldMove, PokemonMove newMove){
 			int id = 0;
-			for (int i = 0; i < moves.length; i++) {
-				if (moves[i].getId() == oldMove){
+			for (int i = 0; i < getMoves().length; i++) {
+				if (getMoves()[i].getId() == oldMove){
 					id = i;
 				}
 			}
@@ -864,8 +864,8 @@ public class Pokemon {
 		 */
 		public void replaceMove(String oldMove, PokemonMove newMove){
 			int place = 0;
-			for (int i = 0; i < moves.length; i++) {
-				if (moves[i].getNameInternal().compareTo(oldMove)== 0){
+			for (int i = 0; i < getMoves().length; i++) {
+				if (getMoves()[i].getNameInternal().compareTo(oldMove)== 0){
 					place = i;
 				}
 			}
@@ -920,6 +920,60 @@ public class Pokemon {
 		 */
 		public void replaceMove(PokemonMove oldMove, int newMove){
 			replaceMove(oldMove,new PokemonMove(newMove));
+		}
+		
+		/**
+		 * Adds a given move to moveset.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param newMove New move to set.
+		 * @return Success of process.
+		 */
+		public boolean addMove(PokemonMove newMove){
+			boolean success = true;
+			if (numMoves<4){
+				setMove(numMoves,newMove);
+				numMoves = numMoves+1;
+			}else{
+				success = false;
+			}
+			
+			return success;
+		}
+		
+		/**
+		 * Adds a given move to moveset.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param newMove Internal name of new move to set.
+		 * @return Success of process.
+		 */
+		public boolean addMove(String newMove){
+			boolean success = true;
+			if (numMoves<4){
+				setMove(numMoves,new PokemonMove(newMove));
+				numMoves = numMoves+1;
+			}else{
+				success = false;
+			}
+			
+			return success;
+		}
+		
+		/**
+		 * Adds a given move to moveset.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param newMove ID of new move to set.
+		 * @return Success of process.
+		 */
+		public boolean addMove(int newMove){
+			boolean success = true;
+			if (numMoves<4){
+				setMove(numMoves,new PokemonMove(newMove));
+				numMoves = numMoves+1;
+			}else{
+				success = false;
+			}
+			
+			return success;
 		}
 	//</editor-fold>
 	
@@ -987,6 +1041,13 @@ public class Pokemon {
 			return (this.numEvols > 0);
 		}
 
+		/**
+		 * @return the moves
+		 */
+		public PokemonMove[] getMoves() {
+			return moveSet;
+		}
+		
 		/**
 		 * @return the nameInternal
 		 */
@@ -1182,5 +1243,12 @@ public class Pokemon {
 			}
 		}
 	// </editor-fold>
-		
+
+	/**
+	 * @return the numMoves
+	 */
+	public int getNumMoves() {
+		return numMoves;
+	}
+
 }

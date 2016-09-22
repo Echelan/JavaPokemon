@@ -343,8 +343,6 @@ public class Game implements Runnable{
 			int[][] enemyTeam = new int[6][2];
 
 			enemyTeam[0] = getWildPokemon();
-
-			System.out.println(new Pokemon(enemyTeam[0][1]).getNameInternal()+ " "+new Pokemon(enemyTeam[0][1]).getNameNick()+" "+new Pokemon(enemyTeam[0][1]).getNameSpecies());
 			
 			currentBattle = new Combat(player,new Trainer("DAT BOI", "AYY WHADDUP", enemyTeam,1));
 		}

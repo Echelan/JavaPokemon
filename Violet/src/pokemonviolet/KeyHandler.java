@@ -39,7 +39,6 @@ public class KeyHandler extends KeyAdapter{
 				Game.player.setRunning(false);
 			}
 		}else{
-			
 		}
     }
   
@@ -69,7 +68,17 @@ public class KeyHandler extends KeyAdapter{
 				Game.player.setRunning(true);
 			}
 		}else{
-			
+			if (key.getKeyCode() == KeyEvent.VK_UP || key.getKeyCode() == KeyEvent.VK_W){
+				Game.currentBattle.move(-2);
+			}else if(key.getKeyCode() == KeyEvent.VK_DOWN || key.getKeyCode() == KeyEvent.VK_S){
+				Game.currentBattle.move(2);
+			}else if(key.getKeyCode() == KeyEvent.VK_LEFT || key.getKeyCode() == KeyEvent.VK_A){
+				Game.currentBattle.move(-1);
+			}else if(key.getKeyCode() == KeyEvent.VK_RIGHT || key.getKeyCode() == KeyEvent.VK_D){
+				Game.currentBattle.move(1);
+			}else if(key.getKeyCode() == KeyEvent.VK_J){
+				Game.currentBattle.accept();
+			}
 		}
     }
 }
