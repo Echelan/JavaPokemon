@@ -69,15 +69,17 @@ public class KeyHandler extends KeyAdapter{
 			}
 		}else{
 			if (key.getKeyCode() == KeyEvent.VK_UP || key.getKeyCode() == KeyEvent.VK_W){
-				Game.currentBattle.move(-2);
+				Game.currentBattle.move("UP");
 			}else if(key.getKeyCode() == KeyEvent.VK_DOWN || key.getKeyCode() == KeyEvent.VK_S){
-				Game.currentBattle.move(2);
+				Game.currentBattle.move("DOWN");
 			}else if(key.getKeyCode() == KeyEvent.VK_LEFT || key.getKeyCode() == KeyEvent.VK_A){
-				Game.currentBattle.move(-1);
+				Game.currentBattle.move("LEFT");
 			}else if(key.getKeyCode() == KeyEvent.VK_RIGHT || key.getKeyCode() == KeyEvent.VK_D){
-				Game.currentBattle.move(1);
+				Game.currentBattle.move("RIGHT");
 			}else if(key.getKeyCode() == KeyEvent.VK_J){
 				Game.currentBattle.accept();
+			}else if(key.getKeyCode() == KeyEvent.VK_K){
+				Game.currentBattle.cancel();
 			}
 		}
     }
