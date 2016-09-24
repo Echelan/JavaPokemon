@@ -39,9 +39,17 @@ public class KeyHandler extends KeyAdapter{
 				Game.player.setRunning(false);
 			}
 		}else{
+			 if(key.getKeyCode() == KeyEvent.VK_J){
+				Game.currentBattle.accept();
+			}else if(key.getKeyCode() == KeyEvent.VK_K){
+				Game.currentBattle.cancel();
+			}
 		}
     }
   
+	
+			
+	
     public void keyPressed(KeyEvent key) {
 		if (!Game.player.isInCombat()){
 			if (key.getKeyCode() == KeyEvent.VK_UP || key.getKeyCode() == KeyEvent.VK_W){
@@ -76,10 +84,10 @@ public class KeyHandler extends KeyAdapter{
 				Game.currentBattle.move("LEFT");
 			}else if(key.getKeyCode() == KeyEvent.VK_RIGHT || key.getKeyCode() == KeyEvent.VK_D){
 				Game.currentBattle.move("RIGHT");
-			}else if(key.getKeyCode() == KeyEvent.VK_J){
-				Game.currentBattle.accept();
-			}else if(key.getKeyCode() == KeyEvent.VK_K){
-				Game.currentBattle.cancel();
+		//	}else if(key.getKeyCode() == KeyEvent.VK_J){
+		//		Game.currentBattle.accept();
+		//	}else if(key.getKeyCode() == KeyEvent.VK_K){
+		//		Game.currentBattle.cancel();
 			}
 		}
     }

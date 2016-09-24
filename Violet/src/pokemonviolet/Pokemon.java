@@ -7,6 +7,7 @@
  */
 package pokemonviolet;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -15,85 +16,86 @@ import java.util.Random;
 public class Pokemon {
 	
 	//<editor-fold defaultstate="collapsed" desc="Attributes">
-		// 'GLOBAL'
-		static final private int NUM_ATTRIB = 40;
-		static final private int MAX_TOTAL_EV = 510;
-		static final private int MAX_SINGLE_EV = 252;
+		//<editor-fold defaultstate="collapsed" desc="Species Wide">
+			static final private int NUM_ATTRIB = 40;
+			static final private int MAX_TOTAL_EV = 510;
+			static final private int MAX_SINGLE_EV = 252;
 
-		private int id;
-		private final boolean shiny;
-		private String nameSpecies;
-		private String nameInternal;
-		private String kind;
-		private String pokeEntry;
-		private PokemonType[] types;
+			private int id;
+			private String nameSpecies;
+			private String nameInternal;
+			private String kind;
+			private String pokeEntry;
+			private String[] types;
 
-		private int baseHP;
-		private int baseAttack;
-		private int baseDefense;
-		private int baseSpeed;
-		private int baseSpAtk;
-		private int baseSpDef;
+			private int baseHP;
+			private int baseAttack;
+			private int baseDefense;
+			private int baseSpeed;
+			private int baseSpAtk;
+			private int baseSpDef;
 
-		private int yieldEXP;
-		private int yieldHP;
-		private int yieldAttack;
-		private int yieldDefense;
-		private int yieldSpeed;
-		private int yieldSpAtk;
-		private int yieldSpDef;
+			private int yieldEXP;
+			private int yieldHP;
+			private int yieldAttack;
+			private int yieldDefense;
+			private int yieldSpeed;
+			private int yieldSpAtk;
+			private int yieldSpDef;
 
-		private int statHP;
-		private int statAttack;
-		private int statDefense;
-		private int statSpeed;
-		private int statSpAtk;
-		private int statSpDef;
+			private int statHP;
+			private int statAttack;
+			private int statDefense;
+			private int statSpeed;
+			private int statSpAtk;
+			private int statSpDef;
 
-		private int EVHP;
-		private int EVAttack;
-		private int EVDefense;
-		private int EVSpeed;
-		private int EVSpAtk;
-		private int EVSpDef;
+			private int EVHP;
+			private int EVAttack;
+			private int EVDefense;
+			private int EVSpeed;
+			private int EVSpAtk;
+			private int EVSpDef;
 
-		private int IVHP;
-		private int IVAttack;
-		private int IVDefense;
-		private int IVSpeed;
-		private int IVSpAtk;
-		private int IVSpDef;
+			private int IVHP;
+			private int IVAttack;
+			private int IVDefense;
+			private int IVSpeed;
+			private int IVSpAtk;
+			private int IVSpDef;
 
-		private int catchRate;
-		private String growthRate;
-		private int hatchSteps;
-		private String color;
-		private String habitat;
-		private String[] allMoves;
+			private int catchRate;
+			private String growthRate;
+			private int hatchSteps;
+			private String color;
+			private String habitat;
+			private ArrayList<String> allMoves;
 
-		private String height;
-		private String weight;
+			private String height;
+			private String weight;
 
-		private int numEvols;
-		private String[] evolvesInto;
-		private String[] evolveMethod;
-		private int[] evolveLevel;
-		private String[] evolveItem;
+			private int numEvols;
+			private String[] evolvesInto;
+			private String[] evolveMethod;
+			private int[] evolveLevel;
+			private String[] evolveItem;
+		//</editor-fold>
 
-
-		// 'LOCAL'
-		private String gender;
-		private String nameNick;
-		private String ballType;
-		private PokemonMove[] moveSet;
-		private int curHP;
-		private int curEXP;
-		private int maxEXP;
-		private int level;
-		private boolean wild;
-		private boolean fainted;
-		private String status;
-		private int numMoves;
+		//<editor-fold defaultstate="collapsed" desc="Pokemon Specific">
+			private boolean shiny;
+			private String gender;
+			private String nameNick;
+			private String ballType;
+			private PokemonMove[] moveSet;
+			private int curHP;
+			private int curEXP;
+			private int maxEXP;
+			private int level;
+			private boolean wild;
+			private boolean fainted;
+			private String status;
+			private int numMoves;
+		//</editor-fold>
 	//</editor-fold>
 	
 	/**
@@ -102,12 +104,9 @@ public class Pokemon {
 	 */
 	public Pokemon(int id) {
 		this.id = id;
-		this.shiny = false;
 		this.gender = "TBD";
-		this.level = 0;
-		this.ballType = "POKEBALL";
+		this.level = 3;
 		this.wild = true;
-		this.status="";
 		
 		genIVs();
 		
@@ -125,12 +124,9 @@ public class Pokemon {
 	public Pokemon(String nameInternal) {
 		this.nameInternal = nameInternal;
 		this.id = getPokemonID(nameInternal);
-		this.shiny = false;
 		this.gender = "TBD";
-		this.level = 0;
-		this.ballType = "POKEBALL";
+		this.level = 3;
 		this.wild = true;
-		this.status="";
 		
 		genIVs();
 		
@@ -149,9 +145,9 @@ public class Pokemon {
 	public Pokemon(String nameInternal, String ballType) {
 		this.nameInternal = nameInternal;
 		this.id = getPokemonID(nameInternal);
-		this.shiny = false;
 		this.gender = "TBD";
-		this.level = 0;
+		this.level = 3;
+		this.wild = false;
 		this.ballType = ballType;
 		
 		genIVs();
@@ -170,12 +166,10 @@ public class Pokemon {
 	 */
 	public Pokemon(int id, String ballType) {
 		this.id = id;
-		this.shiny = false;
 		this.gender = "TBD";
-		this.level = 0;
-		if (ballType.compareTo("WILD") != 0){
-			this.ballType = ballType;
-		}
+		this.level = 3;
+		this.wild = false;
+		this.ballType = ballType;
 		
 		genIVs();
 		
@@ -194,9 +188,9 @@ public class Pokemon {
 	public Pokemon(String nameInternal, int ballType) {
 		this.nameInternal = nameInternal;
 		this.id = getPokemonID(nameInternal);
-		this.shiny = false;
 		this.gender = "TBD";
-		this.level = 0;
+		this.level = 3;
+		this.wild = false;
 		this.ballType = new Item(ballType).getNameInternal();
 		
 		genIVs();
@@ -215,9 +209,9 @@ public class Pokemon {
 	 */
 	public Pokemon(int id, int ballType) {
 		this.id = id;
-		this.shiny = false;
 		this.gender = "TBD";
-		this.level = 0;
+		this.level = 3;
+		this.wild = false;
 		this.ballType = new Item(ballType).getNameInternal();
 		
 		genIVs();
@@ -237,9 +231,9 @@ public class Pokemon {
 	public Pokemon(String nameInternal, Item ball) {
 		this.nameInternal = nameInternal;
 		this.id = getPokemonID(nameInternal);
-		this.shiny = false;
 		this.gender = "TBD";
-		this.level = 0;
+		this.level = 3;
+		this.wild = false;
 		this.ballType = ball.getNameInternal();
 		
 		genIVs();
@@ -258,9 +252,9 @@ public class Pokemon {
 	 */
 	public Pokemon(int id, Item ball) {
 		this.id = id;
-		this.shiny = false;
 		this.gender = "TBD";
-		this.level = 0;
+		this.level = 3;
+		this.wild = false;
 		this.ballType = ball.getNameInternal();
 		
 		genIVs();
@@ -281,9 +275,9 @@ public class Pokemon {
 	public Pokemon(String nameInternal, String ballType, int level) {
 		this.nameInternal = nameInternal;
 		this.id = getPokemonID(nameInternal);
-		this.shiny = false;
 		this.gender = "TBD";
 		this.level = level;
+		this.wild = false;
 		this.ballType = ballType;
 		
 		genIVs();
@@ -303,11 +297,13 @@ public class Pokemon {
 	 */
 	public Pokemon(int id, String ballType, int level) {
 		this.id = id;
-		this.shiny = false;
 		this.gender = "TBD";
 		this.level = level;
 		if (ballType.compareTo("WILD") != 0){
 			this.ballType = ballType;
+			this.wild = true;
+		}else{
+			this.wild = false;
 		}
 		
 		genIVs();
@@ -328,9 +324,9 @@ public class Pokemon {
 	public Pokemon(String nameInternal, int ballType, int level) {
 		this.nameInternal = nameInternal;
 		this.id = getPokemonID(nameInternal);
-		this.shiny = false;
 		this.gender = "TBD";
 		this.level = level;
+		this.wild = false;
 		this.ballType = new Item(ballType).getNameInternal();
 		
 		genIVs();
@@ -350,9 +346,9 @@ public class Pokemon {
 	 */
 	public Pokemon(int id, int ballType, int level) {
 		this.id = id;
-		this.shiny = false;
 		this.gender = "TBD";
 		this.level = level;
+		this.wild = false;
 		this.ballType = new Item(ballType).getNameInternal();
 		
 		genIVs();
@@ -373,9 +369,9 @@ public class Pokemon {
 	public Pokemon(String nameInternal, Item ball, int level) {
 		this.nameInternal = nameInternal;
 		this.id = getPokemonID(nameInternal);
-		this.shiny = false;
 		this.gender = "TBD";
 		this.level = level;
+		this.wild = false;
 		this.ballType = ball.getNameInternal();
 		
 		genIVs();
@@ -395,9 +391,9 @@ public class Pokemon {
 	 */
 	public Pokemon(int id, Item ball, int level) {
 		this.id = id;
-		this.shiny = false;
 		this.gender = "TBD";
 		this.level = level;
+		this.wild = false;
 		this.ballType = ball.getNameInternal();
 		
 		genIVs();
@@ -422,6 +418,12 @@ public class Pokemon {
 		this.IVSpAtk = rnd.nextInt(32);
 		this.IVSpDef = rnd.nextInt(32);
 		
+		if (this.IVSpeed==10 && this.IVDefense==10 && this.IVSpAtk==10 && this.IVSpDef==10 && this.IVAttack==10){
+			this.shiny = true;
+		}else{
+			this.shiny = false;
+		}
+		
 		wipeEVs();
 	}
 	
@@ -445,7 +447,6 @@ public class Pokemon {
 	private boolean readInfo(int id){
 		boolean success = false;
 		
-		
 		String[] pokeinfo = Game.INFO_POKEMON.get(id-1).split(";");
 		
 		for (int i = 0; i < NUM_ATTRIB; i++){
@@ -457,6 +458,13 @@ public class Pokemon {
 				this.nameInternal = partes[1];
 			 }else if (partes[0].compareTo("Pokedex")==0){
 				this.pokeEntry = partes[1];
+			 }else if (partes[0].compareTo("Type1")==0){
+				this.types = new String[2];
+				this.types[0] = partes[1];
+			 }else if (partes[0].compareTo("Type2")==0){
+				if (partes.length==2){
+					this.types[1] = partes[1];
+				}
 			}else if (partes[0].compareTo("Kind")==0){
 				this.kind = partes[1];
 			}else if (partes[0].compareTo("BaseHP")==0){
@@ -486,36 +494,25 @@ public class Pokemon {
 			}else if (partes[0].compareTo("StepsToHatch")==0){
 				this.hatchSteps = Integer.parseInt(partes[1]);
 			}else if (partes[0].compareTo("Moves")==0){
-				this.allMoves = new String[101];
+				this.allMoves = new ArrayList<String>();
+				this.moveSet = new PokemonMove[4];
+					
 				String[] readMoves = partes[1].split(",");
+				
 				for (int j = 0; j < readMoves.length; j = j+2) {
-					int position = Integer.parseInt(readMoves[j]);
-					if (this.allMoves[position] != null){
-						this.allMoves[position] = this.allMoves[position] + "," + readMoves[j+1];
-					}else{
-						this.allMoves[position] = readMoves[j+1];
-					}
+					int moveLevel = Integer.parseInt(readMoves[j]);
+					this.allMoves.add(moveLevel+"-"+readMoves[j+1]);
 				}
-				if (this.getLevel() == 0){
-					Random rnd = new Random();
-					this.level = rnd.nextInt(99)+1;
-					int allMovesCounter = this.getLevel() + 1;
-					this.moveSet = new PokemonMove[4];
-					boolean finished = false;
-					while (!finished){
-						allMovesCounter = allMovesCounter - 1;
-						if (this.allMoves[allMovesCounter] != null){
-							String[] thisLevelMoves = this.allMoves[allMovesCounter].split(",");
-							for (int j = 0; j < thisLevelMoves.length; j++) {
-								if (numMoves < 4){
-									this.moveSet[numMoves] = new PokemonMove(thisLevelMoves[j]);
-									numMoves = numMoves + 1;
-								}
-							}
+				
+				if (this.numMoves == 0){
+					
+					int cycle = 0;
+					while (numMoves < 4 && cycle < this.allMoves.size()){
+						String thisMove = this.allMoves.get(cycle);
+						if (Integer.parseInt(thisMove.split("-")[0])==1){
+							addMove(thisMove.split("-")[1]);
 						}
-						if (numMoves == 4 || allMovesCounter == 1){
-							finished = true;
-						}
+						cycle=cycle+1;
 					}
 				}
 			}else if (partes[0].compareTo("Color")==0){
@@ -828,8 +825,8 @@ public class Pokemon {
 		 */
 		public void replaceMove(int oldMove, PokemonMove newMove){
 			int id = 0;
-			for (int i = 0; i < getMoves().length; i++) {
-				if (getMoves()[i].getId() == oldMove){
+			for (int i = 0; i < getMoveSet().length; i++) {
+				if (getMoveSet()[i].getId() == oldMove){
 					id = i;
 				}
 			}
@@ -864,8 +861,8 @@ public class Pokemon {
 		 */
 		public void replaceMove(String oldMove, PokemonMove newMove){
 			int place = 0;
-			for (int i = 0; i < getMoves().length; i++) {
-				if (getMoves()[i].getNameInternal().compareTo(oldMove)== 0){
+			for (int i = 0; i < getMoveSet().length; i++) {
+				if (getMoveSet()[i].getNameInternal().compareTo(oldMove)== 0){
 					place = i;
 				}
 			}
@@ -1035,6 +1032,79 @@ public class Pokemon {
 		return (int)gain;
 	}
 	
+	public int[] getDamage(int moveNum, String[] enemyTypes){
+		int[] damageInfo = new int[3];
+		
+		//<editor-fold defaultstate="collapsed" desc="Base damage calculation">
+			damageInfo[0] = (2*this.level+10)/250;
+			damageInfo[0] = damageInfo[0]*(this.statAttack/this.statDefense);
+		//	System.out.println(moveNum);
+		//	System.out.println(this.getMoveSet()[moveNum].getNameDisplay());
+			damageInfo[0] = damageInfo[0]*this.getMoveSet()[moveNum].getDmgBase()+2;
+		//</editor-fold>
+		
+		double modifier=1;
+		//<editor-fold defaultstate="collapsed" desc="Damage modifier calculation">
+			//<editor-fold defaultstate="collapsed" desc="Critical hit calculation">
+				int T, P;
+				
+				Random rnd = new Random();
+				P = (rnd.nextInt(256));
+				
+				T = this.baseSpeed/2;
+				if (this.getMoveSet()[moveNum].isHighCrit()){
+					T = T * 8;
+				}
+				
+				if (P<T){
+					modifier = modifier * 2;
+					damageInfo[1] = 1;
+				}else{
+					damageInfo[1] = 0;
+				}
+			//</editor-fold>
+			//<editor-fold defaultstate="collapsed" desc="STAB modifier calculation">
+				if (this.getMoveSet()[moveNum].getType().compareTo(this.getTypes()[0])==0 || this.getMoveSet()[moveNum].getType().compareTo(this.getTypes()[1])==0){
+					modifier = modifier*1.5;
+				}
+			//</editor-fold>
+			//<editor-fold defaultstate="collapsed" desc="Type effectiveness calculation">
+				double type=1;
+				
+				if( PokemonType.getWeakness(enemyTypes[0]).contains(this.getMoveSet()[moveNum].getType()) ){
+					type=type*2;
+				}
+				if( PokemonType.getImmunity(enemyTypes[0]).contains(this.getMoveSet()[moveNum].getType()) ){
+					type=type*0;
+				}
+				if( PokemonType.getResistance(enemyTypes[0]).contains(this.getMoveSet()[moveNum].getType()) ){
+					type=type*0.5;
+				}
+				if (enemyTypes[1] != null){
+					if( PokemonType.getWeakness(enemyTypes[1]).contains(this.getMoveSet()[moveNum].getType()) ){
+						type=type*2;
+					}
+					if( PokemonType.getImmunity(enemyTypes[1]).contains(this.getMoveSet()[moveNum].getType()) ){
+						type=type*0;
+					}
+					if( PokemonType.getResistance(enemyTypes[1]).contains(this.getMoveSet()[moveNum].getType()) ){
+						type=type*0.5;
+					}
+				}
+				
+				damageInfo[2] = (int)type*10;
+				modifier = modifier*type;
+			//</editor-fold>
+			//<editor-fold defaultstate="collapsed" desc="Random calculation">
+				modifier = modifier * ((rnd.nextInt(25)+85)/100);
+			//</editor-fold>
+		//</editor-fold>
+		
+		damageInfo[0] = (int)(damageInfo[0]*modifier);	
+		
+		return damageInfo;
+	}
+	
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
 		
 		public boolean getCanEvolve(){
@@ -1042,9 +1112,23 @@ public class Pokemon {
 		}
 
 		/**
-		 * @return the moves
+		 * @return the numMoves
 		 */
-		public PokemonMove[] getMoves() {
+		public int getNumMoves() {
+			return numMoves;
+		}
+		
+		/**
+		 * @return the types
+		 */
+		public String[] getTypes() {
+			return types;
+		}
+
+		/**
+		 * @return the moveSet
+		 */
+		public PokemonMove[] getMoveSet() {
 			return moveSet;
 		}
 		
@@ -1245,10 +1329,12 @@ public class Pokemon {
 	// </editor-fold>
 
 	/**
-	 * @return the numMoves
+	 * @return the statSpeed
 	 */
-	public int getNumMoves() {
-		return numMoves;
+	public int getStatSpeed() {
+		return statSpeed;
 	}
+
+
 
 }

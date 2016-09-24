@@ -7,8 +7,6 @@
  */
 package pokemonviolet;
 
-import java.util.Random;
-
 /**
  *
  * @author Andres
@@ -36,7 +34,7 @@ public class PokemonMove {
 		/**
 		 * Type of Move.
 		 */
-		private PokemonType type;
+		private String type;
 		/**
 		 * Description of Move.
 		 */
@@ -54,17 +52,21 @@ public class PokemonMove {
 		 */
 		private int PPMax;
 		/**
-		 * Damage Calculation (Made-Up) Values.
+		 * Damage Calculation Values.
 		 */
-		private int dmgBase,numDice,numSides;
+		private int dmgBase;
 		/**
 		 * Accuracy of Move.
 		 */
 		private int accuracy;
 		/**
+		 * Move High Critical Ratio.
+		 */
+		private boolean highCrit;
+		/**
 		 * Flags of Move.
 		 */
-		private String flags;
+	//	private String flags;
 	//</editor-fold>
 	
 	/**
@@ -75,6 +77,7 @@ public class PokemonMove {
 		this.id = id;
 
 		boolean couldCreate = readInfo( this.id );
+		this.PP = this.PPMax;
 
 		if (!couldCreate){
 			System.err.println("Could not find Move with id " + id + ".");
@@ -90,7 +93,8 @@ public class PokemonMove {
 		this.id = getMoveID(nameInternal);
 
 		boolean couldCreate = readInfo( this.id );
-
+		this.PP = this.PPMax;
+		
 		if (!couldCreate){
 			System.err.println("Could not find Move with id " + id + ".");
 		}
@@ -108,31 +112,32 @@ public class PokemonMove {
 			for (int i = 0; i < NUM_ATTRIB; i++){
 					String[] partes = iteminfo[i].split("=");
 					if (partes[0].compareTo("internalName")==0){
-							this.nameInternal = partes[1];
+						this.nameInternal = partes[1];
 					}else if (partes[0].compareTo("displayName")==0){
-							this.nameDisplay = partes[1];
+						this.nameDisplay = partes[1];
 					}else if (partes[0].compareTo("basePower")==0){
-							this.dmgBase = Integer.parseInt(partes[1]);
-					}else if (partes[0].compareTo("code")==0){
-			//		this.dmgBase = Integer.parseInt(partes[1]);
+						this.dmgBase = Integer.parseInt(partes[1]);
+				//	}else if (partes[0].compareTo("code")==0){
+				//		this.dmgBase = Integer.parseInt(partes[1]);
 					}else if (partes[0].compareTo("type")==0){
-			//		this.dmgBase = Integer.parseInt(partes[1]);
+						this.type = partes[1];
 					}else if (partes[0].compareTo("category")==0){
-							this.category = partes[1];
+						this.category = partes[1];
 					}else if (partes[0].compareTo("description")==0){
-							this.description = partes[1];
+						this.description = partes[1];
 					}else if (partes[0].compareTo("accuracy")==0){
-							this.accuracy = Integer.parseInt(partes[1]);
+						this.accuracy = Integer.parseInt(partes[1]);
 					}else if (partes[0].compareTo("totalPP")==0){
 						this.setPPMax(Integer.parseInt(partes[1]));
-					}else if (partes[0].compareTo("effectChance")==0){
-			//		this.dmgBase = Integer.parseInt(partes[1]);
-					}else if (partes[0].compareTo("target")==0){
-			//		this.dmgBase = Integer.parseInt(partes[1]);
-					}else if (partes[0].compareTo("priority")==0){
-			//		this.dmgBase = Integer.parseInt(partes[1]);
+				//	}else if (partes[0].compareTo("effectChance")==0){
+				//		this.dmgBase = Integer.parseInt(partes[1]);
+				//	}else if (partes[0].compareTo("target")==0){
+				//		this.dmgBase = Integer.parseInt(partes[1]);
+				//	}else if (partes[0].compareTo("priority")==0){
+				//		this.dmgBase = Integer.parseInt(partes[1]);
 					}else if (partes[0].compareTo("flags")==0){
-							this.flags = partes[1];
+				//		this.flags = partes[1];
+						this.highCrit = partes[1].contains("h");
 					}
 			}
 			success = true;
@@ -172,22 +177,6 @@ public class PokemonMove {
 
 
 		return id;
-	}
-	
-	/**
-	 * Calculate damage caused of move.
-	 * @return Damage caused.
-	 */
-	public int calcDaño(){
-	  int daño = dmgBase;
-	  //random rnd = new random();
-	  Random rnd = new Random();
-
-	  for (int i = 0; i < numDice; i++) {
-		daño = daño + (rnd.nextInt(numSides)+1);
-	  }
-
-	  return daño;
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="Getters & Setters">
@@ -247,6 +236,43 @@ public class PokemonMove {
 		public void setPPMax(int PPMax) {
 			this.PPMax = PPMax;
 		}
+		
+		/**
+		 * @return the type
+		 */
+		public String getType() {
+			return type;
+		}
+
+		/**
+		 * @return the category
+		 */
+		public String getCategory() {
+			return category;
+		}
+
+		/**
+		 * @return the dmgBase
+		 */
+		public int getDmgBase() {
+			return dmgBase;
+		}
+
+		/**
+		 * @return the accuracy
+		 */
+		public int getAccuracy() {
+			return accuracy;
+		}
+		
+		/**
+		 * @return the highCrit
+		 */
+		public boolean isHighCrit() {
+			return highCrit;
+		}
 	//</editor-fold>
+
+
 	
 }
