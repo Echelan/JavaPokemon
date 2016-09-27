@@ -25,16 +25,17 @@ public class Combat {
 
 	private final Player player;
 	private final Trainer enemy;
-	private Pokemon currentPlayerPokemon;
-	private Pokemon currentEnemyPokemon;
-	private BufferedImage display;
-	private ArrayList<String> displayTextQueue;
-	private int maxX = 480, maxY = 320;
+	private final Pokemon currentPlayerPokemon;
+	private final Pokemon currentEnemyPokemon;
+	private final BufferedImage display;
+	private final ArrayList<String> displayTextQueue;
+	private final int maxX = 480, maxY = 320;
 	private boolean waitingAction;
 	private int optionsMain;
 	private int optionsMoves;
-	private static int SPRITE_WIDTH = 80*2;
-	private static int SPRITE_HEIGHT = 80*2;
+	private static final int RESIZE = 2;
+	private static final int SPRITE_WIDTH = 80*RESIZE;
+	private static final int SPRITE_HEIGHT = 80*RESIZE;
 	
 	public Combat(Player player, Trainer enemy) {
 		this.player = player;
@@ -47,10 +48,11 @@ public class Combat {
 		this.currentEnemyPokemon = enemy.getTeam()[enemy.getCurrentPokemon()];
 		this.currentPlayerPokemon = player.getTeam()[player.getCurrentPokemon()];
 		
-	//	for (int i = 0; i < currentEnemyPokemon.getNumMoves(); i++) {
-	//		System.out.println(i+" - "+currentEnemyPokemon.getMoveSet()[i].getNameDisplay());
-	//		
-	//	}
+		currentEnemyPokemon.setAccuracy(1);
+		currentPlayerPokemon.setAccuracy(1);
+		
+		currentEnemyPokemon.setEvasion(1);
+		currentPlayerPokemon.setEvasion(1);
 		
 		displayTextQueue = new ArrayList<String>();
 		displayTextQueue.add("A wild "+currentEnemyPokemon.getNameNick()+" appeared!");
@@ -63,91 +65,125 @@ public class Combat {
 	
 	private void refreshDisplayImage(){
 		Graphics g = getDisplay().getGraphics();
-		g.clearRect(getDisplay().getMinX(), getDisplay().getMinY(), getDisplay().getWidth(), getDisplay().getHeight());
+	//	g.clearRect(getDisplay().getMinX(), getDisplay().getMinY(), getDisplay().getWidth(), getDisplay().getHeight());
+		
+		//<editor-fold defaultstate="collapsed" desc="Background">
+			try{
+				g.drawImage(ImageIO.read(new File("assets/combat/background.png")), 0, 0, maxX, maxY, null);
+			}catch(IOException ex){
+			}
+
+			try{
+				g.drawImage(ImageIO.read(new File("assets/combat/grassunderground1.png")), 220, 85, 128*RESIZE, 36*RESIZE, null);
+				g.drawImage(ImageIO.read(new File("assets/combat/grassunderground2.png")), 10, 180, 128*RESIZE, 36*RESIZE, null);
+			}catch(IOException ex){
+			}
+		//</editor-fold>
+		
+		//<editor-fold defaultstate="collapsed" desc="Pokemon Sprites Display">
+			try{
+				String suffix1="";
+				String suffix2="";
+
+				if (currentPlayerPokemon.getGender().compareTo("Male")==0 || currentPlayerPokemon.getGender().compareTo("Genderless")==0){
+					suffix1=suffix1+"m";
+				}else{
+					suffix1=suffix1+"f";
+				}
+
+				if (currentEnemyPokemon.getGender().compareTo("Male")==0 || currentEnemyPokemon.getGender().compareTo("Genderless")==0){
+					suffix2=suffix2+"m";
+				}else{
+					suffix2=suffix2+"f";
+				}
+
+				suffix1 = suffix1+"b";
+				suffix2 = suffix2+"f";
+
+				if (currentPlayerPokemon.isShiny()){
+					suffix1=suffix1+"s";
+				}else{
+					suffix1=suffix1+"n";
+				}
+
+				if (currentEnemyPokemon.isShiny()){
+					suffix2=suffix2+"s";
+				}else{
+					suffix2=suffix2+"n";
+				}
+
+				g.drawImage(ImageIO.read(new File("assets/Pokemon Sprites/"+currentPlayerPokemon.getId()+suffix1+".png")), 64, 64, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+
+				g.drawImage(ImageIO.read(new File("assets/Pokemon Sprites/"+currentEnemyPokemon.getId()+suffix2+".png")), maxX-50-SPRITE_WIDTH, 18, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+
+			}catch(IOException ex){
+			}
+		//</editor-fold>
 		
 		try{
-			g.drawImage(ImageIO.read(new File("assets/combat/uibkgdisplay.png")), 0, 0, maxX, maxY, null);
+			g.drawImage(ImageIO.read(new File("assets/combat/dialogdisplay.png")), 0, maxY-(48*RESIZE), 240*RESIZE, 48*RESIZE, null);
 		}catch(IOException ex){
 		}
 		
-		g.setFont(new Font("Arial",0,18));
+		g.setFont(new Font("Arial",0,18));	
 		g.drawString(displayTextQueue.get(0), 30, maxY-60);
 		
-		try{
+		g.setColor(Color.green);
+		g.fillRect(86, 52, (int)((float)100*(float)((float)currentEnemyPokemon.getCurHP()/(float)currentEnemyPokemon.getStatHP())), 10);
+		g.fillRect(355, 177, (int)((float)100*(float)((float)currentPlayerPokemon.getCurHP()/(float)currentPlayerPokemon.getStatHP())), 10);
 		
-			String suffix1="";
-			String suffix2="";
-
-			if (currentPlayerPokemon.getGender().compareTo("Male")==0 || currentPlayerPokemon.getGender().compareTo("Genderless")==0){
-				suffix1=suffix1+"m";
-			}else{
-				suffix1=suffix1+"f";
-			}
-
-			if (currentEnemyPokemon.getGender().compareTo("Male")==0 || currentEnemyPokemon.getGender().compareTo("Genderless")==0){
-				suffix2=suffix2+"m";
-			}else{
-				suffix2=suffix2+"f";
-			}
-
-			suffix1 = suffix1+"b";
-			suffix2 = suffix2+"f";
-
-			if (currentPlayerPokemon.isShiny()){
-				suffix1=suffix1+"s";
-			}else{
-				suffix1=suffix1+"n";
-			}
-
-			if (currentEnemyPokemon.isShiny()){
-				suffix2=suffix2+"s";
-			}else{
-				suffix2=suffix2+"n";
-			}
-
-			g.drawImage(ImageIO.read(new File("assets/Pokemon Sprites/"+currentPlayerPokemon.getId()+suffix1+".png")), 64, 64, SPRITE_WIDTH, SPRITE_HEIGHT, null);
-			
-			g.drawImage(ImageIO.read(new File("assets/Pokemon Sprites/"+currentEnemyPokemon.getId()+suffix2+".png")), maxX-50-SPRITE_WIDTH, 18, SPRITE_WIDTH, SPRITE_HEIGHT, null);
-			
+		g.setColor(Color.blue);
+		g.fillRect(320, 207, (int)((float)140*(float)((float)currentPlayerPokemon.getCurEXP()/(float)currentPlayerPokemon.getMaxEXP())), 10);
+		
+		try{
+			g.drawImage(ImageIO.read(new File("assets/combat/enemydisplay.png")),10,20,100*RESIZE,29*RESIZE,null);
+			g.drawImage(ImageIO.read(new File("assets/combat/playerdisplay.png")),maxX-(104*RESIZE)-10,(int)(maxY/2)-15,104*RESIZE,37*RESIZE,null);
 		}catch(IOException ex){
 		}
 		
-		try{
-			if (waitingAction){
-				if (optionsMoves == -1){
-					int uiW = (120*2), uiH = (48*2);
-					g.drawImage(ImageIO.read(new File("assets/combat/uioptionsdisplay.png")), maxX-uiW, maxY-uiH, uiW, uiH, null);
-					
-					g.drawImage(ImageIO.read(new File("assets/combat/arrow.png")), maxX-230+(int)(Math.floor(optionsMain/2)*110), maxY-70+(int)(Math.floor(optionsMain%2)*30), 20, 20, null);
-				}else{
-					int uiW = (240*2), uiH = (48*2);
-					g.drawImage(ImageIO.read(new File("assets/combat/uimovesdisplay.png")), maxX-uiW, maxY-uiH, uiW, uiH, null);
-					
-					g.drawImage(ImageIO.read(new File("assets/combat/arrow.png")), 10+(int)(Math.floor(optionsMoves/2)*140), maxY-75+(int)(Math.floor(optionsMoves%2)*40), 20, 20, null);
-					for (int i = 0; i < 4; i++) {
-						String moveName;
-						if (i < currentPlayerPokemon.getNumMoves()){
-							moveName = currentPlayerPokemon.getMoveSet()[i].getNameDisplay();
-							if (moveName == null || moveName.compareTo("")==0){
+		//<editor-fold defaultstate="collapsed" desc="UI Display">
+			try{
+				if (waitingAction){
+					if (optionsMoves == -1){
+						int uiW = (120*RESIZE), uiH = (48*RESIZE);
+						g.drawImage(ImageIO.read(new File("assets/combat/uioptionsdisplay.png")), maxX-uiW, maxY-uiH, uiW, uiH, null);
+						
+						g.setColor(Color.black);
+						g.drawString("FIGHT", maxX-215, maxY-55);
+						g.drawString("BAG", maxX-105, maxY-55);
+						g.drawString("POKéMON", maxX-215, maxY-20);
+						g.drawString("RUN", maxX-105, maxY-20);
+						
+						g.drawImage(ImageIO.read(new File("assets/combat/arrow.png")), maxX-230+(int)(Math.floor(optionsMain/2)*110), maxY-70+(int)(Math.floor(optionsMain%2)*30), 20, 20, null);
+					}else{
+						int uiW = (240*RESIZE), uiH = (48*RESIZE);
+						g.drawImage(ImageIO.read(new File("assets/combat/uimovesdisplay.png")), maxX-uiW, maxY-uiH, uiW, uiH, null);
+
+						g.drawImage(ImageIO.read(new File("assets/combat/arrow.png")), 10+(int)(Math.floor(optionsMoves/2)*140), maxY-75+(int)(Math.floor(optionsMoves%2)*40), 20, 20, null);
+						for (int i = 0; i < 4; i++) {
+							String moveName;
+							if (i < currentPlayerPokemon.getNumMoves()){
+								moveName = currentPlayerPokemon.getMoveSet()[i].getNameDisplay();
+								if (moveName == null || moveName.compareTo("")==0){
+									moveName = "--";
+								}
+							}else{
 								moveName = "--";
 							}
-						}else{
-							moveName = "--";
+							g.setColor(Color.black);
+							g.drawString(moveName, 30+(int)(Math.floor(i/2)*140), maxY-60+(int)(Math.floor(i%2)*40));
 						}
-						g.setColor(Color.black);
-						g.drawString(moveName, 30+(int)(Math.floor(i/2)*140), maxY-60+(int)(Math.floor(i%2)*40));
+						if (optionsMoves<currentPlayerPokemon.getNumMoves()){
+							g.setColor(Color.black);
+							g.drawString("PP  "+currentPlayerPokemon.getMoveSet()[optionsMoves].getPP()+ " / "+currentPlayerPokemon.getMoveSet()[optionsMoves].getPPMax(), maxX-140, maxY-55);
+							g.drawString("TYPE  "+PokemonType.getNameDisplay(currentPlayerPokemon.getMoveSet()[optionsMoves].getType()), maxX-140, maxY-20);
+						}
+
 					}
-					if (optionsMoves<currentPlayerPokemon.getNumMoves()){
-						g.drawString(""+currentPlayerPokemon.getMoveSet()[optionsMoves].getPP(), maxX-90, maxY-55);
-						g.drawString(""+currentPlayerPokemon.getMoveSet()[optionsMoves].getPPMax(), maxX-30, maxY-55);
-						//g.drawString(""+currentPlayerPokemon.getMoveSet()[optionsMoves].getType().getNameDisplay(), maxX-30, maxY-55);
-					}
-					
 				}
+			}catch(IOException ex){
 			}
-		}catch(IOException ex){
-			
-		}
+		//</editor-fold>
 	}
 
 	public void accept(){
@@ -172,9 +208,13 @@ public class Combat {
 		}else{
 			displayTextQueue.remove(0);
 			if (displayTextQueue.isEmpty()){
-				waitingAction = true;
-				displayTextQueue.add("What will "+currentPlayerPokemon.getNameNick()+ " do?");
-				optionsMain = 0;
+				if (!currentEnemyPokemon.isFainted() && !currentPlayerPokemon.isFainted()){
+					waitingAction = true;
+					displayTextQueue.add("What will "+currentPlayerPokemon.getNameNick()+ " do?");
+					optionsMain = 0;
+				}else{
+					this.dispose();
+				}
 			}
 		}
 		refreshDisplayImage();
@@ -193,67 +233,67 @@ public class Combat {
 	}
 	
 	private void doRound(){
-	//	System.out.println("<ROUND>");
 		displayTextQueue.remove(0);
-		if (currentEnemyPokemon.getStatSpeed() >= currentPlayerPokemon.getStatSpeed()){
-			doEnemyTurn();
-			doPlayerTurn();
-		}else{
-			doPlayerTurn();
-			doEnemyTurn();
-		}
-	//	System.out.println("</ROUND>");
-	}
-	
-	private void doEnemyTurn(){
-	//	System.out.println("<ENEMY>");
 		Random rnd = new Random();
 		int randomMove = (rnd.nextInt(currentEnemyPokemon.getNumMoves()));
-		
-	//	System.out.println(randomMove+"<"+currentEnemyPokemon.getNumMoves());
-		
-		
-		displayTextQueue.add(currentEnemyPokemon.getNameNick()+" used "+currentEnemyPokemon.getMoveSet()[randomMove].getNameDisplay()+"!");
-		
-		int[] moveDamage = currentEnemyPokemon.getDamage(randomMove, currentPlayerPokemon.getTypes());
-		
-		currentEnemyPokemon.getMoveSet()[randomMove].setPP(currentEnemyPokemon.getMoveSet()[randomMove].getPP()-1);
-		
-		if(moveDamage[2]==0){
-			displayTextQueue.add(currentPlayerPokemon.getNameNick()+" is immune!");
-		}else if(moveDamage[2]>10){
-			displayTextQueue.add("It's super effective!");
-		}else if(moveDamage[2]<10){
-			displayTextQueue.add("It's not very effective...");
+		int turnNum = 0;
+		while (turnNum<2 && !currentEnemyPokemon.isFainted() && !currentPlayerPokemon.isFainted()){
+			if (currentEnemyPokemon.getStatSpeed() >= currentPlayerPokemon.getStatSpeed()){
+				if (turnNum == 0){
+					doTurn(currentEnemyPokemon,currentPlayerPokemon,randomMove);
+				}else{
+					doTurn(currentPlayerPokemon,currentEnemyPokemon,optionsMoves);
+				}
+				turnNum = turnNum+1;
+			}else if (currentEnemyPokemon.getStatSpeed() < currentPlayerPokemon.getStatSpeed()){
+				if (turnNum == 1){
+					doTurn(currentEnemyPokemon,currentPlayerPokemon,randomMove);
+				}else{
+					doTurn(currentPlayerPokemon,currentEnemyPokemon,optionsMoves);
+				}
+				turnNum = turnNum+1;
+			}
 		}
-		
-		if (moveDamage[1]==1){
-			displayTextQueue.add("A critical hit!");
+		optionsMoves = -1;
+		if (currentEnemyPokemon.isFainted()){
+			displayTextQueue.add(currentEnemyPokemon.getNameNick() +"fainted!");
+			displayTextQueue.add(currentPlayerPokemon.getNameNick() +"gained "+currentEnemyPokemon.getExpGain()+" EXP!");
+			boolean levelUp = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP()+currentEnemyPokemon.getExpGain());
+			if (levelUp){
+				displayTextQueue.add(currentPlayerPokemon.getNameNick()+"is now level "+currentPlayerPokemon.getLevel()+"!");
+			}
 		}
-	//	System.out.println("</ENEMY>");
+		if (currentPlayerPokemon.isFainted()){
+			System.exit(0);
+		}
 	}
 	
-	private void doPlayerTurn(){
-	//	System.out.println("<PLAYER>");
+	private void doTurn(Pokemon attacker, Pokemon attacked, int moveNum){
 		
-		displayTextQueue.add(currentPlayerPokemon.getNameNick()+" used "+currentPlayerPokemon.getMoveSet()[optionsMoves].getNameDisplay()+"!");
+		displayTextQueue.add(attacker.getNameNick()+" used "+attacker.getMoveSet()[moveNum].getNameDisplay()+"!");
 		
-		int[] moveDamage = currentPlayerPokemon.getDamage(optionsMoves, currentEnemyPokemon.getTypes());
 		
-		currentPlayerPokemon.getMoveSet()[optionsMoves].setPP(currentPlayerPokemon.getMoveSet()[optionsMoves].getPP()-1);
+		float hitChance = (attacker.getMoveSet()[moveNum].getAccuracy()/100)*(attacker.getAccuracy()/attacked.getEvasion());
 		
-		if(moveDamage[2]==0){
-			displayTextQueue.add(currentEnemyPokemon.getNameNick()+" is immune!");
-		}else if(moveDamage[2]>10){
-			displayTextQueue.add("It's super effective!");
-		}else if(moveDamage[2]<10){
-			displayTextQueue.add("It's not very effective...");
+		Random rnd = new Random();
+		float roll = (rnd.nextInt(100))/100;
+		if (hitChance >= 1 || roll<=hitChance ){
+			int[] moveDamage = attacker.getDamage(moveNum, attacked.getTypes());
+			attacker.getMoveSet()[moveNum].setPP(attacker.getMoveSet()[moveNum].getPP()-1);
+			if(moveDamage[2]==0){
+				displayTextQueue.add(attacked.getNameNick()+" is immune!");
+			}else if(moveDamage[2]>10){
+				displayTextQueue.add("It's super effective!");
+			}else if(moveDamage[2]<10){
+				displayTextQueue.add("It's not very effective...");
+			}
+			if (moveDamage[1]==1){
+				displayTextQueue.add("A critical hit!");
+			}
+			attacked.setCurHP(attacked.getCurHP()-moveDamage[0]);
+		}else{
+			displayTextQueue.add(attacker.getNameNick()+"'s attack missed!");
 		}
-		
-		if (moveDamage[1]==1){
-			displayTextQueue.add("A critical hit!");
-		}
-	//	System.out.println("</PLAYER>");
 	}
 	
 	public void move(String dir){
