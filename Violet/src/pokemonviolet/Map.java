@@ -293,7 +293,7 @@ public class Map {
 			if (pokemonInMap[i][0]==1){
 				if (pokemonInMap[i][3] <= x &&  x <= pokemonInMap[i][4] && pokemonInMap[i][5] <= y &&  y <= pokemonInMap[i][6]){
 					pokemonInTile[numPokemon][0] = i+1;
-					pokemonInTile[numPokemon][1] = rnd.nextInt(pokemonInMap[i][2]-pokemonInMap[i][1])+pokemonInMap[i][2];
+					pokemonInTile[numPokemon][1] = rnd.nextInt(pokemonInMap[i][2]-pokemonInMap[i][1])+pokemonInMap[i][1];
 					
 					numPokemon = numPokemon + 1;
 				}

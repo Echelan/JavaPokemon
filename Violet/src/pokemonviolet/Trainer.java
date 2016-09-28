@@ -8,7 +8,6 @@
 package pokemonviolet;
 
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 /**
  *
@@ -60,7 +59,7 @@ public class Trainer {
 		
 		for (int i = 0; i < maxTeam; i++) {
 		//	if (pokemon[i] != null){
-				team[numPokemonTeam] = new Pokemon(pokemon[i][0],"WILD",pokemon[i][1]);
+				team[numPokemonTeam] = new Pokemon(pokemon[i][0],pokemon[i][1]);
 				numPokemonTeam = numPokemonTeam+1;
 		//	}
 		}
@@ -102,6 +101,13 @@ public class Trainer {
 		 */
 		public int getCurrentPokemon() {
 			return currentPokemon;
+		}
+
+		/**
+		 * @return the numPokemonTeam
+		 */
+		public int getNumPokemonTeam() {
+			return numPokemonTeam;
 		}
 
 		/**

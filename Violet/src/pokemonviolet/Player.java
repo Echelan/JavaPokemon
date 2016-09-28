@@ -170,52 +170,54 @@ public final class Player {
 		//</editor-fold>
 	// </editor-fold>
 	
-	/**
-	 * Create Player with given name and given starter Pokemon.
-	 * @param name Player name.
-	 * @param starterPokemon Starter Pokemon.
-	 */
-	public Player(String name, Pokemon starterPokemon) {
-		setBasics();
-		this.name = name;
-		this.team[0] = starterPokemon;
-		this.numPokemonTeam = 1;
-	}
+	//<editor-fold defaultstate="collapsed" desc="Constructors">
+		/**
+		 * Create Player with given name and given starter Pokemon.
+		 * @param name Player name.
+		 * @param starterPokemon Starter Pokemon.
+		 */
+		public Player(String name, Pokemon starterPokemon) {
+			setBasics();
+			this.name = name;
+			this.team[0] = starterPokemon;
+			this.numPokemonTeam = 1;
+		}
 
-	/**
-	 * Create Player with given name and starter Pokemon with given ID.
-	 * @param name Player name.
-	 * @param starterID Starter Pokemon ID.
-	 */
-	public Player(String name, int starterID) {
-		setBasics();
-		this.name = name;
-		this.team[0] = new Pokemon(starterID);
-		this.numPokemonTeam = 1;
-	}
+		/**
+		 * Create Player with given name and starter Pokemon with given ID.
+		 * @param name Player name.
+		 * @param starterID Starter Pokemon ID.
+		 */
+		public Player(String name, int starterID) {
+			setBasics();
+			this.name = name;
+			this.team[0] = new Pokemon(starterID);
+			this.numPokemonTeam = 1;
+		}
 
-	/**
-	 * Create Player with given name and starter Pokemon with given internal name.
-	 * @param name Player name.
-	 * @param internalName Starter Pokemon internal name.
-	 */
-	public Player(String name, String internalName) {
-		setBasics();
-		this.name = name;
-		this.team[0] = new Pokemon(internalName);
-		this.numPokemonTeam = 1;
-	}
-	
-	/**
-	 * Create Player with given name.
-	 * @param name Player name.
-	 */
-	public Player(String name) {
-		setBasics();
-		this.name = name;
-		this.numPokemonTeam = 0;
-	}
+		/**
+		 * Create Player with given name and starter Pokemon with given internal name.
+		 * @param name Player name.
+		 * @param internalName Starter Pokemon internal name.
+		 */
+		public Player(String name, String internalName) {
+			setBasics();
+			this.name = name;
+			this.team[0] = new Pokemon(internalName);
+			this.numPokemonTeam = 1;
+		}
 
+		/**
+		 * Create Player with given name.
+		 * @param name Player name.
+		 */
+		public Player(String name) {
+			setBasics();
+			this.name = name;
+			this.numPokemonTeam = 0;
+		}
+	//</editor-fold>
+		
 	/**
 	 * Set Player's main default attributes.
 	 */
@@ -371,7 +373,7 @@ public final class Player {
 		/**
 		 * Returns amount of item with given ID carried by Player.
 		 * <p>(Sub-process, wraps to a MASTER.)</p>
-		 * @param id Item ID to search for.
+		 * @param item Item to search for.
 		 * @return amount of Item present.
 		 * @see getAmountItem(int, int)
 		 */
@@ -563,13 +565,14 @@ public final class Player {
 	 * Remove item from Player inventory.
 	 * <p>[MASTER]</p>
 	 * @param id Item ID to remove.
+	 * @param pocket Pocket of item.
 	 * @return Success of process.
 	 */
-	public boolean subItem(int id){
+	public boolean subItem(int id, int pocket){
 		boolean success = false;
 		Item item = new Item(id);
 		
-		switch(item.getPocket()){
+		switch(pocket){
 			case 1:
 				for (int i = 0; i < this.numItems; i++) {
 					if (this.pocketItems[i].getId() == id){
@@ -653,12 +656,12 @@ public final class Player {
 		 * <p>(Sub-process, wraps to a MASTER.)</p>
 		 * @param internalName Item internal name to remove.
 		 * @return Success of process.
-		 * @see subItem(int)
+		 * @see subItem(int, int)
 		 */
 		public boolean subItem(String internalName){
 			boolean success;
 
-			success = subItem(new Item(internalName).getId());
+			success = subItem(new Item(internalName).getId(),new Item(internalName).getPocket());
 
 			return success;
 		}
@@ -668,17 +671,38 @@ public final class Player {
 		 * <p>(Sub-process, wraps to a MASTER.)</p>
 		 * @param item Item to remove.
 		 * @return Success of process.
-		 * @see subItem(int)
+		 * @see subItem(int, int)
 		 */
 		public boolean subItem(Item item){
 			boolean success;
 
-			success = subItem(item.getId());
+			success = subItem(item.getId(),item.getPocket());
+
+			return success;
+		}
+		
+		/**
+		 * Remove item from Player inventory.
+		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * @param id Item id to remove.
+		 * @return Success of process.
+		 * @see subItem(int, int)
+		 */
+		public boolean subItem(int id){
+			boolean success;
+
+			success = subItem(id,new Item(id).getPocket());
 
 			return success;
 		}
 	//</editor-fold>
-	
+		
+	public void pokemonCenter(){
+		for (int i = 0; i < numPokemonTeam; i++) {
+			team[i].revive(1);
+		}
+	}
+		
 	public int calcXinMap(){
 		int playerMapX, playerXinMap;
 		playerMapX = ((int)Math.floor(xTile/Map.MAP_ROW_TILES))+1;
@@ -920,7 +944,22 @@ public final class Player {
 		 * @return the currentPokemon
 		 */
 		public int getCurrentPokemon() {
-			return currentPokemon;
+			int value;
+			if (team[currentPokemon].isFainted()){
+				int numPokemon = -1;
+
+				for (int i = 0; i < numPokemonTeam; i++) {
+					if (!team[i].isFainted()){
+						numPokemon = i;
+					}
+				}
+
+				value = numPokemon;
+			}else{
+				value = currentPokemon;
+			}
+		
+			return value;
 		}
 
 		/**

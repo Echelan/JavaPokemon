@@ -35,7 +35,7 @@ public class KeyHandler extends KeyAdapter{
 				if (Game.player.getDirection().compareTo("RIGHT")==0){
 					Game.player.setDirection("");
 				}
-			}else if(key.getKeyCode() == KeyEvent.VK_J){
+			}else if(key.getKeyCode() == KeyEvent.VK_K){
 				Game.player.setRunning(false);
 			}
 		}else{
@@ -72,7 +72,7 @@ public class KeyHandler extends KeyAdapter{
 					Game.player.setvDirection("RIGHT");
 					Game.player.setDirection("RIGHT");
 				}
-			}else if(key.getKeyCode() == KeyEvent.VK_J){
+			}else if(key.getKeyCode() == KeyEvent.VK_K){
 				Game.player.setRunning(true);
 			}
 		}else{

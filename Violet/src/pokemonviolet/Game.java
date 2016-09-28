@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -185,8 +186,9 @@ public class Game implements Runnable{
 		INFO_MAPS = readMap;
 		INFO_BLANK_MAP = readInfoB;
 		
-		player = new Player ("Red","EEVEE");
+		player = new Player ("Red",new Pokemon("SQUIRTLE",10));
 		player.addItem("POKEBALL",15);
+		player.addItem("MASTERBALL",1);
 		
 	//	Thread playerThread = new Thread(player);
 	//	playerThread.start();
@@ -341,8 +343,16 @@ public class Game implements Runnable{
 		if (player.getSpawnSteps() == 0){
 			
 			int[][] enemyTeam = new int[6][2];
-
-			enemyTeam[0] = getWildPokemon();
+			for (int i = 0; i < player.getNumPokemonTeam(); i++) {
+				enemyTeam[i] = getWildPokemon();
+				if (i>1){
+					if (Math.abs(enemyTeam[i][1]-player.getTeam()[i].getLevel())>5){
+						Random rnd = new Random();
+						enemyTeam[i][0] = rnd.nextInt(151)+1;
+						enemyTeam[i][1] = player.getTeam()[i].getLevel();
+					}
+				}
+			}
 			
 			currentBattle = new Combat(player,new Trainer("DAT BOI", "AYY WHADDUP", enemyTeam,1));
 		}

@@ -53,7 +53,7 @@ public class GameDisplay extends Canvas implements Runnable {
 					g.clearRect(0, 0, this.getWidth(), this.getHeight());
 					combatBasics = true;
 				}
-				g.drawImage(Game.currentBattle.getDisplay(),0,0,this.getWidth(),this.getHeight(),this);
+				g.drawImage(Game.currentBattle.displayImage(),0,0,this.getWidth(),this.getHeight(),this);
 			}
 			repaint();
 			
