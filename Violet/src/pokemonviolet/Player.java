@@ -947,6 +947,13 @@ public final class Player {
 		 * @return the currentPokemon
 		 */
 		public int getCurrentPokemon() {
+			return currentPokemon;
+		}
+
+		/**
+		 * @return the currentPokemon
+		 */
+		public int getNextAvailablePokemon() {
 			int value;
 			if (team[currentPokemon].isFainted()){
 				int numPokemon = -1;

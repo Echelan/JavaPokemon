@@ -341,20 +341,22 @@ public class Game implements Runnable{
 	public void steppedGrass(){
 		player.setSpawnSteps(player.getSpawnSteps()-1);
 		if (player.getSpawnSteps() == 0){
-			
+			int maxNum = 0;
 			int[][] enemyTeam = new int[6][2];
 			for (int i = 0; i < player.getNumPokemonTeam(); i++) {
 				enemyTeam[i] = getWildPokemon();
+				maxNum = maxNum+1;
 				if (i>1){
 					if (Math.abs(enemyTeam[i][1]-player.getTeam()[i].getLevel())>5){
 						Random rnd = new Random();
 						enemyTeam[i][0] = rnd.nextInt(151)+1;
 						enemyTeam[i][1] = player.getTeam()[i].getLevel();
+						maxNum = maxNum+1;
 					}
 				}
 			}
 			
-			currentBattle = new Combat(player,new Trainer("DAT BOI", "AYY WHADDUP", enemyTeam,1));
+			currentBattle = new Combat(player,new Trainer("", "", enemyTeam,maxNum),true);
 		}
 	}
 	
