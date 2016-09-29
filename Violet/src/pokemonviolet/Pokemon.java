@@ -929,7 +929,11 @@ public class Pokemon {
 		if (this.isWild()){
 			a = (float)1.5;
 		}
-		gain = (float)((float)(a * (float)this.yieldEXP * (float)this.getLevel())/(float)7);
+		gain = this.getLevel();
+		gain = (float)gain / 7f;
+		gain = (float)gain * (float)this.yieldEXP;
+		gain = (float)gain * (float)a;
+		
 		return (int)gain;
 	}
 	

@@ -700,6 +700,9 @@ public final class Player {
 	public void pokemonCenter(){
 		for (int i = 0; i < numPokemonTeam; i++) {
 			team[i].revive(1);
+			for (int j = 0; j < team[i].getNumMoves(); j++) {
+				team[i].getMoveSet()[j].setPP(team[i].getMoveSet()[j].getPPMax());
+			}
 		}
 	}
 		
