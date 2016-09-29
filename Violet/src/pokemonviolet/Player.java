@@ -306,28 +306,28 @@ public final class Player {
 		int pocketCap = 0;
 		switch(pocketID){
 			case 1:
-				pocket = this.pocketItems;
-				pocketCap = this.numItems;
+				pocket = this.getPocketItems();
+				pocketCap = this.getNumItems();
 			break;
 			case 2:
-				pocket = this.pocketMeds;
-				pocketCap = this.numMeds;
+				pocket = this.getPocketMeds();
+				pocketCap = this.getNumMeds();
 			break;
 			case 3:
-				pocket = this.pocketBalls;
-				pocketCap = this.numBalls;
+				pocket = this.getPocketBalls();
+				pocketCap = this.getNumBalls();
 			break;
 			case 4:
-				pocket = this.pocketMachines;
-				pocketCap = this.numMachines;
+				pocket = this.getPocketMachines();
+				pocketCap = this.getNumMachines();
 			break;
 			case 7:
-				pocket = this.pocketBattles;
-				pocketCap = this.numBattles;
+				pocket = this.getPocketBattles();
+				pocketCap = this.getNumBattles();
 			break;
 			case 8:
-				pocket = this.pocketKeys;
-				pocketCap = this.numKeys;
+				pocket = this.getPocketKeys();
+				pocketCap = this.getNumKeys();
 			break;
 		}
 		for (int i = 0; i < pocketCap; i++) {
@@ -400,81 +400,81 @@ public final class Player {
 		
 		switch(item.getPocket()){
 			case 1:
-				for (int i = 0; i < this.numItems; i++) {
-					if (this.pocketItems[i].getId() == id){
-						this.pocketItems[i].setAmount(this.pocketItems[i].getAmount() + item.getAmount());
+				for (int i = 0; i < this.getNumItems(); i++) {
+					if (this.getPocketItems()[i].getId() == id){
+						this.getPocketItems()[i].setAmount(this.getPocketItems()[i].getAmount() + item.getAmount());
 						success = true;
 					}
 				}
 
 				if (!success){
-					this.pocketItems[this.numItems] = item;
-					this.numItems = this.numItems + 1;
+					this.pocketItems[this.getNumItems()] = item;
+					this.numItems = this.getNumItems() + 1;
 				}
 			break;
 			case 2:
-				for (int i = 0; i < this.numMeds; i++) {
-					if (this.pocketMeds[i].getId() == id){
-						this.pocketMeds[i].setAmount(this.pocketMeds[i].getAmount() + item.getAmount());
+				for (int i = 0; i < this.getNumMeds(); i++) {
+					if (this.getPocketMeds()[i].getId() == id){
+						this.getPocketMeds()[i].setAmount(this.getPocketMeds()[i].getAmount() + item.getAmount());
 						success = true;
 					}
 				}
 
 				if (!success){
-					this.pocketMeds[this.numMeds] = item;
-					this.numMeds = this.numMeds + 1;
+					this.pocketMeds[this.getNumMeds()] = item;
+					this.numMeds = this.getNumMeds() + 1;
 				}
 			break;
 			case 3:
-				for (int i = 0; i < this.numBalls; i++) {
-					if (this.pocketBalls[i].getId() == id){
-						this.pocketBalls[i].setAmount(this.pocketBalls[i].getAmount() + item.getAmount());
+				for (int i = 0; i < this.getNumBalls(); i++) {
+					if (this.getPocketBalls()[i].getId() == id){
+						this.getPocketBalls()[i].setAmount(this.getPocketBalls()[i].getAmount() + item.getAmount());
 						success = true;
 					}
 				}
 
 				if (!success){
-					this.pocketBalls[this.numBalls] = item;
-					this.numBalls = this.numBalls + 1;
+					this.pocketBalls[this.getNumBalls()] = item;
+					this.numBalls = this.getNumBalls() + 1;
 				}
 			break;
 			case 4:
-				for (int i = 0; i < this.numMachines; i++) {
-					if (this.pocketMachines[i].getId() == id){
-						this.pocketMachines[i].setAmount(this.pocketMachines[i].getAmount() + item.getAmount());
+				for (int i = 0; i < this.getNumMachines(); i++) {
+					if (this.getPocketMachines()[i].getId() == id){
+						this.getPocketMachines()[i].setAmount(this.getPocketMachines()[i].getAmount() + item.getAmount());
 						success = true;
 					}
 				}
 
 				if (!success){
-					this.pocketMachines[this.numMachines] = item;
-					this.numMachines = this.numMachines + 1;
+					this.pocketMachines[this.getNumMachines()] = item;
+					this.numMachines = this.getNumMachines() + 1;
 				}
 			break;
 			case 7:
-				for (int i = 0; i < this.numBattles; i++) {
-					if (this.pocketBattles[i].getId() == id){
-						this.pocketBattles[i].setAmount(this.pocketBattles[i].getAmount() + item.getAmount());
+				for (int i = 0; i < this.getNumBattles(); i++) {
+					if (this.getPocketBattles()[i].getId() == id){
+						this.getPocketBattles()[i].setAmount(this.getPocketBattles()[i].getAmount() + item.getAmount());
 						success = true;
 					}
 				}
 
 				if (!success){
-					this.pocketBattles[this.numBattles] = item;
-					this.numBattles = this.numBattles + 1;
+					this.pocketBattles[this.getNumBattles()] = item;
+					this.numBattles = this.getNumBattles() + 1;
 				}
 			break;
 			case 8:
-				for (int i = 0; i < this.numKeys; i++) {
-					if (this.pocketKeys[i].getId() == id){
-						this.pocketKeys[i].setAmount(this.pocketKeys[i].getAmount() + item.getAmount());
+				for (int i = 0; i < this.getNumKeys(); i++) {
+					if (this.getPocketKeys()[i].getId() == id){
+						this.getPocketKeys()[i].setAmount(this.getPocketKeys()[i].getAmount() + item.getAmount());
 						success = true;
 					}
 				}
 
 				if (!success){
-					this.pocketKeys[this.numKeys] = item;
-					this.numKeys = this.numKeys + 1;
+					this.pocketKeys[this.getNumKeys()] = item;
+					this.numKeys = this.getNumKeys() + 1;
 				}
 			break;
 		}
@@ -574,72 +574,72 @@ public final class Player {
 		
 		switch(pocket){
 			case 1:
-				for (int i = 0; i < this.numItems; i++) {
-					if (this.pocketItems[i].getId() == id){
+				for (int i = 0; i < this.getNumItems(); i++) {
+					if (this.getPocketItems()[i].getId() == id){
 						success = true;
-						this.pocketItems[i].setAmount(this.pocketItems[i].getAmount()-1);
-						if (this.pocketItems[i].getAmount() < 0){
-							this.pocketItems[i].setAmount(0);
+						this.getPocketItems()[i].setAmount(this.getPocketItems()[i].getAmount()-1);
+						if (this.getPocketItems()[i].getAmount() < 0){
+							this.getPocketItems()[i].setAmount(0);
 							success = false;
 						}
 					}
 				}
 			break;
 			case 2:
-				for (int i = 0; i < this.numMeds; i++) {
-					if (this.pocketMeds[i].getId() == id){
+				for (int i = 0; i < this.getNumMeds(); i++) {
+					if (this.getPocketMeds()[i].getId() == id){
 						success = true;
-						this.pocketMeds[i].setAmount(this.pocketMeds[i].getAmount()-1);
-						if (this.pocketMeds[i].getAmount() < 0){
-							this.pocketMeds[i].setAmount(0);
+						this.getPocketMeds()[i].setAmount(this.getPocketMeds()[i].getAmount()-1);
+						if (this.getPocketMeds()[i].getAmount() < 0){
+							this.getPocketMeds()[i].setAmount(0);
 							success = false;
 						}
 					}
 				}
 			break;
 			case 3:
-				for (int i = 0; i < this.numBalls; i++) {
-					if (this.pocketBalls[i].getId() == id){
+				for (int i = 0; i < this.getNumBalls(); i++) {
+					if (this.getPocketBalls()[i].getId() == id){
 						success = true;
-						this.pocketBalls[i].setAmount(this.pocketBalls[i].getAmount()-1);
-						if (this.pocketBalls[i].getAmount() < 0){
-							this.pocketBalls[i].setAmount(0);
+						this.getPocketBalls()[i].setAmount(this.getPocketBalls()[i].getAmount()-1);
+						if (this.getPocketBalls()[i].getAmount() < 0){
+							this.getPocketBalls()[i].setAmount(0);
 							success = false;
 						}
 					}
 				}
 			break;
 			case 4:
-				for (int i = 0; i < this.numMachines; i++) {
-					if (this.pocketMachines[i].getId() == id){
+				for (int i = 0; i < this.getNumMachines(); i++) {
+					if (this.getPocketMachines()[i].getId() == id){
 						success = true;
-						this.pocketMachines[i].setAmount(this.pocketMachines[i].getAmount()-1);
-						if (this.pocketMachines[i].getAmount() < 0){
-							this.pocketMachines[i].setAmount(0);
+						this.getPocketMachines()[i].setAmount(this.getPocketMachines()[i].getAmount()-1);
+						if (this.getPocketMachines()[i].getAmount() < 0){
+							this.getPocketMachines()[i].setAmount(0);
 							success = false;
 						}
 					}
 				}
 			break;
 			case 7:
-				for (int i = 0; i < this.numBattles; i++) {
-					if (this.pocketBattles[i].getId() == id){
+				for (int i = 0; i < this.getNumBattles(); i++) {
+					if (this.getPocketBattles()[i].getId() == id){
 						success = true;
-						this.pocketBattles[i].setAmount(this.pocketBattles[i].getAmount()-1);
-						if (this.pocketBattles[i].getAmount() < 0){
-							this.pocketBattles[i].setAmount(0);
+						this.getPocketBattles()[i].setAmount(this.getPocketBattles()[i].getAmount()-1);
+						if (this.getPocketBattles()[i].getAmount() < 0){
+							this.getPocketBattles()[i].setAmount(0);
 							success = false;
 						}
 					}
 				}
 			break;
 			case 8:
-				for (int i = 0; i < this.numKeys; i++) {
-					if (this.pocketKeys[i].getId() == id){
+				for (int i = 0; i < this.getNumKeys(); i++) {
+					if (this.getPocketKeys()[i].getId() == id){
 						success = true;
-						this.pocketKeys[i].setAmount(this.pocketKeys[i].getAmount()-1);
-						if (this.pocketKeys[i].getAmount() < 0){
-							this.pocketKeys[i].setAmount(0);
+						this.getPocketKeys()[i].setAmount(this.getPocketKeys()[i].getAmount()-1);
+						if (this.getPocketKeys()[i].getAmount() < 0){
+							this.getPocketKeys()[i].setAmount(0);
 							success = false;
 						}
 					}
@@ -967,6 +967,90 @@ public final class Player {
 		 */
 		public void setCurrentPokemon(int currentPokemon) {
 			this.currentPokemon = currentPokemon;
+		}
+
+		/**
+		 * @return the pocketItems
+		 */
+		public Item[] getPocketItems() {
+			return pocketItems;
+		}
+
+		/**
+		 * @return the pocketMeds
+		 */
+		public Item[] getPocketMeds() {
+			return pocketMeds;
+		}
+
+		/**
+		 * @return the pocketBalls
+		 */
+		public Item[] getPocketBalls() {
+			return pocketBalls;
+		}
+
+		/**
+		 * @return the pocketMachines
+		 */
+		public Item[] getPocketMachines() {
+			return pocketMachines;
+		}
+
+		/**
+		 * @return the pocketBattles
+		 */
+		public Item[] getPocketBattles() {
+			return pocketBattles;
+		}
+
+		/**
+		 * @return the pocketKeys
+		 */
+		public Item[] getPocketKeys() {
+			return pocketKeys;
+		}
+
+		/**
+		 * @return the numItems
+		 */
+		public int getNumItems() {
+			return numItems;
+		}
+
+		/**
+		 * @return the numMeds
+		 */
+		public int getNumMeds() {
+			return numMeds;
+		}
+
+		/**
+		 * @return the numBalls
+		 */
+		public int getNumBalls() {
+			return numBalls;
+		}
+
+		/**
+		 * @return the numMachines
+		 */
+		public int getNumMachines() {
+			return numMachines;
+		}
+
+		/**
+		 * @return the numBattles
+		 */
+		public int getNumBattles() {
+			return numBattles;
+		}
+
+		/**
+		 * @return the numKeys
+		 */
+		public int getNumKeys() {
+			return numKeys;
 		}
 	//</editor-fold>
 }

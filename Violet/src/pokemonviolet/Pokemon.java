@@ -329,7 +329,7 @@ public class Pokemon {
 		this.IVSpAtk = rnd.nextInt(32);
 		this.IVSpDef = rnd.nextInt(32);
 		
-		if (this.IVSpeed==10 && this.IVDefense==10 && this.IVSpAtk==10 && this.IVSpDef==10 && this.IVAttack==10){
+		if (this.IVSpeed>28 && this.IVDefense>28 && this.IVSpAtk>28 && this.IVSpDef>28 && this.IVAttack>28){
 			this.shiny = true;
 		}else{
 			this.shiny = false;
@@ -530,33 +530,34 @@ public class Pokemon {
 			}
 		}
 		updateStats();
+		this.status="";
 		this.setCurHP(this.getStatHP());
 		success = true;
 		
 		return success;
 	}
 	
-	public boolean doCatch(Item ball){
+	public int doCatch(Item ball){
 		boolean caught = false;
-		int shakes = 0;
+		int shakes = -1;
 		
 		do{
-			caught = this.tryCatch(ball.getPokeRate()); 
 			shakes = shakes + 1; 
+			caught = this.tryCatch(ball.getPokeRate()); 
 		}while(caught==true && shakes<4);
  
 		if (caught){
 			this.setBallType(ball.getNameInternal()); 
 		} 
 		
-		return caught;
+		return shakes;
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="Catch Pokemon Methods">
-		public boolean doCatch(String internalName){
+		public int doCatch(String internalName){
 			return doCatch(new Item(internalName));
 		}
-		public boolean doCatch(int id){
+		public int doCatch(int id){
 			return doCatch(new Item(id));
 		}
 	//</editor-fold>
@@ -569,7 +570,7 @@ public class Pokemon {
 	private double calcAlpha(double bonusball) {
 		
 		double bonusstatus;
-		switch (this.status){
+		switch (this.getStatus()){
 			case "SLEEP":
 				bonusstatus = 2;
 			break;
@@ -1046,6 +1047,13 @@ public class Pokemon {
 			return evasion;
 		}
 
+		/**
+		 * @return the status
+		 */
+		public String getStatus() {
+			return status;
+		}
+		
 		/**
 		 * @param evasion the evasion to set
 		 */
