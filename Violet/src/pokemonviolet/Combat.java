@@ -43,10 +43,11 @@ public class Combat {
 	private static final int SPRITE_HEIGHT = 80*RESIZE;
 	private int turnNum;
 	private boolean canDispose;
-	private int[] caught;
-	private int finalPlayerX, finalEnemyX, currentEnemyX, currentPlayerX;
+	private final int[] caught;
+	private final int finalPlayerX, finalEnemyX;
+	private int currentEnemyX, currentPlayerX;
 	private boolean ready;
-	private boolean wildBattle;
+	private final boolean wildBattle;
 	
 	public Combat(Player player, Trainer enemy, boolean wildBattle) {
 		this.player = player;
@@ -133,7 +134,7 @@ public class Combat {
 						suffix2=suffix2+"n";
 					}
 
-					g.drawImage(ImageIO.read(new File("assets/Pokemon Sprites/"+currentEnemyPokemon.getId()+suffix2+".png")), this.currentEnemyX+50, 18, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+					g.drawImage(ImageIO.read(new File("assets/Pokemon Sprites/"+currentEnemyPokemon.getId()+suffix2+".png")), this.currentEnemyX+50, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
 				}else if (this.caught[enemy.getCurrentPokemon()]==1){
 					int x = (this.currentEnemyX+50+(SPRITE_WIDTH/2)+20-(14*RESIZE)), y = (18+SPRITE_HEIGHT-50-(14*RESIZE));
 					g.drawImage(ImageIO.read(new File("assets/combat/pokeballactive.png")).getSubimage(0, 0, 14, 14), x,y, 14*RESIZE, 14*RESIZE, null);
@@ -507,12 +508,8 @@ public class Combat {
 							prefix = "Foe ";
 						}
 						displayTextQueue.add(prefix+currentEnemyPokemon.getNameNick() +" fainted!");
-						displayTextQueue.add(currentPlayerPokemon.getNameNick() +" gained "+currentEnemyPokemon.getExpGain()+" EXP!");
-						boolean levelUp = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP()+currentEnemyPokemon.getExpGain());
-						this.doneExpPlayer=false;
-						if (levelUp){
-							displayTextQueue.add(currentPlayerPokemon.getNameNick()+" is now level "+currentPlayerPokemon.getLevel()+"!");
-						}
+						/*
+						*/
 						currentMenu = "MAIN";
 						turnNum = 0;
 						inRound = false;
@@ -542,46 +539,77 @@ public class Combat {
 						if (!currentEnemyPokemon.isFainted() && caught[enemy.getCurrentPokemon()]==0 && !currentPlayerPokemon.isFainted()){
 							waitingAction = true;
 							displayTextQueue.add("What will "+currentPlayerPokemon.getNameNick()+ " do?");
-						}else if (currentEnemyPokemon.isFainted()){
-							if (enemy.getCurrentPokemon()+1<enemy.getNumPokemonTeam()){
-								enemy.setCurrentPokemon(enemy.getCurrentPokemon()+1);
-								currentEnemyPokemon = enemy.getTeam()[enemy.getCurrentPokemon()];
-								this.displayHealthEnemy = currentEnemyPokemon.getCurHP();
-
-								if (this.wildBattle){
-									displayTextQueue.add("A wild "+currentEnemyPokemon.getNameNick()+" rushed at you!");
-								}else{
-									displayTextQueue.add("Foe "+enemy.getName()+" sent out "+currentEnemyPokemon.getNameNick()+"!");
-								}
+						}else if (currentEnemyPokemon.isFainted() && enemy.getCurrentPokemon()+1<enemy.getNumPokemonTeam()){
+							
+							displayTextQueue.add(currentPlayerPokemon.getNameNick() +" gained "+currentEnemyPokemon.getExpGain()+" EXP!");
+							boolean levelUp = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP()+currentEnemyPokemon.getExpGain());
+							this.doneExpPlayer=false;
+							if (levelUp){
+								displayTextQueue.add(currentPlayerPokemon.getNameNick()+" is now level "+currentPlayerPokemon.getLevel()+"!");
 							}
-						}else if (currentPlayerPokemon.isFainted()){
-							if (player.getNextAvailablePokemon()!= -1){
+						
+							enemy.setCurrentPokemon(enemy.getCurrentPokemon()+1);
+							currentEnemyPokemon = enemy.getTeam()[enemy.getCurrentPokemon()];
+							this.displayHealthEnemy = currentEnemyPokemon.getCurHP();
+
+							if (this.wildBattle){
+								displayTextQueue.add("A wild "+currentEnemyPokemon.getNameNick()+" rushed at you!");
+							}else{
+								displayTextQueue.add("Foe "+enemy.getName()+" sent out "+currentEnemyPokemon.getNameNick()+"!");
+							}
+						}else if (caught[enemy.getCurrentPokemon()]==1 && enemy.getCurrentPokemon()+1<enemy.getNumPokemonTeam()){
+							
+							displayTextQueue.add(currentPlayerPokemon.getNameNick() +" gained "+currentEnemyPokemon.getExpGain()+" EXP!");
+							boolean levelUp = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP()+currentEnemyPokemon.getExpGain());
+							this.doneExpPlayer=false;
+							if (levelUp){
+								displayTextQueue.add(currentPlayerPokemon.getNameNick()+" is now level "+currentPlayerPokemon.getLevel()+"!");
+							}
+						
+							enemy.setCurrentPokemon(enemy.getCurrentPokemon()+1);
+							currentEnemyPokemon = enemy.getTeam()[enemy.getCurrentPokemon()];
+							this.displayHealthEnemy = currentEnemyPokemon.getCurHP();
+
+							if (this.wildBattle){
+								displayTextQueue.add("A wild "+currentEnemyPokemon.getNameNick()+" rushed at you!");
+							}else{
+								displayTextQueue.add("Foe "+enemy.getName()+" sent out "+currentEnemyPokemon.getNameNick()+"!");
+							}
+						}else if (currentPlayerPokemon.isFainted() && player.getNextAvailablePokemon()!= -1){
 								displayTextQueue.add("What Pokemon will you send out next?");
 								currentMenu = "POKEMONF";
 								waitingAction = true;
-							}else{
-								displayTextQueue.add(player.getName()+ " wiped out!");
-								currentMenu = "MAIN";
-							}
 						}else if (!canDispose){
 							canDispose = true;
-							Random rnd = new Random();
-							int roll = rnd.nextInt(100);
-							if( roll == 0){
-								displayTextQueue.add("Found a Masterball!");
-								player.addItem("MASTERBALL",1);
-							}else if (roll<10){
-								displayTextQueue.add("Found an Ultraball!");
-								player.addItem("ULTRABALL",1);
-							}else if (roll<40){
-								displayTextQueue.add("Found a Greatball!");
-								player.addItem("GREATBALL",1);
-							}else if (roll<50){
-								displayTextQueue.add("Found a Premier Ball!");
-								player.addItem("PREMIERBALL",1);
+							if (currentPlayerPokemon.isFainted()){
+								displayTextQueue.add(player.getName()+ " wiped out!");
 							}else{
-								displayTextQueue.add("Found a Pokeball!");
-								player.addItem("POKEBALL",1);
+								if (this.caught[enemy.getCurrentPokemon()]!=1){
+									displayTextQueue.add(currentPlayerPokemon.getNameNick() +" gained "+currentEnemyPokemon.getExpGain()+" EXP!");
+									boolean levelUp = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP()+currentEnemyPokemon.getExpGain());
+									this.doneExpPlayer=false;
+									if (levelUp){
+										displayTextQueue.add(currentPlayerPokemon.getNameNick()+" is now level "+currentPlayerPokemon.getLevel()+"!");
+									}
+								}
+								Random rnd = new Random();
+								int lootRoll = rnd.nextInt(100);
+								if( lootRoll == 0){
+									displayTextQueue.add("Found a Masterball!");
+									player.addItem("MASTERBALL",1);
+								}else if (lootRoll<10){
+									displayTextQueue.add("Found an Ultraball!");
+									player.addItem("ULTRABALL",1);
+								}else if (lootRoll<40){
+									displayTextQueue.add("Found a Greatball!");
+									player.addItem("GREATBALL",1);
+								}else if (lootRoll<50){
+									displayTextQueue.add("Found a Premier Ball!");
+									player.addItem("PREMIERBALL",1);
+								}else{
+									displayTextQueue.add("Found a Pokeball!");
+									player.addItem("POKEBALL",1);
+								}
 							}
 						}else{
 							player.pokemonCenter();
@@ -693,14 +721,15 @@ public class Combat {
 			
 			if(moveDamage[2]==0){
 				displayTextQueue.add(attacked.getNameNick()+" is immune!");
-			}else if(moveDamage[2]>10){
-				displayTextQueue.add("It's super effective!");
-			}else if(moveDamage[2]<10){
-				displayTextQueue.add("It's not very effective...");
-			}
-			
-			if (moveDamage[1]==1){
-				displayTextQueue.add("A critical hit!");
+			}else{
+				if (moveDamage[1]==1){
+					displayTextQueue.add("A critical hit!");
+				}
+				if(moveDamage[2]>10){
+					displayTextQueue.add("It's super effective!");
+				}else if(moveDamage[2]<10){
+					displayTextQueue.add("It's not very effective...");
+				}
 			}
 			
 			this.doneHealthEnemy = false;

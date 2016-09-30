@@ -111,8 +111,12 @@ public class Pokemon {
 			this.wild = true;
 
 			genIVs();
+			doBasics();
 
 			boolean couldCreate = readInfo( this.id );
+			
+			updateStats();
+			this.setCurHP(this.getStatHP());
 
 			if (!couldCreate){
 				System.err.println("Could not find Pokemon with id " + id + ".");
@@ -131,8 +135,12 @@ public class Pokemon {
 			this.wild = true;
 
 			genIVs();
+			doBasics();
 
 			boolean couldCreate = readInfo( this.id );
+			
+			updateStats();
+			this.setCurHP(this.getStatHP());
 
 			if (!couldCreate){
 				System.err.println("Could not find Pokemon with id " + id + ".");
@@ -151,8 +159,12 @@ public class Pokemon {
 			this.wild = true;
 
 			genIVs();
+			doBasics();
 
 			boolean couldCreate = readInfo( this.id );
+			
+			updateStats();
+			this.setCurHP(this.getStatHP());
 
 			if (!couldCreate){
 				System.err.println("Could not find Pokemon with id " + id + ".");
@@ -172,8 +184,12 @@ public class Pokemon {
 			this.wild = true;
 
 			genIVs();
+			doBasics();
 
 			boolean couldCreate = readInfo( this.id );
+			
+			updateStats();
+			this.setCurHP(this.getStatHP());
 
 			if (!couldCreate){
 				System.err.println("Could not find Pokemon with id " + id + ".");
@@ -195,8 +211,12 @@ public class Pokemon {
 			this.ballType = ballType;
 
 			genIVs();
+			doBasics();
 
 			boolean couldCreate = readInfo( this.id );
+			
+			updateStats();
+			this.setCurHP(this.getStatHP());
 
 			if (!couldCreate){
 				System.err.println("Could not find Pokemon with id " + id + ".");
@@ -217,8 +237,12 @@ public class Pokemon {
 			this.wild = false;
 
 			genIVs();
+			doBasics();
 
 			boolean couldCreate = readInfo( this.id );
+			
+			updateStats();
+			this.setCurHP(this.getStatHP());
 
 			if (!couldCreate){
 				System.err.println("Could not find Pokemon with id " + id + ".");
@@ -240,8 +264,12 @@ public class Pokemon {
 			this.ballType = new Item(ballType).getNameInternal();
 
 			genIVs();
+			doBasics();
 
 			boolean couldCreate = readInfo( this.id );
+			
+			updateStats();
+			this.setCurHP(this.getStatHP());
 
 			if (!couldCreate){
 				System.err.println("Could not find Pokemon with id " + id + ".");
@@ -262,8 +290,12 @@ public class Pokemon {
 			this.ballType = new Item(ballType).getNameInternal();
 
 			genIVs();
+			doBasics();
 
 			boolean couldCreate = readInfo( this.id );
+			
+			updateStats();
+			this.setCurHP(this.getStatHP());
 
 			if (!couldCreate){
 				System.err.println("Could not find Pokemon with id " + id + ".");
@@ -285,8 +317,12 @@ public class Pokemon {
 			this.ballType = ball.getNameInternal();
 
 			genIVs();
+			doBasics();
 
 			boolean couldCreate = readInfo( this.id );
+			
+			updateStats();
+			this.setCurHP(this.getStatHP());
 
 			if (!couldCreate){
 				System.err.println("Could not find Pokemon with id " + id + ".");
@@ -307,8 +343,12 @@ public class Pokemon {
 			this.ballType = ball.getNameInternal();
 
 			genIVs();
+			doBasics();
 
 			boolean couldCreate = readInfo( this.id );
+			
+			updateStats();
+			this.setCurHP(this.getStatHP());
 
 			if (!couldCreate){
 				System.err.println("Could not find Pokemon with id " + id + ".");
@@ -408,7 +448,7 @@ public class Pokemon {
 				}
 			}else if (partes[0].compareTo("StepsToHatch")==0){
 				this.hatchSteps = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("Moves")==0){
+			}else if (partes[0].compareTo("Moves")==0 && this.numMoves == 0){
 				this.allMoves = new ArrayList<String>();
 				this.moveSet = new PokemonMove[4];
 					
@@ -529,12 +569,16 @@ public class Pokemon {
 				}
 			}
 		}
-		updateStats();
-		this.status="";
-		this.setCurHP(this.getStatHP());
+		
+		
 		success = true;
 		
 		return success;
+	}
+	
+	private void doBasics(){
+		this.numMoves=0;
+		this.status="";
 	}
 	
 	public int doCatch(Item ball){
@@ -657,7 +701,7 @@ public class Pokemon {
 	 */
 	public boolean evolve(int num){
 		boolean success;
-		this.id = getPokemonID(this.evolvesInto[num]);
+		this.id = num;
 
 		boolean couldCreate = readInfo(this.getId());
 
@@ -861,7 +905,7 @@ public class Pokemon {
 	/**
 	 * Update Pokemon stats.
 	 */
-	public void updateStats(){
+	private void updateStats(){
 		this.statHP= (((2 * this.baseHP + this.IVHP + (this.EVHP/4))*this.getLevel())/100)+this.getLevel()+10;
 		this.statAttack = (((2 * this.baseAttack + this.IVAttack + (this.EVAttack/4))*this.getLevel())/100)+5;
 		this.statDefense = (((2 * this.baseDefense + this.IVDefense + (this.EVDefense/4))*this.getLevel())/100)+5;
@@ -1004,7 +1048,7 @@ public class Pokemon {
 					}
 				}
 				
-				damageInfo[2] = (int)type*10;
+				damageInfo[2] = (int)(type*10);
 				modifier = modifier*type;
 			//</editor-fold>
 			//<editor-fold defaultstate="collapsed" desc="Random calculation">
