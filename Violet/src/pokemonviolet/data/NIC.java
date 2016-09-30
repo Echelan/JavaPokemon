@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import pokemonviolet.model.Map;
 
 /**
  *
@@ -56,6 +57,8 @@ public abstract class NIC {
 	//</editor-fold>
 	
 	public static void loadData(){
+		
+		Map.loadImages();
 		
 		NUM_MAPS_X = 4;
 		NUM_MAPS_Y = 4;

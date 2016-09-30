@@ -17,13 +17,13 @@ import pokemonviolet.model.Game;
  */
 public class GameDisplay extends Canvas implements Runnable {
 	
-	boolean combatBasics;
+	String lastState;
 	
 	/**
 	 * Create a GameDisplay custom canvas.
 	 */
 	public GameDisplay(){
-		combatBasics = false;
+		lastState="";
 	}
 	
 	public void paint(Graphics g){
@@ -40,22 +40,13 @@ public class GameDisplay extends Canvas implements Runnable {
         while (true){
 			Graphics g = getBufferStrategy().getDrawGraphics();
 			
-			if (!Game.player.isInCombat()){
-				if (combatBasics){
-					g.clearRect(0, 0, this.getWidth(), this.getHeight());
-					combatBasics = false;
-				}
-				
-				g.drawImage(Game.ALL_MAPS, Game.ALL_MAPS_X, Game.ALL_MAPS_Y, Game.ALL_MAPS_WIDTH, Game.ALL_MAPS_HEIGHT, this);
-
-				g.drawImage(Game.player.getCurFrameImage(), this.getWidth()/2, this.getHeight()/2,(int)(Game.player.SPRITE_X*Game.player.SPRITE_RESIZE),(int)(Game.player.SPRITE_Y*Game.player.SPRITE_RESIZE), this);
-			}else{
-				if (!combatBasics){
-					g.clearRect(0, 0, this.getWidth(), this.getHeight());
-					combatBasics = true;
-				}
-				g.drawImage(Game.currentBattle.displayImage(),0,0,this.getWidth(),this.getHeight(),this);
+			if (lastState.compareTo(Game.gameState.get(Game.gameState.size()-1))!=0){
+				g.clearRect(0, 0, this.getWidth(), this.getHeight());
+				lastState = Game.gameState.get(Game.gameState.size()-1);
 			}
+			
+			g.drawImage(displayParser.displayImage(), 0, 0, this.getWidth(), this.getHeight(), this);
+			
 			repaint();
 			
 			try {

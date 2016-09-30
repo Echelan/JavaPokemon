@@ -7,15 +7,8 @@
  */
 package pokemonviolet.model;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import javax.imageio.ImageIO;
 
 /**
  *
@@ -23,31 +16,27 @@ import javax.imageio.ImageIO;
  */
 public class Combat {
 
-	private final Player player;
-	private final Trainer enemy;
 	private Pokemon currentPlayerPokemon;
 	private Pokemon currentEnemyPokemon;
+	private boolean ready;
 	private final ArrayList<String> displayTextQueue;
-	private final int maxX = 480, maxY = 320;
 	private boolean waitingAction;
+	private String currentMenu;
+	private int displayHealthEnemy,displayHealthPlayer, displayExpPlayer;
+	private boolean doneHealthEnemy, doneHealthPlayer, doneExpPlayer;
+	private final int[] caught;
+	private final Player player;
+	private final Trainer enemy;
 	private int optionsMain;
 	private int optionsMoves;
 	private int optionsBalls;
 	private int optionsPokemon;
-	private String currentMenu;
+	
 	private boolean inRound;
-	private int displayHealthEnemy,displayHealthPlayer, displayExpPlayer;
-	private boolean doneHealthEnemy, doneHealthPlayer, doneExpPlayer;
-	private static final int RESIZE = 2;
-	private static final int SPRITE_WIDTH = 80*RESIZE;
-	private static final int SPRITE_HEIGHT = 80*RESIZE;
 	private int turnNum;
 	private boolean canDispose;
-	private final int[] caught;
-	private final int finalPlayerX, finalEnemyX;
-	private int currentEnemyX, currentPlayerX;
-	private boolean ready;
 	private final boolean wildBattle;
+	private final int maxX, maxY;
 	
 	public Combat(Player player, Trainer enemy, boolean wildBattle) {
 		this.player = player;
@@ -65,12 +54,8 @@ public class Combat {
 		this.ready = false;
 		this.wildBattle = wildBattle;
 		
-		
-		this.finalEnemyX = 220;
-		this.currentEnemyX = this.finalEnemyX-500;
-		
-		this.finalPlayerX = 10;
-		this.currentPlayerX = this.finalPlayerX+500;
+		maxX=Game.SCREEN_SIZE_X;
+		maxY=Game.SCREEN_SIZE_Y;
 		
 		for (int i = 0; i < enemy.getNumPokemonTeam(); i++) {
 			this.caught[i] = 0;
@@ -98,329 +83,20 @@ public class Combat {
 		
 		this.player.setInCombat(true);
 		this.player.setSpawnSteps(this.player.roll(1,2,3));
+		
+		Game.gameState.add("COMBAT");
 	}
 	
-	public BufferedImage displayImage(){
-		BufferedImage display = new BufferedImage( maxX, maxY, BufferedImage.TYPE_INT_RGB);
-		Graphics g = display.getGraphics();
-		
-		//<editor-fold defaultstate="collapsed" desc="Background">
-			try{
-				g.drawImage(ImageIO.read(new File("assets/combat/background.png")), 0, 0, maxX, maxY, null);
-			}catch(IOException ex){
-			}
-
-			try{
-				g.drawImage(ImageIO.read(new File("assets/combat/grassunderground1.png")), this.currentEnemyX, 85, 128*RESIZE, 36*RESIZE, null);
-				g.drawImage(ImageIO.read(new File("assets/combat/grassunderground2.png")), this.currentPlayerX, 180, 128*RESIZE, 36*RESIZE, null);
-			}catch(IOException ex){
-			}
-		//</editor-fold>
-		
-		//<editor-fold defaultstate="collapsed" desc="Pokemon Sprites Display">
-			try{
-				if (this.displayHealthEnemy != 0 && this.caught[enemy.getCurrentPokemon()]!=1){
-					String suffix2="";
-
-					if (currentEnemyPokemon.getGender().compareTo("Male")==0 || currentEnemyPokemon.getGender().compareTo("Genderless")==0){
-						suffix2=suffix2+"m";
-					}else{
-						suffix2=suffix2+"f";
-					}
-					suffix2 = suffix2+"f";
-					if (currentEnemyPokemon.isShiny()){
-						suffix2=suffix2+"s";
-					}else{
-						suffix2=suffix2+"n";
-					}
-
-					g.drawImage(ImageIO.read(new File("assets/Pokemon Sprites/"+currentEnemyPokemon.getId()+suffix2+".png")), this.currentEnemyX+50, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
-				}else if (this.caught[enemy.getCurrentPokemon()]==1){
-					int x = (this.currentEnemyX+50+(SPRITE_WIDTH/2)+20-(14*RESIZE)), y = (18+SPRITE_HEIGHT-50-(14*RESIZE));
-					g.drawImage(ImageIO.read(new File("assets/combat/pokeballactive.png")).getSubimage(0, 0, 14, 14), x,y, 14*RESIZE, 14*RESIZE, null);
-				}
-				if (this.displayHealthPlayer != 0){
-					String suffix1="";
-					if (currentPlayerPokemon.getGender().compareTo("Male")==0 || currentPlayerPokemon.getGender().compareTo("Genderless")==0){
-						suffix1=suffix1+"m";
-					}else{
-						suffix1=suffix1+"f";
-					}
-
-					suffix1 = suffix1+"b";
-
-					if (currentPlayerPokemon.isShiny()){
-						suffix1=suffix1+"s";
-					}else{
-						suffix1=suffix1+"n";
-					}
-
-					g.drawImage(ImageIO.read(new File("assets/Pokemon Sprites/"+currentPlayerPokemon.getId()+suffix1+".png")), this.currentPlayerX+54, 64, SPRITE_WIDTH, SPRITE_HEIGHT, null);
-				}
-			}catch(IOException ex){
-			}
-			
-			try{
-				g.drawImage(ImageIO.read(new File("assets/combat/dialogdisplay.png")), 0, maxY-(48*RESIZE), 240*RESIZE, 48*RESIZE, null);
-			}catch(IOException ex){
-			}
-
-		//</editor-fold>
-		
-		if (this.currentEnemyX != this.finalEnemyX || this.currentPlayerX != this.finalPlayerX){
-			if (this.currentEnemyX != this.finalEnemyX){
-				this.currentEnemyX = this.currentEnemyX+20;
-			}
-			
-			if (this.currentPlayerX != this.finalPlayerX){
-				this.currentPlayerX = this.currentPlayerX-20;
-			}
-			
-			if (this.currentEnemyX == this.finalEnemyX && this.currentPlayerX == this.finalPlayerX){
-				this.ready=true;
-			}
-		}else{
-			g.setFont(new Font("Arial",0,18));
-			if (displayTextQueue.size()>0){
-				g.drawString(displayTextQueue.get(0), 30, maxY-60);
-			}
-
-			//<editor-fold defaultstate="collapse" desc="Health & Experience Display">
-				if (!this.doneHealthEnemy){
-					int delta = Math.abs(this.displayHealthEnemy - currentEnemyPokemon.getCurHP());
-					delta = (int)Math.ceil((float)delta/(float)20);
-					if (this.displayHealthEnemy < currentEnemyPokemon.getCurHP()){
-						this.displayHealthEnemy = this.displayHealthEnemy+delta;
-					}else if (this.displayHealthEnemy > currentEnemyPokemon.getCurHP()){
-						this.displayHealthEnemy = this.displayHealthEnemy-delta;
-					}else{
-						this.doneHealthEnemy=true;
-					}
-				}
-
-				if (!this.doneHealthPlayer){
-					int delta = Math.abs(this.displayHealthPlayer - currentPlayerPokemon.getCurHP());
-					delta = (int)Math.ceil((float)delta/(float)20);
-					if (this.displayHealthPlayer < currentPlayerPokemon.getCurHP()){
-						this.displayHealthPlayer = this.displayHealthPlayer+delta;
-					}else if (this.displayHealthPlayer > currentPlayerPokemon.getCurHP()){
-						this.displayHealthPlayer = this.displayHealthPlayer-delta;
-					}else{
-						this.doneHealthPlayer=true;
-					}
-				}
-
-				if (!this.doneExpPlayer){
-					int delta = Math.abs(this.displayExpPlayer - currentPlayerPokemon.getCurEXP());
-					delta = (int)Math.ceil((float)delta/5);
-					if (this.displayExpPlayer < currentPlayerPokemon.getCurEXP()){
-						this.displayExpPlayer = this.displayExpPlayer+delta;
-					}else if (this.displayExpPlayer > currentPlayerPokemon.getCurEXP()){
-						this.displayExpPlayer = 0;
-					}else{
-						this.doneExpPlayer=true;
-					}
-				}
-
-				g.setColor(Color.green);
-				if ( (float)(float)this.displayHealthEnemy/(float)currentEnemyPokemon.getStatHP() < (float)0.5){
-					g.setColor(Color.orange);
-					if ( (float)(float)this.displayHealthEnemy/(float)currentEnemyPokemon.getStatHP() < (float)0.25){
-						g.setColor(Color.red);
-					}
-				}
-				g.fillRect(86, 52, (int)((float)100*(float)((float)this.displayHealthEnemy/(float)currentEnemyPokemon.getStatHP())), 10);
-
-				g.setColor(Color.green);
-				if ( (float)(float)this.displayHealthPlayer/(float)currentPlayerPokemon.getStatHP() < (float)0.5){
-					g.setColor(Color.orange);
-					if ( (float)(float)this.displayHealthPlayer/(float)currentPlayerPokemon.getStatHP() < (float)0.25){
-						g.setColor(Color.red);
-					}
-				}
-				g.fillRect(355, 177, (int)((float)100*(float)((float)this.displayHealthPlayer/(float)currentPlayerPokemon.getStatHP())), 10);
-
-				g.setColor(Color.blue);
-				g.fillRect(320, 207, (int)((float)140*(float)((float)displayExpPlayer/(float)currentPlayerPokemon.getMaxEXP())), 10);
-			//</editor-fold>
-
-			//<editor-fold defaultstate="collapsed" desc="Pokeballs Display">
-				try{
-					BufferedImage allBalls = ImageIO.read(new File("assets/combat/pokeballui.png"));
-					int dimX=9, dimY=9;
-					int x,y, id;
-
-					y = 3;
-					for (int i = 0; i < 6; i++) {
-					x = 12+(i*dimX*RESIZE);
-						if (i<enemy.getNumPokemonTeam()){
-							if (enemy.getTeam()[i].isFainted()){
-								id = 2;
-							}else{
-								id = 1;
-							}
-						}else{
-							id = 0;
-						}
-						g.drawImage(allBalls.getSubimage(id*9, 0, dimX, dimY),x,y,dimX*RESIZE,dimY*RESIZE,null);
-					}
-
-
-					y = (int)(maxY/2)-33;
-					for (int i = 0; i < 6; i++) {
-						x = maxX-(104*RESIZE)+75+(i*dimX*RESIZE);
-						if (i<player.getNumPokemonTeam()){
-							if (player.getTeam()[i].isFainted()){
-								id = 2;
-							}else{
-								id = 1;
-							}
-						}else{
-							id = 0;
-						}
-						g.drawImage(allBalls.getSubimage(id*9, 0, dimX, dimY),x,y,dimX*RESIZE,dimY*RESIZE,null);
-					}
-				}catch(IOException ex){
-
-				}
-			//</editor-fold>
-
-			try{
-				g.drawImage(ImageIO.read(new File("assets/combat/enemydisplay.png")),10,20,100*RESIZE,29*RESIZE,null);
-				g.drawImage(ImageIO.read(new File("assets/combat/playerdisplay.png")),maxX-(104*RESIZE)-10,(int)(maxY/2)-15,104*RESIZE,37*RESIZE,null);
-			}catch(IOException ex){
-			}
-
-			g.setColor(Color.black);
-			g.drawString(currentEnemyPokemon.getNameNick(), 25,45);
-			g.drawString("Lv: "+currentEnemyPokemon.getLevel(), 140, 45);
-
-			g.drawString(currentPlayerPokemon.getNameNick(), maxX-(104*RESIZE)+20,(int)(maxY/2)+10);
-			g.drawString("Lv: "+currentPlayerPokemon.getLevel(), maxX-(104*RESIZE)+130,(int)(maxY/2)+10);
-
-			g.drawString(displayHealthPlayer+"/"+currentPlayerPokemon.getStatHP(), maxX-(104*RESIZE)+125,(int)(maxY/2)+45);
-
-
-			//<editor-fold defaultstate="collapsed" desc="UI Display">
-				try{
-					if (waitingAction){
-						if (currentMenu.compareTo("MAIN")==0){
-							//<editor-fold defaultstate="collapsed" desc="Main UI Display">
-								int uiW = (120*RESIZE), uiH = (48*RESIZE);
-								g.drawImage(ImageIO.read(new File("assets/combat/uioptionsdisplay.png")), maxX-uiW, maxY-uiH, uiW, uiH, null);
-
-								g.setColor(Color.black);
-								g.drawString("FIGHT", maxX-215, maxY-55);
-								g.drawString("POKéBALL", maxX-105, maxY-55);
-								g.drawString("POKéMON", maxX-215, maxY-20);
-								g.drawString("RUN", maxX-105, maxY-20);
-
-								g.drawImage(ImageIO.read(new File("assets/combat/arrow.png")), maxX-230+(int)(Math.floor(optionsMain%2)*110), maxY-70+(int)(Math.floor(optionsMain/2)*30), 20, 20, null);
-							//</editor-fold>
-						}else if (currentMenu.compareTo("MOVES")==0){
-							//<editor-fold defaultstate="collapsed" desc="Moves UI Display">
-								int uiW = (240*RESIZE), uiH = (48*RESIZE);
-								g.drawImage(ImageIO.read(new File("assets/combat/uimovesdisplay.png")), maxX-uiW, maxY-uiH, uiW, uiH, null);
-
-								g.drawImage(ImageIO.read(new File("assets/combat/arrow.png")), 10+(int)(Math.floor(optionsMoves%2)*140), maxY-75+(int)(Math.floor(optionsMoves/2)*40), 20, 20, null);
-								for (int i = 0; i < 4; i++) {
-									String moveName;
-									if (i < currentPlayerPokemon.getNumMoves()){
-										moveName = currentPlayerPokemon.getMoveSet()[i].getNameDisplay();
-										if (moveName == null || moveName.compareTo("")==0){
-											moveName = "--";
-										}
-									}else{
-										moveName = "--";
-									}
-									g.setColor(Color.black);
-									g.drawString(moveName, 30+(int)(Math.floor(i%2)*140), maxY-60+(int)(Math.floor(i/2)*40));
-								}
-								if (optionsMoves<currentPlayerPokemon.getNumMoves()){
-									g.setColor(Color.black);
-									g.drawString("PP  "+currentPlayerPokemon.getMoveSet()[optionsMoves].getPP()+ " / "+currentPlayerPokemon.getMoveSet()[optionsMoves].getPPMax(), maxX-140, maxY-55);
-									g.drawString("TYPE  "+PokemonType.getNameDisplay(currentPlayerPokemon.getMoveSet()[optionsMoves].getType()), maxX-140, maxY-20);
-								}
-							//</editor-fold>
-						}else if (currentMenu.compareTo("BALLS")==0){
-							//<editor-fold defaultstate="collapsed" desc="Balls UI Display">
-								int uiW = (240*RESIZE), uiH = (48*RESIZE);
-								g.drawImage(ImageIO.read(new File("assets/combat/uimovesdisplay.png")), maxX-uiW, maxY-uiH, uiW, uiH, null);
-
-								g.drawImage(ImageIO.read(new File("assets/combat/arrow.png")), 10+(int)(Math.floor(optionsBalls%2)*140), maxY-75+(int)(Math.floor(optionsBalls/2)*40), 20, 20, null);
-
-								String[] pokeTypes = {"POKEBALL","GREATBALL","ULTRABALL","PREMIERBALL","MASTERBALL"};
-								String[] order = new String[4];
-								int counter = 0;
-								int numBalls = 0;
-								for (int i = 0; i < pokeTypes.length; i++) {
-									if (numBalls<4){
-										boolean foundOne = false;
-										String option="--";
-										while (counter<5 && !foundOne){
-											if (player.getAmountItem(pokeTypes[counter])>0){
-												option = new Item(pokeTypes[counter]).getNameSingular();
-												order[numBalls] = pokeTypes[counter];
-												foundOne = true;
-											}
-											counter=counter+1;
-										}
-
-										if (option.compareTo("--")!=0){
-											g.setColor(Color.black);
-											g.drawString(option, 30+(int)(Math.floor(numBalls%2)*140), maxY-60+(int)(Math.floor(numBalls/2)*40));
-											numBalls = numBalls+1;
-										}else{
-
-										}
-									}
-								}
-
-								if (optionsBalls<numBalls){
-									g.setColor(Color.black);
-									g.drawString("x "+player.getAmountItem(order[optionsBalls]), maxX-100, maxY-40);
-								}
-
-								for (int i = numBalls; i < 4; i++) {
-									g.setColor(Color.black);
-									g.drawString("--", 30+(int)(Math.floor(numBalls%2)*140), maxY-60+(int)(Math.floor(numBalls/2)*40));
-									numBalls = numBalls+1;
-								}
-
-							//</editor-fold>
-						}else if (currentMenu.compareTo("POKEMON")==0 || currentMenu.compareTo("POKEMONF")==0){
-							//<editor-fold defaultstate="collapsed" desc="Pokemon UI Display">
-								int uiW = (110*RESIZE), uiH = (110*RESIZE);	
-								g.drawImage(ImageIO.read(new File("assets/combat/extrabackground.png")), (maxX/2)-(uiW/2), (maxY/2)-(uiH/2), uiW, uiH, null);
-
-								for (int i = 0; i < player.getNumPokemonTeam(); i++) {
-									g.drawString(player.getTeam()[i].getNameNick(), (maxX/2)-(uiW/2)+30, (maxY/2)-(uiH/2)+40+(i*30));
-								}
-								for (int i = player.getNumPokemonTeam(); i < 6; i++) {
-									g.drawString("--", (maxX/2)-(uiW/2)+30, (maxY/2)-(uiH/2)+40+(i*30));
-								}
-								g.drawImage(ImageIO.read(new File("assets/combat/arrow.png")), (maxX/2)-(uiW/2)+15, (maxY/2)-(uiH/2)-5+((optionsPokemon+1)*30), 20, 20, null);
-
-							//</editor-fold>
-						}
-					}
-				}catch(IOException ex){
-				}
-			//</editor-fold>
-		}
-		return display;
-	}
-
 	public void accept(){
 		if (!this.ready){
-			this.currentEnemyX=this.finalEnemyX;
-			this.currentPlayerX=this.finalPlayerX;
-			this.ready=true;
+			pokemonviolet.view.displayParser.CUR_ENEMY_X = pokemonviolet.view.displayParser.FINAL_ENEMY_X;
+			pokemonviolet.view.displayParser.CUR_PLAYER_X = pokemonviolet.view.displayParser.FINAL_PLAYER_X;
+			this.setReady(true);
 		}else{
-			if (waitingAction){
+			if (isWaitingAction()){
 				//<editor-fold defaultstate="collapsed" desc="User Input Menus">
-					if (currentMenu.compareTo("MAIN")==0){
-						switch (optionsMain) {
+					if (getCurrentMenu().compareTo("MAIN")==0){
+						switch (getOptionsMain()) {
 							case 0:
 								this.currentMenu="MOVES";
 							break;
@@ -437,18 +113,18 @@ public class Combat {
 
 							break;
 						}
-					}else if (currentMenu.compareTo("MOVES")==0){
-						if (optionsMoves<currentPlayerPokemon.getNumMoves()){
+					}else if (getCurrentMenu().compareTo("MOVES")==0){
+						if (getOptionsMoves()<getCurrentPlayerPokemon().getNumMoves()){
 							waitingAction = false;
-							displayTextQueue.remove(0);
-							if (currentPlayerPokemon.getMoveSet()[optionsMoves].getPP()>0){
+							getDisplayTextQueue().remove(0);
+							if (getCurrentPlayerPokemon().getMoveSet()[getOptionsMoves()].getPP()>0){
 								inRound = true;
 								nextTurn();
 							}else{
-								displayTextQueue.add("There is no PP left for this move!");
+								getDisplayTextQueue().add("There is no PP left for this move!");
 							}
 						}
-					}else if (currentMenu.compareTo("BALLS")==0){
+					}else if (getCurrentMenu().compareTo("BALLS")==0){
 						String[] pokeTypes = {"POKEBALL","GREATBALL","ULTRABALL","PREMIERBALL","MASTERBALL"};
 						String[] order = new String[4];
 						int counter = 0;
@@ -457,7 +133,7 @@ public class Combat {
 							if (numBalls<4){
 								boolean foundOne = false;
 								while (counter<5 && !foundOne){
-									if (player.getAmountItem(pokeTypes[counter])>0){
+									if (getPlayer().getAmountItem(pokeTypes[counter])>0){
 										order[numBalls] = pokeTypes[counter];
 										foundOne = true;
 										numBalls=numBalls+1;
@@ -466,153 +142,153 @@ public class Combat {
 								}
 							}
 						}
-						if (optionsBalls<numBalls){
+						if (getOptionsBalls()<numBalls){
 							waitingAction = false;
-							displayTextQueue.remove(0);
+							getDisplayTextQueue().remove(0);
 							inRound = true;
-							throwBall(order[optionsBalls]);
+							throwBall(order[getOptionsBalls()]);
 						}
-					}else if (currentMenu.compareTo("POKEMON")==0 || currentMenu.compareTo("POKEMONF")==0){
-						displayTextQueue.remove(0);
-						if (currentMenu.compareTo("POKEMONF")==0){
+					}else if (getCurrentMenu().compareTo("POKEMON")==0 || getCurrentMenu().compareTo("POKEMONF")==0){
+						getDisplayTextQueue().remove(0);
+						if (getCurrentMenu().compareTo("POKEMONF")==0){
 							currentMenu = "MAIN";
 						}else{
 							waitingAction = false;
 							inRound = true;
 							turnNum = turnNum+1;
 						}
-						if (currentMenu.compareTo("POKEMON")==0){
-							displayTextQueue.add("That's enough, "+currentPlayerPokemon.getNameNick()+", come back!");
+						if (getCurrentMenu().compareTo("POKEMON")==0){
+							getDisplayTextQueue().add("That's enough, "+getCurrentPlayerPokemon().getNameNick()+", come back!");
 						}else{
 						//	displayTextQueue.add("You did good, "+currentPlayerPokemon.getNameNick()+".");
 						}
-						player.setCurrentPokemon(optionsPokemon);
-						currentPlayerPokemon = player.getTeam()[player.getCurrentPokemon()];
-						displayTextQueue.add("Go! "+currentPlayerPokemon.getNameNick()+"!");
-						this.displayHealthPlayer = currentPlayerPokemon.getCurHP();
-						this.displayExpPlayer = currentPlayerPokemon.getCurEXP();
+						getPlayer().setCurrentPokemon(getOptionsPokemon());
+						currentPlayerPokemon = getPlayer().getTeam()[getPlayer().getCurrentPokemon()];
+						getDisplayTextQueue().add("Go! "+getCurrentPlayerPokemon().getNameNick()+"!");
+						this.setDisplayHealthPlayer(getCurrentPlayerPokemon().getCurHP());
+						this.setDisplayExpPlayer(getCurrentPlayerPokemon().getCurEXP());
 					}
 				//</editor-fold>
 			}else if (inRound){
-				if (this.doneHealthEnemy && this.doneHealthPlayer){
-					displayTextQueue.remove(0);
-					if (this.caught[enemy.getCurrentPokemon()]==1){
+				if (this.isDoneHealthEnemy() && this.isDoneHealthPlayer()){
+					getDisplayTextQueue().remove(0);
+					if (this.getCaught()[getEnemy().getCurrentPokemon()]==1){
 						currentMenu = "MAIN";
 						turnNum = 0;
 						inRound = false;
-					}else if (currentEnemyPokemon.isFainted()){
+					}else if (getCurrentEnemyPokemon().isFainted()){
 						String prefix;
 						if (this.wildBattle){
 							prefix = "Wild ";
 						}else{
 							prefix = "Foe ";
 						}
-						displayTextQueue.add(prefix+currentEnemyPokemon.getNameNick() +" fainted!");
+						getDisplayTextQueue().add(prefix+getCurrentEnemyPokemon().getNameNick() +" fainted!");
 						/*
 						*/
 						currentMenu = "MAIN";
 						turnNum = 0;
 						inRound = false;
 						
-					}else if (currentPlayerPokemon.isFainted()){
-						displayTextQueue.add(currentEnemyPokemon.getNameNick() +" fainted!");
+					}else if (getCurrentPlayerPokemon().isFainted()){
+						getDisplayTextQueue().add(getCurrentEnemyPokemon().getNameNick() +" fainted!");
 						turnNum = 0;
 						inRound = false;
 					}else{
-						if (displayTextQueue.isEmpty()){
+						if (getDisplayTextQueue().isEmpty()){
 							if (turnNum<2){
 								nextTurn();
 							}else{
 								currentMenu = "MAIN";
 								turnNum = 0;
 								inRound = false;
-								displayTextQueue.add("");
+								getDisplayTextQueue().add("");
 								accept();
 							}
 						}
 					}
 				}
 			}else{
-				if (this.doneExpPlayer){
-					displayTextQueue.remove(0);
-					if (displayTextQueue.isEmpty()){
-						if (!currentEnemyPokemon.isFainted() && caught[enemy.getCurrentPokemon()]==0 && !currentPlayerPokemon.isFainted()){
+				if (this.isDoneExpPlayer()){
+					getDisplayTextQueue().remove(0);
+					if (getDisplayTextQueue().isEmpty()){
+						if (!currentEnemyPokemon.isFainted() && getCaught()[getEnemy().getCurrentPokemon()]==0 && !currentPlayerPokemon.isFainted()){
 							waitingAction = true;
-							displayTextQueue.add("What will "+currentPlayerPokemon.getNameNick()+ " do?");
-						}else if (currentEnemyPokemon.isFainted() && enemy.getCurrentPokemon()+1<enemy.getNumPokemonTeam()){
+							getDisplayTextQueue().add("What will "+getCurrentPlayerPokemon().getNameNick()+ " do?");
+						}else if (getCurrentEnemyPokemon().isFainted() && getEnemy().getCurrentPokemon()+1<getEnemy().getNumPokemonTeam()){
 							
-							displayTextQueue.add(currentPlayerPokemon.getNameNick() +" gained "+currentEnemyPokemon.getExpGain()+" EXP!");
-							boolean levelUp = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP()+currentEnemyPokemon.getExpGain());
-							this.doneExpPlayer=false;
+							getDisplayTextQueue().add(getCurrentPlayerPokemon().getNameNick() +" gained "+getCurrentEnemyPokemon().getExpGain()+" EXP!");
+							boolean levelUp = getCurrentPlayerPokemon().setCurEXP(getCurrentPlayerPokemon().getCurEXP()+getCurrentEnemyPokemon().getExpGain());
+							this.setDoneExpPlayer(false);
 							if (levelUp){
-								displayTextQueue.add(currentPlayerPokemon.getNameNick()+" is now level "+currentPlayerPokemon.getLevel()+"!");
+								getDisplayTextQueue().add(getCurrentPlayerPokemon().getNameNick()+" is now level "+getCurrentPlayerPokemon().getLevel()+"!");
 							}
 						
-							enemy.setCurrentPokemon(enemy.getCurrentPokemon()+1);
-							currentEnemyPokemon = enemy.getTeam()[enemy.getCurrentPokemon()];
-							this.displayHealthEnemy = currentEnemyPokemon.getCurHP();
+							getEnemy().setCurrentPokemon(getEnemy().getCurrentPokemon()+1);
+							currentEnemyPokemon = getEnemy().getTeam()[getEnemy().getCurrentPokemon()];
+							this.setDisplayHealthEnemy(getCurrentEnemyPokemon().getCurHP());
 
 							if (this.wildBattle){
-								displayTextQueue.add("A wild "+currentEnemyPokemon.getNameNick()+" rushed at you!");
+								getDisplayTextQueue().add("A wild "+getCurrentEnemyPokemon().getNameNick()+" rushed at you!");
 							}else{
-								displayTextQueue.add("Foe "+enemy.getName()+" sent out "+currentEnemyPokemon.getNameNick()+"!");
+								getDisplayTextQueue().add("Foe "+getEnemy().getName()+" sent out "+getCurrentEnemyPokemon().getNameNick()+"!");
 							}
-						}else if (caught[enemy.getCurrentPokemon()]==1 && enemy.getCurrentPokemon()+1<enemy.getNumPokemonTeam()){
+						}else if (getCaught()[getEnemy().getCurrentPokemon()]==1 && getEnemy().getCurrentPokemon()+1<getEnemy().getNumPokemonTeam()){
 							
-							displayTextQueue.add(currentPlayerPokemon.getNameNick() +" gained "+currentEnemyPokemon.getExpGain()+" EXP!");
-							boolean levelUp = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP()+currentEnemyPokemon.getExpGain());
-							this.doneExpPlayer=false;
+							getDisplayTextQueue().add(getCurrentPlayerPokemon().getNameNick() +" gained "+getCurrentEnemyPokemon().getExpGain()+" EXP!");
+							boolean levelUp = getCurrentPlayerPokemon().setCurEXP(getCurrentPlayerPokemon().getCurEXP()+getCurrentEnemyPokemon().getExpGain());
+							this.setDoneExpPlayer(false);
 							if (levelUp){
-								displayTextQueue.add(currentPlayerPokemon.getNameNick()+" is now level "+currentPlayerPokemon.getLevel()+"!");
+								getDisplayTextQueue().add(getCurrentPlayerPokemon().getNameNick()+" is now level "+getCurrentPlayerPokemon().getLevel()+"!");
 							}
 						
-							enemy.setCurrentPokemon(enemy.getCurrentPokemon()+1);
-							currentEnemyPokemon = enemy.getTeam()[enemy.getCurrentPokemon()];
-							this.displayHealthEnemy = currentEnemyPokemon.getCurHP();
+							getEnemy().setCurrentPokemon(getEnemy().getCurrentPokemon()+1);
+							currentEnemyPokemon = getEnemy().getTeam()[getEnemy().getCurrentPokemon()];
+							this.setDisplayHealthEnemy(getCurrentEnemyPokemon().getCurHP());
 
 							if (this.wildBattle){
-								displayTextQueue.add("A wild "+currentEnemyPokemon.getNameNick()+" rushed at you!");
+								getDisplayTextQueue().add("A wild "+getCurrentEnemyPokemon().getNameNick()+" rushed at you!");
 							}else{
-								displayTextQueue.add("Foe "+enemy.getName()+" sent out "+currentEnemyPokemon.getNameNick()+"!");
+								getDisplayTextQueue().add("Foe "+getEnemy().getName()+" sent out "+getCurrentEnemyPokemon().getNameNick()+"!");
 							}
-						}else if (currentPlayerPokemon.isFainted() && player.getNextAvailablePokemon()!= -1){
-								displayTextQueue.add("What Pokemon will you send out next?");
+						}else if (getCurrentPlayerPokemon().isFainted() && getPlayer().getNextAvailablePokemon()!= -1){
+								getDisplayTextQueue().add("What Pokemon will you send out next?");
 								currentMenu = "POKEMONF";
 								waitingAction = true;
 						}else if (!canDispose){
 							canDispose = true;
-							if (currentPlayerPokemon.isFainted()){
-								displayTextQueue.add(player.getName()+ " wiped out!");
+							if (getCurrentPlayerPokemon().isFainted()){
+								getDisplayTextQueue().add(getPlayer().getName()+ " wiped out!");
 							}else{
-								if (this.caught[enemy.getCurrentPokemon()]!=1){
-									displayTextQueue.add(currentPlayerPokemon.getNameNick() +" gained "+currentEnemyPokemon.getExpGain()+" EXP!");
-									boolean levelUp = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP()+currentEnemyPokemon.getExpGain());
-									this.doneExpPlayer=false;
+								if (this.getCaught()[getEnemy().getCurrentPokemon()]!=1){
+									getDisplayTextQueue().add(getCurrentPlayerPokemon().getNameNick() +" gained "+getCurrentEnemyPokemon().getExpGain()+" EXP!");
+									boolean levelUp = getCurrentPlayerPokemon().setCurEXP(getCurrentPlayerPokemon().getCurEXP()+getCurrentEnemyPokemon().getExpGain());
+									this.setDoneExpPlayer(false);
 									if (levelUp){
-										displayTextQueue.add(currentPlayerPokemon.getNameNick()+" is now level "+currentPlayerPokemon.getLevel()+"!");
+										getDisplayTextQueue().add(getCurrentPlayerPokemon().getNameNick()+" is now level "+getCurrentPlayerPokemon().getLevel()+"!");
 									}
 								}
 								Random rnd = new Random();
 								int lootRoll = rnd.nextInt(100);
 								if( lootRoll == 0){
-									displayTextQueue.add("Found a Masterball!");
-									player.addItem("MASTERBALL",1);
+									getDisplayTextQueue().add("Found a Masterball!");
+									getPlayer().addItem("MASTERBALL",1);
 								}else if (lootRoll<10){
-									displayTextQueue.add("Found an Ultraball!");
-									player.addItem("ULTRABALL",1);
+									getDisplayTextQueue().add("Found an Ultraball!");
+									getPlayer().addItem("ULTRABALL",1);
 								}else if (lootRoll<40){
-									displayTextQueue.add("Found a Greatball!");
-									player.addItem("GREATBALL",1);
+									getDisplayTextQueue().add("Found a Greatball!");
+									getPlayer().addItem("GREATBALL",1);
 								}else if (lootRoll<50){
-									displayTextQueue.add("Found a Premier Ball!");
-									player.addItem("PREMIERBALL",1);
+									getDisplayTextQueue().add("Found a Premier Ball!");
+									getPlayer().addItem("PREMIERBALL",1);
 								}else{
-									displayTextQueue.add("Found a Pokeball!");
-									player.addItem("POKEBALL",1);
+									getDisplayTextQueue().add("Found a Pokeball!");
+									getPlayer().addItem("POKEBALL",1);
 								}
 							}
 						}else{
-							player.pokemonCenter();
+							getPlayer().pokemonCenter();
 							this.dispose();
 						}
 					}
@@ -622,10 +298,10 @@ public class Combat {
 	}
 	
 	public void cancel(){
-		if (waitingAction){
-			if (currentMenu.compareTo("MAIN")==0){
+		if (isWaitingAction()){
+			if (getCurrentMenu().compareTo("MAIN")==0){
 				optionsMain = 3;
-			}else if (currentMenu.compareTo("POKEMONF")!=0){
+			}else if (getCurrentMenu().compareTo("POKEMONF")!=0){
 				currentMenu = "MAIN";
 			}
 		}
@@ -633,75 +309,75 @@ public class Combat {
 	
 	private void throwBall(String internalName){
 		turnNum = turnNum+1;
-		player.subItem(internalName);
-		int shakes = currentEnemyPokemon.doCatch(internalName);
-		displayTextQueue.add(player.getName()+" throws a "+new Item(internalName).getNameSingular()+"!");
+		getPlayer().subItem(internalName);
+		int shakes = getCurrentEnemyPokemon().doCatch(internalName);
+		getDisplayTextQueue().add(getPlayer().getName()+" throws a "+new Item(internalName).getNameSingular()+"!");
 		switch (shakes) {
 			case 0:
-				displayTextQueue.add(currentEnemyPokemon.getNameNick()+" escaped!");
-				this.caught[enemy.getCurrentPokemon()]=2;
+				getDisplayTextQueue().add(getCurrentEnemyPokemon().getNameNick()+" escaped!");
+				this.caught[getEnemy().getCurrentPokemon()]=2;
 			break;
 			case 1:
-				displayTextQueue.add("The "+new Item(internalName).getNameSingular()+" broke!");
-				this.caught[enemy.getCurrentPokemon()]=2;
+				getDisplayTextQueue().add("The "+new Item(internalName).getNameSingular()+" broke!");
+				this.caught[getEnemy().getCurrentPokemon()]=2;
 			break;
 			case 2:
-				displayTextQueue.add("Couldn't catch "+currentEnemyPokemon.getNameNick()+"!");
-				this.caught[enemy.getCurrentPokemon()]=2;
+				getDisplayTextQueue().add("Couldn't catch "+getCurrentEnemyPokemon().getNameNick()+"!");
+				this.caught[getEnemy().getCurrentPokemon()]=2;
 			break;
 			case 3:
-				displayTextQueue.add("Oh no! It was so close too!");
-				this.caught[enemy.getCurrentPokemon()]=2;
+				getDisplayTextQueue().add("Oh no! It was so close too!");
+				this.caught[getEnemy().getCurrentPokemon()]=2;
 			break;
 			case 4:
-				displayTextQueue.add("Gotcha! "+currentEnemyPokemon.getNameNick()+" was caught!");
-				this.caught[enemy.getCurrentPokemon()]=1;
-				player.addPokemon(currentEnemyPokemon);
+				getDisplayTextQueue().add("Gotcha! "+getCurrentEnemyPokemon().getNameNick()+" was caught!");
+				this.caught[getEnemy().getCurrentPokemon()]=1;
+				getPlayer().addPokemon(getCurrentEnemyPokemon());
 			break;
 		}
 	}
 	
 	private void nextTurn(){
-		if (this.caught[enemy.getCurrentPokemon()]==2){
-			this.caught[enemy.getCurrentPokemon()]=0;
+		if (this.getCaught()[getEnemy().getCurrentPokemon()]==2){
+			this.caught[getEnemy().getCurrentPokemon()]=0;
 			Random rnd = new Random();
-			int randomMove = (rnd.nextInt(currentEnemyPokemon.getNumMoves()));
+			int randomMove = (rnd.nextInt(getCurrentEnemyPokemon().getNumMoves()));
 				String prefix;
 				if (this.wildBattle){
 					prefix = "Wild ";
 				}else{
 					prefix = "Foe ";
 				}
-			doTurn(currentEnemyPokemon,currentPlayerPokemon,randomMove,prefix);
+			doTurn(getCurrentEnemyPokemon(), getCurrentPlayerPokemon(),randomMove,prefix);
 			turnNum = turnNum+1;
-		}else if (currentEnemyPokemon.getStatSpeed() >= currentPlayerPokemon.getStatSpeed()){
+		}else if (getCurrentEnemyPokemon().getStatSpeed() >= getCurrentPlayerPokemon().getStatSpeed()){
 			if (turnNum == 0){
 				Random rnd = new Random();
-				int randomMove = (rnd.nextInt(currentEnemyPokemon.getNumMoves()));
+				int randomMove = (rnd.nextInt(getCurrentEnemyPokemon().getNumMoves()));
 				String prefix;
 				if (this.wildBattle){
 					prefix = "Wild ";
 				}else{
 					prefix = "Foe ";
 				}
-				doTurn(currentEnemyPokemon,currentPlayerPokemon,randomMove,prefix);
+				doTurn(getCurrentEnemyPokemon(), getCurrentPlayerPokemon(),randomMove,prefix);
 			}else{
-				doTurn(currentPlayerPokemon,currentEnemyPokemon,optionsMoves,"");
+				doTurn(getCurrentPlayerPokemon(), getCurrentEnemyPokemon(), getOptionsMoves(),"");
 			}
 			turnNum = turnNum+1;
-		}else if (currentEnemyPokemon.getStatSpeed() < currentPlayerPokemon.getStatSpeed()){
+		}else if (getCurrentEnemyPokemon().getStatSpeed() < getCurrentPlayerPokemon().getStatSpeed()){
 			if (turnNum == 1){
 				Random rnd = new Random();
-				int randomMove = (rnd.nextInt(currentEnemyPokemon.getNumMoves()));
+				int randomMove = (rnd.nextInt(getCurrentEnemyPokemon().getNumMoves()));
 				String prefix;
 				if (this.wildBattle){
 					prefix = "Wild ";
 				}else{
 					prefix = "Foe ";
 				}
-				doTurn(currentEnemyPokemon,currentPlayerPokemon,randomMove,prefix);
+				doTurn(getCurrentEnemyPokemon(), getCurrentPlayerPokemon(),randomMove,prefix);
 			}else{
-				doTurn(currentPlayerPokemon,currentEnemyPokemon,optionsMoves,"");
+				doTurn(getCurrentPlayerPokemon(), getCurrentEnemyPokemon(), getOptionsMoves(),"");
 			}
 			turnNum = turnNum+1;
 		}
@@ -709,7 +385,7 @@ public class Combat {
 	
 	private void doTurn(Pokemon attacker, Pokemon attacked, int moveNum, String prefix){
 		
-		displayTextQueue.add(prefix+attacker.getNameNick()+" used "+attacker.getMoveSet()[moveNum].getNameDisplay()+"!");
+		getDisplayTextQueue().add(prefix+attacker.getNameNick()+" used "+attacker.getMoveSet()[moveNum].getNameDisplay()+"!");
 		
 		float hitChance = (attacker.getMoveSet()[moveNum].getAccuracy()/100)*(attacker.getAccuracy()/attacked.getEvasion());
 		
@@ -720,34 +396,34 @@ public class Combat {
 			attacker.getMoveSet()[moveNum].setPP(attacker.getMoveSet()[moveNum].getPP()-1);
 			
 			if(moveDamage[2]==0){
-				displayTextQueue.add(attacked.getNameNick()+" is immune!");
+				getDisplayTextQueue().add(attacked.getNameNick()+" is immune!");
 			}else{
 				if (moveDamage[1]==1){
-					displayTextQueue.add("A critical hit!");
+					getDisplayTextQueue().add("A critical hit!");
 				}
 				if(moveDamage[2]>10){
-					displayTextQueue.add("It's super effective!");
+					getDisplayTextQueue().add("It's super effective!");
 				}else if(moveDamage[2]<10){
-					displayTextQueue.add("It's not very effective...");
+					getDisplayTextQueue().add("It's not very effective...");
 				}
 			}
 			
-			this.doneHealthEnemy = false;
-			this.doneHealthPlayer = false;
+			this.setDoneHealthEnemy(false);
+			this.setDoneHealthPlayer(false);
 			
 			attacked.setCurHP(attacked.getCurHP()-moveDamage[0]);
 		}else{
-			displayTextQueue.add(prefix+attacker.getNameNick()+"'s attack missed!");
+			getDisplayTextQueue().add(prefix+attacker.getNameNick()+"'s attack missed!");
 		}
 	}
 	
 	public void move(String dir){
-		if (waitingAction){
+		if (isWaitingAction()){
 			int x,y;
-			if (currentMenu.compareTo("MAIN")==0){
+			if (getCurrentMenu().compareTo("MAIN")==0){
 				//<editor-fold defaultstate="collapsed" desc="Main">
-					x = (optionsMain%2);
-					y = (int)Math.floor(optionsMain/2);
+					x = (getOptionsMain()%2);
+					y = (int)Math.floor(getOptionsMain()/2);
 
 					switch(dir){
 						case "LEFT":
@@ -778,10 +454,10 @@ public class Combat {
 					
 					optionsMain = (y*2)+x;
 				//</editor-fold>
-			}else if (currentMenu.compareTo("POKEMON")==0 || currentMenu.compareTo("POKEMONF")==0){
+			}else if (getCurrentMenu().compareTo("POKEMON")==0 || getCurrentMenu().compareTo("POKEMONF")==0){
 				//<editor-fold defaultstate="collapsed" desc="Pokemon">
 					x=0;
-					y=optionsPokemon;
+					y=getOptionsPokemon();
 
 					switch(dir){
 						case "UP":
@@ -800,10 +476,10 @@ public class Combat {
 
 					optionsPokemon = y;
 				//</editor-fold>
-			}else if (currentMenu.compareTo("MOVES")==0){
+			}else if (getCurrentMenu().compareTo("MOVES")==0){
 				//<editor-fold defaultstate="collapsed" desc="Moves">
-					x = (optionsMoves%2);
-					y = (int)Math.floor(optionsMoves/2);
+					x = (getOptionsMoves()%2);
+					y = (int)Math.floor(getOptionsMoves()/2);
 
 					switch(dir){
 						case "LEFT":
@@ -834,10 +510,10 @@ public class Combat {
 					
 					optionsMoves = (y*2)+x;
 				//</editor-fold>
-			}else if (currentMenu.compareTo("BALLS")==0){
+			}else if (getCurrentMenu().compareTo("BALLS")==0){
 				//<editor-fold defaultstate="collapsed" desc="Balls">
-					x = (optionsBalls%2);
-					y = (int)Math.floor(optionsBalls/2);
+					x = (getOptionsBalls()%2);
+					y = (int)Math.floor(getOptionsBalls()/2);
 
 					switch(dir){
 						case "LEFT":
@@ -874,7 +550,8 @@ public class Combat {
 	
 	private void dispose(){
 		Game.currentBattle = null;
-		this.player.setInCombat(false);
+		this.getPlayer().setInCombat(false);
+		Game.gameState.remove(Game.gameState.size()-1);
 	}
 	
 	public void receiveKeyAction(String action,String state){
@@ -891,4 +568,181 @@ public class Combat {
 		}
 	}
 	
+	//<editor-fold defaultstate="collapsed" desc="Getters & Setters">
+
+		/**
+		 * @return the optionsMain
+		 */
+		public int getOptionsMain() {
+			return optionsMain;
+		}
+
+		/**
+		 * @return the optionsMoves
+		 */
+		public int getOptionsMoves() {
+			return optionsMoves;
+		}
+
+		/**
+		 * @return the optionsBalls
+		 */
+		public int getOptionsBalls() {
+			return optionsBalls;
+		}
+
+		/**
+		 * @return the optionsPokemon
+		 */
+		public int getOptionsPokemon() {
+			return optionsPokemon;
+		}
+
+		/**
+		 * @param aDisplayHealthEnemy the displayHealthEnemy to set
+		 */
+		public void setDisplayHealthEnemy(int aDisplayHealthEnemy) {
+			displayHealthEnemy = aDisplayHealthEnemy;
+		}
+
+		/**
+		 * @param aDisplayHealthPlayer the displayHealthPlayer to set
+		 */
+		public void setDisplayHealthPlayer(int aDisplayHealthPlayer) {
+			displayHealthPlayer = aDisplayHealthPlayer;
+		}
+
+		/**
+		 * @param aDisplayExpPlayer the displayExpPlayer to set
+		 */
+		public void setDisplayExpPlayer(int aDisplayExpPlayer) {
+			displayExpPlayer = aDisplayExpPlayer;
+		}
+
+		/**
+		 * @return the doneHealthEnemy
+		 */
+		public boolean isDoneHealthEnemy() {
+			return doneHealthEnemy;
+		}
+
+		/**
+		 * @return the doneHealthPlayer
+		 */
+		public boolean isDoneHealthPlayer() {
+			return doneHealthPlayer;
+		}
+
+		/**
+		 * @return the doneExpPlayer
+		 */
+		public boolean isDoneExpPlayer() {
+		   return doneExpPlayer;
+	   }
+
+		/**
+		 * @return the currentPlayerPokemon
+		 */
+		public Pokemon getCurrentPlayerPokemon() {
+			return currentPlayerPokemon;
+		}
+
+		/**
+		 * @return the currentEnemyPokemon
+		 */
+		public Pokemon getCurrentEnemyPokemon() {
+			return currentEnemyPokemon;
+		}
+
+		/**
+		 * @return the displayTextQueue
+		 */
+		public ArrayList<String> getDisplayTextQueue() {
+			return displayTextQueue;
+		}
+
+		/**
+		 * @param aReady the ready to set
+		 */
+		public void setReady(boolean aReady) {
+			ready = aReady;
+		}
+
+		/**
+		 * @return the waitingAction
+		 */
+		public boolean isWaitingAction() {
+			return waitingAction;
+		}
+
+		/**
+		 * @return the currentMenu
+		 */
+		public String getCurrentMenu() {
+			return currentMenu;
+		}
+
+		/**
+		 * @return the displayHealthEnemy
+		 */
+		public int getDisplayHealthEnemy() {
+			return displayHealthEnemy;
+		}
+
+		/**
+		 * @return the displayHealthPlayer
+		 */
+		public int getDisplayHealthPlayer() {
+			return displayHealthPlayer;
+		}
+
+		/**
+		 * @return the displayExpPlayer
+		 */
+		public int getDisplayExpPlayer() {
+			return displayExpPlayer;
+		}
+
+		/**
+		 * @return the caught
+		 */
+		public int[] getCaught() {
+			return caught;
+		}
+
+		/**
+		 * @return the player
+		 */
+		public Player getPlayer() {
+			return player;
+		}
+
+		/**
+		 * @return the enemy
+		 */
+		public Trainer getEnemy() {
+			return enemy;
+		}
+
+		/**
+		 * @param aDoneHealthEnemy the doneHealthEnemy to set
+		 */
+		public void setDoneHealthEnemy(boolean aDoneHealthEnemy) {
+			doneHealthEnemy = aDoneHealthEnemy;
+		}
+
+		/**
+		 * @param aDoneHealthPlayer the doneHealthPlayer to set
+		 */
+		public void setDoneHealthPlayer(boolean aDoneHealthPlayer) {
+			doneHealthPlayer = aDoneHealthPlayer;
+		}
+
+		/**
+		 * @param aDoneExpPlayer the doneExpPlayer to set
+		 */
+		public void setDoneExpPlayer(boolean aDoneExpPlayer) {
+			doneExpPlayer = aDoneExpPlayer;
+		}
+	//</editor-fold>
 }

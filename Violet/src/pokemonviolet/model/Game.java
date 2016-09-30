@@ -7,8 +7,6 @@
  */
 package pokemonviolet.model;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -29,14 +27,6 @@ public class Game implements Runnable{
 			 * Canvas size in Y dimension.
 			 */
 			public static int SCREEN_SIZE_Y;
-			/**
-			 * All maps dimensions.
-			 */
-			public static int ALL_MAPS_WIDTH, ALL_MAPS_HEIGHT;
-			/**
-			 * Current map position.
-			 */
-			public static int ALL_MAPS_X, ALL_MAPS_Y;
 		//</editor-fold>
 		
 		/**
@@ -48,27 +38,30 @@ public class Game implements Runnable{
 		 */
 		public static Map[][] displayedMaps;
 		/**
-		 * All maps in one Buffered Image!
-		 * <p>(What a time to be alive.)</p>
-		 */
-		public static BufferedImage ALL_MAPS;
-		/**
 		 * Current battle handler.
 		 */
 		public static Combat currentBattle;
+		/**
+		 * List of states.
+		 */
+		public static ArrayList<String> gameState;
 	// </editor-fold>
 		
 	/**
 	 * Build game.
 	 */
 	public Game() {
-		Map.loadImages();
+		gameState=new ArrayList<String>();
+		gameState.add("TITLE");
 		
 		SCREEN_SIZE_X = 480;
 		SCREEN_SIZE_Y = 320;
+		new pokemonviolet.view.GameWindow();
 		
-		ALL_MAPS_WIDTH = Map.MAP_TOTAL_SIZE_X*3;
-		ALL_MAPS_HEIGHT = Map.MAP_TOTAL_SIZE_Y*3;
+		startGame();
+	}
+	
+	private void startGame(){
 		
 		displayedMaps = new Map[3][3];
 		
@@ -76,22 +69,16 @@ public class Game implements Runnable{
 		player.addItem("POKEBALL",15);
 		player.addItem("MASTERBALL",1);
 		
-		setMaps();
-
-		new pokemonviolet.view.GameWindow();
+		refreshDisplayedMaps();
 		
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException ex) {
-		}
-		
+		gameState.add("GAME");
 	}
 	
-	private void setMaps(){
+	private void refreshDisplayedMaps(){
 		int playerMapX, playerMapY;
-
-		playerMapX = ((int)Math.floor(player.getxTile()/Map.MAP_ROW_TILES));
-		playerMapY = ((int)Math.floor(player.getyTile()/Map.MAP_ROW_TILES));
+	
+		playerMapX = ((int)Math.floor(Game.player.getxTile()/Map.MAP_ROW_TILES));
+		playerMapY = ((int)Math.floor(Game.player.getyTile()/Map.MAP_ROW_TILES));
 		
 		int maxMapsX=pokemonviolet.data.NIC.NUM_MAPS_X, maxMapsY=pokemonviolet.data.NIC.NUM_MAPS_Y;
 		for (int j = playerMapY-1; j < playerMapY+2; j++) {
@@ -113,29 +100,19 @@ public class Game implements Runnable{
 				mapIDy = j-(playerMapY-2)-1;
 				mapIDx = i-(playerMapX-2)-1;
 				
-				displayedMaps[mapIDx][mapIDy] = new Map(thisMapInfo,player.getxTile(),player.getyTile(),mapIDx,mapIDy);
+				displayedMaps[mapIDx][mapIDy] = new Map(thisMapInfo,Game.player.getxTile(),Game.player.getyTile(),mapIDx,mapIDy);
 			}
 		}
 		
-		BufferedImage tempStitched = new BufferedImage( ALL_MAPS_WIDTH, ALL_MAPS_HEIGHT, BufferedImage.TYPE_INT_RGB);
-		Graphics2D g = (Graphics2D) tempStitched.getGraphics();
-		
-		for (int i = 0; i < displayedMaps.length; i++) {
-			for (int j = 0; j < displayedMaps[i].length; j++) {
-				g.drawImage( displayedMaps[i][j].getImage(), (int)(i*Map.MAP_TOTAL_SIZE_X), (int)(j*Map.MAP_TOTAL_SIZE_Y),(int)(Map.MAP_TOTAL_SIZE_X), (int)(Map.MAP_TOTAL_SIZE_Y), null);
-			}
-		}
-		
-		ALL_MAPS = tempStitched;
-		
-		ALL_MAPS_X = calcX();
-		ALL_MAPS_Y = calcY();
+		pokemonviolet.view.displayParser.curMapX = calcX();
+		pokemonviolet.view.displayParser.curMapY = calcY();
 	}
-		
+	
 	@Override
 	public void run(){
 		while(true){
-			if (!player.isInCombat()){
+			
+			if (gameState.get(gameState.size()-1).compareTo("GAME")==0){
 				if (player.getvDirection().compareTo("")!=0){
 					boolean finished = moveMap();
 					
@@ -144,53 +121,27 @@ public class Game implements Runnable{
 					}
 				}
 			}else{
-			// 	System.out.println("Resistance is futile!");
 			}
+			
 			try {
 				Thread.sleep(70);
 			} catch (InterruptedException ex) {
 			}
 		}
 	}
-	
-	private int calcX(){
-		
-		int xTile, xDisplace, xTotal;
-		
-		xTile = player.getxTile();
-		
-		xDisplace = xTile * (Map.MAP_TOTAL_SIZE_X/Map.MAP_ROW_TILES);
-		
-		xTotal = (xDisplace*-1)+(SCREEN_SIZE_X/2);
-		
-		return xTotal;
-	}
-	
-	private int calcY(){
-		
-		int yTile, yTotal, yDisplace;
-		
-		yTile = player.getyTile();
-		
-		yDisplace = yTile * (Map.MAP_TOTAL_SIZE_Y/Map.MAP_ROW_TILES);
-		
-		yTotal = (yDisplace*-1)+(SCREEN_SIZE_Y/2);
-		
-		return yTotal;
-	}
 			
-	public void mapCheck(){
+	private void mapCheck(){
 		int playerMapX, playerMapY;
 		playerMapX = ((int)Math.floor(player.getxTile()/Map.MAP_ROW_TILES));
 		playerMapY = ((int)Math.floor(player.getyTile()/Map.MAP_ROW_TILES));
 		
 		if (playerMapX != displayedMaps[1][1].getxMap() || playerMapY != displayedMaps[1][1].getyMap()){
 			cleanMaps();
-			setMaps();
+			refreshDisplayedMaps();
 		}
 	}
 	
-	public void tileCheck(){
+	private void tileCheck(){
 		int xTile, yTile;
 		xTile=player.getxTile();
 		yTile=player.getyTile();
@@ -213,7 +164,7 @@ public class Game implements Runnable{
 		}
 	}
 	
-	public void steppedGrass(){
+	private void steppedGrass(){
 		player.setSpawnSteps(player.getSpawnSteps()-1);
 		if (player.getSpawnSteps() == 0){
 			int maxNum = 0;
@@ -235,6 +186,7 @@ public class Game implements Runnable{
 		}
 	}
 	
+	/*
 	private int[] getWildPokemon(){
 		int xTile, yTile;
 		xTile=player.getxTile();
@@ -253,8 +205,9 @@ public class Game implements Runnable{
 		}
 		return displayedMaps[1][1].getWildPokemon(xTile,yTile);
 	}
+	*/
 	
-	public void cleanMaps(){
+	private void cleanMaps(){
 		for (int i = 0; i < displayedMaps.length; i++) {
 			for (int j = 0; j < displayedMaps[i].length; j++) {
 				displayedMaps[i][j] = null;
@@ -262,7 +215,7 @@ public class Game implements Runnable{
 		}
 	}
 	
-	public boolean getCanMove(String direction){
+	private boolean getCanMove(String direction){
 		boolean canMove = false;
 		
 		int posX, posY;
@@ -326,15 +279,18 @@ public class Game implements Runnable{
 		
 		return canMove;
 	}
-		
-	public boolean moveMap(){		
+	
+	private boolean moveMap(){		
 		int baseX, baseY;
 		boolean isDone = true;
 		
 		baseX = calcX();
 		baseY = calcY();
 		
-		if (ALL_MAPS_X == baseX && ALL_MAPS_Y == baseY){
+		int curMapX = pokemonviolet.view.displayParser.curMapX;
+		int curMapY = pokemonviolet.view.displayParser.curMapY;
+		
+		if (curMapX == baseX && curMapY == baseY){
 			switch (player.getDirection()){
 				case "LEFT":
 					if (getCanMove(player.getDirection())){
@@ -363,44 +319,43 @@ public class Game implements Runnable{
 		baseX = calcX();
 		baseY = calcY();
 		
-		if (ALL_MAPS_X != baseX || ALL_MAPS_Y != baseY){
+		if (curMapX != baseX || curMapY != baseY){
 			int amount = player.MOVE_POS;
 			if (player.isRunning()){
 				amount = (int)(amount * player.RUN_MULT);
 			}
 			
-			
 			switch (player.getvDirection()){
 				case "LEFT":
-					if (Math.abs(baseX-ALL_MAPS_X) >= amount){
-						ALL_MAPS_X = ALL_MAPS_X + amount;
+					if (Math.abs(baseX-curMapX) >= amount){
+						curMapX = curMapX + amount;
 						isDone=false;
 					}else{
-						ALL_MAPS_X = baseX;
+						curMapX = baseX;
 					}
 					break;
 				case "RIGHT":
-					if (Math.abs(baseX-ALL_MAPS_X) >= amount){
-						ALL_MAPS_X = ALL_MAPS_X - amount;
+					if (Math.abs(baseX-curMapX) >= amount){
+						curMapX = curMapX - amount;
 						isDone=false;
 					}else{
-						ALL_MAPS_X = baseX;
+						curMapX = baseX;
 					}
 					break;
 				case "UP":
-					if (Math.abs(baseY-ALL_MAPS_Y) >= amount){
-						ALL_MAPS_Y = ALL_MAPS_Y + amount;
+					if (Math.abs(baseY-curMapY) >= amount){
+						curMapY = curMapY + amount;
 						isDone=false;
 					}else{
-						ALL_MAPS_Y = baseY;
+						curMapY = baseY;
 					}
 					break;
 				case "DOWN":
-					if (Math.abs(baseY-ALL_MAPS_Y) >= amount){
-						ALL_MAPS_Y = ALL_MAPS_Y - amount;
+					if (Math.abs(baseY-curMapY) >= amount){
+						curMapY = curMapY - amount;
 						isDone=false;
 					}else{
-						ALL_MAPS_Y = baseY;
+						curMapY = baseY;
 					}
 					break;
 			}
@@ -409,7 +364,36 @@ public class Game implements Runnable{
 			}
 		}
 		
+		pokemonviolet.view.displayParser.curMapX = curMapX;
+		pokemonviolet.view.displayParser.curMapY = curMapY;
+		
 		return isDone;
+	}
+	
+	private int calcX(){
+		
+		int xTile, xDisplace, xTotal;
+		
+		xTile = player.getxTile();
+		
+		xDisplace = xTile * (Map.MAP_TOTAL_SIZE_X/Map.MAP_ROW_TILES);
+		
+		xTotal = (xDisplace*-1)+(SCREEN_SIZE_X/2);
+		
+		return xTotal;
+	}
+	
+	private int calcY(){
+		
+		int yTile, yTotal, yDisplace;
+		
+		yTile = player.getyTile();
+		
+		yDisplace = yTile * (Map.MAP_TOTAL_SIZE_Y/Map.MAP_ROW_TILES);
+		
+		yTotal = (yDisplace*-1)+(SCREEN_SIZE_Y/2);
+		
+		return yTotal;
 	}
 	
 	public static void receiveKeyAction(String action, String state){
