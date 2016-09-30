@@ -134,7 +134,7 @@ public class Item {
 	private boolean readInfo(int id){
 		boolean success = false;
 		
-		String[] iteminfo = Game.INFO_ITEMS.get(id-1).split(";");
+		String[] iteminfo = pokemonviolet.data.NIC.INFO_ITEMS.get(id-1).split(";");
 		for (int i = 0; i < NUM_ATTRIB; i++){
 			String[] partes = iteminfo[i].split("=");
 			if (partes[0].compareTo("internalName")==0){
@@ -172,8 +172,8 @@ public class Item {
 		
 		boolean foundItem = false;
 
-		while (foundItem == false && id < Game.INFO_ITEMS.size()){
-			String[] iteminfo = Game.INFO_ITEMS.get(id).split(";");
+		while (foundItem == false && id < pokemonviolet.data.NIC.INFO_ITEMS.size()){
+			String[] iteminfo = pokemonviolet.data.NIC.INFO_ITEMS.get(id).split(";");
 			int attribComp = 0;
 			while (attribComp < NUM_ATTRIB && foundItem == false){
 				String[] partes = iteminfo[attribComp].split("=");

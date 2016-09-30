@@ -7,16 +7,11 @@
  */
 package pokemonviolet.model;
 
-import pokemonviolet.view.GameWindow;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import pokemonviolet.main.SplashWindow;
 
 /**
  *
@@ -26,38 +21,6 @@ public class Game implements Runnable{
 	
 	// <editor-fold defaultstate="collapsed" desc="Attributes">
 		// <editor-fold defaultstate="collapsed" desc="Statics">
-			/**
-			 * Main data for Pokemon.
-			 */
-			public static List<String> INFO_POKEMON;
-			/**
-			 * Main data for Items.
-			 */
-			public static List<String> INFO_ITEMS;
-			/**
-			 * Main data for Moves.
-			 */
-			public static List<String> INFO_MOVES;
-			/**
-			 * Main data for Types.
-			 */
-			public static List<String> INFO_TYPES;
-			/**
-			 * Main data for Maps.
-			 */
-			public static ArrayList<List<String>> INFO_MAPS;
-			/**
-			 * Blank map data.
-			 */
-			public static List<String> INFO_BLANK_MAP;
-			/**
-			 * Amount of Maps in X.
-			 */
-			public static int NUM_MAPS_X;
-			/**
-			 * Amount of Maps in Y.
-			 */
-			public static int NUM_MAPS_Y;
 			/**
 			 * Canvas size in X dimension.
 			 */
@@ -101,9 +64,6 @@ public class Game implements Runnable{
 	public Game() {
 		Map.loadImages();
 		
-		NUM_MAPS_X = 4;
-		NUM_MAPS_Y = 4;
-		
 		SCREEN_SIZE_X = 480;
 		SCREEN_SIZE_Y = 320;
 		
@@ -112,106 +72,19 @@ public class Game implements Runnable{
 		
 		displayedMaps = new Map[3][3];
 		
-		SplashWindow splash = new SplashWindow();
-
-		List<String> readInfoP = null;
-		List<String> readInfoI = null;
-		List<String> readInfoM = null;
-		List<String> readInfoT = null;
-		List<String> readInfoB = null;
-		ArrayList<List<String>> readMap = new ArrayList();
-		
-		File archivo;
-		
-		try {
-			
-			archivo = new File("listPokemon.txt");
-			readInfoP = Files.readAllLines(archivo.toPath());
-			
-		} catch (IOException ex) {
-			System.err.println("Couldn't load files!");
-			System.exit(0);
-		}
-
-		try {
-			archivo = new File("listItems.txt");
-			readInfoI = Files.readAllLines(archivo.toPath());
-			
-		} catch (IOException ex) {
-			System.err.println("Couldn't load files!");
-			System.exit(0);
-		}
-
-		try {
-			archivo = new File("listMoves.txt");
-			readInfoM = Files.readAllLines(archivo.toPath());
-			
-		} catch (IOException ex) {
-			System.err.println("Couldn't load files!");
-			System.exit(0);
-		}
-
-		try {
-			archivo = new File("listTypes.txt");
-			readInfoT = Files.readAllLines(archivo.toPath());
-		} catch (IOException ex) {
-			System.err.println("Couldn't load files!");
-			System.exit(0);
-		}
-
-		try {
-			archivo = new File("mapBLANK.txt");
-			readInfoB = Files.readAllLines(archivo.toPath());
-		} catch (IOException ex) {
-			System.err.println("Couldn't load files!");
-			System.exit(0);
-		}
-			
-		
-		for (int y = 0; y < NUM_MAPS_Y; y++) {
-			for (int x = 0; x < NUM_MAPS_X; x++) {
-				List<String> temp = null;
-				try {
-					archivo = new File("mapX"+x+"Y"+y+".txt");
-					temp = Files.readAllLines(archivo.toPath());
-				} catch (IOException ex1) {
-					temp = readInfoB;
-				}
-				readMap.add(temp);
-			}
-		}
-		
-		INFO_ITEMS = readInfoI;
-		INFO_POKEMON = readInfoP;
-		INFO_MOVES = readInfoM;
-		INFO_TYPES = readInfoT;
-		INFO_MAPS = readMap;
-		INFO_BLANK_MAP = readInfoB;
-		
 		player = new Player ("Red",new Pokemon("SQUIRTLE",15));
 		player.addItem("POKEBALL",15);
 		player.addItem("MASTERBALL",1);
 		
-	//	Thread playerThread = new Thread(player);
-	//	playerThread.start();
-		
-	//	windowClassTest = new ClassTestWindow(javax.swing.JFrame.HIDE_ON_CLOSE,false);
-	//	windowMapBuilder = new MapBuilder(javax.swing.JFrame.HIDE_ON_CLOSE,false);
-	//	windowGame = new GameWindow(javax.swing.JFrame.HIDE_ON_CLOSE,false);
-		
-		
-			setMaps();
-			
-			new GameWindow();
-			
-		//	new ClassTestWindow();
+		setMaps();
+
+		new pokemonviolet.view.GameWindow();
 		
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException ex) {
 		}
 		
-		splash.dispose();
 	}
 	
 	private void setMaps(){
@@ -220,16 +93,16 @@ public class Game implements Runnable{
 		playerMapX = ((int)Math.floor(player.getxTile()/Map.MAP_ROW_TILES));
 		playerMapY = ((int)Math.floor(player.getyTile()/Map.MAP_ROW_TILES));
 		
-		
+		int maxMapsX=pokemonviolet.data.NIC.NUM_MAPS_X, maxMapsY=pokemonviolet.data.NIC.NUM_MAPS_Y;
 		for (int j = playerMapY-1; j < playerMapY+2; j++) {
 			for (int i = playerMapX-1; i < playerMapX+2; i++) {
 				List<String> thisMapInfo;
 
-				if (i<1 || i>NUM_MAPS_X || j<1 || j>NUM_MAPS_Y){
-					thisMapInfo = new ArrayList<String>(INFO_BLANK_MAP);
+				if (i<1 || i>maxMapsX || j<1 || j>maxMapsY){
+					thisMapInfo = new ArrayList<String>(pokemonviolet.data.NIC.INFO_BLANK_MAP);
 				}else{
-					int mapID = ((j)*NUM_MAPS_X)+i;
-					thisMapInfo = new ArrayList<String>(INFO_MAPS.get(mapID));
+					int mapID = ((j)*maxMapsX)+i;
+					thisMapInfo = new ArrayList<String>(pokemonviolet.data.NIC.INFO_MAPS.get(mapID));
 				}
 				if (thisMapInfo.get(0).split(";")[0].compareTo("#")==0){
 					thisMapInfo.remove(0);

@@ -26,17 +26,17 @@ public class SplashWindow extends JWindow{
 	 * Create a splash window.
 	 */
 	public SplashWindow(){
+		media = new MediaTracker(this);
 		try {	
-			logo  = Toolkit.getDefaultToolkit().createImage("splashImage.png"); 	 	
-			media = new MediaTracker(this);
+			logo  = Toolkit.getDefaultToolkit().createImage("assets/splashImage.png"); 	 	
 			media.addImage(logo,0);
 			media.waitForID(0);
-			this.setSize(logo.getWidth(null),logo.getHeight(null));
-			this.setLocationRelativeTo(null);
-			setVisible(true);
 		}catch (Exception ex){
-		//	System.out.println (ex.getMessage());
 		}
+		
+		this.setSize(logo.getWidth(null),logo.getHeight(null));
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
 	}
 	
 	public void paint (Graphics g)

@@ -7,8 +7,6 @@
  */
 package pokemonviolet.main;
 
-
-
 /**
  *
  * @author Andres
@@ -17,13 +15,21 @@ public class PokemonViolet {
 	
 	public static void main(String[] args) throws InterruptedException{
 		
-		//	new MapBuilder(javax.swing.JFrame.EXIT_ON_CLOSE);
+		SplashWindow splash = new SplashWindow();
+		
+//			new MapBuilder(javax.swing.JFrame.EXIT_ON_CLOSE);
 		
 			pokemonviolet.model.Game game = new pokemonviolet.model.Game();
 
 			Thread gameThread = new Thread(game);
 			gameThread.start();
 		
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException ex) {
+		}
+		
+		splash.dispose();
     }
 	
 }

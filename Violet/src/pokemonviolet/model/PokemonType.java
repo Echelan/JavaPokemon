@@ -27,7 +27,7 @@ public abstract class PokemonType {
 	private static String readInfo(int id, String search){
 		String returnValue = null;
 		
-		String[] typeInfo = Game.INFO_TYPES.get(id-1).split(";");
+		String[] typeInfo = pokemonviolet.data.NIC.INFO_TYPES.get(id-1).split(";");
 		for (int i = 0; i < NUM_ATTRIB; i++){
 			String[] partes = typeInfo[i].split("=");
 			if (partes[0].compareTo(search)==0){
@@ -51,7 +51,7 @@ public abstract class PokemonType {
 		int id = 1;
 		boolean found = false;
 		while (!found){
-			String[] typeInfo = Game.INFO_TYPES.get(id-1).split(";");
+			String[] typeInfo = pokemonviolet.data.NIC.INFO_TYPES.get(id-1).split(";");
 			for (int i = 0; i < NUM_ATTRIB; i++){
 				String[] partes = typeInfo[i].split("=");
 				if (partes[0].compareTo("InternalName")==0){

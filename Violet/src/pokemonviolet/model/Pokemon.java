@@ -398,7 +398,7 @@ public class Pokemon {
 	private boolean readInfo(int id){
 		boolean success = false;
 		
-		String[] pokeinfo = Game.INFO_POKEMON.get(id-1).split(";");
+		String[] pokeinfo = pokemonviolet.data.NIC.INFO_POKEMON.get(id-1).split(";");
 		
 		for (int i = 0; i < NUM_ATTRIB; i++){
 			String[] partes = pokeinfo[i].split("=");
@@ -669,8 +669,8 @@ public class Pokemon {
 		int id = 0;
 		boolean foundPokemon = false;
 
-		while (foundPokemon == false && id < Game.INFO_POKEMON.size()){
-			String[] pokeinfo = Game.INFO_POKEMON.get(id).split(";");
+		while (foundPokemon == false && id < pokemonviolet.data.NIC.INFO_POKEMON.size()){
+			String[] pokeinfo = pokemonviolet.data.NIC.INFO_POKEMON.get(id).split(";");
 			int attribComp = 0;
 			while (attribComp < NUM_ATTRIB && foundPokemon == false){
 				String[] partes = pokeinfo[attribComp].split("=");

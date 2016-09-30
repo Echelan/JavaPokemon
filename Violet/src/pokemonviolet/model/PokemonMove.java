@@ -108,7 +108,7 @@ public class PokemonMove {
 	private boolean readInfo(int id){
 			boolean success = false;
 
-			String[] iteminfo = Game.INFO_MOVES.get(id-1).split(";");
+			String[] iteminfo = pokemonviolet.data.NIC.INFO_MOVES.get(id-1).split(";");
 			for (int i = 0; i < NUM_ATTRIB; i++){
 					String[] partes = iteminfo[i].split("=");
 					if (partes[0].compareTo("internalName")==0){
@@ -154,8 +154,8 @@ public class PokemonMove {
 		int id = 0;
 		boolean foundMove = false;
 	//	System.out.println("Searching for " + internalName);
-		while (foundMove == false && id < Game.INFO_MOVES.size()){
-			String[] moveinfo = Game.INFO_MOVES.get(id).split(";");
+		while (foundMove == false && id < pokemonviolet.data.NIC.INFO_MOVES.size()){
+			String[] moveinfo = pokemonviolet.data.NIC.INFO_MOVES.get(id).split(";");
 			int attribComp = 0;
 			while (attribComp < NUM_ATTRIB && foundMove == false){
 					String[] partes = moveinfo[attribComp].split("=");
