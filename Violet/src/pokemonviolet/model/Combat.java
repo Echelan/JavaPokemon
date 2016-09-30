@@ -7,11 +7,6 @@
  */
 package pokemonviolet.model;
 
-import pokemonviolet.model.PokemonType;
-import pokemonviolet.model.Item;
-import pokemonviolet.model.Player;
-import pokemonviolet.model.Pokemon;
-import pokemonviolet.model.Trainer;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -880,6 +875,20 @@ public class Combat {
 	private void dispose(){
 		Game.currentBattle = null;
 		this.player.setInCombat(false);
+	}
+	
+	public void receiveKeyAction(String action,String state){
+		if (state.compareTo("RELEASE")==0){
+			if (action.compareTo("A")==0){
+				accept();
+			}else if (action.compareTo("B")==0){
+				cancel();
+			}
+		}else if(state.compareTo("PRESS")==0){
+			if (action.compareTo("A")!=0 && action.compareTo("B")!=0){
+				move(action);
+			}
+		}
 	}
 	
 }

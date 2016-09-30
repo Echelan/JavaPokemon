@@ -412,4 +412,24 @@ public class Game implements Runnable{
 		return isDone;
 	}
 	
+	public static void receiveKeyAction(String action, String state){
+		if (player.isInCombat()){
+			currentBattle.receiveKeyAction(action,state);
+		}else{
+			if (action.compareTo("A")==0){
+			}else if(action.compareTo("B")==0){
+				player.setRunning(state.compareTo("PRESS")==0);
+			}else{
+				if (state.compareTo("PRESS")==0){
+					if (Game.player.getvDirection().compareTo("")==0){
+						Game.player.setvDirection(action);
+						Game.player.setDirection(action);
+					}
+				}else if (state.compareTo("RELEASE")==0){
+					Game.player.setDirection("");
+				}
+			}
+		}
+	}
+	
 }
