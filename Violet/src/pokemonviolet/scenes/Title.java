@@ -13,6 +13,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import pokemonviolet.model.Handler;
 
@@ -26,8 +27,16 @@ public class Title extends Scene{
 	private final int finalBlackBarY, finalLogoY, finalArcanineX, finalGrowlitheX;
 	private boolean ready;
 	
-	public Title(Handler main) {
+	private boolean konamiExecuted;
+	private String[] konamiCode = {"UP","UP","DOWN","DOWN","LEFT","RIGHT","LEFT","RIGHT","B","A","START"};
+	private ArrayList<String> konamiInput;
+			
+	public Title(Handler main, boolean canKonami) {
 		super(main, "TITLE", true);
+		
+		konamiExecuted = !canKonami;
+		
+		konamiInput=new ArrayList<String>();
 		
 		ready = false;
 		startDisplay = 6;
@@ -47,6 +56,69 @@ public class Title extends Scene{
 		logoY=-100;
 	}
 
+	@Override
+	public void receiveKeyAction(String action, String state) {
+		boolean konamid=false;
+		if (!konamiExecuted){
+			if (state.compareTo("RELEASE")==0){
+				if (action.compareTo(konamiCode[konamiInput.size()])==0){
+					konamiInput.add(action);
+					konamid=true;
+					if (konamiInput.size()==konamiCode.length){
+						konamiInput.clear();
+						new pokemonviolet.builder.MapBuilder(javax.swing.JFrame.DISPOSE_ON_CLOSE);
+						konamiExecuted=true;
+					}
+				}else{
+					konamiInput.clear();
+				}
+			}
+		}
+		
+		if (!konamid && state.compareTo("RELEASE")==0){
+			if (action.compareTo("START")==0){
+				start();
+			}else if (action.compareTo("A")==0){
+				accept();
+			}else if (action.compareTo("B")==0){
+				cancel();
+			}
+		}
+	}
+
+	@Override
+	protected void accept() {
+		logoY=finalLogoY;
+		arcanineX=finalArcanineX;
+		growlitheX=finalGrowlitheX;
+		blackBarY=finalBlackBarY;
+		ready=true;
+	}
+	
+	protected void start() {
+		if (ready){
+			this.dispose();
+		}else{
+			accept();
+		}
+	}
+	
+	@Override
+	protected void cancel() {
+		System.exit(0);
+	}
+
+	@Override
+	protected void dispose() {
+		main.gameState.remove(main.gameState.size()-1);
+		main.gameState.add(new GenderChoose(main));
+	}
+
+	@Override
+	protected void move(String dir) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+	
 	@Override
 	public BufferedImage getDisplay() {
 		BufferedImage display = new BufferedImage( ssX, ssY, BufferedImage.TYPE_INT_RGB);
@@ -120,46 +192,4 @@ public class Title extends Scene{
 		return display;
 	}
 
-	@Override
-	public void receiveKeyAction(String action, String state) {
-		if (action.compareTo("START")==0 && state.compareTo("RELEASE")==0){
-			start();
-		}else if (action.compareTo("A")==0 && state.compareTo("RELEASE")==0){
-			accept();
-		}
-	}
-
-	@Override
-	protected void accept() {
-		logoY=finalLogoY;
-		arcanineX=finalArcanineX;
-		growlitheX=finalGrowlitheX;
-		blackBarY=finalBlackBarY;
-		ready=true;
-	}
-	
-	private void start() {
-		if (ready){
-			this.dispose();
-		}else{
-			accept();
-		}
-	}
-	
-	@Override
-	protected void cancel() {
-	
-	}
-
-	@Override
-	protected void dispose() {
-		main.gameState.remove(main.gameState.size()-1);
-		main.gameState.add(new GenderChoose(main));
-	}
-
-	@Override
-	protected void move(String dir) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-	
 }

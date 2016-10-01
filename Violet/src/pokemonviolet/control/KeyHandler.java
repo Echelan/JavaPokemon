@@ -16,43 +16,43 @@ import java.awt.event.KeyEvent;
  * @author Andres
  */
 public class KeyHandler extends KeyAdapter{
-	private String lastPressed = "";
+//	private String lastPressed = "";
     public void keyReleased(KeyEvent key) {
-		boolean changedSomething=false;
+		boolean acceptedKey=false;
 		String sendAction = "";
 		
 		if (key.getKeyCode() == KeyEvent.VK_UP || key.getKeyCode() == KeyEvent.VK_W){
-			if (lastPressed.compareTo("UP")==0){
-				changedSomething=true;
-				sendAction=lastPressed;
-			}
+//			if (lastPressed.compareTo("UP")==0){
+				acceptedKey=true;
+				sendAction="UP";
+//			}
 		}else if(key.getKeyCode() == KeyEvent.VK_DOWN || key.getKeyCode() == KeyEvent.VK_S){
-			if (lastPressed.compareTo("UP")==0){
-				changedSomething=true;
-				sendAction=lastPressed;
-			}
+//			if (lastPressed.compareTo("DOWN")==0){
+				acceptedKey=true;
+				sendAction="DOWN";
+//			}
 		}else if(key.getKeyCode() == KeyEvent.VK_LEFT || key.getKeyCode() == KeyEvent.VK_A){
-			if (lastPressed.compareTo("UP")==0){
-				changedSomething=true;
-				sendAction=lastPressed;
-			}
+//			if (lastPressed.compareTo("LEFT")==0){
+				acceptedKey=true;
+				sendAction="LEFT";
+//			}
 		}else if(key.getKeyCode() == KeyEvent.VK_RIGHT || key.getKeyCode() == KeyEvent.VK_D){
-			if (lastPressed.compareTo("UP")==0){
-				changedSomething=true;
-				sendAction=lastPressed;
-			}
+//			if (lastPressed.compareTo("RIGHT")==0){
+				acceptedKey=true;
+				sendAction="RIGHT";
+//			}
 		}else if(key.getKeyCode() == KeyEvent.VK_K){
-			changedSomething=true;
+			acceptedKey=true;
 			sendAction="B";
 		}else if(key.getKeyCode() == KeyEvent.VK_J){
-			changedSomething=true;
+			acceptedKey=true;
 			sendAction="A";
 		}else if(key.getKeyCode() == KeyEvent.VK_ENTER){
-			changedSomething=true;
+			acceptedKey=true;
 			sendAction="START";
 		}
 
-		if (changedSomething){
+		if (acceptedKey){
 			pokemonviolet.model.Handler.gameState.get(pokemonviolet.model.Handler.gameState.size()-1).receiveKeyAction(sendAction,"RELEASE");
 		}
     }
@@ -61,37 +61,37 @@ public class KeyHandler extends KeyAdapter{
 			
 	
     public void keyPressed(KeyEvent key) {
-		boolean changedSomething=false;
+		boolean acceptedKey=false;
 		String sendAction = "";
 		
 		if (key.getKeyCode() == KeyEvent.VK_UP || key.getKeyCode() == KeyEvent.VK_W){
-			lastPressed="UP";
-			changedSomething=true;
-			sendAction=lastPressed;
+//			lastPressed="UP";
+			acceptedKey=true;
+			sendAction="UP";
 		}else if(key.getKeyCode() == KeyEvent.VK_DOWN || key.getKeyCode() == KeyEvent.VK_S){
-			lastPressed="DOWN";
-			changedSomething=true;
-			sendAction=lastPressed;
+//			lastPressed="DOWN";
+			acceptedKey=true;
+			sendAction="DOWN";
 		}else if(key.getKeyCode() == KeyEvent.VK_LEFT || key.getKeyCode() == KeyEvent.VK_A){
-			lastPressed="LEFT";
-			changedSomething=true;
-			sendAction=lastPressed;
+//			lastPressed="LEFT";
+			acceptedKey=true;
+			sendAction="LEFT";
 		}else if(key.getKeyCode() == KeyEvent.VK_RIGHT || key.getKeyCode() == KeyEvent.VK_D){
-			lastPressed="RIGHT";
-			changedSomething=true;
-			sendAction=lastPressed;
+//			lastPressed="RIGHT";
+			acceptedKey=true;
+			sendAction="RIGHT";
 		}else if(key.getKeyCode() == KeyEvent.VK_K){
-			changedSomething=true;
+			acceptedKey=true;
 			sendAction="B";
 		}else if(key.getKeyCode() == KeyEvent.VK_J){
-			changedSomething=true;
+			acceptedKey=true;
 			sendAction="A";
 		}else if(key.getKeyCode() == KeyEvent.VK_ENTER){
-			changedSomething=true;
+			acceptedKey=true;
 			sendAction="START";
 		}
 
-		if (changedSomething){
+		if (acceptedKey){
 			pokemonviolet.model.Handler.gameState.get(pokemonviolet.model.Handler.gameState.size()-1).receiveKeyAction(sendAction,"PRESS");
 		}
     }

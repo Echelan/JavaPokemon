@@ -32,6 +32,8 @@ public abstract class Scene {
 	
 	protected abstract void cancel();
 	
+	protected abstract void start();
+	
 	protected abstract void dispose();
 	
 	protected abstract void move(String dir);

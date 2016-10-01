@@ -48,6 +48,8 @@ public class Handler implements Runnable{
 		 */
 		public static ArrayList<Scene> gameState;
 		public int curMapX, curMapY;
+		private boolean randomPokemon=false;
+		private boolean fillTeam=false;
 	// </editor-fold>
 		
 	/**
@@ -60,14 +62,14 @@ public class Handler implements Runnable{
 		SCREEN_SIZE_Y = 320;
 		new pokemonviolet.view.GameWindow();
 		
-		gameState.add(new pokemonviolet.scenes.Title(this));
+		gameState.add(new pokemonviolet.scenes.Title(this,true));
 	}
 	
-	public void startGame(String name, String gender){
+	public void startGame(String name, String gender, int pokeID){
 		
 		displayedMaps = new Map[3][3];
 		
-		player = new Player (name, gender, new Pokemon("SQUIRTLE",15));
+		player = new Player (name, gender, new Pokemon(pokeID,15,"POKEBALL"));
 		player.addItem("POKEBALL",15);
 		player.addItem("MASTERBALL",1);
 		
@@ -120,7 +122,6 @@ public class Handler implements Runnable{
 							player.setvDirection("");
 						}
 					}
-				}else{
 				}
 
 				try {
@@ -170,24 +171,36 @@ public class Handler implements Runnable{
 		if (player.getSpawnSteps() == 0){
 			int maxNum = 0;
 			int[][] enemyTeam = new int[6][2];
-			for (int i = 0; i < player.getNumPokemonTeam(); i++) {
-			//	enemyTeam[i] = getWildPokemon();
-			//	maxNum = maxNum+1;
-			//	if (i>1){
-			//		if (Math.abs(enemyTeam[i][1]-player.getTeam()[i].getLevel())>5){
+			
+			if (fillTeam){
+				for (int i = 0; i < player.getNumPokemonTeam(); i++) {
+					if (randomPokemon){
 						Random rnd = new Random();
 						enemyTeam[i][0] = rnd.nextInt(151)+1;
 						enemyTeam[i][1] = player.getTeam()[i].getLevel()-3;
 						maxNum = maxNum+1;
-			//		}
-			//	}
+					}else{
+						enemyTeam[i] = getWildPokemon();
+						maxNum = maxNum+1;
+					}
+				}
+			}else{
+				int i=0;
+				if (randomPokemon){
+					Random rnd = new Random();
+					enemyTeam[i][0] = rnd.nextInt(151)+1;
+					enemyTeam[i][1] = player.getTeam()[i].getLevel()-3;
+					maxNum = maxNum+1;
+				}else{
+					enemyTeam[i] = getWildPokemon();
+					maxNum = maxNum+1;
+				}
 			}
 			
 			gameState.add(new Combat(player,new Trainer("", "", enemyTeam,maxNum),true,this));
 		}
 	}
 	
-	/*
 	private int[] getWildPokemon(){
 		int xTile, yTile;
 		xTile=player.getxTile();
@@ -206,7 +219,6 @@ public class Handler implements Runnable{
 		}
 		return displayedMaps[1][1].getWildPokemon(xTile,yTile);
 	}
-	*/
 	
 	private void cleanMaps(){
 		for (int i = 0; i < displayedMaps.length; i++) {

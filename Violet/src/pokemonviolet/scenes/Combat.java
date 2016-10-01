@@ -584,7 +584,7 @@ public class Combat extends Scene{
 				cancel();
 			}
 		}else if(state.compareTo("PRESS")==0){
-			if (action.compareTo("A")!=0 && action.compareTo("B")!=0){
+			if (action.compareTo("A")!=0 && action.compareTo("B")!=0 && action.compareTo("START")!=0){
 				move(action);
 			}
 		}
@@ -758,22 +758,23 @@ public class Combat extends Scene{
 					BufferedImage allBalls = ImageIO.read(new File("assets/combat/pokeballui.png"));
 					int dimX=9, dimY=9;
 					int x,y, id;
-
-					y = 3;
-					for (int i = 0; i < 6; i++) {
-					x = 12+(i*dimX*RESIZE);
-						if (i<enemy.getNumPokemonTeam()){
-							if (enemy.getTeam()[i].isFainted()){
-								id = 2;
+					
+					if (!wildBattle){
+						y = 3;
+						for (int i = 0; i < 6; i++) {
+						x = 12+(i*dimX*RESIZE);
+							if (i<enemy.getNumPokemonTeam()){
+								if (enemy.getTeam()[i].isFainted()){
+									id = 2;
+								}else{
+									id = 1;
+								}
 							}else{
-								id = 1;
+								id = 0;
 							}
-						}else{
-							id = 0;
+							g.drawImage(allBalls.getSubimage(id*9, 0, dimX, dimY),x,y,dimX*RESIZE,dimY*RESIZE,null);
 						}
-						g.drawImage(allBalls.getSubimage(id*9, 0, dimX, dimY),x,y,dimX*RESIZE,dimY*RESIZE,null);
 					}
-
 
 					y = (int)(ssY/2)-33;
 					for (int i = 0; i < 6; i++) {
@@ -928,5 +929,10 @@ public class Combat extends Scene{
 			//</editor-fold>
 		}
 		return display;
+	}
+
+	@Override
+	protected void start() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 }

@@ -49,5 +49,10 @@ public class Pause extends Scene{
 	protected void move(String dir) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+
+	@Override
+	protected void start() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 	
 }

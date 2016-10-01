@@ -24,42 +24,40 @@ public class GenderChoose extends Scene{
 	
 	private int chosen=0;
 	private String[] genders = {"Male","Female"};
-	private String playerName;
+	private String[] name = {"Boy","Girl"};
 	
 	public GenderChoose(Handler main) {
 		super(main, "GENDER", true);
-		playerName="Player";
 	}
 
 	@Override
 	public void receiveKeyAction(String action, String state) {
-		if (state.compareTo("PRESS")==0){
+		if (state.compareTo("RELEASE")==0){
 			if (action.compareTo("LEFT")==0 || action.compareTo("RIGHT")==0){
 				move(action);
 			}else if (action.compareTo("A")==0){
-				this.dispose();
+				accept();
+			}else if (action.compareTo("B")==0){
+				cancel();
 			}
 		}
 	}
 
 	@Override
 	protected void accept() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		this.dispose();
+		main.gameState.add(new StarterChoose(main, genders[chosen]));
 	}
 
 	@Override
 	protected void cancel() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		this.dispose();
+		main.gameState.add(new Title(main,false));
 	}
 
 	@Override
 	protected void dispose() {
-		if (playerName.compareTo("")==0){
-			playerName="Red";
-		}
-		main.startGame(playerName,genders[chosen]);
 		main.gameState.remove(main.gameState.size()-1);
-		main.gameState.add(new Game(main));
 	}
 
 	@Override
@@ -93,30 +91,26 @@ public class GenderChoose extends Scene{
 		float resize=2.5f;
 		int characterWidth=(int)(40*resize), characterHeight=(int)(82*resize);
 		
-		try {
-			g.drawImage(ImageIO.read(new File("assets/maleChar.png")), 0+50,50,characterWidth,characterHeight,null);
-			if (chosen==0){
-				g.setColor(Color.WHITE);
-			}else{
-				g.setColor(Color.GRAY);
+		for (int i = 0; i < genders.length; i++) {
+			int x = 75+(i*(ssX/2));
+			try {
+				g.drawImage(ImageIO.read(new File("assets/"+genders[i].toLowerCase()+"Char.png")), x,50,characterWidth,characterHeight,null);
+				if (chosen==i){
+					g.setColor(Color.WHITE);
+				}else{
+					g.setColor(Color.GRAY);
+				}
+				g.drawString(name[i], x+(characterWidth/4), ssY-20);
+			} catch (IOException ex) {
 			}
-			g.drawString("Boy", 0+50+(characterWidth/3), ssY-20);
-		} catch (IOException ex) {
-		}
-		
-		
-		try {
-			g.drawImage(ImageIO.read(new File("assets/femaleChar.png")), (ssX/2)+50,50,characterWidth,characterHeight,null);
-			if (chosen==1){
-				g.setColor(Color.WHITE);
-			}else{
-				g.setColor(Color.GRAY);
-			}
-			g.drawString("Girl", (ssX/2)+50+(characterWidth/3), ssY-20);
-		} catch (IOException ex) {
 		}
 		
 		return display;
+	}
+
+	@Override
+	protected void start() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	

@@ -38,16 +38,18 @@ public class GameDisplay extends Canvas implements Runnable {
     public void run() {
 		createBufferStrategy(2);
         while (true){
-			Graphics g = getBufferStrategy().getDrawGraphics();
+			if (!Handler.gameState.isEmpty()){
+				Graphics g = getBufferStrategy().getDrawGraphics();
 			
-			if (lastState.compareTo(Handler.gameState.get(Handler.gameState.size()-1).getName())!=0){
-				g.clearRect(0, 0, this.getWidth(), this.getHeight());
-				lastState = Handler.gameState.get(Handler.gameState.size()-1).getName();
+				if (lastState.compareTo(Handler.gameState.get(Handler.gameState.size()-1).getName())!=0){
+					g.clearRect(0, 0, this.getWidth(), this.getHeight());
+					lastState = Handler.gameState.get(Handler.gameState.size()-1).getName();
+				}
+
+				g.drawImage(DisplayParser.displayImage(), 0, 0, this.getWidth(), this.getHeight(), this);
+
+				repaint();
 			}
-			
-			g.drawImage(DisplayParser.displayImage(), 0, 0, this.getWidth(), this.getHeight(), this);
-			
-			repaint();
 			
 			try {
 				Thread.sleep(80);

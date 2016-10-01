@@ -44,6 +44,7 @@ public class Game extends Scene{
 		if (action.compareTo("A")==0){
 		}else if(action.compareTo("B")==0){
 			main.player.setRunning(state.compareTo("PRESS")==0);
+		}else if(action.compareTo("START")==0){
 		}else{
 			if (state.compareTo("PRESS")==0){
 				if (main.player.getvDirection().compareTo("")==0){
@@ -51,7 +52,9 @@ public class Game extends Scene{
 					main.player.setDirection(action);
 				}
 			}else if (state.compareTo("RELEASE")==0){
-				main.player.setDirection("");
+				if (main.player.getDirection().compareTo(action)==0){
+					main.player.setDirection("");
+				}
 			}
 		}
 	}
@@ -73,6 +76,11 @@ public class Game extends Scene{
 
 	@Override
 	protected void move(String dir) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected void start() {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 	
