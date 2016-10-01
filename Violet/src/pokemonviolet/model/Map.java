@@ -68,29 +68,29 @@ public class Map {
 	
 	public static void loadImages(){
 		try{
-			tileset = ImageIO.read(new File("assets/tileset.png"));
+			tileset = ImageIO.read(new File("assets/map/tileset.png"));
 			
-			shop = ImageIO.read(new File("assets/shop.png"));
+			shop = ImageIO.read(new File("assets/map/shop.png"));
 			
-			gym = ImageIO.read(new File("assets/gym.png"));
+			gym = ImageIO.read(new File("assets/map/gym.png"));
 			
-			center = ImageIO.read(new File("assets/center.png"));
+			center = ImageIO.read(new File("assets/map/center.png"));
 			
-			objects = ImageIO.read(new File("assets/objects.png"));
+			objects = ImageIO.read(new File("assets/map/objects.png"));
 			
-			house = ImageIO.read(new File("assets/house.png"));
+			house = ImageIO.read(new File("assets/map/house.png"));
 			
-			tree = ImageIO.read(new File("assets/tree.png"));
+			tree = ImageIO.read(new File("assets/map/tree.png"));
 			
-			tree2 = ImageIO.read(new File("assets/tree2.png"));
+			tree2 = ImageIO.read(new File("assets/map/tree2.png"));
 			
-			house2 = ImageIO.read(new File("assets/house2.png"));
+			house2 = ImageIO.read(new File("assets/map/house2.png"));
 			
-			house3 = ImageIO.read(new File("assets/house3.png"));
+			house3 = ImageIO.read(new File("assets/map/house3.png"));
 			
-			wstone = ImageIO.read(new File("assets/wstone.png"));
+			wstone = ImageIO.read(new File("assets/map/wstone.png"));
 			
-			wstone2 = ImageIO.read(new File("assets/wstone2.png"));
+			wstone2 = ImageIO.read(new File("assets/map/wstone2.png"));
 			
 			objSets = new BufferedImage[] {objects,house,house2,house3,center,shop,gym,tree,tree2,wstone,wstone2};
 		}catch (IOException ex){

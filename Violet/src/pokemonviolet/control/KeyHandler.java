@@ -47,10 +47,13 @@ public class KeyHandler extends KeyAdapter{
 		}else if(key.getKeyCode() == KeyEvent.VK_J){
 			changedSomething=true;
 			sendAction="A";
+		}else if(key.getKeyCode() == KeyEvent.VK_ENTER){
+			changedSomething=true;
+			sendAction="START";
 		}
 
 		if (changedSomething){
-			pokemonviolet.model.Game.receiveKeyAction(sendAction,"RELEASE");
+			pokemonviolet.model.Handler.receiveKeyAction(sendAction,"RELEASE");
 		}
     }
   
@@ -83,10 +86,13 @@ public class KeyHandler extends KeyAdapter{
 		}else if(key.getKeyCode() == KeyEvent.VK_J){
 			changedSomething=true;
 			sendAction="A";
+		}else if(key.getKeyCode() == KeyEvent.VK_ENTER){
+			changedSomething=true;
+			sendAction="START";
 		}
 
 		if (changedSomething){
-			pokemonviolet.model.Game.receiveKeyAction(sendAction,"PRESS");
+			pokemonviolet.model.Handler.receiveKeyAction(sendAction,"PRESS");
 		}
     }
 }

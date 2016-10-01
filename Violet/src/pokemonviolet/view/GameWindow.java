@@ -13,7 +13,7 @@ import pokemonviolet.view.GameDisplay;
 import java.awt.Color;
 import java.awt.event.*;
 import javax.swing.*;
-import pokemonviolet.model.Game;
+import pokemonviolet.model.Handler;
 
 
 /**
@@ -33,7 +33,7 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 	 */
 	public GameWindow() {
 		setLayout(null);
-		setSize(Game.SCREEN_SIZE_X+8,Game.SCREEN_SIZE_Y+31);
+		setSize(Handler.SCREEN_SIZE_X+8,Handler.SCREEN_SIZE_Y+31);
 		setTitle("Pokemon Violet [GAME]");
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -41,10 +41,11 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	//	setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		
-	
+		ImageIcon icon = new ImageIcon("assets/Nabu.png");
+		this.setIconImage(icon.getImage());
 	
 		screen = new GameDisplay();
-		screen.setBounds(1, 1, Game.SCREEN_SIZE_X, Game.SCREEN_SIZE_Y);
+		screen.setBounds(1, 1, Handler.SCREEN_SIZE_X, Handler.SCREEN_SIZE_Y);
 		screen.setBackground(Color.black);
 		screen.setFocusable(false);
 		add(screen);

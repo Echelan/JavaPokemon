@@ -21,7 +21,7 @@ public class PokemonViolet {
 		
 		pokemonviolet.data.NIC.loadData();
 
-		pokemonviolet.model.Game game = new pokemonviolet.model.Game();
+		pokemonviolet.model.Handler game = new pokemonviolet.model.Handler();
 		
 		Thread gameThread = new Thread(game);
 		gameThread.start();

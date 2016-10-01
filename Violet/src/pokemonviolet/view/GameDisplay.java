@@ -9,7 +9,7 @@ package pokemonviolet.view;
 
 import java.awt.Canvas;
 import java.awt.Graphics;
-import pokemonviolet.model.Game;
+import pokemonviolet.model.Handler;
 
 /**
  *
@@ -40,12 +40,12 @@ public class GameDisplay extends Canvas implements Runnable {
         while (true){
 			Graphics g = getBufferStrategy().getDrawGraphics();
 			
-			if (lastState.compareTo(Game.gameState.get(Game.gameState.size()-1))!=0){
+			if (lastState.compareTo(Handler.gameState.get(Handler.gameState.size()-1).getName())!=0){
 				g.clearRect(0, 0, this.getWidth(), this.getHeight());
-				lastState = Game.gameState.get(Game.gameState.size()-1);
+				lastState = Handler.gameState.get(Handler.gameState.size()-1).getName();
 			}
 			
-			g.drawImage(displayParser.displayImage(), 0, 0, this.getWidth(), this.getHeight(), this);
+			g.drawImage(DisplayParser.displayImage(), 0, 0, this.getWidth(), this.getHeight(), this);
 			
 			repaint();
 			
