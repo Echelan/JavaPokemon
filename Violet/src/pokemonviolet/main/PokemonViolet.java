@@ -17,7 +17,7 @@ public class PokemonViolet {
 		
 		SplashWindow splash = new SplashWindow();
 		
-//		new MapBuilder(javax.swing.JFrame.EXIT_ON_CLOSE);
+//		new pokemonviolet.builder.MapBuilder(javax.swing.JFrame.EXIT_ON_CLOSE);
 		
 		pokemonviolet.data.NIC.loadData();
 

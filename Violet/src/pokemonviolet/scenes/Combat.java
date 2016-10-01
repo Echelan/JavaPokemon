@@ -87,6 +87,7 @@ public class Combat extends Scene{
 			player.getTeam()[i].setEvasion(1);
 		}
 		
+		player.setCurrentPokemon(player.getFirstAvailablePokemon());
 		this.currentEnemyPokemon = enemy.getTeam()[enemy.getCurrentPokemon()];
 		this.currentPlayerPokemon = player.getTeam()[player.getCurrentPokemon()];
 		
@@ -166,24 +167,28 @@ public class Combat extends Scene{
 							throwBall(order[optionsBalls]);
 						}
 					}else if (currentMenu.compareTo("POKEMON")==0 || currentMenu.compareTo("POKEMONF")==0){
-						displayTextQueue.remove(0);
-						if (currentMenu.compareTo("POKEMONF")==0){
-							currentMenu = "MAIN";
-						}else{
-							waitingAction = false;
-							inRound = true;
-							turnNum = turnNum+1;
+						if (optionsPokemon<player.getNumPokemonTeam() && player.getCurrentPokemon()!=optionsPokemon){
+							if (!player.getTeam()[optionsPokemon].isFainted()){
+								displayTextQueue.remove(0);
+								if (currentMenu.compareTo("POKEMONF")==0){
+									currentMenu = "MAIN";
+								}else{
+									waitingAction = false;
+									inRound = true;
+									turnNum = turnNum+1;
+								}
+								if (currentMenu.compareTo("POKEMON")==0){
+									displayTextQueue.add("That's enough, "+currentPlayerPokemon.getNameNick()+", come back!");
+								}else{
+								//	displayTextQueue.add("You did good, "+currentPlayerPokemon.getNameNick()+".");
+								}
+								player.setCurrentPokemon(optionsPokemon);
+								currentPlayerPokemon = player.getTeam()[player.getCurrentPokemon()];
+								displayTextQueue.add("Go! "+currentPlayerPokemon.getNameNick()+"!");
+								displayHealthPlayer=currentPlayerPokemon.getCurHP();
+								displayExpPlayer=currentPlayerPokemon.getCurEXP();
+							}
 						}
-						if (currentMenu.compareTo("POKEMON")==0){
-							displayTextQueue.add("That's enough, "+currentPlayerPokemon.getNameNick()+", come back!");
-						}else{
-						//	displayTextQueue.add("You did good, "+currentPlayerPokemon.getNameNick()+".");
-						}
-						player.setCurrentPokemon(optionsPokemon);
-						currentPlayerPokemon = player.getTeam()[player.getCurrentPokemon()];
-						displayTextQueue.add("Go! "+currentPlayerPokemon.getNameNick()+"!");
-						displayHealthPlayer=currentPlayerPokemon.getCurHP();
-						displayExpPlayer=currentPlayerPokemon.getCurEXP();
 					}
 				//</editor-fold>
 			}else if (inRound){
@@ -268,7 +273,7 @@ public class Combat extends Scene{
 							}else{
 								displayTextQueue.add("Foe "+enemy.getName()+" sent out "+currentEnemyPokemon.getNameNick()+"!");
 							}
-						}else if (currentPlayerPokemon.isFainted() && player.getNextAvailablePokemon()!= -1){
+						}else if (currentPlayerPokemon.isFainted() && player.getFirstAvailablePokemon()!= -1){
 								displayTextQueue.add("What Pokemon will you send out next?");
 								currentMenu = "POKEMONF";
 								waitingAction = true;
@@ -626,7 +631,22 @@ public class Combat extends Scene{
 					g.drawImage(ImageIO.read(new File("assets/pokemon/"+currentEnemyPokemon.getId()+suffix2+".png")), curEnemyX+50, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
 				}else if (curCaught==1){
 					int x = (curEnemyX+50+(SPRITE_WIDTH/2)+20-(14*RESIZE)), y = (18+SPRITE_HEIGHT-50-(14*RESIZE));
-					g.drawImage(ImageIO.read(new File("assets/combat/pokeballactive.png")).getSubimage(0, 0, 14, 14), x,y, 14*RESIZE, 14*RESIZE, null);
+					int pokeX=0;
+					switch(currentEnemyPokemon.getBallType()){
+						case "GREATBALL":
+							pokeX=1;
+						break;
+						case "PREMIERBALL":
+							pokeX=2;
+						break;
+						case "ULTRABALL":
+							pokeX=3;
+						break;
+						case "MASTERBALL":
+							pokeX=4;
+						break;
+					}
+					g.drawImage(ImageIO.read(new File("assets/combat/pokeballactive.png")).getSubimage(pokeX*14, 0, 14, 14), x,y, 14*RESIZE, 14*RESIZE, null);
 				}
 				if (displayHealthPlayer != 0){
 					String suffix1="";
@@ -883,8 +903,18 @@ public class Combat extends Scene{
 								g.drawImage(ImageIO.read(new File("assets/combat/extrabackground.png")), (ssX/2)-(uiW/2), (ssY/2)-(uiH/2), uiW, uiH, null);
 
 								for (int i = 0; i < player.getNumPokemonTeam(); i++) {
+									if (player.getTeam()[i].isFainted()){
+										g.setColor(Color.orange);
+									}else{
+										if (i == player.getCurrentPokemon()){
+											g.setColor(Color.blue);
+										}else{
+											g.setColor(Color.black);
+										}
+									}
 									g.drawString(player.getTeam()[i].getNameNick(), (ssX/2)-(uiW/2)+30, (ssY/2)-(uiH/2)+40+(i*30));
 								}
+								g.setColor(Color.black);
 								for (int i = player.getNumPokemonTeam(); i < 6; i++) {
 									g.drawString("--", (ssX/2)-(uiW/2)+30, (ssY/2)-(uiH/2)+40+(i*30));
 								}

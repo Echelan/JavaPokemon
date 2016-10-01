@@ -958,21 +958,15 @@ public final class Player {
 		/**
 		 * @return the currentPokemon
 		 */
-		public int getNextAvailablePokemon() {
-			int value;
-			if (team[currentPokemon].isFainted()){
-				int numPokemon = -1;
+		public int getFirstAvailablePokemon() {
+			int value = -1;
 
-				for (int i = 0; i < numPokemonTeam; i++) {
-					if (!team[i].isFainted()){
-						numPokemon = i;
-					}
+			for (int i = 0; i < numPokemonTeam; i++) {
+				if (!team[i].isFainted()){
+					value = i;
 				}
-
-				value = numPokemon;
-			}else{
-				value = currentPokemon;
 			}
+
 		
 			return value;
 		}

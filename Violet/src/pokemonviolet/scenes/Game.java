@@ -29,7 +29,9 @@ public class Game extends Scene{
 		
 		for (int i = 0; i < main.displayedMaps.length; i++) {
 			for (int j = 0; j < main.displayedMaps[i].length; j++) {
-				g.drawImage(main.displayedMaps[i][j].getImage(), main.curMapX+(int)(i*pokemonviolet.model.Map.MAP_TOTAL_SIZE_X), main.curMapY+(int)(j*pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y),(int)(pokemonviolet.model.Map.MAP_TOTAL_SIZE_X), (int)(pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y), null);
+				if (main.displayedMaps[i][j]!=null){
+					g.drawImage(main.displayedMaps[i][j].getImage(), main.curMapX+(int)(i*pokemonviolet.model.Map.MAP_TOTAL_SIZE_X), main.curMapY+(int)(j*pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y),(int)(pokemonviolet.model.Map.MAP_TOTAL_SIZE_X), (int)(pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y), null);
+				}
 			}
 		}
 		g.drawImage(main.player.getCurFrameImage(), ssX/2, ssY/2,(int)(main.player.SPRITE_X*main.player.SPRITE_RESIZE),(int)(main.player.SPRITE_Y*main.player.SPRITE_RESIZE), null);

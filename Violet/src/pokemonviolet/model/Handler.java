@@ -371,6 +371,14 @@ public class Handler implements Runnable{
 		
 		xTile = player.getxTile();
 		
+		while (xTile>39){
+			xTile=xTile-20;
+		}
+		
+		while (xTile<20){
+			xTile=xTile+20;
+		}
+		
 		xDisplace = xTile * (Map.MAP_TOTAL_SIZE_X/Map.MAP_ROW_TILES);
 		
 		xTotal = (xDisplace*-1)+(SCREEN_SIZE_X/2);
@@ -383,6 +391,14 @@ public class Handler implements Runnable{
 		int yTile, yTotal, yDisplace;
 		
 		yTile = player.getyTile();
+		
+		while (yTile>39){
+			yTile=yTile-20;
+		}
+		
+		while (yTile<20){
+			yTile=yTile+20;
+		}
 		
 		yDisplace = yTile * (Map.MAP_TOTAL_SIZE_Y/Map.MAP_ROW_TILES);
 		
