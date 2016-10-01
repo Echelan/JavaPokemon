@@ -25,8 +25,6 @@ public abstract class Scene {
 		this.name = name;
 		this.full = full;
 	}
-
-	public abstract BufferedImage getDisplay();
 	
 	public abstract void receiveKeyAction(String action,String state);
 	
@@ -35,7 +33,11 @@ public abstract class Scene {
 	protected abstract void cancel();
 	
 	protected abstract void dispose();
+	
+	protected abstract void move(String dir);
 
+	public abstract BufferedImage getDisplay();
+	
 	/**
 	 * @return the name
 	 */
@@ -49,7 +51,5 @@ public abstract class Scene {
 	public boolean isFull() {
 		return full;
 	}
-	
-	
 	
 }

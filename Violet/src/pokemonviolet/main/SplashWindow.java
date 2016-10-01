@@ -8,9 +8,10 @@
 package pokemonviolet.main;
 
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.MediaTracker;
-import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
 import javax.swing.JWindow;
 
 /**
@@ -19,7 +20,7 @@ import javax.swing.JWindow;
  */
 public class SplashWindow extends JWindow{
 	
-	Image logo; 
+	BufferedImage logo; 
 	MediaTracker media;
 	
 	/**
@@ -27,14 +28,15 @@ public class SplashWindow extends JWindow{
 	 */
 	public SplashWindow(){
 		media = new MediaTracker(this);
+		
 		try {	
-			logo  = Toolkit.getDefaultToolkit().createImage("assets/splashImage.png"); 	 	
+			logo  = ImageIO.read(new File("assets/splashImage.png")); 
 			media.addImage(logo,0);
 			media.waitForID(0);
 		}catch (Exception ex){
 		}
 		
-		this.setSize(logo.getWidth(null),logo.getHeight(null));
+		this.setSize(logo.getWidth(),logo.getHeight());
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}

@@ -38,11 +38,11 @@ public class Title extends Scene{
 		blackBarY=ssY+50;
 		finalBlackBarY=ssY-50;
 		
-		growlitheX=ssX+120;
-		finalGrowlitheX=ssX-140;
+		arcanineX=ssX;
+		finalArcanineX=ssX-160;
 		
-		arcanineX=ssX+60;
-		finalArcanineX=ssX-200;
+		growlitheX=ssX+120;
+		finalGrowlitheX=finalArcanineX+60;
 		
 		logoY=-100;
 	}
@@ -122,18 +122,30 @@ public class Title extends Scene{
 
 	@Override
 	public void receiveKeyAction(String action, String state) {
-		if (ready){
-			if (action.compareTo("START")==0 && state.compareTo("RELEASE")==0){
-				this.dispose();
-			}
+		if (action.compareTo("START")==0 && state.compareTo("RELEASE")==0){
+			start();
+		}else if (action.compareTo("A")==0 && state.compareTo("RELEASE")==0){
+			accept();
 		}
 	}
 
 	@Override
 	protected void accept() {
-	
+		logoY=finalLogoY;
+		arcanineX=finalArcanineX;
+		growlitheX=finalGrowlitheX;
+		blackBarY=finalBlackBarY;
+		ready=true;
 	}
-
+	
+	private void start() {
+		if (ready){
+			this.dispose();
+		}else{
+			accept();
+		}
+	}
+	
 	@Override
 	protected void cancel() {
 	
@@ -143,6 +155,11 @@ public class Title extends Scene{
 	protected void dispose() {
 		main.gameState.remove(main.gameState.size()-1);
 		main.gameState.add(new GenderChoose(main));
+	}
+
+	@Override
+	protected void move(String dir) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 	
 }

@@ -53,7 +53,7 @@ public class KeyHandler extends KeyAdapter{
 		}
 
 		if (changedSomething){
-			pokemonviolet.model.Handler.receiveKeyAction(sendAction,"RELEASE");
+			pokemonviolet.model.Handler.gameState.get(pokemonviolet.model.Handler.gameState.size()-1).receiveKeyAction(sendAction,"RELEASE");
 		}
     }
   
@@ -92,7 +92,7 @@ public class KeyHandler extends KeyAdapter{
 		}
 
 		if (changedSomething){
-			pokemonviolet.model.Handler.receiveKeyAction(sendAction,"PRESS");
+			pokemonviolet.model.Handler.gameState.get(pokemonviolet.model.Handler.gameState.size()-1).receiveKeyAction(sendAction,"PRESS");
 		}
     }
 }

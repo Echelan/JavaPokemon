@@ -18,8 +18,7 @@ import pokemonviolet.scenes.Scene;
  */
 public abstract class DisplayParser {
 	
-	public static int curMapX, curMapY;
-	private static final int ssX=pokemonviolet.model.Handler.SCREEN_SIZE_X, ssY=pokemonviolet.model.Handler.SCREEN_SIZE_Y;
+	private static final int ssX=Handler.SCREEN_SIZE_X, ssY=Handler.SCREEN_SIZE_Y;
 	
 	public static BufferedImage displayImage(){
 		BufferedImage display = new BufferedImage( ssX, ssY, BufferedImage.TYPE_INT_RGB);
@@ -29,13 +28,17 @@ public abstract class DisplayParser {
 		boolean done = false;
 		int allW = pokemonviolet.model.Map.MAP_TOTAL_SIZE_X*3, allH = pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y*3;
 		while (!done){
-			Scene thisScene=pokemonviolet.model.Handler.gameState.get(Handler.gameState.size()-1);
+			Scene thisScene=Handler.gameState.get(Handler.gameState.size()-counter);
 
-			g.drawImage(Handler.gameState.get(Handler.gameState.size()-1).getDisplay(), 0,0, null);
+//			g.drawImage(Handler.gameState.get(Handler.gameState.size()-1).getDisplay(), 0,0, null);
 			
 			done=thisScene.isFull();
 			
 			counter = counter+1;
+		}
+		
+		for (int i = Handler.gameState.size()-counter; i < Handler.gameState.size(); i++) {
+			g.drawImage(Handler.gameState.get(Handler.gameState.size()-1).getDisplay(), 0,0, null);
 		}
 		
 		return display;

@@ -34,7 +34,8 @@ public final class Player {
 			/**
 			 * Player combat toggle.
 			 */
-			private boolean inCombat;
+//			private boolean inCombat;
+			private String gender;
 		// </editor-fold>
 		// <editor-fold defaultstate="collapsed" desc="Items">
 			/**
@@ -176,7 +177,8 @@ public final class Player {
 		 * @param name Player name.
 		 * @param starterPokemon Starter Pokemon.
 		 */
-		public Player(String name, Pokemon starterPokemon) {
+		public Player(String name, String gender, Pokemon starterPokemon) {
+			this.gender=gender;
 			setBasics();
 			this.name = name;
 			this.team[0] = starterPokemon;
@@ -188,7 +190,8 @@ public final class Player {
 		 * @param name Player name.
 		 * @param starterID Starter Pokemon ID.
 		 */
-		public Player(String name, int starterID) {
+		public Player(String name, String gender, int starterID) {
+			this.gender=gender;
 			setBasics();
 			this.name = name;
 			this.team[0] = new Pokemon(starterID);
@@ -200,7 +203,8 @@ public final class Player {
 		 * @param name Player name.
 		 * @param internalName Starter Pokemon internal name.
 		 */
-		public Player(String name, String internalName) {
+		public Player(String name, String gender, String internalName) {
+			this.gender=gender;
 			setBasics();
 			this.name = name;
 			this.team[0] = new Pokemon(internalName);
@@ -211,7 +215,8 @@ public final class Player {
 		 * Create Player with given name.
 		 * @param name Player name.
 		 */
-		public Player(String name) {
+		public Player(String name, String gender) {
+			this.gender=gender;
 			setBasics();
 			this.name = name;
 			this.numPokemonTeam = 0;
@@ -223,7 +228,7 @@ public final class Player {
 	 */
 	private void setBasics(){
 		try {
-			this.SPRITE_SHEET = ImageIO.read(new File("assets/player.png"));
+			this.SPRITE_SHEET = ImageIO.read(new File("assets/"+this.gender.toLowerCase()+"Sprite.png"));
 		} catch (IOException ex) {
 		}
 		this.team = new Pokemon[6];
@@ -249,7 +254,7 @@ public final class Player {
 		this.curAnim = 0;
 		this.setxTile(30);
 		this.setyTile(30);
-		this.setInCombat(false);
+//		this.setInCombat(false);
 		this.setCurrentPokemon(0);
 		setSpawnSteps(roll(1, 2, 3));
 	}
@@ -932,16 +937,16 @@ public final class Player {
 		/**
 		 * @return the inCombat
 		 */
-		public boolean isInCombat() {
-			return inCombat;
-		}
+//		public boolean isInCombat() {
+//			return inCombat;
+//		}
 
 		/**
 		 * @param inCombat the inCombat to set
 		 */
-		public void setInCombat(boolean inCombat) {
-			this.inCombat = inCombat;
-		}
+//		public void setInCombat(boolean inCombat) {
+//			this.inCombat = inCombat;
+//		}
 
 		/**
 		 * @return the currentPokemon

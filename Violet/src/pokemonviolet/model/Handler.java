@@ -34,19 +34,20 @@ public class Handler implements Runnable{
 		/**
 		 * The Player in game.
 		 */
-		public static Player player;
+		public Player player;
 		/**
 		 * Maps displayed.
 		 */
-		public static Map[][] displayedMaps;
+		public Map[][] displayedMaps;
 		/**
 		 * Current battle handler.
 		 */
-		public static Combat currentBattle;
+//		public Combat currentBattle;
 		/**
 		 * List of states.
 		 */
 		public static ArrayList<Scene> gameState;
+		public int curMapX, curMapY;
 	// </editor-fold>
 		
 	/**
@@ -62,11 +63,11 @@ public class Handler implements Runnable{
 		gameState.add(new pokemonviolet.scenes.Title(this));
 	}
 	
-	public void startGame(){
+	public void startGame(String name, String gender){
 		
 		displayedMaps = new Map[3][3];
 		
-		player = new Player ("Red",new Pokemon("SQUIRTLE",15));
+		player = new Player (name, gender, new Pokemon("SQUIRTLE",15));
 		player.addItem("POKEBALL",15);
 		player.addItem("MASTERBALL",1);
 		
@@ -76,8 +77,8 @@ public class Handler implements Runnable{
 	private void refreshDisplayedMaps(){
 		int playerMapX, playerMapY;
 	
-		playerMapX = ((int)Math.floor(Handler.player.getxTile()/Map.MAP_ROW_TILES));
-		playerMapY = ((int)Math.floor(Handler.player.getyTile()/Map.MAP_ROW_TILES));
+		playerMapX = ((int)Math.floor(player.getxTile()/Map.MAP_ROW_TILES));
+		playerMapY = ((int)Math.floor(player.getyTile()/Map.MAP_ROW_TILES));
 		
 		int maxMapsX=pokemonviolet.data.NIC.NUM_MAPS_X, maxMapsY=pokemonviolet.data.NIC.NUM_MAPS_Y;
 		for (int j = playerMapY-1; j < playerMapY+2; j++) {
@@ -99,32 +100,33 @@ public class Handler implements Runnable{
 				mapIDy = j-(playerMapY-2)-1;
 				mapIDx = i-(playerMapX-2)-1;
 				
-				displayedMaps[mapIDx][mapIDy] = new Map(thisMapInfo,Handler.player.getxTile(),Handler.player.getyTile(),mapIDx,mapIDy);
+				displayedMaps[mapIDx][mapIDy] = new Map(thisMapInfo,player.getxTile(),player.getyTile(),mapIDx,mapIDy);
 			}
 		}
 		
-		pokemonviolet.view.DisplayParser.curMapX = calcX();
-		pokemonviolet.view.DisplayParser.curMapY = calcY();
+		curMapX = calcX();
+		curMapY = calcY();
 	}
 	
 	@Override
 	public void run(){
 		while(true){
-			
-			if (gameState.get(gameState.size()-1).getName().compareTo("GAME")==0){
-				if (player.getvDirection().compareTo("")!=0){
-					boolean finished = moveMap();
-					
-					if (finished){
-						player.setvDirection("");
+			if (!gameState.isEmpty()){
+				if (gameState.get(gameState.size()-1).getName().compareTo("GAME")==0){
+					if (player.getvDirection().compareTo("")!=0){
+						boolean finished = moveMap();
+
+						if (finished){
+							player.setvDirection("");
+						}
 					}
+				}else{
 				}
-			}else{
-			}
-			
-			try {
-				Thread.sleep(70);
-			} catch (InterruptedException ex) {
+
+				try {
+					Thread.sleep(70);
+				} catch (InterruptedException ex) {
+				}
 			}
 		}
 	}
@@ -286,9 +288,6 @@ public class Handler implements Runnable{
 		baseX = calcX();
 		baseY = calcY();
 		
-		int curMapX = pokemonviolet.view.DisplayParser.curMapX;
-		int curMapY = pokemonviolet.view.DisplayParser.curMapY;
-		
 		if (curMapX == baseX && curMapY == baseY){
 			switch (player.getDirection()){
 				case "LEFT":
@@ -363,9 +362,6 @@ public class Handler implements Runnable{
 			}
 		}
 		
-		pokemonviolet.view.DisplayParser.curMapX = curMapX;
-		pokemonviolet.view.DisplayParser.curMapY = curMapY;
-		
 		return isDone;
 	}
 	
@@ -393,28 +389,6 @@ public class Handler implements Runnable{
 		yTotal = (yDisplace*-1)+(SCREEN_SIZE_Y/2);
 		
 		return yTotal;
-	}
-	
-	public static void receiveKeyAction(String action, String state){
-		if (gameState.get(gameState.size()-1).getName().compareTo("COMBAT")==0 ){
-			currentBattle.receiveKeyAction(action,state);
-		}else if (gameState.get(gameState.size()-1).getName().compareTo("GAME")==0 ){
-			if (action.compareTo("A")==0){
-			}else if(action.compareTo("B")==0){
-				player.setRunning(state.compareTo("PRESS")==0);
-			}else{
-				if (state.compareTo("PRESS")==0){
-					if (Handler.player.getvDirection().compareTo("")==0){
-						Handler.player.setvDirection(action);
-						Handler.player.setDirection(action);
-					}
-				}else if (state.compareTo("RELEASE")==0){
-					Handler.player.setDirection("");
-				}
-			}
-		}else{
-			gameState.get(gameState.size()-1).receiveKeyAction(action, state);
-		}
 	}
 	
 }

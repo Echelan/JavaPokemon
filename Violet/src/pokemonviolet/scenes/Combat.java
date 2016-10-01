@@ -100,7 +100,7 @@ public class Combat extends Scene{
 		displayTextQueue = new ArrayList<String>();
 		displayTextQueue.add("A wild "+currentEnemyPokemon.getNameNick()+" appeared!");
 		
-		this.player.setInCombat(true);
+//		this.player.setInCombat(true);
 		this.player.setSpawnSteps(this.player.roll(1,2,3));
 	}
 	
@@ -567,8 +567,7 @@ public class Combat extends Scene{
 	
 	@Override
 	protected void dispose(){
-		main.currentBattle = null;
-		main.player.setInCombat(false);
+//		main.player.setInCombat(false);
 		main.gameState.remove(main.gameState.size()-1);
 	}
 	
