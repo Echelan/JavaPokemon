@@ -126,40 +126,40 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
         try {
 			
 			//<editor-fold defaultstate="collapsed" desc="Image Load">
-				tilesetSMALL = ImageIO.read(new File("assets/tileset.png"));
+				tilesetSMALL = ImageIO.read(new File("assets/map/tileset.png"));
 				tileset = scale(tilesetSMALL,tilesetSMALL.getWidth(),tilesetSMALL.getHeight(),2.0,2.0);
 
-				shopSMALL = ImageIO.read(new File("assets/shop.png"));
+				shopSMALL = ImageIO.read(new File("assets/map/shop.png"));
 				shop = scale(shopSMALL,shopSMALL.getWidth(),shopSMALL.getHeight(),2.0,2.0);
 
-				gymSMALL = ImageIO.read(new File("assets/gym.png"));
+				gymSMALL = ImageIO.read(new File("assets/map/gym.png"));
 				gym = scale(gymSMALL,gymSMALL.getWidth(),gymSMALL.getHeight(),2.0,2.0);
 
-				centerSMALL = ImageIO.read(new File("assets/center.png"));
+				centerSMALL = ImageIO.read(new File("assets/map/center.png"));
 				center = scale(centerSMALL,centerSMALL.getWidth(),centerSMALL.getHeight(),2.0,2.0);
 
-				objectsSMALL = ImageIO.read(new File("assets/objects.png"));
+				objectsSMALL = ImageIO.read(new File("assets/map/objects.png"));
 				objects = scale(objectsSMALL,objectsSMALL.getWidth(),objectsSMALL.getHeight(),2.0,2.0);
 
-				houseSMALL = ImageIO.read(new File("assets/house.png"));
+				houseSMALL = ImageIO.read(new File("assets/map/house.png"));
 				house = scale(houseSMALL,houseSMALL.getWidth(),houseSMALL.getHeight(),2.0,2.0);
 
-				treeSMALL = ImageIO.read(new File("assets/tree.png"));
+				treeSMALL = ImageIO.read(new File("assets/map/tree.png"));
 				tree = scale(treeSMALL,treeSMALL.getWidth(),treeSMALL.getHeight(),2.0,2.0);
 
-				tree2SMALL = ImageIO.read(new File("assets/tree2.png"));
+				tree2SMALL = ImageIO.read(new File("assets/map/tree2.png"));
 				tree2 = scale(tree2SMALL,tree2SMALL.getWidth(),tree2SMALL.getHeight(),2.0,2.0);
 
-				house2SMALL = ImageIO.read(new File("assets/house2.png"));
+				house2SMALL = ImageIO.read(new File("assets/map/house2.png"));
 				house2 = scale(house2SMALL,house2SMALL.getWidth(),house2SMALL.getHeight(),2.0,2.0);
 
-				house3SMALL = ImageIO.read(new File("assets/house3.png"));
+				house3SMALL = ImageIO.read(new File("assets/map/house3.png"));
 				house3 = scale(house3SMALL,house3SMALL.getWidth(),house3SMALL.getHeight(),2.0,2.0);
 
-				wstoneSMALL = ImageIO.read(new File("assets/wstone.png"));
+				wstoneSMALL = ImageIO.read(new File("assets/map/wstone.png"));
 				wstone = scale(wstoneSMALL,wstoneSMALL.getWidth(),wstoneSMALL.getHeight(),2.0,2.0);
 
-				wstone2SMALL = ImageIO.read(new File("assets/wstone2.png"));
+				wstone2SMALL = ImageIO.read(new File("assets/map/wstone2.png"));
 				wstone2 = scale(wstone2SMALL,wstone2SMALL.getWidth(),wstone2SMALL.getHeight(),2.0,2.0);
 			//</editor-fold>
 			
