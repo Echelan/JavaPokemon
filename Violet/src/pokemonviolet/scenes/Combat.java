@@ -380,6 +380,7 @@ public class Combat extends Scene{
 		player.subItem(internalName);
 		int shakes = currentEnemyPokemon.doCatch(internalName);
 		displayTextQueue.add(player.getName()+" throws a "+new Item(internalName).getNameSingular()+"!");
+		
 		switch (shakes) {
 			case 0:
 				displayTextQueue.add(currentEnemyPokemon.getNameNick()+" escaped!");
@@ -659,21 +660,7 @@ public class Combat extends Scene{
 		//<editor-fold defaultstate="collapsed" desc="Pokemon Sprites Display">
 			try{
 				if (displayHealthEnemy != 0 && curCaught!=1){
-					String suffix2="";
-
-					if (currentEnemyPokemon.getGender().compareTo("Male")==0 || currentEnemyPokemon.getGender().compareTo("Genderless")==0){
-						suffix2=suffix2+"m";
-					}else{
-						suffix2=suffix2+"f";
-					}
-					suffix2 = suffix2+"f";
-					if (currentEnemyPokemon.isShiny()){
-						suffix2=suffix2+"s";
-					}else{
-						suffix2=suffix2+"n";
-					}
-
-					g.drawImage(ImageIO.read(new File("assets/pokemon/"+currentEnemyPokemon.getId()+suffix2+".png")), curEnemyX+50, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+					g.drawImage(currentEnemyPokemon.getFrontImage(), curEnemyX+50, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
 				}else if (curCaught==1){
 					int x = (curEnemyX+50+(SPRITE_WIDTH/2)+20-(14*RESIZE)), y = (18+SPRITE_HEIGHT-50-(14*RESIZE));
 					int pokeX=0;
@@ -694,22 +681,7 @@ public class Combat extends Scene{
 					g.drawImage(ImageIO.read(new File("assets/combat/pokeballactive.png")).getSubimage(pokeX*14, 0, 14, 14), x,y, 14*RESIZE, 14*RESIZE, null);
 				}
 				if (displayHealthPlayer != 0){
-					String suffix1="";
-					if (currentPlayerPokemon.getGender().compareTo("Male")==0 || currentPlayerPokemon.getGender().compareTo("Genderless")==0){
-						suffix1=suffix1+"m";
-					}else{
-						suffix1=suffix1+"f";
-					}
-
-					suffix1 = suffix1+"b";
-
-					if (currentPlayerPokemon.isShiny()){
-						suffix1=suffix1+"s";
-					}else{
-						suffix1=suffix1+"n";
-					}
-
-					g.drawImage(ImageIO.read(new File("assets/pokemon/"+currentPlayerPokemon.getId()+suffix1+".png")), curPlayerX+54, 64, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+					g.drawImage(currentPlayerPokemon.getBackImage(), curPlayerX+54, 64, SPRITE_WIDTH, SPRITE_HEIGHT, null);
 				}
 			}catch(IOException ex){
 			}
@@ -862,8 +834,9 @@ public class Combat extends Scene{
 						if (currentMenu.compareTo("MAIN")==0){
 							//<editor-fold defaultstate="collapsed" desc="Main UI Display">
 								int uiW = (120*RESIZE), uiH = (48*RESIZE);
-								g.drawImage(ImageIO.read(new File("assets/combat/uioptionsdisplay.png")), ssX-uiW, ssY-uiH, uiW, uiH, null);
 
+								g.drawImage(genWindow(0, uiW, uiH), ssX-uiW, ssY-uiH, null);
+	
 								g.setColor(Color.black);
 								g.drawString("FIGHT", ssX-215, ssY-55);
 								g.drawString("POKéBALL", ssX-105, ssY-55);
@@ -874,8 +847,10 @@ public class Combat extends Scene{
 							//</editor-fold>
 						}else if (currentMenu.compareTo("MOVES")==0){
 							//<editor-fold defaultstate="collapsed" desc="Moves UI Display">
-								int uiW = (240*RESIZE), uiH = (48*RESIZE);
-								g.drawImage(ImageIO.read(new File("assets/combat/uimovesdisplay.png")), ssX-uiW, ssY-uiH, uiW, uiH, null);
+								int ui1W = (80*RESIZE), uiH = (48*RESIZE), ui2W = (160*RESIZE);
+
+								g.drawImage(genWindow(0, ui1W, uiH), ssX-ui1W, ssY-uiH, null);
+								g.drawImage(genWindow(0, ui2W, uiH), 0, ssY-uiH, null);
 
 								g.drawImage(ImageIO.read(new File("assets/arrow.png")), 10+(int)(Math.floor(optionsMoves%2)*140), ssY-75+(int)(Math.floor(optionsMoves/2)*40), 20, 20, null);
 								for (int i = 0; i < 4; i++) {

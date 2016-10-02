@@ -7,8 +7,13 @@
  */
 package pokemonviolet.model;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.imageio.ImageIO;
 
 /**
  * @author Andres
@@ -17,6 +22,9 @@ public class Pokemon {
 	
 	//<editor-fold defaultstate="collapsed" desc="Attributes">
 		//<editor-fold defaultstate="collapsed" desc="Species Wide">
+			private static final int RESIZE = 2;
+			private static final int SPRITE_WIDTH = 80*RESIZE;
+			private static final int SPRITE_HEIGHT = 80*RESIZE;
 			static final private int NUM_ATTRIB = 40;
 			static final private int MAX_TOTAL_EV = 510;
 			static final private int MAX_SINGLE_EV = 252;
@@ -591,7 +599,7 @@ public class Pokemon {
 		}while(caught==true && shakes<4);
  
 		if (caught){
-			this.setBallType(ball.getNameInternal()); 
+			this.setBallType(ball.getNameInternal());
 		} 
 		
 		return shakes;
@@ -1059,6 +1067,56 @@ public class Pokemon {
 		damageInfo[0] = (int)(damageCalc*modifier);
 		
 		return damageInfo;
+	}
+	
+	public BufferedImage getFrontImage() throws IOException{
+		BufferedImage image = new BufferedImage( SPRITE_WIDTH, SPRITE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = image.getGraphics();
+			
+		String suffix="";
+
+		if (getGender().compareTo("Male")==0 || getGender().compareTo("Genderless")==0){
+			suffix=suffix+"m";
+		}else{
+			suffix=suffix+"f";
+		}
+		
+		suffix = suffix+"f";
+		
+		if (isShiny()){
+			suffix=suffix+"s";
+		}else{
+			suffix=suffix+"n";
+		}
+
+		g.drawImage(ImageIO.read(new File("assets/pokemon/"+getId()+suffix+".png")), 0, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+		
+		return image;
+	}
+	
+	public BufferedImage getBackImage() throws IOException{
+		BufferedImage image = new BufferedImage( SPRITE_WIDTH, SPRITE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = image.getGraphics();
+			
+		String suffix="";
+
+		if (getGender().compareTo("Male")==0 || getGender().compareTo("Genderless")==0){
+			suffix=suffix+"m";
+		}else{
+			suffix=suffix+"f";
+		}
+		
+		suffix = suffix+"b";
+		
+		if (isShiny()){
+			suffix=suffix+"s";
+		}else{
+			suffix=suffix+"n";
+		}
+
+		g.drawImage(ImageIO.read(new File("assets/pokemon/"+getId()+suffix+".png")), 0, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+		
+		return image;
 	}
 	
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">

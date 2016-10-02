@@ -26,18 +26,18 @@ public abstract class DisplayParser {
 		
 		int counter = 0;
 		boolean done = false;
-		int allW = pokemonviolet.model.Map.MAP_TOTAL_SIZE_X*3, allH = pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y*3;
-		while (!done){
-			counter = counter+1;
-			Scene thisScene=Handler.gameState.get(Handler.gameState.size()-counter);
-
-//			g.drawImage(Handler.gameState.get(Handler.gameState.size()-1).getDisplay(), 0,0, null);
-			
-			done=thisScene.isFull();
-		}
 		
-		for (int i = Handler.gameState.size()-counter; i < Handler.gameState.size(); i++) {
-			g.drawImage(Handler.gameState.get(i).getDisplay(), 0,0, null);
+		if (!Handler.gameState.isEmpty()){
+			while (!done){
+				counter = counter+1;
+				Scene thisScene=Handler.gameState.get(Handler.gameState.size()-counter);
+
+				done=thisScene.isFull();
+			}
+
+			for (int i = Handler.gameState.size()-counter; i < Handler.gameState.size(); i++) {
+				g.drawImage(Handler.gameState.get(i).getDisplay(), 0,0, null);
+			}
 		}
 		
 		return display;
