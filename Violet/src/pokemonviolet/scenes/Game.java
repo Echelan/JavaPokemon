@@ -22,29 +22,14 @@ public class Game extends Scene{
 	}
 
 	@Override
-	public BufferedImage getDisplay() {
-		int allW = pokemonviolet.model.Map.MAP_TOTAL_SIZE_X*3, allH = pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y*3;
-		BufferedImage tempStitched = new BufferedImage( ssX, ssY, BufferedImage.TYPE_INT_RGB);
-		Graphics g = tempStitched.getGraphics();
-		
-		for (int i = 0; i < main.displayedMaps.length; i++) {
-			for (int j = 0; j < main.displayedMaps[i].length; j++) {
-				if (main.displayedMaps[i][j]!=null){
-					g.drawImage(main.displayedMaps[i][j].getImage(), main.curMapX+(int)(i*pokemonviolet.model.Map.MAP_TOTAL_SIZE_X), main.curMapY+(int)(j*pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y),(int)(pokemonviolet.model.Map.MAP_TOTAL_SIZE_X), (int)(pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y), null);
-				}
-			}
-		}
-		g.drawImage(main.player.getCurFrameImage(), ssX/2, ssY/2,(int)(main.player.SPRITE_X*main.player.SPRITE_RESIZE),(int)(main.player.SPRITE_Y*main.player.SPRITE_RESIZE), null);
-		
-		return tempStitched;
-	}
-
-	@Override
 	public void receiveKeyAction(String action, String state) {
 		if (action.compareTo("A")==0){
 		}else if(action.compareTo("B")==0){
 			main.player.setRunning(state.compareTo("PRESS")==0);
 		}else if(action.compareTo("START")==0){
+			if (state.compareTo("RELEASE")==0){
+				start();
+			}
 		}else{
 			if (state.compareTo("PRESS")==0){
 				if (main.player.getvDirection().compareTo("")==0){
@@ -81,7 +66,25 @@ public class Game extends Scene{
 
 	@Override
 	protected void start() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		main.gameState.add(new Pause(main));
 	}
 	
+	@Override
+	public BufferedImage getDisplay() {
+		int allW = pokemonviolet.model.Map.MAP_TOTAL_SIZE_X*3, allH = pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y*3;
+		BufferedImage display = new BufferedImage( ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = display.getGraphics();
+		
+		for (int i = 0; i < main.displayedMaps.length; i++) {
+			for (int j = 0; j < main.displayedMaps[i].length; j++) {
+				if (main.displayedMaps[i][j]!=null){
+					g.drawImage(main.displayedMaps[i][j].getImage(), main.curMapX+(int)(i*pokemonviolet.model.Map.MAP_TOTAL_SIZE_X), main.curMapY+(int)(j*pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y),(int)(pokemonviolet.model.Map.MAP_TOTAL_SIZE_X), (int)(pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y), null);
+				}
+			}
+		}
+		g.drawImage(main.player.getCurFrameImage(), ssX/2, ssY/2,(int)(main.player.SPRITE_X*main.player.SPRITE_RESIZE),(int)(main.player.SPRITE_Y*main.player.SPRITE_RESIZE), null);
+		
+		return display;
+	}
+
 }

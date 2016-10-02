@@ -50,6 +50,7 @@ public class Handler implements Runnable{
 		public int curMapX, curMapY;
 		private boolean randomPokemon=false;
 		private boolean fillTeam=false;
+		private Thread thisThread;
 	// </editor-fold>
 		
 	/**
@@ -62,6 +63,8 @@ public class Handler implements Runnable{
 		SCREEN_SIZE_Y = 320;
 		new pokemonviolet.view.GameWindow();
 		
+		thisThread = new Thread(this);
+		
 		gameState.add(new pokemonviolet.scenes.Title(this,true));
 	}
 	
@@ -69,11 +72,12 @@ public class Handler implements Runnable{
 		
 		displayedMaps = new Map[3][3];
 		
-		player = new Player (name, gender, new Pokemon(pokeID,15,"POKEBALL"));
+		player = new Player(name, gender, new Pokemon(pokeID,5,"POKEBALL"));
 		player.addItem("POKEBALL",15);
 		player.addItem("MASTERBALL",1);
 		
 		refreshDisplayedMaps();
+		thisThread.start();
 	}
 	
 	private void refreshDisplayedMaps(){

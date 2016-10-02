@@ -144,7 +144,7 @@ public class Map {
 	private BufferedImage createMapRegion(List<String> info){
 		BufferedImage mapRegion;
 		
-		BufferedImage tempStitched = new BufferedImage( MAP_TOTAL_SIZE_X, MAP_TOTAL_SIZE_Y, BufferedImage.TYPE_INT_RGB);
+		BufferedImage tempStitched = new BufferedImage( MAP_TOTAL_SIZE_X, MAP_TOTAL_SIZE_Y, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = (Graphics2D) tempStitched.getGraphics();
 
 		for (int i = 0; i < MAP_ROW_TILES; i++) {

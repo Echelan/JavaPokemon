@@ -77,7 +77,7 @@ public class GenderChoose extends Scene{
 	
 	@Override
 	public BufferedImage getDisplay() {
-		BufferedImage display = new BufferedImage( ssX, ssY, BufferedImage.TYPE_INT_RGB);
+		BufferedImage display = new BufferedImage( ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = display.getGraphics();
 		
 		try {

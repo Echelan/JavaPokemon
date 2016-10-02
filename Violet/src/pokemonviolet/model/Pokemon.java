@@ -578,7 +578,7 @@ public class Pokemon {
 	
 	private void doBasics(){
 		this.numMoves=0;
-		this.status="";
+		this.setStatus("");
 	}
 	
 	public int doCatch(Item ball){
@@ -954,7 +954,7 @@ public class Pokemon {
 	 * Set 'faint' values.
 	 */
 	public void faint(){
-		this.status="";
+		this.setStatus("");
 		this.fainted = true;
 	}
 	
@@ -1100,6 +1100,13 @@ public class Pokemon {
 		 */
 		public String getStatus() {
 			return status;
+		}
+
+		/**
+		 * @param status the status to set
+		 */
+		public void setStatus(String status) {
+			this.status = status;
 		}
 		
 		/**

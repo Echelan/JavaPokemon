@@ -175,6 +175,7 @@ public final class Player {
 		/**
 		 * Create Player with given name and given starter Pokemon.
 		 * @param name Player name.
+		 * @param gender Player gender.
 		 * @param starterPokemon Starter Pokemon.
 		 */
 		public Player(String name, String gender, Pokemon starterPokemon) {
@@ -188,6 +189,7 @@ public final class Player {
 		/**
 		 * Create Player with given name and starter Pokemon with given ID.
 		 * @param name Player name.
+		 * @param gender Player gender.
 		 * @param starterID Starter Pokemon ID.
 		 */
 		public Player(String name, String gender, int starterID) {
@@ -201,6 +203,7 @@ public final class Player {
 		/**
 		 * Create Player with given name and starter Pokemon with given internal name.
 		 * @param name Player name.
+		 * @param gender Player gender.
 		 * @param internalName Starter Pokemon internal name.
 		 */
 		public Player(String name, String gender, String internalName) {
@@ -214,6 +217,7 @@ public final class Player {
 		/**
 		 * Create Player with given name.
 		 * @param name Player name.
+		 * @param gender Player gender.
 		 */
 		public Player(String name, String gender) {
 			this.gender=gender;
@@ -708,6 +712,7 @@ public final class Player {
 			for (int j = 0; j < team[i].getNumMoves(); j++) {
 				team[i].getMoveSet()[j].setPP(team[i].getMoveSet()[j].getPPMax());
 			}
+			team[i].setStatus("");
 		}
 	}
 		

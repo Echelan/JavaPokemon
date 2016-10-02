@@ -84,8 +84,8 @@ public class StarterChoose extends Scene{
 	@Override
 	protected void accept() {
 		this.dispose();
-		main.gameState.add(new Game(main));
 		main.startGame("Player",playerGender,pokeID[chosen]);
+		main.gameState.add(new Game(main));
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class StarterChoose extends Scene{
 
 	@Override
 	public BufferedImage getDisplay() {
-		BufferedImage display = new BufferedImage( ssX, ssY, BufferedImage.TYPE_INT_RGB);
+		BufferedImage display = new BufferedImage( ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = display.getGraphics();
 		
 		try {

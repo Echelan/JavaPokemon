@@ -17,14 +17,9 @@ public class PokemonViolet {
 		
 		SplashWindow splash = new SplashWindow();
 		
-//		new pokemonviolet.builder.MapBuilder(javax.swing.JFrame.EXIT_ON_CLOSE);
-		
 		pokemonviolet.data.NIC.loadData();
 
-		pokemonviolet.model.Handler game = new pokemonviolet.model.Handler();
-		
-		Thread gameThread = new Thread(game);
-		gameThread.start();
+		new pokemonviolet.model.Handler();
 		
 		try {
 			Thread.sleep(500);
