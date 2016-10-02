@@ -12,9 +12,13 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
+import java.time.Clock;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 
 /**
@@ -221,6 +225,8 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
         } catch (IOException ex) {
 
         }
+		
+		setIconImage(objects.getSubimage(32, 0, 32, 32));
 		
 		setVisible(true);
 	//	setVisible(false);
@@ -769,7 +775,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			bw.write(windowGeneral.mapIDx.getText()+";"+windowGeneral.mapIDy.getText());
 			bw.newLine();
 			
-			bw.write(windowPokemon.pokemonListDisplay.getText());
+			bw.write(windowPokemon.pokemonInfo);
 		//	bw.newLine();
 			
 			
@@ -813,40 +819,46 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		try {
 			File archivo = new File("mapX"+windowGeneral.mapIDx.getText()+"Y"+windowGeneral.mapIDy.getText()+".txt");
 			readMapInfo = Files.readAllLines(archivo.toPath());
-			
-			if (readMapInfo.get(1).compareTo("")!=0){
-				windowPokemon.refreshPokemonList(readMapInfo.get(1));
-			}
+		} catch (IOException ex1) {
+			try {
+				File archivo = new File("mapBLANK.txt");
+				readMapInfo = Files.readAllLines(archivo.toPath());
+			} catch (IOException ex2) {
 				
-			readMapInfo.remove(1);
-			readMapInfo.remove(0);
-			
-			for (int i = 0; i < readMapInfo.size(); i++) {
-				String[] thisline = readMapInfo.get(i).split(",");
-				for (int j = 0; j < thisline.length; j++) {
-					String[] tileInfo = thisline[j].split("-");
-					for (int k = 0; k < tileInfo.length; k++) {
-						int thisInfo = Integer.parseInt( tileInfo[k], 16);
+			}
+		}finally{
+			if (readMapInfo!=null){
+				windowPokemon.refreshPokemonList(readMapInfo.get(1));
 
-						switch(k){
-							case 0:
-								setT[i][j] = thisInfo;
-							break;
-							case 1:
-								tile[i][j] = thisInfo;
-							break;
-							case 2:
-								setO[i][j] = thisInfo;
-							break;
-							case 3:
-								obj[i][j] = thisInfo;
-							break;
+				readMapInfo.remove(1);
+				readMapInfo.remove(0);
+
+				for (int i = 0; i < readMapInfo.size(); i++) {
+					String[] thisline = readMapInfo.get(i).split(",");
+					for (int j = 0; j < thisline.length; j++) {
+						String[] tileInfo = thisline[j].split("-");
+						for (int k = 0; k < tileInfo.length; k++) {
+							int thisInfo = Integer.parseInt( tileInfo[k], 16);
+
+							switch(k){
+								case 0:
+									setT[i][j] = thisInfo;
+								break;
+								case 1:
+									tile[i][j] = thisInfo;
+								break;
+								case 2:
+									setO[i][j] = thisInfo;
+								break;
+								case 3:
+									obj[i][j] = thisInfo;
+								break;
+							}
 						}
 					}
 				}
+				refresh();
 			}
-			refresh();
-		} catch (IOException ex) {
 		}
 		
 	}
@@ -967,6 +979,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			setLocation(WINDOW_X+WINDOW_GAP+MAIN_WINDOW_WIDTH,WINDOW_Y);
 			setTitle("Object Manager");
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			setIconImage(objects.getSubimage(64, 0, 32, 32));
 			
 			createObjBtn = new JButton("Create Object");
 			createObjBtn.setBounds(40,10,120,30);
@@ -1084,6 +1097,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			//setLocationRelativeTo(null);
 			setLocation(WINDOW_X+WINDOW_GAP+WINDOW_GAP+MAIN_WINDOW_WIDTH+TOP_WINDOW_WIDTH,WINDOW_Y);
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			setIconImage(objects.getSubimage(64, 0, 32, 32));
 
 			outBoxBtn = new JButton("Set Outer Box");
 			outBoxBtn.setBounds(40,10,120,30);
@@ -1133,14 +1147,16 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	
 	class pokemonManager extends JFrame implements ActionListener{
 
-		private int[][] pokemonList = new int[151][7];
+		private int[][] pokemonList;
 		
 		private JButton addPokemonBtn;
 		private JButton delPokemonBtn;
 		private JTextField minLevField;
 		private JTextField maxLevField;
 		private JTextField newPokemonField;
-		private JTextArea pokemonListDisplay;
+		private JTable pokemonListDisplay;
+		private JScrollPane pokemonListScrollPane;
+		private String pokemonInfo;
 		
 		public pokemonManager() {
 			setLayout(null);
@@ -1148,14 +1164,48 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			setResizable(false);
 			setTitle("Pokemon Manager");
 			setLocation(WINDOW_X+WINDOW_GAP+WINDOW_GAP+MAIN_WINDOW_WIDTH+BOT_WINDOW_WIDTH,WINDOW_Y+WINDOW_GAP+TOP_WINDOW_HEIGHT);
-			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			setIconImage(objects.getSubimage(64, 0, 32, 32));
+		
+			pokemonListDisplay = new JTable();
+			pokemonListDisplay.setModel(new DefaultTableModel(new Object[][] {}, new String[] {"ID","levelRange","From","To"}));
+			pokemonListScrollPane = new JScrollPane(pokemonListDisplay);
+			pokemonListScrollPane.setBounds(1,1,194,105);
+			pokemonListDisplay.setColumnSelectionAllowed(false);
+			ListSelectionModel cellSelectionModel = pokemonListDisplay.getSelectionModel();
+			cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+			cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
+				public void valueChanged(ListSelectionEvent e) {
+					String selectedData = null;
+
+					int selectedRow = pokemonListDisplay.getSelectedRow();
+					
+					if (selectedRow!=-1){
+						DefaultTableModel model = (DefaultTableModel) pokemonListDisplay.getModel();
+
+						String start = (String)model.getValueAt(selectedRow, 2);
+						start = start.substring(1, start.length()-1);
+
+						String end = (String)model.getValueAt(selectedRow, 3);
+						end = end.substring(1, end.length()-1);
+
+						xStart = Integer.parseInt(start.split(",")[0]);
+						yStart = Integer.parseInt(start.split(",")[1]);
+
+						xEnd = Integer.parseInt(end.split(",")[0]);
+						yEnd = Integer.parseInt(end.split(",")[1]);
+
+						windowGeneral.xCoordsDisplay.setText("START: ("+xStart+","+yStart+")");
+						windowGeneral.yCoordsDisplay.setText("END: ("+xEnd+","+yEnd+")");
+
+						highlight(xEnd,yEnd);
+					}
+				}
+
+			});
 			
-			pokemonListDisplay = new JTextArea();
-			pokemonListDisplay.setBounds(5,5,180,100);
-			pokemonListDisplay.setEditable(false);
-			//pokemonListDisplay.setWrapStyleWord(true);
-			pokemonListDisplay.setLineWrap(true);
-			add(pokemonListDisplay);
+			add(pokemonListScrollPane);
 			
 			newPokemonField = new JTextField();
 			newPokemonField.setBounds(60,110,80,30);
@@ -1179,40 +1229,52 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 			maxLevField.setBounds(100,190,80,30);
 			add(maxLevField);
 			
+			pokemonList = new int[151][7];
 			for (int i = 0; i < pokemonList.length; i++) {
 				pokemonList[i][0] = 0;
 			}
 				
-			refreshField();
+			refreshInformation();
 			
 			setVisible(true);
 		}
 		
 		public void refreshPokemonList(String info){
-			String[] list = info.split(";");
-			for (int i = 0; i < list.length; i++) {
-				int num = Integer.parseInt(list[i].split(":")[1]);
-				num = num - 1;
-				String[] clusterFuck = list[i].split(":")[0].split(",");
-				
-				pokemonList[num][0] = 1;
-				
-				pokemonList[num][1] = Integer.parseInt(clusterFuck[0].split("-")[0]);
-				pokemonList[num][2] = Integer.parseInt(clusterFuck[0].split("-")[1]);
-				pokemonList[num][3] = Integer.parseInt(clusterFuck[1].split("-")[0]);
-				pokemonList[num][4] = Integer.parseInt(clusterFuck[1].split("-")[1]);
-				pokemonList[num][5] = Integer.parseInt(clusterFuck[2].split("-")[0]);
-				pokemonList[num][6] = Integer.parseInt(clusterFuck[2].split("-")[1]);
+			
+			pokemonList = new int[151][7];
+			for (int i = 0; i < pokemonList.length; i++) {
+				pokemonList[i][0] = 0;
 			}
-			refreshField();
+			if (info.compareTo("")!=0){
+				String[] list = info.split(";");
+				for (int i = 0; i < list.length; i++) {
+					int num = Integer.parseInt(list[i].split(":")[1]);
+					num = num - 1;
+					String[] clusterFuck = list[i].split(":")[0].split(",");
+
+					pokemonList[num][0] = 1;
+
+					pokemonList[num][1] = Integer.parseInt(clusterFuck[0].split("-")[0]);
+					pokemonList[num][2] = Integer.parseInt(clusterFuck[0].split("-")[1]);
+					pokemonList[num][3] = Integer.parseInt(clusterFuck[1].split("-")[0]);
+					pokemonList[num][4] = Integer.parseInt(clusterFuck[1].split("-")[1]);
+					pokemonList[num][5] = Integer.parseInt(clusterFuck[2].split("-")[0]);
+					pokemonList[num][6] = Integer.parseInt(clusterFuck[2].split("-")[1]);
+				}
+			}
+			refreshInformation();
 		}
 		
-		public void refreshField(){
-			pokemonListDisplay.setText("");
+		public void refreshInformation(){
+			DefaultTableModel model = (DefaultTableModel) pokemonListDisplay.getModel();
+			pokemonInfo="";
+			model.setRowCount(0);
+			
 			for (int i = 0; i < pokemonList.length; i++) {
 				if (pokemonList[i][0]==1){
 					String represent = pokemonList[i][1]+"-"+pokemonList[i][2]+","+pokemonList[i][3]+"-"+pokemonList[i][4]+","+pokemonList[i][5]+"-"+pokemonList[i][6]+":"+(i+1);
-					pokemonListDisplay.setText(pokemonListDisplay.getText()+represent+";");
+					model.addRow(new Object[] {(i+1),pokemonList[i][1]+"-"+pokemonList[i][2],"("+pokemonList[i][3]+","+pokemonList[i][5]+")","("+pokemonList[i][4]+","+pokemonList[i][6]+")"});
+					pokemonInfo=pokemonInfo+represent+";";
 				}
 			}
 		}
@@ -1231,7 +1293,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					pokemonList[num][5] = yStart;
 					pokemonList[num][6] = yEnd;
 					newPokemonField.setText("");
-					refreshField();
+					refreshInformation();
 				}catch (NumberFormatException ex){
 				}
 			}else if (e.getSource() == delPokemonBtn){
@@ -1241,7 +1303,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 					pokemonList[num][0] = 0;
 					
 					newPokemonField.setText("");
-					refreshField();
+					refreshInformation();
 				}catch (NumberFormatException ex){
 				}
 			}
@@ -1271,6 +1333,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		//	setLocationRelativeTo(null);
 			setLocation(WINDOW_X+WINDOW_GAP+MAIN_WINDOW_WIDTH,WINDOW_Y+WINDOW_GAP+TOP_WINDOW_HEIGHT);
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			setIconImage(objects.getSubimage(64, 0, 32, 32));
 			
 			xCoordsDisplay = new JLabel("START: ("+xStart+","+yStart+")");
 			xCoordsDisplay.setBounds(10,10,140,20);
@@ -1506,6 +1569,72 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 				xEnd = 19;
 				yEnd = 19;
 				highlight(xEnd,yEnd);
+			}else{
+				if (e.getKeyCode()==KeyEvent.VK_W || e.getKeyCode()==KeyEvent.VK_UP){
+					
+					if (e.getModifiers()!=KeyEvent.CTRL_MASK){
+						yStart = yStart-1;
+						if (yStart<0){
+							yStart=0;
+						}
+					}
+					
+					if (e.getModifiers()!=KeyEvent.SHIFT_MASK || e.getModifiers()==KeyEvent.CTRL_MASK){
+						yEnd = yEnd-1;
+						if (yEnd<yStart){
+							yEnd=yStart;
+						}
+					}	
+					highlight(xEnd,yEnd);
+				}else if (e.getKeyCode()==KeyEvent.VK_S || e.getKeyCode()==KeyEvent.VK_DOWN){
+					
+					if (e.getModifiers()!=KeyEvent.SHIFT_MASK){
+						yEnd = yEnd+1;
+						if (yEnd>19){
+							yEnd=19;
+						}
+					}
+					
+					if (e.getModifiers()!=KeyEvent.CTRL_MASK || e.getModifiers()==KeyEvent.SHIFT_MASK){
+						yStart = yStart+1;
+						if (yStart>yEnd){
+							yStart=yEnd;
+						}
+					}
+					highlight(xEnd,yEnd);
+				}else if (e.getKeyCode()==KeyEvent.VK_A || e.getKeyCode()==KeyEvent.VK_LEFT){
+					
+					if (e.getModifiers()!=KeyEvent.CTRL_MASK){
+						xStart = xStart-1;
+						if (xStart<0){
+							xStart=0;
+						}
+					}
+					
+					if (e.getModifiers()!=KeyEvent.SHIFT_MASK || e.getModifiers()==KeyEvent.CTRL_MASK){
+						xEnd = xEnd-1;
+						if (xEnd<xStart){
+							xEnd=xStart;
+						}
+					}
+					highlight(xEnd,yEnd);
+				}else if (e.getKeyCode()==KeyEvent.VK_D || e.getKeyCode()==KeyEvent.VK_RIGHT){
+					
+					if (e.getModifiers()!=KeyEvent.SHIFT_MASK){
+						xEnd = xEnd+1;
+						if (xEnd>19){
+							xEnd=19;
+						}
+					}
+					
+					if (e.getModifiers()!=KeyEvent.CTRL_MASK || e.getModifiers()==KeyEvent.SHIFT_MASK){
+						xStart = xStart+1;
+						if (xStart>xEnd){
+							xStart=xEnd;
+						}
+					}
+					highlight(xEnd,yEnd);
+				}
 			}
 		}
 
