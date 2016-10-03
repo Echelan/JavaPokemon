@@ -14,15 +14,10 @@ import pokemonviolet.model.Handler;
  *
  * @author Andres
  */
-public class Evolution extends Scene{
+public class Evolution extends Scene {
 
 	public Evolution(Handler main) {
 		super(main, "EVOLUTION", true);
-	}
-
-	@Override
-	public BufferedImage getDisplay() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
@@ -54,5 +49,10 @@ public class Evolution extends Scene{
 	protected void start() {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
-	
+
+	@Override
+	public BufferedImage getDisplay() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
 }

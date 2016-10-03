@@ -12,7 +12,7 @@ package pokemonviolet.model;
  * @author Andres
  */
 public class Item {
-	
+
 	// <editor-fold defaultstate="collapsed" desc="Attributes">
 		/**
 		 * Number of attributes per Item.
@@ -57,146 +57,154 @@ public class Item {
 		/**
 		 * Pokemon catch rate of Item, only applicable for Pokeballs.
 		 */
-		private double pokeRate; 
+		private double pokeRate;
 		/**
 		 * Amount of Item.
 		 */
 		private int amount;
 	// </editor-fold>
-		
-	/**
-	 * Create Item based on given ID.
-	 * @param id Item ID to create.
-	 */
-	public Item(int id) {
-		this.id = id;
-		this.amount = 1;
-		
-		boolean couldCreate = readInfo( this.id );
-		
-		if (!couldCreate){
-			System.err.println("Could not find item with id " + id + ".");
-		}
-	}
-	
-	/**
-	 * Create Item based on given ID and given amount.
-	 * @param id Item ID to create.
-	 * @param amount Item amount to create.
-	 */
-	public Item(int id, int amount){
-		this.id = id;
-		this.amount = amount;
-		
-		boolean couldCreate = readInfo( this.id );
-		
-		if (!couldCreate){
-			System.err.println("Could not find item with id " + id + ".");
-		}
-	}
 
-	/**
-	 * Create Item based on given internal name.
-	 * @param internalName Item internal name to create.
-	 */
-	public Item(String internalName) {
-		this.id = getItemID(internalName);
-		this.amount = 1;
-		
-		boolean couldCreate = readInfo( this.id );
-		
-		if (!couldCreate){
-			System.err.println("Could not find item with id " + id + ".");
+	//<editor-fold defaultstate="collapsed" desc="Constructors">
+		/**
+		 * Create Item based on given ID.
+		 *
+		 * @param id Item ID to create.
+		 */
+		public Item(int id) {
+			this.id = id;
+			this.amount = 1;
+
+			boolean couldCreate = readInfo(this.id);
+
+			if (!couldCreate) {
+				System.err.println("Could not find item with id " + id + ".");
+			}
 		}
-	}
-	
-	/**
-	 * Create Item based on given internal and given amount.
-	 * @param internalName Item internal name to create.
-	 * @param amount Item amount to create.
-	 */
-	public Item(String internalName, int amount){
+
+		/**
+		 * Create Item based on given ID and given amount.
+		 *
+		 * @param id Item ID to create.
+		 * @param amount Item amount to create.
+		 */
+		public Item(int id, int amount) {
+			this.id = id;
+			this.amount = amount;
+
+			boolean couldCreate = readInfo(this.id);
+
+			if (!couldCreate) {
+				System.err.println("Could not find item with id " + id + ".");
+			}
+		}
+
+		/**
+		 * Create Item based on given internal name.
+		 *
+		 * @param internalName Item internal name to create.
+		 */
+		public Item(String internalName) {
+			this.id = getItemID(internalName);
+			this.amount = 1;
+
+			boolean couldCreate = readInfo(this.id);
+
+			if (!couldCreate) {
+				System.err.println("Could not find item with id " + id + ".");
+			}
+		}
+
+		/**
+		 * Create Item based on given internal and given amount.
+		 *
+		 * @param internalName Item internal name to create.
+		 * @param amount Item amount to create.
+		 */
+		public Item(String internalName, int amount) {
 		this.id = getItemID(internalName);
 		this.amount = amount;
-		
-		boolean couldCreate = readInfo( this.id );
-		
-		if (!couldCreate){
+
+		boolean couldCreate = readInfo(this.id);
+
+		if (!couldCreate) {
 			System.err.println("Could not find item with id " + id + ".");
 		}
 	}
-
+	//</editor-fold>
+	
 	/**
 	 * Acquire information from main data about Item with given ID.
+	 *
 	 * @param id Item to search for in main data.
 	 * @return Success of process.
 	 */
-	private boolean readInfo(int id){
+	private boolean readInfo(int id) {
 		boolean success = false;
-		
-		String[] iteminfo = pokemonviolet.data.NIC.INFO_ITEMS.get(id-1).split(";");
-		for (int i = 0; i < NUM_ATTRIB; i++){
+
+		String[] iteminfo = pokemonviolet.data.NIC.INFO_ITEMS.get(id - 1).split(";");
+		for (int i = 0; i < NUM_ATTRIB; i++) {
 			String[] partes = iteminfo[i].split("=");
-			if (partes[0].compareTo("internalName")==0){
+			if (partes[0].compareTo("internalName") == 0) {
 				this.nameInternal = partes[1];
-			}else if (partes[0].compareTo( "nameSingular" )==0){
+			} else if (partes[0].compareTo("nameSingular") == 0) {
 				this.nameSingular = partes[1];
-			}else if (partes[0].compareTo("namePlural")==0){
+			} else if (partes[0].compareTo("namePlural") == 0) {
 				this.namePlural = partes[1];
-			}else if (partes[0].compareTo("pocket")==0){
+			} else if (partes[0].compareTo("pocket") == 0) {
 				this.pocket = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("price")==0){
+			} else if (partes[0].compareTo("price") == 0) {
 				this.price = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("description")==0){
+			} else if (partes[0].compareTo("description") == 0) {
 				this.description = partes[1];
-			}else if (partes[0].compareTo("useOutBattle")==0){
+			} else if (partes[0].compareTo("useOutBattle") == 0) {
 				this.useOutBattle = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("useInBattle")==0){
+			} else if (partes[0].compareTo("useInBattle") == 0) {
 				this.useInBattle = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("pokeRate")==0){
+			} else if (partes[0].compareTo("pokeRate") == 0) {
 				this.pokeRate = Double.parseDouble(partes[1]);
 			}
 		}
 		success = true;
-		
+
 		return success;
 	}
 
 	/**
-	 * Searches in main data for Item with given internal name, and returns its ID.
+	 * Searches in main data for Item with given internal name, and returns its
+	 * ID.
+	 *
 	 * @param internalName Item internal name to search for.
 	 * @return Item ID.
 	 */
-	public static int getItemID(String internalName){
+	public static int getItemID(String internalName) {
 		int id = 0;
-		
+
 		boolean foundItem = false;
 
-		while (foundItem == false && id < pokemonviolet.data.NIC.INFO_ITEMS.size()){
+		while (foundItem == false && id < pokemonviolet.data.NIC.INFO_ITEMS.size()) {
 			String[] iteminfo = pokemonviolet.data.NIC.INFO_ITEMS.get(id).split(";");
 			int attribComp = 0;
-			while (attribComp < NUM_ATTRIB && foundItem == false){
+			while (attribComp < NUM_ATTRIB && foundItem == false) {
 				String[] partes = iteminfo[attribComp].split("=");
-				if (partes[0].compareTo("internalName")==0){
-					if (partes[1].compareTo(internalName)==0){
+				if (partes[0].compareTo("internalName") == 0) {
+					if (partes[1].compareTo(internalName) == 0) {
 						foundItem = true;
-					}else{
+					} else {
 						attribComp = attribComp + 100;
 					}
-				}else{
+				} else {
 					attribComp = attribComp + 1;
 				}
 			}
 			id = id + 1;
 		}
-		if (!foundItem){
+		if (!foundItem) {
 			System.err.println("Could not find item " + internalName + ".");
 		}
-		
-		
+
 		return id;
 	}
-	
+
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
 		/**
 		 * @return the nameSingular
@@ -253,20 +261,20 @@ public class Item {
 		public void setAmount(int amount) {
 			this.amount = amount;
 		}
-		
+
 		/**
 		 * @return the id
 		 */
 		public int getId() {
 			return id;
 		}
-		
+
 		/**
 		 * @return the nameInternal
 		 */
 		public String getNameInternal() {
-			return nameInternal;
-		}
+		return nameInternal;
+	}
 	//</editor-fold>
 
 }

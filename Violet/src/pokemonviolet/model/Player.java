@@ -14,13 +14,12 @@ import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
 
-
 /**
  *
  * @author Andres
  */
 public final class Player {
-	
+
 	// <editor-fold defaultstate="collapsed" desc="Attributes">
 		// <editor-fold defaultstate="collapsed" desc="General">
 			/**
@@ -32,10 +31,9 @@ public final class Player {
 			 */
 			private final String name;
 			/**
-			 * Player combat toggle.
+			 * Player gender.
 			 */
-//			private boolean inCombat;
-			private String gender;
+			private final String gender;
 		// </editor-fold>
 		// <editor-fold defaultstate="collapsed" desc="Items">
 			/**
@@ -170,16 +168,17 @@ public final class Player {
 			public static BufferedImage SPRITE_SHEET;
 		//</editor-fold>
 	// </editor-fold>
-	
+
 	//<editor-fold defaultstate="collapsed" desc="Constructors">
 		/**
 		 * Create Player with given name and given starter Pokemon.
+		 *
 		 * @param name Player name.
 		 * @param gender Player gender.
 		 * @param starterPokemon Starter Pokemon.
 		 */
 		public Player(String name, String gender, Pokemon starterPokemon) {
-			this.gender=gender;
+			this.gender = gender;
 			setBasics();
 			this.name = name;
 			this.team[0] = starterPokemon;
@@ -188,12 +187,13 @@ public final class Player {
 
 		/**
 		 * Create Player with given name and starter Pokemon with given ID.
+		 *
 		 * @param name Player name.
 		 * @param gender Player gender.
 		 * @param starterID Starter Pokemon ID.
 		 */
 		public Player(String name, String gender, int starterID) {
-			this.gender=gender;
+			this.gender = gender;
 			setBasics();
 			this.name = name;
 			this.team[0] = new Pokemon(starterID);
@@ -201,13 +201,15 @@ public final class Player {
 		}
 
 		/**
-		 * Create Player with given name and starter Pokemon with given internal name.
+		 * Create Player with given name and starter Pokemon with given internal
+		 * name.
+		 *
 		 * @param name Player name.
 		 * @param gender Player gender.
 		 * @param internalName Starter Pokemon internal name.
 		 */
 		public Player(String name, String gender, String internalName) {
-			this.gender=gender;
+			this.gender = gender;
 			setBasics();
 			this.name = name;
 			this.team[0] = new Pokemon(internalName);
@@ -216,23 +218,24 @@ public final class Player {
 
 		/**
 		 * Create Player with given name.
+		 *
 		 * @param name Player name.
 		 * @param gender Player gender.
 		 */
 		public Player(String name, String gender) {
-			this.gender=gender;
-			setBasics();
-			this.name = name;
-			this.numPokemonTeam = 0;
-		}
+		this.gender = gender;
+		setBasics();
+		this.name = name;
+		this.numPokemonTeam = 0;
+	}
 	//</editor-fold>
-		
+
 	/**
 	 * Set Player's main default attributes.
 	 */
-	private void setBasics(){
+	private void setBasics() {
 		try {
-			this.SPRITE_SHEET = ImageIO.read(new File("assets/"+this.gender.toLowerCase()+"Sprite.png"));
+			this.SPRITE_SHEET = ImageIO.read(new File("assets/" + this.gender.toLowerCase() + "Sprite.png"));
 		} catch (IOException ex) {
 		}
 		this.team = new Pokemon[6];
@@ -262,23 +265,25 @@ public final class Player {
 		this.setCurrentPokemon(0);
 		setSpawnSteps(roll(1, 2, 3));
 	}
-	
+
 	/**
 	 * Adds given Pokemon to Player.
+	 *
 	 * @param newPokemon Pokemon to add.
-	 * @return Integer representing where Pokemon was sent to. (0 = Team, 1 = PC, 2 = Released)
+	 * @return Integer representing where Pokemon was sent to. (0 = Team, 1 =
+	 * PC, 2 = Released)
 	 */
-	public int addPokemon(Pokemon newPokemon){
+	public int addPokemon(Pokemon newPokemon) {
 		int response = 0;
-		if (getNumPokemonTeam() == 6){
-			if (getNumPokemonPC() == 200){
+		if (getNumPokemonTeam() == 6) {
+			if (getNumPokemonPC() == 200) {
 				response = 2;
-			}else{
+			} else {
 				response = 1;
 				this.PC[getNumPokemonPC()] = newPokemon;
 				numPokemonPC = getNumPokemonPC() + 1;
 			}
-		}else{
+		} else {
 			response = 0;
 			this.team[getNumPokemonTeam()] = newPokemon;
 			numPokemonTeam = getNumPokemonTeam() + 1;
@@ -287,218 +292,211 @@ public final class Player {
 	}
 
 	/**
-	 * Reduce Player funds by given amount if possible, returns false if Player has insufficient funds.
-	 * @param amount Amount to reduce Player funds by.
-	 * @return Success of process.
-	 */
-	public boolean reduceMoney(int amount){
-		boolean success = false;
-		
-		if (this.getFunds() >= amount){
-			this.setFunds(this.getFunds() - amount);
-			success = true;
-		}
-		
-		return success;
-	}
-	
-	/**
 	 * Returns amount of item with given ID in Player pocket with given ID.
-	 * <p> [MASTER] </p>
+	 * <p>
+	 * [MASTER] </p>
+	 *
 	 * @param id Item ID to search for.
 	 * @param pocketID Pocket ID to search in.
 	 * @return amount of Item present.
 	 */
-	public int getAmountItem(int id, int pocketID){
+	public int getAmountItem(int id, int pocketID) {
 		int amount = 0;
 		Item[] pocket = null;
 		int pocketCap = 0;
-		switch(pocketID){
+		switch (pocketID) {
 			case 1:
 				pocket = this.getPocketItems();
 				pocketCap = this.getNumItems();
-			break;
+				break;
 			case 2:
 				pocket = this.getPocketMeds();
 				pocketCap = this.getNumMeds();
-			break;
+				break;
 			case 3:
 				pocket = this.getPocketBalls();
 				pocketCap = this.getNumBalls();
-			break;
+				break;
 			case 4:
 				pocket = this.getPocketMachines();
 				pocketCap = this.getNumMachines();
-			break;
+				break;
 			case 7:
 				pocket = this.getPocketBattles();
 				pocketCap = this.getNumBattles();
-			break;
+				break;
 			case 8:
 				pocket = this.getPocketKeys();
 				pocketCap = this.getNumKeys();
-			break;
+				break;
 		}
 		for (int i = 0; i < pocketCap; i++) {
-			if (pocket[i].getId() == id){
+			if (pocket[i].getId() == id) {
 				amount = pocket[i].getAmount();
 			}
 		}
-		
+
 		return amount;
 	}
-	
 	//<editor-fold defaultstate="collapsed" desc="getAmountItem Sub-Processes">
 		/**
 		 * Returns amount of item with given ID carried by Player.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param id Item ID to search for.
 		 * @return amount of Item present.
 		 * @see getAmountItem(int, int)
 		 */
-		public int getAmountItem(int id){
+		public int getAmountItem(int id) {
 			int amount;
 
-			amount = getAmountItem(id,new Item(id).getPocket());
+			amount = getAmountItem(id, new Item(id).getPocket());
 
 			return amount;
 		}
 
 		/**
 		 * Returns amount of item with given internal name carried by Player.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param internalName Item internal name to search for.
 		 * @return amount of Item present.
 		 * @see getAmountItem(int, int)
 		 */
-		public int getAmountItem(String internalName){
+		public int getAmountItem(String internalName) {
 			int amount;
 
 			amount = getAmountItem(new Item(internalName).getId());
 
 			return amount;
 		}
-		
+
 		/**
 		 * Returns amount of item with given ID carried by Player.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param item Item to search for.
 		 * @return amount of Item present.
 		 * @see getAmountItem(int, int)
 		 */
-		public int getAmountItem(Item item){
+		public int getAmountItem(Item item) {
 			int amount;
 
-			amount = getAmountItem(item.getId(),item.getPocket());
+			amount = getAmountItem(item.getId(), item.getPocket());
 
 			return amount;
 		}
-
 	//</editor-fold>
 	
 	/**
 	 * Add item to Player inventory.
-	 * <p>[MASTER]</p>
+	 * <p>
+	 * [MASTER]</p>
+	 *
 	 * @param id Item ID to add.
 	 * @param amount Amount of item to add.
 	 * @return Success of process.
 	 */
-	public boolean addItem(int id, int amount){
+	public boolean addItem(int id, int amount) {
 		boolean success = false;
 		Item item = new Item(id, amount);
-		
-		switch(item.getPocket()){
+
+		switch (item.getPocket()) {
 			case 1:
 				for (int i = 0; i < this.getNumItems(); i++) {
-					if (this.getPocketItems()[i].getId() == id){
+					if (this.getPocketItems()[i].getId() == id) {
 						this.getPocketItems()[i].setAmount(this.getPocketItems()[i].getAmount() + item.getAmount());
 						success = true;
 					}
 				}
 
-				if (!success){
+				if (!success) {
 					this.pocketItems[this.getNumItems()] = item;
 					this.numItems = this.getNumItems() + 1;
 				}
-			break;
+				break;
 			case 2:
 				for (int i = 0; i < this.getNumMeds(); i++) {
-					if (this.getPocketMeds()[i].getId() == id){
+					if (this.getPocketMeds()[i].getId() == id) {
 						this.getPocketMeds()[i].setAmount(this.getPocketMeds()[i].getAmount() + item.getAmount());
 						success = true;
 					}
 				}
 
-				if (!success){
+				if (!success) {
 					this.pocketMeds[this.getNumMeds()] = item;
 					this.numMeds = this.getNumMeds() + 1;
 				}
-			break;
+				break;
 			case 3:
 				for (int i = 0; i < this.getNumBalls(); i++) {
-					if (this.getPocketBalls()[i].getId() == id){
+					if (this.getPocketBalls()[i].getId() == id) {
 						this.getPocketBalls()[i].setAmount(this.getPocketBalls()[i].getAmount() + item.getAmount());
 						success = true;
 					}
 				}
 
-				if (!success){
+				if (!success) {
 					this.pocketBalls[this.getNumBalls()] = item;
 					this.numBalls = this.getNumBalls() + 1;
 				}
-			break;
+				break;
 			case 4:
 				for (int i = 0; i < this.getNumMachines(); i++) {
-					if (this.getPocketMachines()[i].getId() == id){
+					if (this.getPocketMachines()[i].getId() == id) {
 						this.getPocketMachines()[i].setAmount(this.getPocketMachines()[i].getAmount() + item.getAmount());
 						success = true;
 					}
 				}
 
-				if (!success){
+				if (!success) {
 					this.pocketMachines[this.getNumMachines()] = item;
 					this.numMachines = this.getNumMachines() + 1;
 				}
-			break;
+				break;
 			case 7:
 				for (int i = 0; i < this.getNumBattles(); i++) {
-					if (this.getPocketBattles()[i].getId() == id){
+					if (this.getPocketBattles()[i].getId() == id) {
 						this.getPocketBattles()[i].setAmount(this.getPocketBattles()[i].getAmount() + item.getAmount());
 						success = true;
 					}
 				}
 
-				if (!success){
+				if (!success) {
 					this.pocketBattles[this.getNumBattles()] = item;
 					this.numBattles = this.getNumBattles() + 1;
 				}
-			break;
+				break;
 			case 8:
 				for (int i = 0; i < this.getNumKeys(); i++) {
-					if (this.getPocketKeys()[i].getId() == id){
+					if (this.getPocketKeys()[i].getId() == id) {
 						this.getPocketKeys()[i].setAmount(this.getPocketKeys()[i].getAmount() + item.getAmount());
 						success = true;
 					}
 				}
 
-				if (!success){
+				if (!success) {
 					this.pocketKeys[this.getNumKeys()] = item;
 					this.numKeys = this.getNumKeys() + 1;
 				}
-			break;
+				break;
 		}
 		return success;
 	}
-	
 	//<editor-fold defaultstate="collapsed" desc="addItem Sub-Processes">
 		/**
 		 * Add item to Player inventory.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param id Item id to add.
 		 * @return Success of process.
 		 * @see addItem(int, int)
 		 */
-		public boolean addItem(int id){
+		public boolean addItem(int id) {
 			boolean success;
 
 			success = addItem(id, 1);
@@ -508,12 +506,14 @@ public final class Player {
 
 		/**
 		 * Add item to Player inventory.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param internalName Item internal name to add.
 		 * @return Success of process.
 		 * @see addItem(int, int)
 		 */
-		public boolean addItem(String internalName){
+		public boolean addItem(String internalName) {
 			boolean success;
 
 			success = addItem(new Item(internalName).getId());
@@ -523,28 +523,32 @@ public final class Player {
 
 		/**
 		 * Add item to Player inventory.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param internalName Item internal name to add.
 		 * @param amount Item amount to add.
 		 * @return Success of process.
 		 * @see addItem(int, int)
 		 */
-		public boolean addItem(String internalName, int amount){
-		boolean success;
-		
-		success = addItem(new Item(internalName).getId(), amount);
-		
-		return success;
-	}
-		
+		public boolean addItem(String internalName, int amount) {
+			boolean success;
+
+			success = addItem(new Item(internalName).getId(), amount);
+
+			return success;
+		}
+
 		/**
 		 * Add item to Player inventory.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param item Item to add.
 		 * @return Success of process.
 		 * @see addItem(int, int)
 		 */
-		public boolean addItem(Item item){
+		public boolean addItem(Item item) {
 			boolean success;
 
 			success = addItem(item.getId());
@@ -554,159 +558,171 @@ public final class Player {
 
 		/**
 		 * Add item to Player inventory.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param item Item to add.
 		 * @param amount Item amount to add.
 		 * @return Success of process.
 		 * @see addItem(int, int)
 		 */
-		public boolean addItem(Item item, int amount){
+		public boolean addItem(Item item, int amount) {
 		boolean success;
-		
+
 		success = addItem(item.getId(), amount);
-		
+
 		return success;
 	}
-	
 	//</editor-fold>
 	
 	/**
 	 * Remove item from Player inventory.
-	 * <p>[MASTER]</p>
+	 * <p>
+	 * [MASTER]</p>
+	 *
 	 * @param id Item ID to remove.
 	 * @param pocket Pocket of item.
 	 * @return Success of process.
 	 */
-	public boolean subItem(int id, int pocket){
+	public boolean subItem(int id, int pocket) {
 		boolean success = false;
 		Item item = new Item(id);
-		
-		switch(pocket){
+
+		switch (pocket) {
 			case 1:
 				for (int i = 0; i < this.getNumItems(); i++) {
-					if (this.getPocketItems()[i].getId() == id){
+					if (this.getPocketItems()[i].getId() == id) {
 						success = true;
-						this.getPocketItems()[i].setAmount(this.getPocketItems()[i].getAmount()-1);
-						if (this.getPocketItems()[i].getAmount() < 0){
+						this.getPocketItems()[i].setAmount(this.getPocketItems()[i].getAmount() - 1);
+						if (this.getPocketItems()[i].getAmount() < 0) {
 							this.getPocketItems()[i].setAmount(0);
 							success = false;
 						}
 					}
 				}
-			break;
+				break;
 			case 2:
 				for (int i = 0; i < this.getNumMeds(); i++) {
-					if (this.getPocketMeds()[i].getId() == id){
+					if (this.getPocketMeds()[i].getId() == id) {
 						success = true;
-						this.getPocketMeds()[i].setAmount(this.getPocketMeds()[i].getAmount()-1);
-						if (this.getPocketMeds()[i].getAmount() < 0){
+						this.getPocketMeds()[i].setAmount(this.getPocketMeds()[i].getAmount() - 1);
+						if (this.getPocketMeds()[i].getAmount() < 0) {
 							this.getPocketMeds()[i].setAmount(0);
 							success = false;
 						}
 					}
 				}
-			break;
+				break;
 			case 3:
 				for (int i = 0; i < this.getNumBalls(); i++) {
-					if (this.getPocketBalls()[i].getId() == id){
+					if (this.getPocketBalls()[i].getId() == id) {
 						success = true;
-						this.getPocketBalls()[i].setAmount(this.getPocketBalls()[i].getAmount()-1);
-						if (this.getPocketBalls()[i].getAmount() < 0){
+						this.getPocketBalls()[i].setAmount(this.getPocketBalls()[i].getAmount() - 1);
+						if (this.getPocketBalls()[i].getAmount() < 0) {
 							this.getPocketBalls()[i].setAmount(0);
 							success = false;
 						}
 					}
 				}
-			break;
+				break;
 			case 4:
 				for (int i = 0; i < this.getNumMachines(); i++) {
-					if (this.getPocketMachines()[i].getId() == id){
+					if (this.getPocketMachines()[i].getId() == id) {
 						success = true;
-						this.getPocketMachines()[i].setAmount(this.getPocketMachines()[i].getAmount()-1);
-						if (this.getPocketMachines()[i].getAmount() < 0){
+						this.getPocketMachines()[i].setAmount(this.getPocketMachines()[i].getAmount() - 1);
+						if (this.getPocketMachines()[i].getAmount() < 0) {
 							this.getPocketMachines()[i].setAmount(0);
 							success = false;
 						}
 					}
 				}
-			break;
+				break;
 			case 7:
 				for (int i = 0; i < this.getNumBattles(); i++) {
-					if (this.getPocketBattles()[i].getId() == id){
+					if (this.getPocketBattles()[i].getId() == id) {
 						success = true;
-						this.getPocketBattles()[i].setAmount(this.getPocketBattles()[i].getAmount()-1);
-						if (this.getPocketBattles()[i].getAmount() < 0){
+						this.getPocketBattles()[i].setAmount(this.getPocketBattles()[i].getAmount() - 1);
+						if (this.getPocketBattles()[i].getAmount() < 0) {
 							this.getPocketBattles()[i].setAmount(0);
 							success = false;
 						}
 					}
 				}
-			break;
+				break;
 			case 8:
 				for (int i = 0; i < this.getNumKeys(); i++) {
-					if (this.getPocketKeys()[i].getId() == id){
+					if (this.getPocketKeys()[i].getId() == id) {
 						success = true;
-						this.getPocketKeys()[i].setAmount(this.getPocketKeys()[i].getAmount()-1);
-						if (this.getPocketKeys()[i].getAmount() < 0){
+						this.getPocketKeys()[i].setAmount(this.getPocketKeys()[i].getAmount() - 1);
+						if (this.getPocketKeys()[i].getAmount() < 0) {
 							this.getPocketKeys()[i].setAmount(0);
 							success = false;
 						}
 					}
 				}
-			break;
+				break;
 		}
-		
+
 		return success;
 	}
-	
 	//<editor-fold defaultstate="collapsed" desc="subItem Sub-Processes">
 		/**
 		 * Remove item from Player inventory.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param internalName Item internal name to remove.
 		 * @return Success of process.
 		 * @see subItem(int, int)
 		 */
-		public boolean subItem(String internalName){
+		public boolean subItem(String internalName) {
 			boolean success;
 
-			success = subItem(new Item(internalName).getId(),new Item(internalName).getPocket());
+			success = subItem(new Item(internalName).getId(), new Item(internalName).getPocket());
 
 			return success;
 		}
-		
+
 		/**
 		 * Remove item from Player inventory.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param item Item to remove.
 		 * @return Success of process.
 		 * @see subItem(int, int)
 		 */
-		public boolean subItem(Item item){
+		public boolean subItem(Item item) {
 			boolean success;
 
-			success = subItem(item.getId(),item.getPocket());
+			success = subItem(item.getId(), item.getPocket());
 
 			return success;
 		}
-		
+
 		/**
 		 * Remove item from Player inventory.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param id Item id to remove.
 		 * @return Success of process.
 		 * @see subItem(int, int)
 		 */
-		public boolean subItem(int id){
-			boolean success;
+		public boolean subItem(int id) {
+		boolean success;
 
-			success = subItem(id,new Item(id).getPocket());
+		success = subItem(id, new Item(id).getPocket());
 
-			return success;
-		}
+		return success;
+	}
 	//</editor-fold>
-		
-	public void pokemonCenter(){
+
+	/**
+	 * Revives, heals to full health, clears status, 
+	 * and recovers PP of all Pokemon in Player's team.
+	 */
+	public void pokemonCenter() {
 		for (int i = 0; i < numPokemonTeam; i++) {
 			team[i].revive(1);
 			for (int j = 0; j < team[i].getNumMoves(); j++) {
@@ -715,55 +731,89 @@ public final class Player {
 			team[i].setStatus("");
 		}
 	}
-		
-	public int calcXinMap(){
+	
+	/**
+	 * Calculates and returns the Player's Local X.
+	 * @return Player's local X.
+	 */
+	public int calcXinMap() {
 		int playerMapX, playerXinMap;
-		playerMapX = ((int)Math.floor(xTile/Map.MAP_ROW_TILES))+1;
-		playerXinMap = xTile-((playerMapX-1)*Map.MAP_ROW_TILES);
-		
+		playerMapX = ((int) Math.floor(xTile / Map.MAP_ROW_TILES)) + 1;
+		playerXinMap = xTile - ((playerMapX - 1) * Map.MAP_ROW_TILES);
+
 		return playerXinMap;
 	}
 	
-	public int calcYinMap(){
+	/**
+	 * Calculates and returns the Player's Local Y.
+	 * @return Player's local Y.
+	 */
+	public int calcYinMap() {
 		int playerMapY, playerYinMap;
-		playerMapY = ((int)Math.floor(yTile/Map.MAP_ROW_TILES))+1;
-		playerYinMap = yTile-((playerMapY-1)*Map.MAP_ROW_TILES);
-		
+		playerMapY = ((int) Math.floor(yTile / Map.MAP_ROW_TILES)) + 1;
+		playerYinMap = yTile - ((playerMapY - 1) * Map.MAP_ROW_TILES);
+
 		return playerYinMap;
 	}
 	
-	public Image getCurFrameImage(){
+	/**
+	 * Calculates and returns the Player's Map X.
+	 * @return Player's map X.
+	 */
+	public int calcMapX() {
+		return ((int) Math.floor(getxTile() / Map.MAP_ROW_TILES));
+	}
+	
+	/**
+	 * Calculates and returns the Player's Map Y.
+	 * @return Player's map Y.
+	 */
+	public int calcMapY() {
+		return ((int) Math.floor(getyTile() / Map.MAP_ROW_TILES));
+	}
+	
+	/**
+	 * Returns Player's Current Frame.
+	 * @return Current frame.
+	 */
+	public Image getCurFrameImage() {
 		Image frameImg = null;
-		
+
 		int xPlayerIMG = 0;
 		int yPlayerIMG = 0;
-		if (getvDirection().compareTo("") != 0){
-			setCurFrame(getCurFrame()+1);
-			if (isRunning()){
+		if (getvDirection().compareTo("") != 0) {
+			setCurFrame(getCurFrame() + 1);
+			if (isRunning()) {
 				xPlayerIMG = xPlayerIMG + 60;
 			}
 		}
 
-		xPlayerIMG = xPlayerIMG + (getCurFrame()*20);
-		yPlayerIMG = yPlayerIMG + (getCurAnim()*20);
-			
+		xPlayerIMG = xPlayerIMG + (getCurFrame() * 20);
+		yPlayerIMG = yPlayerIMG + (getCurAnim() * 20);
+
 		frameImg = SPRITE_SHEET.getSubimage(xPlayerIMG, yPlayerIMG, 20, 20);
-		
+
 		return frameImg;
 	}
-		
-	public static int roll(int value, int numDice, int numSides){
+
+	/**
+	 * Rolls -numDice- dice with -numSides- sides and adds a base -value-.
+	 * @param value Base value to add.
+	 * @param numDice Number of dice to roll.
+	 * @param numSides Number of sides per die.
+	 * @return Result of dice roll.
+	 */
+	public static int roll(int value, int numDice, int numSides) {
 		Random rnd = new Random();
 
 		for (int i = 0; i < numDice; i++) {
-		  value = value + (rnd.nextInt(numSides)+1);
+			value = value + (rnd.nextInt(numSides) + 1);
 		}
-		
+
 		return value;
 	}
-	
+
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
-		
 		/**
 		 * @return the funds
 		 */
@@ -867,7 +917,7 @@ public final class Player {
 		 */
 		public void setCurFrame(int curFrame) {
 			this.curFrame = curFrame;
-			if (curFrame >= getMaxFrames()){
+			if (curFrame >= getMaxFrames()) {
 				this.curFrame = 0;
 			}
 		}
@@ -885,7 +935,7 @@ public final class Player {
 		public int getCurAnim() {
 			return curAnim;
 		}
-		
+
 		/**
 		 * @return the vDirection
 		 */
@@ -898,19 +948,19 @@ public final class Player {
 		 */
 		public void setvDirection(String vDirection) {
 			this.vDirection = vDirection;
-			if (vDirection.compareTo("LEFT") ==0){
-				this.curAnim=2;
-			}else if (vDirection.compareTo("RIGHT") ==0){
-				this.curAnim=3;
-			}else if (vDirection.compareTo("UP") ==0){
-				this.curAnim=1;
-			}else if (vDirection.compareTo("DOWN") ==0){
-				this.curAnim=0;
-			}else{
-				this.curFrame=1;
+			if (vDirection.compareTo("LEFT") == 0) {
+				this.curAnim = 2;
+			} else if (vDirection.compareTo("RIGHT") == 0) {
+				this.curAnim = 3;
+			} else if (vDirection.compareTo("UP") == 0) {
+				this.curAnim = 1;
+			} else if (vDirection.compareTo("DOWN") == 0) {
+				this.curAnim = 0;
+			} else {
+				this.curFrame = 1;
 			}
 		}
-		
+
 		/**
 		 * @return the spawnSteps
 		 */
@@ -940,20 +990,6 @@ public final class Player {
 		}
 
 		/**
-		 * @return the inCombat
-		 */
-//		public boolean isInCombat() {
-//			return inCombat;
-//		}
-
-		/**
-		 * @param inCombat the inCombat to set
-		 */
-//		public void setInCombat(boolean inCombat) {
-//			this.inCombat = inCombat;
-//		}
-
-		/**
 		 * @return the currentPokemon
 		 */
 		public int getCurrentPokemon() {
@@ -967,12 +1003,11 @@ public final class Player {
 			int value = -1;
 
 			for (int i = 0; i < numPokemonTeam; i++) {
-				if (!team[i].isFainted()){
+				if (!team[i].isFainted()) {
 					value = i;
 				}
 			}
 
-		
 			return value;
 		}
 
@@ -1064,7 +1099,7 @@ public final class Player {
 		 * @return the numKeys
 		 */
 		public int getNumKeys() {
-			return numKeys;
-		}
+		return numKeys;
+	}
 	//</editor-fold>
 }

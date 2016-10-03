@@ -12,13 +12,13 @@ package pokemonviolet.model;
  * @author Andres
  */
 public class PokemonMove {
-	
+
 	//<editor-fold defaultstate="collapsed" desc="Attributes">
 		/**
 		 * Number of attributes per Move.
 		 */
 		static final private int NUM_ATTRIB = 13;
-		
+
 		/**
 		 * ID of Move
 		 */
@@ -63,124 +63,123 @@ public class PokemonMove {
 		 * Move High Critical Ratio.
 		 */
 		private boolean highCrit;
-		/**
-		 * Flags of Move.
-		 */
-	//	private String flags;
 	//</editor-fold>
-	
+
 	/**
 	 * Create PokemonMove based on given ID.
+	 *
 	 * @param id PokemonMove ID to create.
 	 */
-	public PokemonMove(int id){
+	public PokemonMove(int id) {
 		this.id = id;
 
-		boolean couldCreate = readInfo( this.id );
+		boolean couldCreate = readInfo(this.id);
 		this.PP = this.PPMax;
 
-		if (!couldCreate){
+		if (!couldCreate) {
 			System.err.println("Could not find Move with id " + id + ".");
 		}
 	}
 
 	/**
 	 * Create PokemonMove based on given ID.
+	 *
 	 * @param nameInternal PokemonMove nameInternal to create.
 	 */
-	public PokemonMove(String nameInternal){
+	public PokemonMove(String nameInternal) {
 		this.nameInternal = nameInternal;
 		this.id = getMoveID(nameInternal);
 
-		boolean couldCreate = readInfo( this.id );
+		boolean couldCreate = readInfo(this.id);
 		this.PP = this.PPMax;
-		
-		if (!couldCreate){
+
+		if (!couldCreate) {
 			System.err.println("Could not find Move with id " + id + ".");
 		}
 	}
 
 	/**
 	 * Acquire information from main data about Pokemon moves with given ID.
+	 *
 	 * @param id PokemonMove to search for in main data.
 	 * @return Success of process.
 	 */
-	private boolean readInfo(int id){
-			boolean success = false;
+	private boolean readInfo(int id) {
+		boolean success = false;
 
-			String[] iteminfo = pokemonviolet.data.NIC.INFO_MOVES.get(id-1).split(";");
-			for (int i = 0; i < NUM_ATTRIB; i++){
-					String[] partes = iteminfo[i].split("=");
-					if (partes[0].compareTo("internalName")==0){
-						this.nameInternal = partes[1];
-					}else if (partes[0].compareTo("displayName")==0){
-						this.nameDisplay = partes[1];
-					}else if (partes[0].compareTo("basePower")==0){
-						this.dmgBase = Integer.parseInt(partes[1]);
+		String[] iteminfo = pokemonviolet.data.NIC.INFO_MOVES.get(id - 1).split(";");
+		for (int i = 0; i < NUM_ATTRIB; i++) {
+			String[] partes = iteminfo[i].split("=");
+			if (partes[0].compareTo("internalName") == 0) {
+				this.nameInternal = partes[1];
+			} else if (partes[0].compareTo("displayName") == 0) {
+				this.nameDisplay = partes[1];
+			} else if (partes[0].compareTo("basePower") == 0) {
+				this.dmgBase = Integer.parseInt(partes[1]);
 				//	}else if (partes[0].compareTo("code")==0){
 				//		this.dmgBase = Integer.parseInt(partes[1]);
-					}else if (partes[0].compareTo("type")==0){
-						this.type = partes[1];
-					}else if (partes[0].compareTo("category")==0){
-						this.category = partes[1];
-					}else if (partes[0].compareTo("description")==0){
-						this.description = partes[1];
-					}else if (partes[0].compareTo("accuracy")==0){
-						this.accuracy = Integer.parseInt(partes[1]);
-					}else if (partes[0].compareTo("totalPP")==0){
-						this.setPPMax(Integer.parseInt(partes[1]));
+			} else if (partes[0].compareTo("type") == 0) {
+				this.type = partes[1];
+			} else if (partes[0].compareTo("category") == 0) {
+				this.category = partes[1];
+			} else if (partes[0].compareTo("description") == 0) {
+				this.description = partes[1];
+			} else if (partes[0].compareTo("accuracy") == 0) {
+				this.accuracy = Integer.parseInt(partes[1]);
+			} else if (partes[0].compareTo("totalPP") == 0) {
+				this.setPPMax(Integer.parseInt(partes[1]));
 				//	}else if (partes[0].compareTo("effectChance")==0){
 				//		this.dmgBase = Integer.parseInt(partes[1]);
 				//	}else if (partes[0].compareTo("target")==0){
 				//		this.dmgBase = Integer.parseInt(partes[1]);
 				//	}else if (partes[0].compareTo("priority")==0){
 				//		this.dmgBase = Integer.parseInt(partes[1]);
-					}else if (partes[0].compareTo("flags")==0){
+			} else if (partes[0].compareTo("flags") == 0) {
 				//		this.flags = partes[1];
-						this.highCrit = partes[1].contains("h");
-					}
+				this.highCrit = partes[1].contains("h");
 			}
-			success = true;
+		}
+		success = true;
 
-			return success;
+		return success;
 	}
-	
+
 	/**
-	 * Searches in main data for PokemonMove with given internal name, and returns its ID.
+	 * Searches in main data for PokemonMove with given internal name, and
+	 * returns its ID.
+	 *
 	 * @param internalName PokemonMove internal name to search for.
 	 * @return Move ID.
 	 */
-	private int getMoveID(String internalName){
+	private int getMoveID(String internalName) {
 		int id = 0;
 		boolean foundMove = false;
-	//	System.out.println("Searching for " + internalName);
-		while (foundMove == false && id < pokemonviolet.data.NIC.INFO_MOVES.size()){
+		//	System.out.println("Searching for " + internalName);
+		while (foundMove == false && id < pokemonviolet.data.NIC.INFO_MOVES.size()) {
 			String[] moveinfo = pokemonviolet.data.NIC.INFO_MOVES.get(id).split(";");
 			int attribComp = 0;
-			while (attribComp < NUM_ATTRIB && foundMove == false){
-					String[] partes = moveinfo[attribComp].split("=");
-					if (partes[0].compareTo("internalName")==0){
-						if (partes[1].compareTo(internalName)==0){
-							foundMove = true;
-						}else{
-							attribComp = attribComp + 100;
-						}
-					}else{
-						attribComp = attribComp + 1;
+			while (attribComp < NUM_ATTRIB && foundMove == false) {
+				String[] partes = moveinfo[attribComp].split("=");
+				if (partes[0].compareTo("internalName") == 0) {
+					if (partes[1].compareTo(internalName) == 0) {
+						foundMove = true;
+					} else {
+						attribComp = attribComp + 100;
 					}
+				} else {
+					attribComp = attribComp + 1;
+				}
 			}
 			id = id + 1;
 		}
-	//	if (!foundMove){
-	//		System.err.println("Could not find move " + internalName + ".");
-	//	}
-
+		//	if (!foundMove){
+		//		System.err.println("Could not find move " + internalName + ".");
+		//	}
 
 		return id;
 	}
-	
+
 	//<editor-fold defaultstate="collapsed" desc="Getters & Setters">
-		
 		/**
 		 * @return the id
 		 */
@@ -236,7 +235,7 @@ public class PokemonMove {
 		public void setPPMax(int PPMax) {
 			this.PPMax = PPMax;
 		}
-		
+
 		/**
 		 * @return the type
 		 */
@@ -264,15 +263,13 @@ public class PokemonMove {
 		public int getAccuracy() {
 			return accuracy;
 		}
-		
+
 		/**
 		 * @return the highCrit
 		 */
 		public boolean isHighCrit() {
-			return highCrit;
-		}
+		return highCrit;
+	}
 	//</editor-fold>
 
-
-	
 }

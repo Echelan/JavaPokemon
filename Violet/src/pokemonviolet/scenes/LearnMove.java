@@ -14,15 +14,10 @@ import pokemonviolet.model.Handler;
  *
  * @author Andres
  */
-public class LearnMove extends Scene{
+public class LearnMove extends Scene {
 
 	public LearnMove(Handler main) {
 		super(main, "LEARNMOVE", true);
-	}
-
-	@Override
-	public BufferedImage getDisplay() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
@@ -54,5 +49,10 @@ public class LearnMove extends Scene{
 	protected void start() {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
-	
+
+	@Override
+	public BufferedImage getDisplay() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
 }

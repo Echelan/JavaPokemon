@@ -22,60 +22,60 @@ import static pokemonviolet.scenes.Scene.ssX;
  *
  * @author Andres
  */
-public class StarterChoose extends Scene{
-	
-	private int[] pokeID = {1,4,7};
-	private String[] pokeNames = {"Bulbasaur","Charmander","Squirtle"};
+public class StarterChoose extends Scene {
+
+	private int[] pokeID = {1, 4, 7};
+	private String[] pokeNames = {"Bulbasaur", "Charmander", "Squirtle"};
 	private int chosen;
-	
+
 	private boolean konamiExecuted;
-	private String[] konamiCode = {"UP","UP","DOWN","DOWN","LEFT","RIGHT","LEFT","RIGHT","B","A","START"};
+	private String[] konamiCode = {"UP", "UP", "DOWN", "DOWN", "LEFT", "RIGHT", "LEFT", "RIGHT", "B", "A", "START"};
 	private ArrayList<String> konamiInput;
 	private String playerGender;
-	
+
 	public StarterChoose(Handler main, String gender) {
 		super(main, "STARTER", true);
-		
+
 		playerGender = gender;
-		
-		konamiInput=new ArrayList<String>();
-		
+
+		konamiInput = new ArrayList<String>();
+
 		chosen = 0;
-		
+
 	}
 
 	@Override
 	public void receiveKeyAction(String action, String state) {
-		boolean konamid=false;
-		if (!konamiExecuted){
-			if (state.compareTo("RELEASE")==0){
-				if (action.compareTo(konamiCode[konamiInput.size()])==0){
+		boolean konamid = false;
+		if (!konamiExecuted) {
+			if (state.compareTo("RELEASE") == 0) {
+				if (action.compareTo(konamiCode[konamiInput.size()]) == 0) {
 					konamiInput.add(action);
-					konamid=true;
-					if (konamiInput.size()==konamiCode.length){
+					konamid = true;
+					if (konamiInput.size() == konamiCode.length) {
 						konamiInput.clear();
 						pokeID[0] = 135;
 						pokeID[1] = 136;
 						pokeID[2] = 134;
-						
+
 						pokeNames[0] = "Jolteon";
 						pokeNames[1] = "Flareon";
 						pokeNames[2] = "Vaporeon";
-						
-						konamiExecuted=true;
+
+						konamiExecuted = true;
 					}
-				}else{
+				} else {
 					konamiInput.clear();
 				}
 			}
 		}
-		
-		if (!konamid && state.compareTo("RELEASE")==0){
-			if (action.compareTo("A")==0){
+
+		if (!konamid && state.compareTo("RELEASE") == 0) {
+			if (action.compareTo("A") == 0) {
 				accept();
-			}else if (action.compareTo("B")==0){
+			} else if (action.compareTo("B") == 0) {
 				cancel();
-			}else if (action.compareTo("LEFT")==0 || action.compareTo("RIGHT")==0){
+			} else if (action.compareTo("LEFT") == 0 || action.compareTo("RIGHT") == 0) {
 				move(action);
 			}
 		}
@@ -84,7 +84,7 @@ public class StarterChoose extends Scene{
 	@Override
 	protected void accept() {
 		this.dispose();
-		main.startGame("Player",playerGender,pokeID[chosen]);
+		main.startGame("Player", playerGender, pokeID[chosen]);
 		main.gameState.add(new Game(main));
 	}
 
@@ -96,60 +96,61 @@ public class StarterChoose extends Scene{
 
 	@Override
 	protected void dispose() {
-		main.gameState.remove(main.gameState.size()-1);
+		main.gameState.remove(main.gameState.size() - 1);
 	}
 
 	@Override
 	protected void move(String dir) {
-		if (dir.compareTo("LEFT")==0){
-			chosen=chosen-1;
-		}else if (dir.compareTo("RIGHT")==0){
-			chosen=chosen+1;
+		if (dir.compareTo("LEFT") == 0) {
+			chosen = chosen - 1;
+		} else if (dir.compareTo("RIGHT") == 0) {
+			chosen = chosen + 1;
 		}
-		
-		if (chosen<0){
-			chosen=2;
-		}else if(chosen>2){
-			chosen=0;
-		}
-	}
 
-	@Override
-	public BufferedImage getDisplay() {
-		BufferedImage display = new BufferedImage( ssX, ssY, BufferedImage.TYPE_INT_ARGB);
-		Graphics g = display.getGraphics();
-		
-		try {
-			g.drawImage(ImageIO.read(new File("assets/title/background.png")), 0,0,null);
-		} catch (IOException ex) {
+		if (chosen < 0) {
+			chosen = 2;
+		} else if (chosen > 2) {
+			chosen = 0;
 		}
-		
-		g.setFont(new Font("Arial",Font.BOLD,30));
-		g.drawString("Choose your starter!", ssX/5, 30);
-		
-		float resize=2.0f;
-		int characterWidth=(int)(80*resize), characterHeight=(int)(80*resize);
-		
-		g.setFont(new Font("Arial",Font.BOLD,15));
-		for (int i = 0; i < pokeID.length; i++) {
-			int x = 5+(i*(ssX/3));
-			try {
-				g.drawImage(ImageIO.read(new File("assets/pokemon/"+pokeID[i]+"mfn.png")), x,ssY/3,characterWidth,characterHeight,null);
-				if (chosen==i){
-					g.setColor(Color.WHITE);
-				}else{
-					g.setColor(Color.GRAY);
-				}
-				g.drawString(pokeNames[i], x+(characterWidth/4), ssY/3+characterHeight+5);
-			} catch (IOException ex) {
-			}
-		}
-		
-		return display;
 	}
 
 	@Override
 	protected void start() {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+	
+	@Override
+	public BufferedImage getDisplay() {
+		BufferedImage display = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = display.getGraphics();
+
+		try {
+			g.drawImage(ImageIO.read(new File("assets/title/background.png")), 0, 0, null);
+		} catch (IOException ex) {
+		}
+
+		g.setFont(new Font("Arial", Font.BOLD, 30));
+		g.drawString("Choose your starter!", ssX / 5, 30);
+
+		float resize = 2.0f;
+		int characterWidth = (int) (80 * resize), characterHeight = (int) (80 * resize);
+
+		g.setFont(new Font("Arial", Font.BOLD, 15));
+		for (int i = 0; i < pokeID.length; i++) {
+			int x = 5 + (i * (ssX / 3));
+			try {
+				g.drawImage(ImageIO.read(new File("assets/pokemon/" + pokeID[i] + "mfn.png")), x, ssY / 3, characterWidth, characterHeight, null);
+				if (chosen == i) {
+					g.setColor(Color.WHITE);
+				} else {
+					g.setColor(Color.GRAY);
+				}
+				g.drawString(pokeNames[i], x + (characterWidth / 4), ssY / 3 + characterHeight + 5);
+			} catch (IOException ex) {
+			}
+		}
+
+		return display;
+	}
+
 }

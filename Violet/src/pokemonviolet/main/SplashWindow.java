@@ -18,31 +18,31 @@ import javax.swing.JWindow;
  *
  * @author Andres
  */
-public class SplashWindow extends JWindow{
-	
-	BufferedImage logo; 
+public class SplashWindow extends JWindow {
+
+	BufferedImage logo;
 	MediaTracker media;
-	
+
 	/**
 	 * Create a splash window.
 	 */
-	public SplashWindow(){
+	public SplashWindow() {
 		media = new MediaTracker(this);
-		
-		try {	
-			logo  = ImageIO.read(new File("assets/splashImage.png")); 
-			media.addImage(logo,0);
+
+		try {
+			logo = ImageIO.read(new File("assets/splashImage.png"));
+			media.addImage(logo, 0);
 			media.waitForID(0);
-		}catch (Exception ex){
+		} catch (Exception ex) {
 		}
-		
-		this.setSize(logo.getWidth(),logo.getHeight());
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
+
+		setSize(logo.getWidth(), logo.getHeight());
+		setLocationRelativeTo(null);
+		setVisible(true);
 	}
-	
-	public void paint (Graphics g)
-	{
-	    g.drawImage(logo,0,0,this);
+
+	@Override
+	public void paint(Graphics g) {
+		g.drawImage(logo, 0, 0, this);
 	}
 }

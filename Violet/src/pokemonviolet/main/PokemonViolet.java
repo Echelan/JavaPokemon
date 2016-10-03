@@ -12,21 +12,26 @@ package pokemonviolet.main;
  * @author Andres
  */
 public class PokemonViolet {
-	
-	public static void main(String[] args) throws InterruptedException{
-		
+
+	public static void main(String[] args) throws InterruptedException {
+
 		SplashWindow splash = new SplashWindow();
-		
+
 		pokemonviolet.data.NIC.loadData();
 
-		new pokemonviolet.model.Handler();
-		
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException ex) {
 		}
+
+		new pokemonviolet.model.Handler();
+		
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException ex) {
+		}
 		
 		splash.dispose();
-    }
-	
+	}
+
 }

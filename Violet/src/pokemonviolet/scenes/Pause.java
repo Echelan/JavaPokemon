@@ -20,38 +20,23 @@ import pokemonviolet.model.Handler;
  *
  * @author Andres
  */
-public class Pause extends Scene{
-	
-	private String[] options = {"PokeDex","Heal","Shop","Pokemon","PC","Bag"};
+public class Pause extends Scene {
+
+	private String[] options = {"PokeDex", "Heal", "Shop", "Pokemon", "PC", "Bag"};
 	private int selection;
-	
+
 	public Pause(Handler main) {
 		super(main, "PAUSE", false);
-		
+
 		this.selection = 0;
 	}
 
 	@Override
-	public void receiveKeyAction(String action, String state) {
-		if (state.compareTo("RELEASE")==0){
-			if (action.compareTo("A")==0){
-				accept();
-			}else if(action.compareTo("B")==0){
-				cancel();
-			}else if(action.compareTo("START")==0){
-				start();
-			}else if(action.compareTo("UP")==0 || action.compareTo("DOWN")==0){
-				move(action);
-			}
-		}
-	}
-
-	@Override
 	protected void accept() {
-		if (options[selection].compareTo("Heal")==0){
+		if (options[selection].compareTo("Heal") == 0) {
 			main.player.pokemonCenter();
 			this.dispose();
-		}else if (options[selection].compareTo("Shop")==0){
+		} else if (options[selection].compareTo("Shop") == 0) {
 			main.gameState.add(new Shop(main));
 		}
 	}
@@ -63,20 +48,20 @@ public class Pause extends Scene{
 
 	@Override
 	protected void dispose() {
-		main.gameState.remove(main.gameState.size()-1);
+		main.gameState.remove(main.gameState.size() - 1);
 	}
 
 	@Override
 	protected void move(String dir) {
-		if(dir.compareTo("UP")==0){
-			selection = selection-1;
-		}else if(dir.compareTo("DOWN")==0){
-			selection = selection+1;
+		if (dir.compareTo("UP") == 0) {
+			selection = selection - 1;
+		} else if (dir.compareTo("DOWN") == 0) {
+			selection = selection + 1;
 		}
-		if (selection>=options.length){
-			selection=0;
-		}else if(selection<0){
-			selection = options.length-1;
+		if (selection >= options.length) {
+			selection = 0;
+		} else if (selection < 0) {
+			selection = options.length - 1;
 		}
 	}
 
@@ -87,28 +72,43 @@ public class Pause extends Scene{
 
 	@Override
 	public BufferedImage getDisplay() {
-		BufferedImage tempStitched = new BufferedImage( ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
-		
+
 		float RESIZE = 2.0f;
-		int windowWidth=(int)(90*RESIZE), windowHeight=(int)(127*RESIZE);
+		int windowWidth = (int) (90 * RESIZE), windowHeight = (int) (127 * RESIZE);
 		try {
-			g.drawImage(genWindow(0,windowWidth,windowHeight),ssX-windowWidth,(int)((ssY/2)-(windowHeight/2)), null);
+			g.drawImage(genWindow(0, windowWidth, windowHeight), ssX - windowWidth, (int) ((ssY / 2) - (windowHeight / 2)), null);
 		} catch (IOException ex) {
 		}
-		
+
 		g.setColor(Color.black);
-		g.setFont(new Font("Arial",Font.BOLD,25));
+		g.setFont(new Font("Arial", Font.BOLD, 25));
 		for (int i = 0; i < options.length; i++) {
-			g.drawString(options[i],ssX-windowWidth+30,(int)((ssY/2)-(windowHeight/2))+40+(i*25));
+			g.drawString(options[i], ssX - windowWidth + 30, (int) ((ssY / 2) - (windowHeight / 2)) + 40 + (i * 25));
 		}
-		
+
 		try {
-			g.drawImage(ImageIO.read(new File("assets/arrow.png")), ssX-windowWidth+10, (int)((ssY/2)-(windowHeight/2))+22+(selection*25), 20, 20, null);
+			g.drawImage(ImageIO.read(new File("assets/arrow.png")), ssX - windowWidth + 10, (int) ((ssY / 2) - (windowHeight / 2)) + 22 + (selection * 25), 20, 20, null);
 		} catch (IOException ex) {
 		}
-		
+
 		return tempStitched;
 	}
-	
+
+	@Override
+	public void receiveKeyAction(String action, String state) {
+		if (state.compareTo("RELEASE") == 0) {
+			if (action.compareTo("A") == 0) {
+				accept();
+			} else if (action.compareTo("B") == 0) {
+				cancel();
+			} else if (action.compareTo("START") == 0) {
+				start();
+			} else if (action.compareTo("UP") == 0 || action.compareTo("DOWN") == 0) {
+				move(action);
+			}
+		}
+	}
+
 }

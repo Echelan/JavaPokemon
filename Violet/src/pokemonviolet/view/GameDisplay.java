@@ -16,46 +16,47 @@ import pokemonviolet.model.Handler;
  * @author Andres
  */
 public class GameDisplay extends Canvas implements Runnable {
-	
+
 	String lastState;
-	
+
 	/**
 	 * Create a GameDisplay custom canvas.
 	 */
-	public GameDisplay(){
-		lastState="";
+	public GameDisplay() {
+		lastState = "";
 	}
-	
-	public void paint(Graphics g){
-		try{
+
+	@Override
+	public void paint(Graphics g) {
+		try {
 			getBufferStrategy().show();
-		}catch(Exception ex){
-			
+		} catch (Exception ex) {
+
 		}
 	}
-	
-    @Override
-    public void run() {
+
+	@Override
+	public void run() {
 		createBufferStrategy(2);
-        while (true){
-			if (!Handler.gameState.isEmpty()){
+		while (true) {
+			if (!Handler.gameState.isEmpty()) {
 				Graphics g = getBufferStrategy().getDrawGraphics();
-			
-				if (lastState.compareTo(Handler.gameState.get(Handler.gameState.size()-1).getName())!=0){
+
+				if (lastState.compareTo(Handler.gameState.get(Handler.gameState.size() - 1).getName()) != 0) {
 					g.clearRect(0, 0, this.getWidth(), this.getHeight());
-					lastState = Handler.gameState.get(Handler.gameState.size()-1).getName();
+					lastState = Handler.gameState.get(Handler.gameState.size() - 1).getName();
 				}
 
 				g.drawImage(DisplayParser.displayImage(), 0, 0, this.getWidth(), this.getHeight(), this);
 
 				repaint();
 			}
-			
+
 			try {
 				Thread.sleep(80);
 			} catch (InterruptedException ex) {
 			}
-        }
-    }
-	
+		}
+	}
+
 }

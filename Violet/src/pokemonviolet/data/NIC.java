@@ -19,6 +19,7 @@ import pokemonviolet.model.Map;
  * @author Andres
  */
 public abstract class NIC {
+
 	//<editor-fold defaultstate="collapsed" desc="Information Lists">
 		/**
 		 * Main data for Pokemon.
@@ -45,6 +46,7 @@ public abstract class NIC {
 		 */
 		public static List<String> INFO_BLANK_MAP;
 	//</editor-fold>
+	
 	//<editor-fold defaultstate="collapsed" desc="Static Attributes">
 		/**
 		 * Amount of Maps in X.
@@ -55,28 +57,28 @@ public abstract class NIC {
 		 */
 		public static int NUM_MAPS_Y;
 	//</editor-fold>
-	
-	public static void loadData(){
-		
+
+	public static void loadData() {
+
 		Map.loadImages();
-		
+
 		NUM_MAPS_X = 4;
 		NUM_MAPS_Y = 4;
-		
+
 		List<String> readInfoP = null;
 		List<String> readInfoI = null;
 		List<String> readInfoM = null;
 		List<String> readInfoT = null;
 		List<String> readInfoB = null;
 		ArrayList<List<String>> readMap = new ArrayList();
-		
+
 		File archivo;
-		
+
 		try {
-			
+
 			archivo = new File("listPokemon.txt");
 			readInfoP = Files.readAllLines(archivo.toPath());
-			
+
 		} catch (IOException ex) {
 			System.err.println("Couldn't load files!");
 			System.exit(0);
@@ -85,7 +87,7 @@ public abstract class NIC {
 		try {
 			archivo = new File("listItems.txt");
 			readInfoI = Files.readAllLines(archivo.toPath());
-			
+
 		} catch (IOException ex) {
 			System.err.println("Couldn't load files!");
 			System.exit(0);
@@ -94,7 +96,7 @@ public abstract class NIC {
 		try {
 			archivo = new File("listMoves.txt");
 			readInfoM = Files.readAllLines(archivo.toPath());
-			
+
 		} catch (IOException ex) {
 			System.err.println("Couldn't load files!");
 			System.exit(0);
@@ -115,13 +117,12 @@ public abstract class NIC {
 			System.err.println("Couldn't load files!");
 			System.exit(0);
 		}
-			
-		
+
 		for (int y = 0; y < NUM_MAPS_Y; y++) {
 			for (int x = 0; x < NUM_MAPS_X; x++) {
 				List<String> temp = null;
 				try {
-					archivo = new File("mapX"+x+"Y"+y+".txt");
+					archivo = new File("mapX" + x + "Y" + y + ".txt");
 					temp = Files.readAllLines(archivo.toPath());
 				} catch (IOException ex1) {
 					temp = readInfoB;
@@ -129,7 +130,7 @@ public abstract class NIC {
 				readMap.add(temp);
 			}
 		}
-		
+
 		INFO_ITEMS = readInfoI;
 		INFO_POKEMON = readInfoP;
 		INFO_MOVES = readInfoM;

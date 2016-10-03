@@ -17,29 +17,29 @@ import pokemonviolet.scenes.Scene;
  * @author Andres
  */
 public abstract class DisplayParser {
-	
-	private static final int ssX=Handler.SCREEN_SIZE_X, ssY=Handler.SCREEN_SIZE_Y;
-	
-	public static BufferedImage displayImage(){
-		BufferedImage display = new BufferedImage( ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+
+	private static final int ssX = Handler.SCREEN_SIZE_X, ssY = Handler.SCREEN_SIZE_Y;
+
+	public static BufferedImage displayImage() {
+		BufferedImage display = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = display.getGraphics();
-		
+
 		int counter = 0;
 		boolean done = false;
-		
-		if (!Handler.gameState.isEmpty()){
-			while (!done){
-				counter = counter+1;
-				Scene thisScene=Handler.gameState.get(Handler.gameState.size()-counter);
 
-				done=thisScene.isFull();
+		if (!Handler.gameState.isEmpty()) {
+			while (!done) {
+				counter = counter + 1;
+				Scene thisScene = Handler.gameState.get(Handler.gameState.size() - counter);
+
+				done = thisScene.isFull();
 			}
 
-			for (int i = Handler.gameState.size()-counter; i < Handler.gameState.size(); i++) {
-				g.drawImage(Handler.gameState.get(i).getDisplay(), 0,0, null);
+			for (int i = Handler.gameState.size() - counter; i < Handler.gameState.size(); i++) {
+				g.drawImage(Handler.gameState.get(i).getDisplay(), 0, 0, null);
 			}
 		}
-		
+
 		return display;
 	}
 

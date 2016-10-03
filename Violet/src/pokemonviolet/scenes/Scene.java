@@ -19,7 +19,8 @@ import pokemonviolet.model.Handler;
  * @author Andres
  */
 public abstract class Scene {
-	protected static final int ssX=pokemonviolet.model.Handler.SCREEN_SIZE_X, ssY=pokemonviolet.model.Handler.SCREEN_SIZE_Y;
+
+	protected static final int ssX = pokemonviolet.model.Handler.SCREEN_SIZE_X, ssY = pokemonviolet.model.Handler.SCREEN_SIZE_Y;
 	protected final Handler main;
 	private final String name;
 	private final boolean full;
@@ -29,76 +30,77 @@ public abstract class Scene {
 		this.name = name;
 		this.full = full;
 	}
-	
-	public abstract void receiveKeyAction(String action,String state);
-	
+
+	public abstract void receiveKeyAction(String action, String state);
+
 	protected abstract void accept();
-	
+
 	protected abstract void cancel();
-	
+
 	protected abstract void start();
-	
+
 	protected abstract void dispose();
-	
+
 	protected abstract void move(String dir);
 
 	public abstract BufferedImage getDisplay();
-	
+
 	/**
 	 * Generates a window with the given theme and given dimensions.
+	 *
 	 * @param theme Window theming.
 	 * @param dimX Window dimension in X.
 	 * @param dimY Window dimension in Y.
 	 * @return Window Buffered Image.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	protected BufferedImage genWindow(int theme, int dimX, int dimY) throws IOException{
-		BufferedImage window = new BufferedImage( dimX, dimY, BufferedImage.TYPE_INT_ARGB);
+	protected BufferedImage genWindow(int theme, int dimX, int dimY) throws IOException {
+		BufferedImage window = new BufferedImage(dimX, dimY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = window.getGraphics();
-		
+
 		float RESIZE = 2.0f;
-		int pieceDim = (int)(RESIZE*7);
-		
-		if (dimX<pieceDim*2){
-			dimX=pieceDim*2;
+		int pieceDim = (int) (RESIZE * 7);
+
+		if (dimX < pieceDim * 2) {
+			dimX = pieceDim * 2;
 		}
-		
-		if (dimY<pieceDim*2){
-			dimY=pieceDim*2;
+
+		if (dimY < pieceDim * 2) {
+			dimY = pieceDim * 2;
 		}
-		
-		int numTilesX=dimX/pieceDim, numTilesY=dimY/pieceDim;
-		
-		for (int i = 0; i < numTilesY+1; i++) {
-			for (int j = 0; j < numTilesX+1; j++) {
-				int pieceX=0, pieceY=0;
-				int thisY=i*pieceDim, thisX=j*pieceDim;
-			
-				if (i>0){
-					pieceY=pieceY+1;
+
+		int numTilesX = dimX / pieceDim, numTilesY = dimY / pieceDim;
+
+		for (int i = 0; i < numTilesY + 1; i++) {
+			for (int j = 0; j < numTilesX + 1; j++) {
+				int pieceX = 0, pieceY = 0;
+				int thisY = i * pieceDim, thisX = j * pieceDim;
+
+				if (i > 0) {
+					pieceY = pieceY + 1;
 				}
 
-				if (i==numTilesY){
-					pieceY=pieceY+1;
-					thisY=dimY-pieceDim;
+				if (i == numTilesY) {
+					pieceY = pieceY + 1;
+					thisY = dimY - pieceDim;
 				}
 
-				if (j>0){
-					pieceX=pieceX+1;
+				if (j > 0) {
+					pieceX = pieceX + 1;
 				}
 
-				if (j==numTilesX){
-					pieceX=pieceX+1;
-					thisX=dimX-pieceDim;
+				if (j == numTilesX) {
+					pieceX = pieceX + 1;
+					thisX = dimX - pieceDim;
 				}
-				
-				g.drawImage(ImageIO.read(new File("assets/windows/"+theme+".png")).getSubimage(7*pieceX, 7*pieceY, 7, 7), thisX,thisY,pieceDim,pieceDim,null);
+
+				g.drawImage(ImageIO.read(new File("assets/windows/" + theme + ".png")).getSubimage(7 * pieceX, 7 * pieceY, 7, 7), thisX, thisY, pieceDim, pieceDim, null);
 			}
 		}
-		
+
 		return window;
 	}
-	
+
 	/**
 	 * @return the name
 	 */
@@ -112,5 +114,5 @@ public abstract class Scene {
 	public boolean isFull() {
 		return full;
 	}
-	
+
 }

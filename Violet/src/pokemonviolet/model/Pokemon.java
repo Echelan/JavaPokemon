@@ -19,12 +19,12 @@ import javax.imageio.ImageIO;
  * @author Andres
  */
 public class Pokemon {
-	
+
 	//<editor-fold defaultstate="collapsed" desc="Attributes">
 		//<editor-fold defaultstate="collapsed" desc="Species Wide">
 			private static final int RESIZE = 2;
-			private static final int SPRITE_WIDTH = 80*RESIZE;
-			private static final int SPRITE_HEIGHT = 80*RESIZE;
+			private static final int SPRITE_WIDTH = 80 * RESIZE;
+			private static final int SPRITE_HEIGHT = 80 * RESIZE;
 			static final private int NUM_ATTRIB = 40;
 			static final private int MAX_TOTAL_EV = 510;
 			static final private int MAX_SINGLE_EV = 252;
@@ -106,10 +106,11 @@ public class Pokemon {
 			private float accuracy, evasion;
 		//</editor-fold>
 	//</editor-fold>
-	
+
 	//<editor-fold defaultstate="collapsed" desc="Constructors">
 		/**
 		 * Create Pokemon based on given ID.
+		 *
 		 * @param id Pokemon ID to create.
 		 */
 		public Pokemon(int id) {
@@ -121,18 +122,19 @@ public class Pokemon {
 			genIVs();
 			doBasics();
 
-			boolean couldCreate = readInfo( this.id );
-			
+			boolean couldCreate = readInfo(this.id);
+
 			updateStats();
 			this.setCurHP(this.getStatHP());
 
-			if (!couldCreate){
+			if (!couldCreate) {
 				System.err.println("Could not find Pokemon with id " + id + ".");
 			}
 		}
 
 		/**
 		 * Create Pokemon based on given internal name.
+		 *
 		 * @param nameInternal Pokemon internal name to create.
 		 */
 		public Pokemon(String nameInternal) {
@@ -145,18 +147,19 @@ public class Pokemon {
 			genIVs();
 			doBasics();
 
-			boolean couldCreate = readInfo( this.id );
-			
+			boolean couldCreate = readInfo(this.id);
+
 			updateStats();
 			this.setCurHP(this.getStatHP());
 
-			if (!couldCreate){
+			if (!couldCreate) {
 				System.err.println("Could not find Pokemon with id " + id + ".");
 			}
 		}
 
 		/**
 		 * Create Pokemon based on given id and given ball type internal name.
+		 *
 		 * @param id Pokemon ID to create.
 		 * @param level Pokemon level to set.
 		 */
@@ -169,18 +172,19 @@ public class Pokemon {
 			genIVs();
 			doBasics();
 
-			boolean couldCreate = readInfo( this.id );
-			
+			boolean couldCreate = readInfo(this.id);
+
 			updateStats();
 			this.setCurHP(this.getStatHP());
 
-			if (!couldCreate){
+			if (!couldCreate) {
 				System.err.println("Could not find Pokemon with id " + id + ".");
 			}
 		}
 
 		/**
 		 * Create Pokemon based on given id and given ball type internal name.
+		 *
 		 * @param nameInternal Pokemon internal name to create.
 		 * @param level Pokemon level to set.
 		 */
@@ -194,18 +198,20 @@ public class Pokemon {
 			genIVs();
 			doBasics();
 
-			boolean couldCreate = readInfo( this.id );
-			
+			boolean couldCreate = readInfo(this.id);
+
 			updateStats();
 			this.setCurHP(this.getStatHP());
 
-			if (!couldCreate){
+			if (!couldCreate) {
 				System.err.println("Could not find Pokemon with id " + id + ".");
 			}
 		}
 
 		/**
-		 * Create Pokemon based on given internal name and given ball type internal name.
+		 * Create Pokemon based on given internal name and given ball type internal
+		 * name.
+		 *
 		 * @param nameInternal Pokemon internal name to create.
 		 * @param ballType Pokemon Pokeball internal name.
 		 * @param level Pokemon level to set.
@@ -221,18 +227,19 @@ public class Pokemon {
 			genIVs();
 			doBasics();
 
-			boolean couldCreate = readInfo( this.id );
-			
+			boolean couldCreate = readInfo(this.id);
+
 			updateStats();
 			this.setCurHP(this.getStatHP());
 
-			if (!couldCreate){
+			if (!couldCreate) {
 				System.err.println("Could not find Pokemon with id " + id + ".");
 			}
 		}
 
 		/**
 		 * Create Pokemon based on given id and given ball type internal name.
+		 *
 		 * @param id Pokemon ID to create.
 		 * @param ballType Pokemon Pokeball internal name.
 		 * @param level Pokemon level to set.
@@ -247,18 +254,19 @@ public class Pokemon {
 			genIVs();
 			doBasics();
 
-			boolean couldCreate = readInfo( this.id );
-			
+			boolean couldCreate = readInfo(this.id);
+
 			updateStats();
 			this.setCurHP(this.getStatHP());
 
-			if (!couldCreate){
+			if (!couldCreate) {
 				System.err.println("Could not find Pokemon with id " + id + ".");
 			}
 		}
 
 		/**
 		 * Create Pokemon based on given internal name and given ball type ID.
+		 *
 		 * @param nameInternal Pokemon internal name to create.
 		 * @param ballType Pokemon Pokeball ID.
 		 * @param level Pokemon level to set.
@@ -274,18 +282,19 @@ public class Pokemon {
 			genIVs();
 			doBasics();
 
-			boolean couldCreate = readInfo( this.id );
-			
+			boolean couldCreate = readInfo(this.id);
+
 			updateStats();
 			this.setCurHP(this.getStatHP());
 
-			if (!couldCreate){
+			if (!couldCreate) {
 				System.err.println("Could not find Pokemon with id " + id + ".");
 			}
 		}
 
 		/**
 		 * Create Pokemon based on given id and given ball type ID.
+		 *
 		 * @param id Pokemon ID to create.
 		 * @param ballType Pokemon Pokeball ID.
 		 * @param level Pokemon level to set.
@@ -300,18 +309,19 @@ public class Pokemon {
 			genIVs();
 			doBasics();
 
-			boolean couldCreate = readInfo( this.id );
-			
+			boolean couldCreate = readInfo(this.id);
+
 			updateStats();
 			this.setCurHP(this.getStatHP());
 
-			if (!couldCreate){
+			if (!couldCreate) {
 				System.err.println("Could not find Pokemon with id " + id + ".");
 			}
 		}
 
 		/**
 		 * Create Pokemon based on given internal name and given ball item.
+		 *
 		 * @param nameInternal Pokemon internal name to create.
 		 * @param ball Pokemon Pokeball Item.
 		 * @param level Pokemon level to set.
@@ -327,69 +337,70 @@ public class Pokemon {
 			genIVs();
 			doBasics();
 
-			boolean couldCreate = readInfo( this.id );
-			
+			boolean couldCreate = readInfo(this.id);
+
 			updateStats();
 			this.setCurHP(this.getStatHP());
 
-			if (!couldCreate){
+			if (!couldCreate) {
 				System.err.println("Could not find Pokemon with id " + id + ".");
 			}
 		}
 
 		/**
 		 * Create Pokemon based on given id and given ball item.
+		 *
 		 * @param id Pokemon ID to create.
 		 * @param ball Pokemon Pokeball Item
 		 * @param level Pokemon level to set.
 		 */
 		public Pokemon(int id, int level, Item ball) {
-			this.id = id;
-			this.gender = "TBD";
-			this.level = level;
-			this.wild = false;
-			this.ballType = ball.getNameInternal();
+		this.id = id;
+		this.gender = "TBD";
+		this.level = level;
+		this.wild = false;
+		this.ballType = ball.getNameInternal();
 
-			genIVs();
-			doBasics();
+		genIVs();
+		doBasics();
 
-			boolean couldCreate = readInfo( this.id );
-			
-			updateStats();
-			this.setCurHP(this.getStatHP());
+		boolean couldCreate = readInfo(this.id);
 
-			if (!couldCreate){
-				System.err.println("Could not find Pokemon with id " + id + ".");
-			}
+		updateStats();
+		this.setCurHP(this.getStatHP());
+
+		if (!couldCreate) {
+			System.err.println("Could not find Pokemon with id " + id + ".");
 		}
+	}
 	//</editor-fold>
-	
+
 	/**
 	 * Generate Pokemon IVs.
 	 */
-	private void genIVs(){
+	private void genIVs() {
 		Random rnd = new Random();
-		
+
 		this.IVHP = rnd.nextInt(32);
 		this.IVAttack = rnd.nextInt(32);
 		this.IVDefense = rnd.nextInt(32);
 		this.IVSpeed = rnd.nextInt(32);
 		this.IVSpAtk = rnd.nextInt(32);
 		this.IVSpDef = rnd.nextInt(32);
-		
-		if (this.IVSpeed>28 && this.IVDefense>28 && this.IVSpAtk>28 && this.IVSpDef>28 && this.IVAttack>28){
+
+		if (this.IVSpeed > 28 && this.IVDefense > 28 && this.IVSpAtk > 28 && this.IVSpDef > 28 && this.IVAttack > 28) {
 			this.shiny = true;
-		}else{
+		} else {
 			this.shiny = false;
 		}
-		
+
 		wipeEVs();
 	}
-	
+
 	/**
 	 * Wipe Pokemon EVs.
 	 */
-	public void wipeEVs(){
+	public void wipeEVs() {
 		this.setEVHP(0);
 		this.setEVAttack(0);
 		this.setEVDefense(0);
@@ -397,50 +408,51 @@ public class Pokemon {
 		this.setEVSpAtk(0);
 		this.setEVSpDef(0);
 	}
-	
+
 	/**
 	 * Acquire information from main data about Pokemon with given ID.
+	 *
 	 * @param id Pokemon to search for in main data.
 	 * @return Success of process.
 	 */
-	private boolean readInfo(int id){
+	private boolean readInfo(int id) {
 		boolean success = false;
-		
-		String[] pokeinfo = pokemonviolet.data.NIC.INFO_POKEMON.get(id-1).split(";");
-		
-		for (int i = 0; i < NUM_ATTRIB; i++){
+
+		String[] pokeinfo = pokemonviolet.data.NIC.INFO_POKEMON.get(id - 1).split(";");
+
+		for (int i = 0; i < NUM_ATTRIB; i++) {
 			String[] partes = pokeinfo[i].split("=");
-			if (partes[0].compareTo( "Name" )==0){
+			if (partes[0].compareTo("Name") == 0) {
 				this.nameSpecies = partes[1];
 				this.setNameNick(partes[1]);
-			}else if (partes[0].compareTo("InternalName")==0){
+			} else if (partes[0].compareTo("InternalName") == 0) {
 				this.nameInternal = partes[1];
-			 }else if (partes[0].compareTo("Pokedex")==0){
+			} else if (partes[0].compareTo("Pokedex") == 0) {
 				this.pokeEntry = partes[1];
-			 }else if (partes[0].compareTo("Type1")==0){
+			} else if (partes[0].compareTo("Type1") == 0) {
 				this.types = new String[2];
 				this.types[0] = partes[1];
-			 }else if (partes[0].compareTo("Type2")==0){
-				if (partes.length==2){
+			} else if (partes[0].compareTo("Type2") == 0) {
+				if (partes.length == 2) {
 					this.types[1] = partes[1];
 				}
-			}else if (partes[0].compareTo("Kind")==0){
+			} else if (partes[0].compareTo("Kind") == 0) {
 				this.kind = partes[1];
-			}else if (partes[0].compareTo("BaseHP")==0){
+			} else if (partes[0].compareTo("BaseHP") == 0) {
 				this.baseHP = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("BaseAttack")==0){
+			} else if (partes[0].compareTo("BaseAttack") == 0) {
 				this.baseAttack = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("BaseDefense")==0){
+			} else if (partes[0].compareTo("BaseDefense") == 0) {
 				this.baseDefense = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("BaseSpeed")==0){
+			} else if (partes[0].compareTo("BaseSpeed") == 0) {
 				this.baseSpeed = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("BaseSpAtk")==0){
+			} else if (partes[0].compareTo("BaseSpAtk") == 0) {
 				this.baseSpAtk = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("BaseSpDef")==0){
+			} else if (partes[0].compareTo("BaseSpDef") == 0) {
 				this.baseSpDef = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("CatchRate")==0){
+			} else if (partes[0].compareTo("CatchRate") == 0) {
 				this.catchRate = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("GrowthRate")==0){
+			} else if (partes[0].compareTo("GrowthRate") == 0) {
 				/*
 					Fast
 					Medium or MediumFast
@@ -448,39 +460,39 @@ public class Pokemon {
 					Parabolic or MediumSlow
 					Erratic
 					Fluctuating
-				*/
-				if (partes[1].compareTo("Parabolic")==0 || partes[1].compareTo("Fast")==0 || partes[1].compareTo("Medium")==0 || partes[1].compareTo("Slow")==0){
+				 */
+				if (partes[1].compareTo("Parabolic") == 0 || partes[1].compareTo("Fast") == 0 || partes[1].compareTo("Medium") == 0 || partes[1].compareTo("Slow") == 0) {
 					this.growthRate = partes[1];
-				}else{
+				} else {
 					this.growthRate = "Parabolic";
 				}
-			}else if (partes[0].compareTo("StepsToHatch")==0){
+			} else if (partes[0].compareTo("StepsToHatch") == 0) {
 				this.hatchSteps = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("Moves")==0 && this.numMoves == 0){
+			} else if (partes[0].compareTo("Moves") == 0 && this.numMoves == 0) {
 				this.allMoves = new ArrayList<String>();
 				this.moveSet = new PokemonMove[4];
-					
+
 				String[] readMoves = partes[1].split(",");
-				
-				for (int j = 0; j < readMoves.length; j = j+2) {
+
+				for (int j = 0; j < readMoves.length; j = j + 2) {
 					int moveLevel = Integer.parseInt(readMoves[j]);
-					this.allMoves.add(moveLevel+"-"+readMoves[j+1]);
+					this.allMoves.add(moveLevel + "-" + readMoves[j + 1]);
 				}
-				
-				if (this.numMoves == 0){
-					
+
+				if (this.numMoves == 0) {
+
 					int cycle = 0;
-					while (numMoves < 4 && cycle < this.allMoves.size()){
+					while (numMoves < 4 && cycle < this.allMoves.size()) {
 						String thisMove = this.allMoves.get(cycle);
-						if (Integer.parseInt(thisMove.split("-")[0])==1){
+						if (Integer.parseInt(thisMove.split("-")[0]) == 1) {
 							addMove(thisMove.split("-")[1]);
 						}
-						cycle=cycle+1;
+						cycle = cycle + 1;
 					}
 				}
-			}else if (partes[0].compareTo("Color")==0){
+			} else if (partes[0].compareTo("Color") == 0) {
 				this.color = partes[1];
-			}else if (partes[0].compareTo("Habitat")==0){
+			} else if (partes[0].compareTo("Habitat") == 0) {
 				/*
 					Cave
 					Forest
@@ -491,27 +503,27 @@ public class Pokemon {
 					Sea
 					Urban
 					WatersEdge
-				*/
+				 */
 				this.habitat = partes[1];
-			}else if (partes[0].compareTo("YieldHP")==0){
+			} else if (partes[0].compareTo("YieldHP") == 0) {
 				this.yieldHP = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("YieldAttack")==0){
+			} else if (partes[0].compareTo("YieldAttack") == 0) {
 				this.yieldAttack = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("YieldDefense")==0){
+			} else if (partes[0].compareTo("YieldDefense") == 0) {
 				this.yieldDefense = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("YieldSpeed")==0){
+			} else if (partes[0].compareTo("YieldSpeed") == 0) {
 				this.yieldSpeed = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("YieldSpAtk")==0){
+			} else if (partes[0].compareTo("YieldSpAtk") == 0) {
 				this.yieldSpAtk = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("YieldSpDef")==0){
+			} else if (partes[0].compareTo("YieldSpDef") == 0) {
 				this.yieldSpDef = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("YieldEXP")==0){
+			} else if (partes[0].compareTo("YieldEXP") == 0) {
 				this.yieldEXP = Integer.parseInt(partes[1]);
-			}else if (partes[0].compareTo("Weight")==0){
+			} else if (partes[0].compareTo("Weight") == 0) {
 				this.weight = partes[1];
-			}else if (partes[0].compareTo("Height")==0){
+			} else if (partes[0].compareTo("Height") == 0) {
 				this.height = partes[1];
-			}else if (partes[0].compareTo("GenderRate")==0 && this.getGender().compareTo("TBD") == 0){
+			} else if (partes[0].compareTo("GenderRate") == 0 && this.getGender().compareTo("TBD") == 0) {
 				/*
 					AlwaysMale
 					FemaleOneEighth
@@ -521,193 +533,198 @@ public class Pokemon {
 					FemaleSevenEighths
 					AlwaysFemale
 					Genderless
-				*/
+				 */
 				String genderRate = partes[1];
-				if (genderRate.compareTo("AlwaysMale") == 0){
+				if (genderRate.compareTo("AlwaysMale") == 0) {
 					this.gender = "Male";
-				}else if (genderRate.compareTo("AlwaysFemale") == 0){
+				} else if (genderRate.compareTo("AlwaysFemale") == 0) {
 					this.gender = "Female";
-				}else if (genderRate.compareTo("Genderless") == 0){
+				} else if (genderRate.compareTo("Genderless") == 0) {
 					this.gender = "Genderless";
-				}else{
+				} else {
 					Random rnd = new Random();
-					double roll = (rnd.nextInt(99)+1)/100;
-					if (genderRate.compareTo("FemaleOneEighth") == 0 && (roll < 1/8)){
+					double roll = (rnd.nextInt(99) + 1) / 100;
+					if (genderRate.compareTo("FemaleOneEighth") == 0 && (roll < 1 / 8)) {
 						this.gender = "Female";
-					}else if (genderRate.compareTo("Female25Percent") == 0 && (roll < 1/4)){
+					} else if (genderRate.compareTo("Female25Percent") == 0 && (roll < 1 / 4)) {
 						this.gender = "Female";
-					}else if (genderRate.compareTo("Female50Percent") == 0 && (roll < 1/2)){
+					} else if (genderRate.compareTo("Female50Percent") == 0 && (roll < 1 / 2)) {
 						this.gender = "Female";
-					}else if (genderRate.compareTo("Female75Percent") == 0 && (roll < 3/4)){
+					} else if (genderRate.compareTo("Female75Percent") == 0 && (roll < 3 / 4)) {
 						this.gender = "Female";
-					}else if (genderRate.compareTo("FemaleSevenEighths") == 0 && (roll < 7/8)){
+					} else if (genderRate.compareTo("FemaleSevenEighths") == 0 && (roll < 7 / 8)) {
 						this.gender = "Female";
-					}else{
+					} else {
 						this.gender = "Male";
 					}
 				}
-			}else if (partes[0].compareTo("numEvols")==0){
+			} else if (partes[0].compareTo("numEvols") == 0) {
 				this.numEvols = Integer.parseInt(partes[1]);
 				this.evolvesInto = new String[this.numEvols];
 				this.evolveMethod = new String[this.numEvols];
 				this.evolveLevel = new int[this.numEvols];
 				this.evolveItem = new String[this.numEvols];
-			}else if (partes[0].compareTo("Evolutions")==0){
-				if (this.numEvols > 0){
+			} else if (partes[0].compareTo("Evolutions") == 0) {
+				if (this.numEvols > 0) {
 					String[] allEvolutionInfo = partes[1].split(",");
 					for (int j = 0; j < allEvolutionInfo.length; j++) {
-						switch (j%3) {
+						switch (j % 3) {
 							case 0:
-								this.evolvesInto[(int)Math.floor(j/3)] = allEvolutionInfo[j];
-							break;
+								this.evolvesInto[(int) Math.floor(j / 3)] = allEvolutionInfo[j];
+								break;
 							case 1:
-								this.evolveMethod[(int)Math.floor(j/3)] = allEvolutionInfo[j];
-							break;
+								this.evolveMethod[(int) Math.floor(j / 3)] = allEvolutionInfo[j];
+								break;
 							case 2:
-								try { 
-									this.evolveLevel[(int)Math.floor(j/3)] = Integer.parseInt(allEvolutionInfo[j]); 
-									this.evolveItem[(int)Math.floor(j/3)] = "";
-								} catch(NumberFormatException e) { 
-									this.evolveLevel[(int)Math.floor(j/3)] = 1;
-									this.evolveItem[(int)Math.floor(j/3)] = allEvolutionInfo[j];
+								try {
+									this.evolveLevel[(int) Math.floor(j / 3)] = Integer.parseInt(allEvolutionInfo[j]);
+									this.evolveItem[(int) Math.floor(j / 3)] = "";
+								} catch (NumberFormatException e) {
+									this.evolveLevel[(int) Math.floor(j / 3)] = 1;
+									this.evolveItem[(int) Math.floor(j / 3)] = allEvolutionInfo[j];
 								}
-							break;
+								break;
 						}
 					}
 				}
 			}
 		}
-		
-		
+
 		success = true;
-		
+
 		return success;
 	}
-	
-	private void doBasics(){
-		this.numMoves=0;
+
+	private void doBasics() {
+		this.numMoves = 0;
 		this.setStatus("");
 	}
-	
-	public int doCatch(Item ball){
+
+	public int doCatch(Item ball) {
 		boolean caught = false;
 		int shakes = -1;
-		
-		do{
-			shakes = shakes + 1; 
-			caught = this.tryCatch(ball.getPokeRate()); 
-		}while(caught==true && shakes<4);
- 
-		if (caught){
+
+		do {
+			shakes = shakes + 1;
+			caught = this.tryCatch(ball.getPokeRate());
+		} while (caught == true && shakes < 4);
+
+		if (caught) {
 			this.setBallType(ball.getNameInternal());
-		} 
-		
+		}
+
 		return shakes;
 	}
-	
 	//<editor-fold defaultstate="collapsed" desc="Catch Pokemon Methods">
-		public int doCatch(String internalName){
+		public int doCatch(String internalName) {
 			return doCatch(new Item(internalName));
 		}
-		public int doCatch(int id){
-			return doCatch(new Item(id));
-		}
+
+		public int doCatch(int id) {
+		return doCatch(new Item(id));
+	}
 	//</editor-fold>
-	
+
 	/**
 	 * Calculate the 'Alpha' of the Catch Rate formula.
+	 *
 	 * @param bonusball Pokeball multiplier.
 	 * @return 'Alpha' value for the formula
 	 */
 	private double calcAlpha(double bonusball) {
-		
+
 		double bonusstatus;
-		switch (this.getStatus()){
+		switch (this.getStatus()) {
 			case "SLEEP":
 				bonusstatus = 2;
-			break;
+				break;
 			case "FREEZE":
 				bonusstatus = 2;
-			break;
+				break;
 			case "PARALYZE":
 				bonusstatus = 1.5;
-			break;
+				break;
 			case "POISON":
 				bonusstatus = 1.5;
-			break;
+				break;
 			case "BURN":
 				bonusstatus = 1.5;
-			break;
+				break;
 			default:
 				bonusstatus = 1;
-			break;
+				break;
 		}
-		
-		double alpha = ((((3 * this.getStatHP()) - (2 * this.getCurHP())) * this.getCatchRate() * bonusball)/(3*this.getStatHP()))*bonusstatus;
-		
+
+		double alpha = ((((3 * this.getStatHP()) - (2 * this.getCurHP())) * this.getCatchRate() * bonusball) / (3 * this.getStatHP())) * bonusstatus;
+
 		return alpha;
 	}
-	
+
 	/**
 	 * Do a shake check.
-	 * <p>[MASTER]</p>
+	 * <p>
+	 * [MASTER]</p>
+	 *
 	 * @param bonusball Pokeball multiplier.
 	 * @return Success of shake check.
 	 */
-	private boolean tryCatch(double bonusball){
+	private boolean tryCatch(double bonusball) {
 		boolean shakeCheck = false;
 		Random rnd = new Random();
-		
+
 		double alpha = calcAlpha(bonusball);
-		
-		double beta = 1048560/Math.sqrt(Math.sqrt(16711680/alpha));
+
+		double beta = 1048560 / Math.sqrt(Math.sqrt(16711680 / alpha));
 		if (beta > rnd.nextInt(65535)) {
 			shakeCheck = true;
 		}
-		
+
 		return shakeCheck;
 	}
-	
+
 	/**
-	 * Searches in main data for Pokemon with given internal name, and returns its ID.
+	 * Searches in main data for Pokemon with given internal name, and returns
+	 * its ID.
+	 *
 	 * @param internalName Pokemon internal name to search for.
 	 * @return Pokemon ID.
 	 */
-	private int getPokemonID(String internalName){
+	private int getPokemonID(String internalName) {
 		int id = 0;
 		boolean foundPokemon = false;
 
-		while (foundPokemon == false && id < pokemonviolet.data.NIC.INFO_POKEMON.size()){
+		while (foundPokemon == false && id < pokemonviolet.data.NIC.INFO_POKEMON.size()) {
 			String[] pokeinfo = pokemonviolet.data.NIC.INFO_POKEMON.get(id).split(";");
 			int attribComp = 0;
-			while (attribComp < NUM_ATTRIB && foundPokemon == false){
+			while (attribComp < NUM_ATTRIB && foundPokemon == false) {
 				String[] partes = pokeinfo[attribComp].split("=");
-				if (partes[0].compareTo("InternalName")==0){
-			//		System.out.println("Comparing " + partes[1] + "...");
-					if (partes[1].compareTo(internalName)==0){
+				if (partes[0].compareTo("InternalName") == 0) {
+					//		System.out.println("Comparing " + partes[1] + "...");
+					if (partes[1].compareTo(internalName) == 0) {
 						foundPokemon = true;
-					}else{
+					} else {
 						attribComp = attribComp + 100;
 					}
-				}else{
+				} else {
 					attribComp = attribComp + 1;
 				}
 			}
 			id = id + 1;
 		}
-		if (!foundPokemon){
+		if (!foundPokemon) {
 			System.err.println("Could not find pokemon " + internalName + ".");
 		}
-			
+
 		return id;
 	}
-	
+
 	/**
 	 * Evolve this Pokemon.
+	 *
 	 * @param num ID number of evolution Pokemon.
 	 * @return Success of process.
 	 */
-	public boolean evolve(int num){
+	public boolean evolve(int num) {
 		boolean success;
 		this.id = num;
 
@@ -715,413 +732,442 @@ public class Pokemon {
 
 		success = couldCreate;
 
-		if (!couldCreate){
+		if (!couldCreate) {
 			System.err.println("Error evolving to id " + getId() + ".");
 		}
-			
+
 		return success;
 	}
-	
+
 	/**
 	 * Sets a given move in a given place.
-	 * <p>[MASTER]</p>
+	 * <p>
+	 * [MASTER]</p>
+	 *
 	 * @param place Place to set given move in.
 	 * @param newMove New move to set.
 	 */
-	public void setMove(int place, PokemonMove newMove){
+	public void setMove(int place, PokemonMove newMove) {
 		moveSet[place] = newMove;
 	}
-	
 	//<editor-fold defaultstate="collapsed" desc="setMove Sub-Processes">
 		/**
 		 * Sets a given move in a given place.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param place Place to set given move in.
 		 * @param newMove Internal name of new move to set.
 		 */
-		public void setMove(int place, String newMove){
-			setMove(place,new PokemonMove(newMove));
+		public void setMove(int place, String newMove) {
+			setMove(place, new PokemonMove(newMove));
 		}
 
 		/**
 		 * Sets a given move in a given place.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param place Place to set given move in.
 		 * @param newMove ID of new move to set.
 		 */
-		public void setMove(int place, int newMove){
-			setMove(place,new PokemonMove(newMove));
+		public void setMove(int place, int newMove) {
+			setMove(place, new PokemonMove(newMove));
 		}
 
 		/**
 		 * Replaces a given move with another given move.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param oldMove ID of old move.
 		 * @param newMove New move to set.
 		 */
-		public void replaceMove(int oldMove, PokemonMove newMove){
+		public void replaceMove(int oldMove, PokemonMove newMove) {
 			int id = 0;
 			for (int i = 0; i < getMoveSet().length; i++) {
-				if (getMoveSet()[i].getId() == oldMove){
+				if (getMoveSet()[i].getId() == oldMove) {
 					id = i;
 				}
 			}
-			setMove(id,newMove);
+			setMove(id, newMove);
 		}
 
 		/**
 		 * Replaces a given move with another given move.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param oldMove ID of old move.
 		 * @param newMove Internal name of new move to set.
 		 */
-		public void replaceMove(int oldMove, String newMove){
-			replaceMove(oldMove,new PokemonMove(newMove));
+		public void replaceMove(int oldMove, String newMove) {
+			replaceMove(oldMove, new PokemonMove(newMove));
 		}
 
 		/**
 		 * Replaces a given move with another given move.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param oldMove ID of old move.
 		 * @param newMove ID of new move to set.
 		 */
-		public void replaceMove(int oldMove, int newMove){
-			replaceMove(oldMove,new PokemonMove(newMove));
+		public void replaceMove(int oldMove, int newMove) {
+			replaceMove(oldMove, new PokemonMove(newMove));
 		}
-	
+
 		/**
 		 * Replaces a given move with another given move.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param oldMove Internal name of old move.
 		 * @param newMove New move to set.
 		 */
-		public void replaceMove(String oldMove, PokemonMove newMove){
+		public void replaceMove(String oldMove, PokemonMove newMove) {
 			int place = 0;
 			for (int i = 0; i < getMoveSet().length; i++) {
-				if (getMoveSet()[i].getNameInternal().compareTo(oldMove)== 0){
+				if (getMoveSet()[i].getNameInternal().compareTo(oldMove) == 0) {
 					place = i;
 				}
 			}
-			setMove(place,newMove);
+			setMove(place, newMove);
 		}
 
 		/**
 		 * Replaces a given move with another given move.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param oldMove Internal name of old move.
 		 * @param newMove Internal name of new move to set.
 		 */
-		public void replaceMove(String oldMove, String newMove){
-			replaceMove(oldMove,new PokemonMove(newMove));
+		public void replaceMove(String oldMove, String newMove) {
+			replaceMove(oldMove, new PokemonMove(newMove));
 		}
 
 		/**
 		 * Replaces a given move with another given move.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param oldMove Internal name of old move.
 		 * @param newMove ID of new move to set.
 		 */
-		public void replaceMove(String oldMove, int newMove){
-			replaceMove(oldMove,new PokemonMove(newMove));
-		}
-		
-		/**
-		 * Replaces a given move with another given move.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
-		 * @param oldMove Old move.
-		 * @param newMove New move to set.
-		 */
-		public void replaceMove(PokemonMove oldMove, PokemonMove newMove){
-			replaceMove(oldMove.getId(),newMove);
+		public void replaceMove(String oldMove, int newMove) {
+			replaceMove(oldMove, new PokemonMove(newMove));
 		}
 
 		/**
 		 * Replaces a given move with another given move.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param oldMove Old move.
-		 * @param newMove Internal name of new move to set.
+		 * @param newMove New move to set.
 		 */
-		public void replaceMove(PokemonMove oldMove, String newMove){
-			replaceMove(oldMove,new PokemonMove(newMove));
+		public void replaceMove(PokemonMove oldMove, PokemonMove newMove) {
+			replaceMove(oldMove.getId(), newMove);
 		}
 
 		/**
 		 * Replaces a given move with another given move.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
+		 * @param oldMove Old move.
+		 * @param newMove Internal name of new move to set.
+		 */
+		public void replaceMove(PokemonMove oldMove, String newMove) {
+			replaceMove(oldMove, new PokemonMove(newMove));
+		}
+
+		/**
+		 * Replaces a given move with another given move.
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param oldMove Old move.
 		 * @param newMove ID of new move to set.
 		 */
-		public void replaceMove(PokemonMove oldMove, int newMove){
-			replaceMove(oldMove,new PokemonMove(newMove));
+		public void replaceMove(PokemonMove oldMove, int newMove) {
+			replaceMove(oldMove, new PokemonMove(newMove));
 		}
-		
+
 		/**
 		 * Adds a given move to moveset.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param newMove New move to set.
 		 * @return Success of process.
 		 */
-		public boolean addMove(PokemonMove newMove){
+		public boolean addMove(PokemonMove newMove) {
 			boolean success = true;
-			if (numMoves<4){
-				setMove(numMoves,newMove);
-				numMoves = numMoves+1;
-			}else{
+			if (numMoves < 4) {
+				setMove(numMoves, newMove);
+				numMoves = numMoves + 1;
+			} else {
 				success = false;
 			}
-			
+
 			return success;
 		}
-		
+
 		/**
 		 * Adds a given move to moveset.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param newMove Internal name of new move to set.
 		 * @return Success of process.
 		 */
-		public boolean addMove(String newMove){
+		public boolean addMove(String newMove) {
 			boolean success = true;
-			if (numMoves<4){
-				setMove(numMoves,new PokemonMove(newMove));
-				numMoves = numMoves+1;
-			}else{
+			if (numMoves < 4) {
+				setMove(numMoves, new PokemonMove(newMove));
+				numMoves = numMoves + 1;
+			} else {
 				success = false;
 			}
-			
+
 			return success;
 		}
-		
+
 		/**
 		 * Adds a given move to moveset.
-		 * <p>(Sub-process, wraps to a MASTER.)</p>
+		 * <p>
+		 * (Sub-process, wraps to a MASTER.)</p>
+		 *
 		 * @param newMove ID of new move to set.
 		 * @return Success of process.
 		 */
-		public boolean addMove(int newMove){
-			boolean success = true;
-			if (numMoves<4){
-				setMove(numMoves,new PokemonMove(newMove));
-				numMoves = numMoves+1;
-			}else{
-				success = false;
-			}
-			
-			return success;
+		public boolean addMove(int newMove) {
+		boolean success = true;
+		if (numMoves < 4) {
+			setMove(numMoves, new PokemonMove(newMove));
+			numMoves = numMoves + 1;
+		} else {
+			success = false;
 		}
+
+		return success;
+	}
 	//</editor-fold>
-	
+
 	/**
 	 * Update Pokemon stats.
 	 */
-	private void updateStats(){
-		this.statHP= (((2 * this.baseHP + this.IVHP + (this.EVHP/4))*this.getLevel())/100)+this.getLevel()+10;
-		this.statAttack = (((2 * this.baseAttack + this.IVAttack + (this.EVAttack/4))*this.getLevel())/100)+5;
-		this.statDefense = (((2 * this.baseDefense + this.IVDefense + (this.EVDefense/4))*this.getLevel())/100)+5;
-		this.statSpAtk = (((2 * this.baseSpAtk + this.IVSpAtk + (this.EVSpAtk/4))*this.getLevel())/100)+5;
-		this.statSpDef = (((2 * this.baseSpDef + this.IVSpDef + (this.EVSpDef/4))*this.getLevel())/100)+5;
-		this.statSpeed = (((2 * this.baseSpeed + this.IVSpeed + (this.EVSpeed/4))*this.getLevel())/100)+5;
-		
-		switch(this.getGrowthRate()){
+	private void updateStats() {
+		this.statHP = (((2 * this.baseHP + this.IVHP + (this.EVHP / 4)) * this.getLevel()) / 100) + this.getLevel() + 10;
+		this.statAttack = (((2 * this.baseAttack + this.IVAttack + (this.EVAttack / 4)) * this.getLevel()) / 100) + 5;
+		this.statDefense = (((2 * this.baseDefense + this.IVDefense + (this.EVDefense / 4)) * this.getLevel()) / 100) + 5;
+		this.statSpAtk = (((2 * this.baseSpAtk + this.IVSpAtk + (this.EVSpAtk / 4)) * this.getLevel()) / 100) + 5;
+		this.statSpDef = (((2 * this.baseSpDef + this.IVSpDef + (this.EVSpDef / 4)) * this.getLevel()) / 100) + 5;
+		this.statSpeed = (((2 * this.baseSpeed + this.IVSpeed + (this.EVSpeed / 4)) * this.getLevel()) / 100) + 5;
+
+		switch (this.getGrowthRate()) {
 			case "Parabolic":
-				this.maxEXP = (6/5*(int)Math.pow(this.getLevel(),3)) - (15*(int)Math.pow(this.getLevel(),2)) + (100*this.getLevel()) - 140;
-			break;
+				this.maxEXP = (6 / 5 * (int) Math.pow(this.getLevel(), 3)) - (15 * (int) Math.pow(this.getLevel(), 2)) + (100 * this.getLevel()) - 140;
+				break;
 			case "Fast":
-				this.maxEXP = (4*(int)Math.pow(this.getLevel(),3))/5;
-			break;
+				this.maxEXP = (4 * (int) Math.pow(this.getLevel(), 3)) / 5;
+				break;
 			case "Medium":
-				this.maxEXP = (int)Math.pow(this.getLevel(),3);
-			break;
+				this.maxEXP = (int) Math.pow(this.getLevel(), 3);
+				break;
 			case "Slow":
-				this.maxEXP = (5*(int)Math.pow(this.getLevel(),3))/4;
-			break;
+				this.maxEXP = (5 * (int) Math.pow(this.getLevel(), 3)) / 4;
+				break;
 		}
 	}
-	
+
 	/**
 	 * Level up Pokemon.
 	 */
-	public void levelUp(){
+	public void levelUp() {
 		this.setCurEXP(this.getCurEXP() - this.getMaxEXP());
 		this.level = this.getLevel() + 1;
 		for (int i = 0; i < this.numEvols; i++) {
-			if (this.evolveMethod[i].compareTo("Level")==0){
-				if (this.level >= this.evolveLevel[i]){
+			if (this.evolveMethod[i].compareTo("Level") == 0) {
+				if (this.level >= this.evolveLevel[i]) {
 					evolve(getPokemonID(this.evolvesInto[i]));
 				}
 			}
 		}
 		for (int i = 0; i < this.allMoves.size(); i++) {
-			if (this.level == Integer.parseInt(this.allMoves.get(i).split("-")[0])){
+			if (this.level == Integer.parseInt(this.allMoves.get(i).split("-")[0])) {
 				addMove(this.allMoves.get(i).split("-")[1]);
 			}
 		}
 		this.updateStats();
 	}
-	
+
 	/**
 	 * Set 'faint' values.
 	 */
-	public void faint(){
+	public void faint() {
 		this.setStatus("");
 		this.fainted = true;
 	}
-	
-	public void revive(double healthPercent){
+
+	public void revive(double healthPercent) {
 		this.fainted = false;
-		this.setCurHP((int)(this.getStatHP()*healthPercent));
+		this.setCurHP((int) (this.getStatHP() * healthPercent));
 	}
-	
+
 	/**
 	 * Gets Experience value result for winning against this Pokemon.
+	 *
 	 * @return Experience value to gain.
 	 */
-	public int getExpGain(){
+	public int getExpGain() {
 		double gain;
 		float a = 1;
-		if (this.isWild()){
-			a = (float)1.5;
+		if (this.isWild()) {
+			a = (float) 1.5;
 		}
 		gain = this.getLevel();
-		gain = (float)gain / 7f;
-		gain = (float)gain * (float)this.yieldEXP;
-		gain = (float)gain * (float)a;
-		
-		return (int)gain;
+		gain = (float) gain / 7f;
+		gain = (float) gain * (float) this.yieldEXP;
+		gain = (float) gain * (float) a;
+
+		return (int) gain;
 	}
-	
-	public int[] getDamage(int moveNum, String[] enemyTypes){
+
+	public int[] getDamage(int moveNum, String[] enemyTypes) {
 		int[] damageInfo = new int[3];
-		
+
 		float damageCalc;
 		//<editor-fold defaultstate="collapsed" desc="Base damage calculation">
-			damageCalc = ((float)2*(float)this.level+10)/(float)250;
-			if (this.getMoveSet()[moveNum].getCategory().compareTo("Physical")==0){
-				damageCalc = damageCalc*(float)((float)this.statAttack/(float)this.statDefense);
-			}else if (this.getMoveSet()[moveNum].getCategory().compareTo("Special")==0){
-				damageCalc = damageCalc*(float)((float)this.statSpAtk/(float)this.statSpDef);
-			}
-			damageCalc = damageCalc*(float)this.getMoveSet()[moveNum].getDmgBase()+(float)2;
+		damageCalc = ((float) 2 * (float) this.level + 10) / (float) 250;
+		if (this.getMoveSet()[moveNum].getCategory().compareTo("Physical") == 0) {
+			damageCalc = damageCalc * (float) ((float) this.statAttack / (float) this.statDefense);
+		} else if (this.getMoveSet()[moveNum].getCategory().compareTo("Special") == 0) {
+			damageCalc = damageCalc * (float) ((float) this.statSpAtk / (float) this.statSpDef);
+		}
+		damageCalc = damageCalc * (float) this.getMoveSet()[moveNum].getDmgBase() + (float) 2;
 		//</editor-fold>
-		
-		double modifier=1;
+
+		double modifier = 1;
 		//<editor-fold defaultstate="collapsed" desc="Damage modifier calculation">
-			//<editor-fold defaultstate="collapsed" desc="Critical hit calculation">
-				int T, P;
-				
-				Random rnd = new Random();
-				P = (rnd.nextInt(256));
-				
-				T = this.baseSpeed/2;
-				if (this.getMoveSet()[moveNum].isHighCrit()){
-					T = T * 8;
-				}
-				
-				if (P<T){
-					modifier = modifier * 2;
-					damageInfo[1] = 1;
-				}else{
-					damageInfo[1] = 0;
-				}
-			//</editor-fold>
-			//<editor-fold defaultstate="collapsed" desc="STAB modifier calculation">
-				if (this.getMoveSet()[moveNum].getType().compareTo(this.getTypes()[0])==0){
-					modifier = modifier*1.5;
-				}else if(this.getTypes()[1]!=null){
-					if (this.getMoveSet()[moveNum].getType().compareTo(this.getTypes()[1])==0){
-						modifier = modifier*1.5;	
-					}
-				}
-			//</editor-fold>
-			//<editor-fold defaultstate="collapsed" desc="Type effectiveness calculation">
-				double type=1;
-				
-				if( PokemonType.getWeakness(enemyTypes[0]).contains(this.getMoveSet()[moveNum].getType()) ){
-					type=type*2;
-				}
-				if( PokemonType.getImmunity(enemyTypes[0]).contains(this.getMoveSet()[moveNum].getType()) ){
-					type=type*0;
-				}
-				if( PokemonType.getResistance(enemyTypes[0]).contains(this.getMoveSet()[moveNum].getType()) ){
-					type=type*0.5;
-				}
-				if (enemyTypes[1] != null){
-					if( PokemonType.getWeakness(enemyTypes[1]).contains(this.getMoveSet()[moveNum].getType()) ){
-						type=type*2;
-					}
-					if( PokemonType.getImmunity(enemyTypes[1]).contains(this.getMoveSet()[moveNum].getType()) ){
-						type=type*0;
-					}
-					if( PokemonType.getResistance(enemyTypes[1]).contains(this.getMoveSet()[moveNum].getType()) ){
-						type=type*0.5;
-					}
-				}
-				
-				damageInfo[2] = (int)(type*10);
-				modifier = modifier*type;
-			//</editor-fold>
-			//<editor-fold defaultstate="collapsed" desc="Random calculation">
-				modifier = modifier * (float)((float)(rnd.nextInt(25)+85)/(float)100);
-			//</editor-fold>
+		//<editor-fold defaultstate="collapsed" desc="Critical hit calculation">
+		int T, P;
+
+		Random rnd = new Random();
+		P = (rnd.nextInt(256));
+
+		T = this.baseSpeed / 2;
+		if (this.getMoveSet()[moveNum].isHighCrit()) {
+			T = T * 8;
+		}
+
+		if (P < T) {
+			modifier = modifier * 2;
+			damageInfo[1] = 1;
+		} else {
+			damageInfo[1] = 0;
+		}
 		//</editor-fold>
-		
-		damageInfo[0] = (int)(damageCalc*modifier);
-		
+		//<editor-fold defaultstate="collapsed" desc="STAB modifier calculation">
+		if (this.getMoveSet()[moveNum].getType().compareTo(this.getTypes()[0]) == 0) {
+			modifier = modifier * 1.5;
+		} else if (this.getTypes()[1] != null) {
+			if (this.getMoveSet()[moveNum].getType().compareTo(this.getTypes()[1]) == 0) {
+				modifier = modifier * 1.5;
+			}
+		}
+		//</editor-fold>
+		//<editor-fold defaultstate="collapsed" desc="Type effectiveness calculation">
+		double type = 1;
+
+		if (PokemonType.getWeakness(enemyTypes[0]).contains(this.getMoveSet()[moveNum].getType())) {
+			type = type * 2;
+		}
+		if (PokemonType.getImmunity(enemyTypes[0]).contains(this.getMoveSet()[moveNum].getType())) {
+			type = type * 0;
+		}
+		if (PokemonType.getResistance(enemyTypes[0]).contains(this.getMoveSet()[moveNum].getType())) {
+			type = type * 0.5;
+		}
+		if (enemyTypes[1] != null) {
+			if (PokemonType.getWeakness(enemyTypes[1]).contains(this.getMoveSet()[moveNum].getType())) {
+				type = type * 2;
+			}
+			if (PokemonType.getImmunity(enemyTypes[1]).contains(this.getMoveSet()[moveNum].getType())) {
+				type = type * 0;
+			}
+			if (PokemonType.getResistance(enemyTypes[1]).contains(this.getMoveSet()[moveNum].getType())) {
+				type = type * 0.5;
+			}
+		}
+
+		damageInfo[2] = (int) (type * 10);
+		modifier = modifier * type;
+		//</editor-fold>
+		//<editor-fold defaultstate="collapsed" desc="Random calculation">
+		modifier = modifier * (float) ((float) (rnd.nextInt(25) + 85) / (float) 100);
+		//</editor-fold>
+		//</editor-fold>
+
+		damageInfo[0] = (int) (damageCalc * modifier);
+
 		return damageInfo;
 	}
-	
-	public BufferedImage getFrontImage() throws IOException{
-		BufferedImage image = new BufferedImage( SPRITE_WIDTH, SPRITE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+
+	public BufferedImage getFrontImage() throws IOException {
+		BufferedImage image = new BufferedImage(SPRITE_WIDTH, SPRITE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
-			
-		String suffix="";
 
-		if (getGender().compareTo("Male")==0 || getGender().compareTo("Genderless")==0){
-			suffix=suffix+"m";
-		}else{
-			suffix=suffix+"f";
-		}
-		
-		suffix = suffix+"f";
-		
-		if (isShiny()){
-			suffix=suffix+"s";
-		}else{
-			suffix=suffix+"n";
+		String suffix = "";
+
+		if (getGender().compareTo("Male") == 0 || getGender().compareTo("Genderless") == 0) {
+			suffix = suffix + "m";
+		} else {
+			suffix = suffix + "f";
 		}
 
-		g.drawImage(ImageIO.read(new File("assets/pokemon/"+getId()+suffix+".png")), 0, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
-		
+		suffix = suffix + "f";
+
+		if (isShiny()) {
+			suffix = suffix + "s";
+		} else {
+			suffix = suffix + "n";
+		}
+
+		g.drawImage(ImageIO.read(new File("assets/pokemon/" + getId() + suffix + ".png")), 0, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+
 		return image;
 	}
-	
-	public BufferedImage getBackImage() throws IOException{
-		BufferedImage image = new BufferedImage( SPRITE_WIDTH, SPRITE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+
+	public BufferedImage getBackImage() throws IOException {
+		BufferedImage image = new BufferedImage(SPRITE_WIDTH, SPRITE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
-			
-		String suffix="";
 
-		if (getGender().compareTo("Male")==0 || getGender().compareTo("Genderless")==0){
-			suffix=suffix+"m";
-		}else{
-			suffix=suffix+"f";
-		}
-		
-		suffix = suffix+"b";
-		
-		if (isShiny()){
-			suffix=suffix+"s";
-		}else{
-			suffix=suffix+"n";
+		String suffix = "";
+
+		if (getGender().compareTo("Male") == 0 || getGender().compareTo("Genderless") == 0) {
+			suffix = suffix + "m";
+		} else {
+			suffix = suffix + "f";
 		}
 
-		g.drawImage(ImageIO.read(new File("assets/pokemon/"+getId()+suffix+".png")), 0, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
-		
+		suffix = suffix + "b";
+
+		if (isShiny()) {
+			suffix = suffix + "s";
+		} else {
+			suffix = suffix + "n";
+		}
+
+		g.drawImage(ImageIO.read(new File("assets/pokemon/" + getId() + suffix + ".png")), 0, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+
 		return image;
 	}
-	
+
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
-		
-		public boolean getCanEvolve(){
+		public boolean getCanEvolve() {
 			return (this.numEvols > 0);
 		}
 
@@ -1131,7 +1177,7 @@ public class Pokemon {
 		public int getNumMoves() {
 			return numMoves;
 		}
-		
+
 		/**
 		 * @return the accuracy
 		 */
@@ -1166,7 +1212,7 @@ public class Pokemon {
 		public void setStatus(String status) {
 			this.status = status;
 		}
-		
+
 		/**
 		 * @param evasion the evasion to set
 		 */
@@ -1187,14 +1233,14 @@ public class Pokemon {
 		public PokemonMove[] getMoveSet() {
 			return moveSet;
 		}
-		
+
 		/**
 		 * @return the nameInternal
 		 */
 		public String getNameInternal() {
 			return nameInternal;
-		};
-		
+		}
+
 		/**
 		 * @return the shiny
 		 */
@@ -1361,7 +1407,7 @@ public class Pokemon {
 		 */
 		public void setCurHP(int curHP) {
 			this.curHP = curHP;
-			if (this.getCurHP() <= 0){
+			if (this.getCurHP() <= 0) {
 				faint();
 				this.curHP = 0;
 			}
@@ -1374,13 +1420,13 @@ public class Pokemon {
 		public boolean setCurEXP(int curEXP) {
 			boolean levelled = false;
 			this.curEXP = curEXP;
-			if (this.getCurEXP() >= this.getMaxEXP()){
+			if (this.getCurEXP() >= this.getMaxEXP()) {
 				levelUp();
 				levelled = true;
 			}
 			return levelled;
 		}
-		
+
 		/**
 		 * @return the statSpeed
 		 */
@@ -1483,9 +1529,7 @@ public class Pokemon {
 		 * @return the maxEXP
 		 */
 		public int getMaxEXP() {
-			return maxEXP;
-		}
-		
+		return maxEXP;
+	}
 	// </editor-fold>
-
 }
