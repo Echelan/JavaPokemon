@@ -25,9 +25,9 @@ public class Pokemon {
 			private static final int RESIZE = 2;
 			private static final int SPRITE_WIDTH = 80 * RESIZE;
 			private static final int SPRITE_HEIGHT = 80 * RESIZE;
-			static final private int NUM_ATTRIB = 40;
-			static final private int MAX_TOTAL_EV = 510;
-			static final private int MAX_SINGLE_EV = 252;
+			private static final int NUM_ATTRIB = 40;
+			private static final int MAX_TOTAL_EV = 510;
+			private static final  int MAX_SINGLE_EV = 252;
 
 			private int id;
 			private String nameSpecies;

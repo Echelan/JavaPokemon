@@ -7,6 +7,12 @@
  */
 package pokemonviolet.model;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 /**
  *
  * @author Andres
@@ -17,7 +23,10 @@ public class Item {
 		/**
 		 * Number of attributes per Item.
 		 */
-		static int NUM_ATTRIB = 10;
+		private static int NUM_ATTRIB = 10;
+		private static int SPRITE_WIDTH = 60;
+		private static int SPRITE_HEIGHT = 60;
+		
 		/**
 		 * ID of Item.
 		 */
@@ -203,6 +212,17 @@ public class Item {
 		}
 
 		return id;
+	}
+
+	public BufferedImage getImage() throws IOException {
+		BufferedImage image = new BufferedImage(SPRITE_WIDTH, SPRITE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = image.getGraphics();
+		
+		int x = ( (this.id - 1) % 24 ) * (SPRITE_WIDTH / 2), y = ((int) Math.floor( (double) (this.id-1) / 24 )) * (SPRITE_HEIGHT / 2);
+		
+		g.drawImage((ImageIO.read(new File("assets/itemsIcons.png"))).getSubimage(x, y, SPRITE_WIDTH/2, SPRITE_HEIGHT/2),0,0,SPRITE_WIDTH,SPRITE_HEIGHT,null);
+		
+		return image;
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">

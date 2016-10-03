@@ -33,12 +33,14 @@ public class GenderChoose extends Scene {
 	@Override
 	public void receiveKeyAction(String action, String state) {
 		if (state.compareTo("RELEASE") == 0) {
-			if (action.compareTo("UP") == 0 || action.compareTo("DOWN") == 0) {
-				move(action);
-			} else if (action.compareTo("A") == 0) {
+			if (action.compareTo("A") == 0) {
 				accept();
 			} else if (action.compareTo("B") == 0) {
 				cancel();
+			}
+		} else if (state.compareTo("PRESS") == 0) {
+			if (action.compareTo("UP") == 0 || action.compareTo("DOWN") == 0) {
+				move(action);
 			}
 		}
 	}

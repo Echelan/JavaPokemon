@@ -33,7 +33,7 @@ public class Shop extends Scene {
 
 		this.selection = 0;
 		this.startIndexX = 0;
-		this.maxItemsPage = 10;
+		this.maxItemsPage = 11;
 	}
 
 	@Override
@@ -44,7 +44,9 @@ public class Shop extends Scene {
 			} else if (action.compareTo("B") == 0) {
 				cancel();
 			} else if (action.compareTo("START") == 0) {
-			} else if (action.compareTo("UP") == 0 || action.compareTo("DOWN") == 0) {
+			}
+		} else if (state.compareTo("PRESS") == 0) {
+			if (action.compareTo("UP") == 0 || action.compareTo("DOWN") == 0) {
 				move(action);
 			}
 		}
@@ -73,24 +75,23 @@ public class Shop extends Scene {
 	@Override
 	protected void move(String dir) {
 		if (dir.compareTo("UP") == 0) {
+			if (selection == startIndexX) {
+				startIndexX = startIndexX - 1;
+			}
 			selection = selection - 1;
 		} else if (dir.compareTo("DOWN") == 0) {
+			if (selection-(maxItemsPage-1) == startIndexX) {
+				startIndexX = startIndexX + 1;
+			}
 			selection = selection + 1;
-		}
-
-		int dispSelection = startIndexX - selection;
-		if (dispSelection > maxItemsPage) {
-			selection = selection - 1;
-			startIndexX = startIndexX + 1;
-		} else if (dispSelection < 0) {
-			selection = selection + 1;
-			startIndexX = startIndexX - 1;
 		}
 
 		if (startIndexX > inventory.length - maxItemsPage) {
 			startIndexX = inventory.length - maxItemsPage;
+			selection = inventory.length-1;
 		} else if (startIndexX < 0) {
 			startIndexX = 0;
+			selection = 0;
 		}
 
 	}
@@ -103,18 +104,59 @@ public class Shop extends Scene {
 		float RESIZE = 2.0f;
 		int windowWidth = (int) (120 * RESIZE), windowHeight = ssY;
 		try {
-			g.drawImage(genWindow(0, windowWidth, windowHeight), ssX - windowWidth, 0, null);
+			g.drawImage(genWindow(0, windowWidth, windowHeight), ssX - windowWidth-1, 1, null);
+			g.drawImage(genWindow(0, 130, 60), 1, 1, null);
+			g.drawImage(genWindow(0, 80, 80), 24, 71, null);
+			g.drawImage(genWindow(0, ssX - 243, 120), 1, ssY - 121, null);
 		} catch (IOException ex) {
 		}
-
+		
 		g.setColor(Color.black);
+		g.setFont(new Font("Arial", Font.BOLD, 15));
+		g.drawString("$  "+main.player.getFunds(), 15, 36);
+		
+		int charsInLine = 27;
+		String fullD = new pokemonviolet.model.Item(inventory[selection]).getDescription();
+		for (int i = 0; i < (fullD.length()/charsInLine)+1; i++) {
+			String prefix = "", suffix = "";
+			int thisLineFirstChar = i * 27;
+			int thisLinePrevChar = thisLineFirstChar - 1;
+			int thisLineLastChar = ((i + 1) * 27) - 2;
+			int thisLineNextChar = thisLineLastChar + 1;
+			
+			if (thisLineFirstChar != 0){
+				if (fullD.charAt(thisLinePrevChar) != ' ') {
+					prefix = "" + fullD.charAt(thisLinePrevChar);
+				}
+			}
+			
+			if (thisLineLastChar < fullD.length()){
+				if (fullD.charAt(thisLineNextChar) != ' ') {
+					suffix = "-";
+				}
+			} else {
+				thisLineLastChar = fullD.length() - 1;
+			}
+			
+			g.drawString(prefix + fullD.substring(thisLineFirstChar, thisLineLastChar) + suffix, 15, ssY - 142 + 45 + (i * 20));
+		}
+//		g.drawString(fullD, 15, ssY - 142 + 35);
+		
+		
+		try{
+			g.drawImage(new pokemonviolet.model.Item(inventory[selection]).getImage(), 34, 81, null);
+		} catch ( IOException ex) {
+			
+		}
+			
+		
 		g.setFont(new Font("Arial", Font.BOLD, 25));
 		for (int i = startIndexX; i < startIndexX + maxItemsPage; i++) {
-			g.drawString(new pokemonviolet.model.Item(inventory[i]).getNameSingular(), ssX - windowWidth + 30, (int) ((ssY / 2) - (windowHeight / 2)) + 40 + (i * 25));
+			g.drawString(new pokemonviolet.model.Item(inventory[i]).getNameSingular(), ssX - windowWidth + 30, (int) ((ssY / 2) - (windowHeight / 2)) + 40 + ((i-startIndexX) * 25));
 		}
 
 		try {
-			int dispSelection = startIndexX - selection;
+			int dispSelection = selection - startIndexX;
 			g.drawImage(ImageIO.read(new File("assets/arrow.png")), ssX - windowWidth + 10, (int) ((ssY / 2) - (windowHeight / 2)) + 22 + (dispSelection * 25), 20, 20, null);
 		} catch (IOException ex) {
 		}

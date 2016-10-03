@@ -36,9 +36,8 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		ImageIcon icon = new ImageIcon("assets/Nabu.png");
-		this.setIconImage(icon.getImage());
+		
+		this.setIconImage(new ImageIcon("assets/Nabu.png").getImage());
 
 		screen = new GameDisplay();
 		screen.setBounds(1, 1, Handler.SCREEN_SIZE_X, Handler.SCREEN_SIZE_Y);

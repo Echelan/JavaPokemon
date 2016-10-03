@@ -70,13 +70,17 @@ public class StarterChoose extends Scene {
 			}
 		}
 
-		if (!konamid && state.compareTo("RELEASE") == 0) {
-			if (action.compareTo("A") == 0) {
-				accept();
-			} else if (action.compareTo("B") == 0) {
-				cancel();
-			} else if (action.compareTo("LEFT") == 0 || action.compareTo("RIGHT") == 0) {
-				move(action);
+		if (!konamid) {
+			if (state.compareTo("RELEASE") == 0) {
+				if (action.compareTo("A") == 0) {
+					accept();
+				} else if (action.compareTo("B") == 0) {
+					cancel();
+				}
+			} else if (state.compareTo("PRESS") == 0) {
+				if (action.compareTo("LEFT") == 0 || action.compareTo("RIGHT") == 0) {
+					move(action);
+				}
 			}
 		}
 	}
