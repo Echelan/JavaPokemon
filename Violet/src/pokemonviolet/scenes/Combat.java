@@ -449,38 +449,23 @@ public class Combat extends Scene {
 			}
 
 			private void subSubActionPreDispose() {
-			canDispose = true;
-			if (currentPlayerPokemon.isFainted()) {
-				displayTextQueue.add(player.getName() + " wiped out!");
-			} else {
-				if (this.caught[enemy.getCurrentPokemon()] != 1) {
-					displayTextQueue.add(currentPlayerPokemon.getNameNick() + " gained " + currentEnemyPokemon.getExpGain() + " EXP!");
-					boolean levelUp = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP() + currentEnemyPokemon.getExpGain());
-					doneExpPlayer = false;
-					if (levelUp) {
-						displayTextQueue.add(currentPlayerPokemon.getNameNick() + " is now level " + currentPlayerPokemon.getLevel() + "!");
-					}
-				}
-				Random rnd = new Random();
-				int lootRoll = rnd.nextInt(100);
-				if (lootRoll == 0) {
-					displayTextQueue.add("Found a Masterball!");
-					player.addItem("MASTERBALL", 1);
-				} else if (lootRoll < 10) {
-					displayTextQueue.add("Found an Ultraball!");
-					player.addItem("ULTRABALL", 1);
-				} else if (lootRoll < 40) {
-					displayTextQueue.add("Found a Greatball!");
-					player.addItem("GREATBALL", 1);
-				} else if (lootRoll < 50) {
-					displayTextQueue.add("Found a Premier Ball!");
-					player.addItem("PREMIERBALL", 1);
+				canDispose = true;
+				if (currentPlayerPokemon.isFainted()) {
+					displayTextQueue.add(player.getName() + " blacked out!");
+					displayTextQueue.add(player.getName() + " was left with $"+player.blackOut()+"!");
 				} else {
-					displayTextQueue.add("Found a Pokeball!");
-					player.addItem("POKEBALL", 1);
+					if (this.caught[enemy.getCurrentPokemon()] != 1) {
+						displayTextQueue.add(currentPlayerPokemon.getNameNick() + " gained " + currentEnemyPokemon.getExpGain() + " EXP!");
+						boolean levelUp = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP() + currentEnemyPokemon.getExpGain());
+						doneExpPlayer = false;
+						if (levelUp) {
+							displayTextQueue.add(currentPlayerPokemon.getNameNick() + " is now level " + currentPlayerPokemon.getLevel() + "!");
+						}
+					}
+					displayTextQueue.add(player.getName() + " earned $" + enemy.getReward() + "!");
+					player.setFunds(player.getFunds()+enemy.getReward());
 				}
 			}
-		}
 		//</editor-fold>
 	//</editor-fold>
 
@@ -743,7 +728,10 @@ public class Combat extends Scene {
 				if (displayExpPlayer < currentPlayerPokemon.getCurEXP()) {
 					displayExpPlayer = displayExpPlayer + delta;
 				} else if (displayExpPlayer > currentPlayerPokemon.getCurEXP()) {
-					displayExpPlayer = 0;
+					displayExpPlayer = displayExpPlayer + delta;
+					if (displayExpPlayer > currentPlayerPokemon.getMaxEXP()) {
+						displayExpPlayer = 0;
+					}
 				} else {
 					doneExpPlayer = true;
 				}

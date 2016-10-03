@@ -24,7 +24,7 @@ public class Trainer {
 			/**
 			 * Trainer reward.
 			 */
-			private final int reward;
+			private final int base;
 			/**
 			 * Trainer name.
 			 */
@@ -64,7 +64,7 @@ public class Trainer {
 			//	}
 		}
 
-		this.reward = 100;
+		this.base = 100;
 	}
 
 	//<editor-fold defaultstate="collapsed" desc="Getters & Setters">
@@ -72,7 +72,7 @@ public class Trainer {
 	 * @return the reward
 	 */
 	public int getReward() {
-		return reward;
+		return base*team[numPokemonTeam].getLevel();
 	}
 
 	/**

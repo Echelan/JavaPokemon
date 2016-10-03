@@ -341,6 +341,7 @@ public class Handler implements Runnable {
 	private void steppedGrass() {
 		player.setSpawnSteps(player.getSpawnSteps() - 1);
 		if (player.getSpawnSteps() == 0) {
+			player.setRunning(false);
 			int maxNum = 0;
 			int[][] enemyTeam = new int[6][2];
 

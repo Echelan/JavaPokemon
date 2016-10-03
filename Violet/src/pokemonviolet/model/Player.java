@@ -240,7 +240,7 @@ public final class Player {
 		}
 		this.team = new Pokemon[6];
 		this.PC = new Pokemon[200];
-		this.setFunds(0);
+		this.setFunds(500);
 		this.pocketBalls = new Item[100];
 		this.pocketBattles = new Item[100];
 		this.pocketItems = new Item[100];
@@ -730,6 +730,13 @@ public final class Player {
 			}
 			team[i].setStatus("");
 		}
+	}
+	
+	public int blackOut() {
+		pokemonCenter();
+		this.funds = this.funds/2;
+		
+		return this.funds;
 	}
 	
 	/**
