@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Random;
 import pokemonviolet.scenes.Combat;
 import pokemonviolet.scenes.Scene;
+import pokemonviolet.view.GameWindow;
 
 /**
  *
@@ -51,6 +52,8 @@ public class Handler implements Runnable {
 		private boolean randomPokemon = false;
 		private boolean fillTeam = false;
 		private Thread thisThread;
+		private GameWindow gw;
+		
 	// </editor-fold>
 
 	/**
@@ -62,7 +65,7 @@ public class Handler implements Runnable {
 		SCREEN_SIZE_X = 480;
 		SCREEN_SIZE_Y = 320;
 		
-		new pokemonviolet.view.GameWindow();
+		gw = new GameWindow();
 
 		thisThread = new Thread(this);
 
@@ -166,8 +169,8 @@ public class Handler implements Runnable {
 		
 		int diffX, diffY;
 		
-		diffX = newPlayerMapX - player.calcMapX();
-		diffY = newPlayerMapY - player.calcMapY();
+		diffX = newPlayerMapX - (player.calcMapX()+1);
+		diffY = newPlayerMapY - (player.calcMapY()+1);
 		
 		posX = posX - (diffX * Map.MAP_ROW_TILES);
 		posY = posY - (diffY * Map.MAP_ROW_TILES);
@@ -387,6 +390,11 @@ public class Handler implements Runnable {
 			yTile = yTile + 20;
 		}
 		return displayedMaps[1][1].getWildPokemon(xTile, yTile);
+	}
+	
+	public void canContinue() {
+		gw.setVisible(true);
+		gw.startCanvasThread();
 	}
 	
 	@Override

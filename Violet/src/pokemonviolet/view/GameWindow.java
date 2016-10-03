@@ -35,9 +35,7 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 		setTitle("Pokemon Violet [GAME]");
 		setResizable(false);
 		setLocationRelativeTo(null);
-		//	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//	setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
 		ImageIcon icon = new ImageIcon("assets/Nabu.png");
 		this.setIconImage(icon.getImage());
@@ -48,18 +46,15 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 		screen.setFocusable(false);
 		add(screen);
 
-		//Movement Mover = new KeyHandler();
 		addKeyListener(new KeyHandler());
 
-		Thread screenThread = new Thread(screen);
-
-		setVisible(true);
-		//	setVisible(false);
-		//	setVisible(visible);
-
-		screenThread.start();
+		setVisible(false);
 	}
-
+	
+	public void startCanvasThread(){
+		screen.thisThread.start();
+	}
+	
 	//<editor-fold defaultstate="collapsed" desc="Overriden JFrame Methods">
 		@Override
 		public void actionPerformed(ActionEvent e) {

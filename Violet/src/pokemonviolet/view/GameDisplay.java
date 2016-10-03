@@ -17,13 +17,15 @@ import pokemonviolet.model.Handler;
  */
 public class GameDisplay extends Canvas implements Runnable {
 
-	String lastState;
+	private String lastState;
+	public Thread thisThread;
 
 	/**
 	 * Create a GameDisplay custom canvas.
 	 */
 	public GameDisplay() {
 		lastState = "";
+		thisThread = new Thread(this);
 	}
 
 	@Override

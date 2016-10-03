@@ -138,16 +138,25 @@ public class StarterChoose extends Scene {
 		g.setFont(new Font("Arial", Font.BOLD, 15));
 		for (int i = 0; i < pokeID.length; i++) {
 			int x = 5 + (i * (ssX / 3));
+			
 			try {
-				g.drawImage(ImageIO.read(new File("assets/pokemon/" + pokeID[i] + "mfn.png")), x, ssY / 3, characterWidth, characterHeight, null);
+				g.drawImage(ImageIO.read(new File("assets/pokemon/" + pokeID[i] + "mfn.png")), x, ssY / 5, characterWidth, characterHeight, null);
 				if (chosen == i) {
 					g.setColor(Color.WHITE);
 				} else {
 					g.setColor(Color.GRAY);
 				}
-				g.drawString(pokeNames[i], x + (characterWidth / 4), ssY / 3 + characterHeight + 5);
+				g.drawString(pokeNames[i], x + (characterWidth / 4), ssY / 5 + characterHeight + 5);
 			} catch (IOException ex) {
 			}
+		}
+			
+		try{
+			g.drawImage(ImageIO.read(new File("assets/moveLeft.png")), 60, ssY-80, 140, 70, null);
+			g.drawImage(ImageIO.read(new File("assets/moveRight.png")), 210, ssY-80, 140, 70, null);
+			g.drawImage(ImageIO.read(new File("assets/buttonB.png")), 360, ssY-80, 70, 70, null);
+		}catch(IOException ex){
+
 		}
 
 		return display;

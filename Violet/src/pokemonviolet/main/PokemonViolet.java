@@ -7,31 +7,65 @@
  */
 package pokemonviolet.main;
 
+import java.awt.Graphics;
+import java.awt.MediaTracker;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
+import javax.swing.JWindow;
+import pokemonviolet.model.Handler;
+
 /**
  *
  * @author Andres
  */
 public class PokemonViolet {
 
+	private static Handler h;
+	
 	public static void main(String[] args) throws InterruptedException {
 
-		SplashWindow splash = new SplashWindow();
+		SplashWindow s = new SplashWindow();
 
 		pokemonviolet.data.NIC.loadData();
 
+		h = new Handler();
+
 		try {
-			Thread.sleep(500);
+			Thread.sleep(1000);
 		} catch (InterruptedException ex) {
+		}
+		
+		s.dispose();
+		h.canContinue();
+	}	
+	
+	private static class SplashWindow extends JWindow {
+
+		BufferedImage image;
+		MediaTracker media;
+
+		/**
+		 * Create a splash window.
+		 */
+		public SplashWindow() {
+			media = new MediaTracker(this);
+
+			try {
+				image = ImageIO.read(new File("assets/splashImage.png"));
+				media.addImage(image, 0);
+				media.waitForID(0);
+			} catch (Exception ex) {
+			}
+
+			setSize(image.getWidth(), image.getHeight());
+			setLocationRelativeTo(null);
+			setVisible(true);
 		}
 
-		new pokemonviolet.model.Handler();
-		
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException ex) {
+		@Override
+		public void paint(Graphics g) {
+			g.drawImage(image, 0, 0, this);
 		}
-		
-		splash.dispose();
 	}
-
 }

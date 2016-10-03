@@ -188,6 +188,17 @@ public class Title extends Scene {
 				g.setFont(new Font("Arial", Font.BOLD, 25));
 				g.drawString("Press Start", 35, 250);
 			}
+
+			try {
+				if (logoY != finalLogoY) {
+					logoY = logoY + 20;
+					if (ready) {
+						ready = false;
+					}
+				}
+				g.drawImage(ImageIO.read(new File("assets/buttonStart.png")), ((int) ssX/2)-60, 200, 140, 60, null);
+			} catch (IOException ex) {
+			}
 		}
 
 		return display;

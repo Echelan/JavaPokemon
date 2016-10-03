@@ -33,7 +33,7 @@ public class GenderChoose extends Scene {
 	@Override
 	public void receiveKeyAction(String action, String state) {
 		if (state.compareTo("RELEASE") == 0) {
-			if (action.compareTo("LEFT") == 0 || action.compareTo("RIGHT") == 0) {
+			if (action.compareTo("UP") == 0 || action.compareTo("DOWN") == 0) {
 				move(action);
 			} else if (action.compareTo("A") == 0) {
 				accept();
@@ -62,9 +62,9 @@ public class GenderChoose extends Scene {
 
 	@Override
 	protected void move(String dir) {
-		if (dir.compareTo("LEFT") == 0) {
+		if (dir.compareTo("UP") == 0) {
 			chosen = chosen - 1;
-		} else if (dir.compareTo("RIGHT") == 0) {
+		} else if (dir.compareTo("DOWN") == 0) {
 			chosen = chosen + 1;
 		}
 
@@ -93,21 +93,29 @@ public class GenderChoose extends Scene {
 		g.setFont(new Font("Arial", Font.BOLD, 30));
 		g.drawString("Are you boy or a girl?", ssX / 5, 30);
 
-		float resize = 2.5f;
+		float resize = 2.0f;
 		int characterWidth = (int) (40 * resize), characterHeight = (int) (82 * resize);
 
+		try {
+			g.drawImage(ImageIO.read(new File("assets/" + genders[chosen].toLowerCase() + "Char.png")), 100 + (ssX / 2), 50, characterWidth, characterHeight, null);
+		} catch (IOException ex) {
+		}
 		for (int i = 0; i < genders.length; i++) {
-			int x = 75 + (i * (ssX / 2));
-			try {
-				g.drawImage(ImageIO.read(new File("assets/" + genders[i].toLowerCase() + "Char.png")), x, 50, characterWidth, characterHeight, null);
-				if (chosen == i) {
-					g.setColor(Color.WHITE);
-				} else {
-					g.setColor(Color.GRAY);
-				}
-				g.drawString(name[i], x + (characterWidth / 4), ssY - 20);
-			} catch (IOException ex) {
+			int y = 110 + (i*70);
+			if (chosen == i) {
+				g.setColor(Color.WHITE);
+			} else {
+				g.setColor(Color.GRAY);
 			}
+			g.drawString(name[i], 120, y);
+		}
+
+		try{
+			g.drawImage(ImageIO.read(new File("assets/moveUp.png")), 60, ssY-80, 140, 70, null);
+			g.drawImage(ImageIO.read(new File("assets/moveDown.png")), 210, ssY-80, 140, 70, null);
+			g.drawImage(ImageIO.read(new File("assets/buttonA.png")), 360, ssY-80, 70, 70, null);
+		}catch(IOException ex){
+
 		}
 
 		return display;
