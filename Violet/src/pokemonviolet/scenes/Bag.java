@@ -47,7 +47,6 @@ public class Bag extends Scene {
 
 	@Override
 	protected void start() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override

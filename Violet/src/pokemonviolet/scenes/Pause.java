@@ -32,6 +32,21 @@ public class Pause extends Scene {
 	}
 
 	@Override
+	public void receiveKeyAction(String action, String state) {
+		if (state.compareTo("RELEASE") == 0) {
+			if (action.compareTo("A") == 0) {
+				accept();
+			} else if (action.compareTo("B") == 0) {
+				cancel();
+			} else if (action.compareTo("START") == 0) {
+				start();
+			} else if (action.compareTo("UP") == 0 || action.compareTo("DOWN") == 0) {
+				move(action);
+			}
+		}
+	}
+
+	@Override
 	protected void accept() {
 		if (options[selection].compareTo("Heal") == 0) {
 			main.player.pokemonCenter();
@@ -78,7 +93,7 @@ public class Pause extends Scene {
 		float RESIZE = 2.0f;
 		int windowWidth = (int) (90 * RESIZE), windowHeight = (int) (127 * RESIZE);
 		try {
-			g.drawImage(genWindow(0, windowWidth, windowHeight), ssX - windowWidth, (int) ((ssY / 2) - (windowHeight / 2)), null);
+			g.drawImage(genWindow(4, windowWidth, windowHeight), ssX - windowWidth - 1, (int) ((ssY / 2) - (windowHeight / 2)), null);
 		} catch (IOException ex) {
 		}
 
@@ -94,21 +109,6 @@ public class Pause extends Scene {
 		}
 
 		return tempStitched;
-	}
-
-	@Override
-	public void receiveKeyAction(String action, String state) {
-		if (state.compareTo("RELEASE") == 0) {
-			if (action.compareTo("A") == 0) {
-				accept();
-			} else if (action.compareTo("B") == 0) {
-				cancel();
-			} else if (action.compareTo("START") == 0) {
-				start();
-			} else if (action.compareTo("UP") == 0 || action.compareTo("DOWN") == 0) {
-				move(action);
-			}
-		}
 	}
 
 }
