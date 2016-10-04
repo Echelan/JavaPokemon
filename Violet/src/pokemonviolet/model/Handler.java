@@ -90,15 +90,11 @@ public class Handler implements Runnable {
 			for (int i = player.calcMapX() - 1; i < player.calcMapX() + 2; i++) {
 				List<String> thisMapInfo;
 
-				if (i < 1 || i > maxMapsX || j < 1 || j > maxMapsY) {
+				if (i < 1 || i >= maxMapsX || j < 1 || j >= maxMapsY) {
 					thisMapInfo = new ArrayList<String>(pokemonviolet.data.NIC.INFO_BLANK_MAP);
 				} else {
 					int mapID = ((j) * maxMapsX) + i;
-					if (mapID < pokemonviolet.data.NIC.INFO_MAPS.size()) {
-						thisMapInfo = new ArrayList<String>(pokemonviolet.data.NIC.INFO_MAPS.get(mapID));
-					} else {
-						thisMapInfo = new ArrayList<String>(pokemonviolet.data.NIC.INFO_BLANK_MAP);
-					}
+					thisMapInfo = new ArrayList<String>(pokemonviolet.data.NIC.INFO_MAPS.get(mapID));
 				}
 				if (thisMapInfo.get(0).split(";")[0].compareTo("#") == 0) {
 					thisMapInfo.remove(0);
