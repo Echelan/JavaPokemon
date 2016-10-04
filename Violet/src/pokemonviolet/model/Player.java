@@ -61,6 +61,7 @@ public final class Player {
 			 * Current active Pokemon.
 			 */
 			private int currentPokemon;
+			private boolean[] pokeDex;
 		// </editor-fold>
 		// <editor-fold defaultstate="collapsed" desc="Movement">
 			/**
@@ -210,6 +211,7 @@ public final class Player {
 		this.setxTile(30);
 		this.setyTile(30);
 		this.setCurrentPokemon(0);
+		this.pokeDex = new boolean[151];
 		setSpawnSteps(roll(1, 2, 3));
 	}
 
@@ -221,7 +223,10 @@ public final class Player {
 	 * PC, 2 = Released)
 	 */
 	public int addPokemon(Pokemon newPokemon) {
-		int response = 0;
+		int response;
+		
+		this.pokeDex[newPokemon.getId() - 1] = true;
+		
 		if (getNumPokemonTeam() == 6) {
 			if (getNumPokemonPC() == 200) {
 				response = 2;

@@ -94,7 +94,11 @@ public class Handler implements Runnable {
 					thisMapInfo = new ArrayList<String>(pokemonviolet.data.NIC.INFO_BLANK_MAP);
 				} else {
 					int mapID = ((j) * maxMapsX) + i;
-					thisMapInfo = new ArrayList<String>(pokemonviolet.data.NIC.INFO_MAPS.get(mapID));
+					if (mapID < pokemonviolet.data.NIC.INFO_MAPS.size()) {
+						thisMapInfo = new ArrayList<String>(pokemonviolet.data.NIC.INFO_MAPS.get(mapID));
+					} else {
+						thisMapInfo = new ArrayList<String>(pokemonviolet.data.NIC.INFO_BLANK_MAP);
+					}
 				}
 				if (thisMapInfo.get(0).split(";")[0].compareTo("#") == 0) {
 					thisMapInfo.remove(0);
@@ -319,13 +323,13 @@ public class Handler implements Runnable {
 		int xTile, yTile;
 		xTile = player.getxTile();
 		yTile = player.getyTile();
-		while (xTile > 20) {
+		while (xTile > 19) {
 			xTile = xTile - 20;
 		}
 		while (xTile < 0) {
 			xTile = xTile + 20;
 		}
-		while (yTile > 20) {
+		while (yTile > 19) {
 			yTile = yTile - 20;
 		}
 		while (yTile < 0) {

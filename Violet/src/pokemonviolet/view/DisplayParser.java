@@ -26,7 +26,7 @@ public abstract class DisplayParser {
 
 		int counter = 0;
 		boolean done = false;
-
+		
 		if (!Handler.gameState.isEmpty()) {
 			while (!done) {
 				counter = counter + 1;
@@ -34,7 +34,15 @@ public abstract class DisplayParser {
 
 				done = thisScene.isFull();
 			}
-
+			
+			if (Handler.gameState.get(Handler.gameState.size() - counter).getName() == "GAME") {
+				for (int i = 0; i < ssX/32; i++) {
+					for (int j = 0; j < ssY/32; j++) {
+						g.drawImage(GameDisplay.water, i*32, j*32, null);
+					}
+				}
+			}
+			
 			for (int i = Handler.gameState.size() - counter; i < Handler.gameState.size(); i++) {
 				g.drawImage(Handler.gameState.get(i).getDisplay(), 0, 0, null);
 			}

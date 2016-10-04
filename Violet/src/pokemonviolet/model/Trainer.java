@@ -72,7 +72,7 @@ public class Trainer {
 	 * @return the reward
 	 */
 	public int getReward() {
-		return base*team[numPokemonTeam].getLevel();
+		return base*team[numPokemonTeam-1].getLevel();
 	}
 
 	/**
