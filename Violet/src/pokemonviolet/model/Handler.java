@@ -77,6 +77,7 @@ public class Handler implements Runnable {
 		displayedMaps = new Map[3][3];
 
 		player = new Player(name, gender, new Pokemon(pokeID, 5, "POKEBALL"));
+				
 		player.addItem("POKEBALL", 15);
 		player.addItem("MASTERBALL", 1);
 

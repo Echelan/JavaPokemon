@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import pokemonviolet.model.Handler;
-import static pokemonviolet.scenes.Scene.ssX;
 
 /**
  *
@@ -59,8 +58,11 @@ public class BuyDialog extends Scene{
 	@Override
 	protected void accept() {
 		if (choice == 0) {
-			main.player.addItem(new pokemonviolet.model.Item(itemID, itemAmount));
-			this.dispose();
+			if (main.player.getFunds() >= curPrice) {
+				main.player.setFunds(main.player.getFunds() - curPrice);
+				main.player.addItem(new pokemonviolet.model.Item(itemID, itemAmount));
+				this.dispose();
+			}
 		} else if (choice == 1) {
 			this.dispose();
 		}
@@ -125,7 +127,13 @@ public class BuyDialog extends Scene{
 		g.setColor(Color.black);
 		g.setFont(new Font("Arial", Font.BOLD, 20));
 		g.drawString("x"+itemAmount, x + 20, 80);
+		
+		if (curPrice > main.player.getFunds()) {
+			g.setColor(Color.red);
+		}
 		g.drawString("$  "+curPrice, x + 20, 141);
+		
+		g.setColor(Color.black);
 		for (int i = 0; i < choices.length; i++) {
 			g.drawString(choices[i], x + 30, 203 + (i * 30));
 		}

@@ -13,9 +13,9 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import pokemonviolet.model.Handler;
-import static pokemonviolet.scenes.Scene.ssX;
 
 /**
  *
@@ -23,8 +23,7 @@ import static pokemonviolet.scenes.Scene.ssX;
  */
 public class Shop extends Scene {
 	private int[] fullInventory = {1, 2, 3, 5, 6, 7, 8, 9, 10, 19, 20, 21, 22, 23, 24, 32, 33, 34, 35, 36, 37, 38, 39, 40, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 57, 58, 59, 60};
-	private int[][] perPocketInventory;
-	private int[] perPocketSize;
+	private ArrayList<Integer>[] perPocketInventory;
 	private String[] categoryNames = {"Items", "Medicine", "PokeBalls"};
 	private int selection;
 	private int category;
@@ -33,10 +32,10 @@ public class Shop extends Scene {
 
 	public Shop(Handler main) {
 		super(main, "SHOP", false);
-		perPocketInventory = new int[3][50];
-		perPocketSize = new int[3];
-		for (int i = 0; i < perPocketSize.length; i++) {
-			perPocketSize[i] = 0;
+		
+		perPocketInventory = new ArrayList[3];
+		for (int i = 0; i < perPocketInventory.length; i++) {
+			perPocketInventory[i] = new ArrayList<Integer>();
 		}
 		
 		/*
@@ -61,8 +60,7 @@ public class Shop extends Scene {
 				break;
 			}
 			if (pocket != -1)  {
-				perPocketInventory[pocket][perPocketSize[pocket]] = fullInventory[i];
-				perPocketSize[pocket] = perPocketSize[pocket] + 1;
+				perPocketInventory[pocket].add( fullInventory[i] );
 			}
 		}
 		
@@ -90,7 +88,11 @@ public class Shop extends Scene {
 
 	@Override
 	protected void accept() {
-		main.gameState.add(new BuyDialog(main,perPocketInventory[category][selection]));
+		if (selection == perPocketInventory[category].size()) {
+			this.dispose();
+		} else {
+			main.gameState.add(new BuyDialog(main,perPocketInventory[category].get(selection)));
+		}
 	}
 
 	@Override
@@ -136,11 +138,11 @@ public class Shop extends Scene {
 			category = 0;
 		}
 		
-		if (selection >= perPocketSize[category]) {
-			if (startIndexX > perPocketSize[category] - maxItemsPage && perPocketSize[category] > maxItemsPage) {
-				startIndexX = perPocketSize[category] - maxItemsPage;
+		if (selection > perPocketInventory[category].size()) {
+			if (startIndexX > perPocketInventory[category].size() - maxItemsPage && perPocketInventory[category].size() > maxItemsPage) {
+				startIndexX = perPocketInventory[category].size() - maxItemsPage;
 			}
-			selection = perPocketSize[category] - 1;
+			selection = perPocketInventory[category].size();
 		} else if (startIndexX < 0) {
 			startIndexX = 0;
 			selection = 0;
@@ -155,12 +157,13 @@ public class Shop extends Scene {
 		float RESIZE = 2.0f;
 		int windowWidth = (int) (120 * RESIZE), windowHeight = (int) (ssY * 0.8);
 		try {
-			g.drawImage(genWindow(0, windowWidth, ssY - windowHeight - 3), ssX - windowWidth - 1, 1, null);
-			g.drawImage(genWindow(0, windowWidth, windowHeight), ssX - windowWidth - 1, ssY-windowHeight - 1, null);
-			g.drawImage(genWindow(0, 130, 60), 1, 1, null);
-			g.drawImage(genWindow(0, 80, 80), 24, 66, null);
-			g.drawImage(genWindow(0, ssX - windowWidth - 3, 120), 1, ssY - 121, null);
-			g.drawImage(genWindow(0, ssX - windowWidth - 3, 50), 1, ssY - 122 - 50, null);
+			int theme = 0;
+			g.drawImage(genWindow(theme, windowWidth, ssY - windowHeight - 3), ssX - windowWidth - 1, 1, null);
+			g.drawImage(genWindow(theme, windowWidth, windowHeight), ssX - windowWidth - 1, ssY-windowHeight - 1, null);
+			g.drawImage(genWindow(theme, 130, 60), 1, 1, null);
+			g.drawImage(genWindow(theme, 80, 80), 24, 66, null);
+			g.drawImage(genWindow(theme, ssX - windowWidth - 3, 120), 1, ssY - 121, null);
+			g.drawImage(genWindow(theme, ssX - windowWidth - 3, 50), 1, ssY - 122 - 50, null);
 		} catch (IOException ex) {
 		}
 		
@@ -169,52 +172,60 @@ public class Shop extends Scene {
 		g.drawString("$  "+main.player.getFunds(), 15, 36);
 		
 		g.setFont(new Font("Arial", Font.BOLD, 20));
-		g.drawString(categoryNames[category], ssX - windowWidth + 20, 36);
+		g.drawString(categoryNames[category], ssX - windowWidth + 20, 40);
 		
-		g.setFont(new Font("Arial", Font.PLAIN, 15));
-		int charsInLine = 30;
-		String fullD = new pokemonviolet.model.Item(perPocketInventory[category][selection]).getDescription();
-		for (int i = 0; i < (fullD.length() / charsInLine) + 1; i++) {
-			String prefix = "", suffix = "";
-			
-			int thisLineFirstChar = i * charsInLine;
-			int thisLinePrevChar = thisLineFirstChar - 1;
-			int thisLineLastChar = ((i + 1) * charsInLine) - 2;
-			int thisLineNextChar = thisLineLastChar + 1;
-			
-			if (thisLineFirstChar != 0){
-				if (fullD.charAt(thisLinePrevChar) != ' ') {
-					prefix = "" + fullD.charAt(thisLinePrevChar);
+		if (selection != perPocketInventory[category].size()) {
+			g.setFont(new Font("Arial", Font.PLAIN, 15));
+			int charsInLine = 30;
+			String fullD = new pokemonviolet.model.Item(perPocketInventory[category].get(selection)).getDescription();
+			for (int i = 0; i < (fullD.length() / charsInLine) + 1; i++) {
+				String prefix = "", suffix = "";
+
+				int thisLineFirstChar = i * charsInLine;
+				int thisLinePrevChar = thisLineFirstChar - 1;
+				int thisLineLastChar = ((i + 1) * charsInLine) - 2;
+				int thisLineNextChar = thisLineLastChar + 1;
+
+				if (thisLineFirstChar != 0){
+					if (fullD.charAt(thisLinePrevChar) != ' ') {
+						prefix = "" + fullD.charAt(thisLinePrevChar);
+					}
 				}
+
+				if (thisLineNextChar < fullD.length()) {
+					if (fullD.charAt(thisLineNextChar) != ' ' && fullD.charAt(thisLineLastChar) != ' ') {
+						suffix = "-";
+					}
+				} else {
+					thisLineLastChar = fullD.length() - 1;
+				}
+
+				g.drawString(prefix + fullD.substring(thisLineFirstChar, thisLineLastChar+1) + suffix, 15, ssY - 142 + 45 + (i * 20));
+			}		
+
+			try{
+				g.drawImage(new pokemonviolet.model.Item(perPocketInventory[category].get(selection)).getImage(), 34, 76, null);
+			} catch ( IOException ex) {
+
 			}
 			
-			if (thisLineNextChar < fullD.length()) {
-				if (fullD.charAt(thisLineNextChar) != ' ' && fullD.charAt(thisLineLastChar) != ' ') {
-					suffix = "-";
-				}
-			} else {
-				thisLineLastChar = fullD.length() - 1;
-			}
-			
-			g.drawString(prefix + fullD.substring(thisLineFirstChar, thisLineLastChar+1) + suffix, 15, ssY - 142 + 45 + (i * 20));
-		}		
-		
-		try{
-			g.drawImage(new pokemonviolet.model.Item(perPocketInventory[category][selection]).getImage(), 34, 76, null);
-		} catch ( IOException ex) {
-			
+			g.setFont(new Font("Arial", Font.BOLD, 20));
+			g.drawString(new pokemonviolet.model.Item(perPocketInventory[category].get(selection)).getNameSingular(), 15, ssY - 140);
 		}
-			
+		
 		int maxIndex = startIndexX + maxItemsPage;
-		if (maxIndex > perPocketSize[category]) {
-			maxIndex = perPocketSize[category];
+		if (maxIndex > perPocketInventory[category].size() + 1) {
+			maxIndex = perPocketInventory[category].size() + 1;
 		}
 		
 		g.setFont(new Font("Arial", Font.BOLD, 20));
-		g.drawString(new pokemonviolet.model.Item(perPocketInventory[category][selection]).getNameSingular(), 15, ssY - 140);
 		for (int i = startIndexX; i < maxIndex; i++) {
-			g.drawString(new pokemonviolet.model.Item(perPocketInventory[category][i]).getNameSingular(), ssX - windowWidth + 20, ((ssY / 2) - (windowHeight / 2) + 65) + ((i-startIndexX) * 20));
-			g.drawString("$"+new pokemonviolet.model.Item(perPocketInventory[category][i]).getPrice(), ssX - (windowWidth / 2) + 50, ((ssY / 2) - (windowHeight / 2) + 65) + ((i-startIndexX) * 20));
+			if (i == perPocketInventory[category].size()) {
+				g.drawString("CANCEL", ssX - windowWidth + 20, ((ssY / 2) - (windowHeight / 2) + 65) + ((i-startIndexX) * 20));
+			} else {
+				g.drawString(new pokemonviolet.model.Item(perPocketInventory[category].get(i)).getNameSingular(), ssX - windowWidth + 20, ((ssY / 2) - (windowHeight / 2) + 65) + ((i-startIndexX) * 20));
+				g.drawString("$"+new pokemonviolet.model.Item(perPocketInventory[category].get(i)).getPrice(), ssX - (windowWidth / 2) + 50, ((ssY / 2) - (windowHeight / 2) + 65) + ((i-startIndexX) * 20));
+			}
 		}
 
 		try {

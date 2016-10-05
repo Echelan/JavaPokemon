@@ -9,35 +9,51 @@ package pokemonviolet.scenes;
 
 import java.awt.image.BufferedImage;
 import pokemonviolet.model.Handler;
+import pokemonviolet.model.Pokemon;
 
 /**
  *
  * @author Andres
  */
 public class PokemonTeam extends Scene {
-
+	
+	private Pokemon[] team;
+	
 	public PokemonTeam(Handler main) {
 		super(main, "TEAM", true);
+		
+		this.team = main.player.getTeam();
 	}
 
 	@Override
 	public void receiveKeyAction(String action, String state) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		if (state.compareTo("RELEASE") == 0) {
+			if (action.compareTo("A") == 0) {
+				accept();
+			} else if (action.compareTo("B") == 0) {
+				cancel();
+			} else if (action.compareTo("START") == 0) {
+			}
+		} else if (state.compareTo("PRESS") == 0) {
+			if (action.compareTo("UP") == 0 || action.compareTo("DOWN") == 0 || action.compareTo("LEFT") == 0 || action.compareTo("RIGHT") == 0) {
+				move(action);
+			}
+		}
 	}
 
 	@Override
 	protected void accept() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		
 	}
 
 	@Override
 	protected void cancel() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		this.dispose();
 	}
 
 	@Override
 	protected void dispose() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		main.gameState.remove(main.gameState.size() - 1);
 	}
 
 	@Override

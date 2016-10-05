@@ -53,6 +53,8 @@ public class Pause extends Scene {
 			this.dispose();
 		} else if (options[selection].compareTo("Shop") == 0) {
 			main.gameState.add(new Shop(main));
+		} else if (options[selection].compareTo("Bag") == 0) {
+			main.gameState.add(new Bag(main));
 		}
 	}
 

@@ -150,24 +150,14 @@ public class Combat extends Scene {
 			this.caught[enemy.getCurrentPokemon()] = 0;
 			Random rnd = new Random();
 			int randomMove = (rnd.nextInt(currentEnemyPokemon.getNumMoves()));
-			String prefix;
-			if (this.wildBattle) {
-				prefix = "Wild ";
-			} else {
-				prefix = "Foe ";
-			}
+			
 			doTurn(currentEnemyPokemon, currentPlayerPokemon, randomMove, enemyPrefix, selfPrefix);
 			turnNum = turnNum + 1;
 		} else if (currentEnemyPokemon.getStatSpeed() >= currentPlayerPokemon.getStatSpeed()) {
 			if (turnNum == 0) {
 				Random rnd = new Random();
 				int randomMove = (rnd.nextInt(currentEnemyPokemon.getNumMoves()));
-				String prefix;
-				if (this.wildBattle) {
-					prefix = "Wild ";
-				} else {
-					prefix = "Foe ";
-				}
+				
 				doTurn(currentEnemyPokemon, currentPlayerPokemon, randomMove, enemyPrefix, selfPrefix);
 			} else {
 				doTurn(currentPlayerPokemon, currentEnemyPokemon, optionsMoves, selfPrefix, enemyPrefix);
@@ -177,12 +167,7 @@ public class Combat extends Scene {
 			if (turnNum == 1) {
 				Random rnd = new Random();
 				int randomMove = (rnd.nextInt(currentEnemyPokemon.getNumMoves()));
-				String prefix;
-				if (this.wildBattle) {
-					prefix = "Wild ";
-				} else {
-					prefix = "Foe ";
-				}
+				
 				doTurn(currentEnemyPokemon, currentPlayerPokemon, randomMove, enemyPrefix, selfPrefix);
 			} else {
 				doTurn(currentPlayerPokemon, currentEnemyPokemon, optionsMoves, selfPrefix, enemyPrefix);
@@ -330,7 +315,7 @@ public class Combat extends Scene {
 				if (numBalls < 4) {
 					boolean foundOne = false;
 					while (counter < 5 && !foundOne) {
-						if (player.getAmountItem(pokeTypes[counter]) > 0) {
+						if (player.searchItem(pokeTypes[counter]) != null) {
 							order[numBalls] = pokeTypes[counter];
 							foundOne = true;
 							numBalls = numBalls + 1;
@@ -356,19 +341,15 @@ public class Combat extends Scene {
 					turnNum = 0;
 					inRound = false;
 				} else if (currentEnemyPokemon.isFainted()) {
-					String prefix;
-					if (this.wildBattle) {
-						prefix = "Wild ";
-					} else {
-						prefix = "Foe ";
-					}
-					displayTextQueue.add(prefix + currentEnemyPokemon.getNameNick() + " fainted!");
+					displayTextQueue.add(enemyPrefix + " "  + currentEnemyPokemon.getNameNick() + " fainted!");
 
 					currentMenu = "MAIN";
 					turnNum = 0;
 					inRound = false;
 				} else if (currentPlayerPokemon.isFainted()) {
-					displayTextQueue.add(currentEnemyPokemon.getNameNick() + " fainted!");
+					displayTextQueue.add(selfPrefix + " " + currentPlayerPokemon.getNameNick() + " fainted!");
+					
+					currentMenu = "MAIN";
 					turnNum = 0;
 					inRound = false;
 				} else if (displayTextQueue.isEmpty()) {
@@ -401,6 +382,7 @@ public class Combat extends Scene {
 						currentMenu = "POKEMONF";
 						waitingAction = true;
 					} else if (!canDispose) {
+//						TODO: WHEN PLAYER BLACKS OUT, MENU POPS UP
 						subSubActionPreDispose();
 					} else {
 						this.dispose();
@@ -862,9 +844,11 @@ public class Combat extends Scene {
 						//</editor-fold>
 					} else if (currentMenu.compareTo("BALLS") == 0) {
 						//<editor-fold defaultstate="collapsed" desc="Balls UI Display">
-						int uiW = (240 * RESIZE), uiH = (48 * RESIZE);
-						g.drawImage(ImageIO.read(new File("assets/combat/uimovesdisplay.png")), ssX - uiW, ssY - uiH, uiW, uiH, null);
+						int ui1W = (80 * RESIZE), uiH = (48 * RESIZE), ui2W = (160 * RESIZE);
 
+						g.drawImage(genWindow(0, ui1W, uiH), ssX - ui1W, ssY - uiH, null);
+						g.drawImage(genWindow(0, ui2W, uiH), 0, ssY - uiH, null);
+						
 						g.drawImage(ImageIO.read(new File("assets/arrow.png")), 10 + (int) (Math.floor(optionsBalls % 2) * 140), ssY - 75 + (int) (Math.floor(optionsBalls / 2) * 40), 20, 20, null);
 
 						String[] pokeTypes = {"POKEBALL", "GREATBALL", "ULTRABALL", "PREMIERBALL", "MASTERBALL"};
@@ -876,7 +860,7 @@ public class Combat extends Scene {
 								boolean foundOne = false;
 								String option = "--";
 								while (counter < 5 && !foundOne) {
-									if (player.getAmountItem(pokeTypes[counter]) > 0) {
+									if (player.searchItem(pokeTypes[counter]) != null) {
 										option = new pokemonviolet.model.Item(pokeTypes[counter]).getNameSingular();
 										order[numBalls] = pokeTypes[counter];
 										foundOne = true;
@@ -896,7 +880,7 @@ public class Combat extends Scene {
 
 						if (optionsBalls < numBalls) {
 							g.setColor(Color.black);
-							g.drawString("x " + player.getAmountItem(order[optionsBalls]), ssX - 100, ssY - 40);
+							g.drawString("x " + player.searchItem(order[optionsBalls]).getAmount(), ssX - 100, ssY - 40);
 						}
 
 						for (int i = numBalls; i < 4; i++) {
@@ -909,7 +893,7 @@ public class Combat extends Scene {
 					} else if (currentMenu.compareTo("POKEMON") == 0 || currentMenu.compareTo("POKEMONF") == 0) {
 						//<editor-fold defaultstate="collapsed" desc="Pokemon UI Display">
 						int uiW = (110 * RESIZE), uiH = (110 * RESIZE);
-						g.drawImage(ImageIO.read(new File("assets/combat/extrabackground.png")), (ssX / 2) - (uiW / 2), (ssY / 2) - (uiH / 2), uiW, uiH, null);
+						g.drawImage(genWindow(5, uiW, uiH), (ssX / 2) - (uiW / 2), (ssY / 2) - (uiH / 2), uiW, uiH, null);
 
 						for (int i = 0; i < player.getNumPokemonTeam(); i++) {
 							if (player.getTeam()[i].isFainted()) {
