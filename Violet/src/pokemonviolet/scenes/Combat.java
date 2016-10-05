@@ -59,6 +59,7 @@ public class Combat extends Scene {
 
 	public Combat(Player player, Trainer enemy, boolean wildBattle, Handler main) {
 		super(main, "COMBAT", true);
+		
 		this.player = player;
 		this.enemy = enemy;
 		this.waitingAction = false;
@@ -110,8 +111,7 @@ public class Combat extends Scene {
 		displayTextQueue = new ArrayList<String>();
 		displayTextQueue.add("A wild " + currentEnemyPokemon.getNameNick() + " appeared!");
 
-//		this.player.setInCombat(true);
-		this.player.setSpawnSteps(this.player.roll(1, 2, 3));
+		this.player.setSpawnSteps(this.player.roll(2, 2, 4));
 	}
 
 	private void throwBall(String internalName) {

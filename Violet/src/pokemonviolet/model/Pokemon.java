@@ -51,27 +51,6 @@ public class Pokemon {
 			private int yieldSpAtk;
 			private int yieldSpDef;
 
-			private int statHP;
-			private int statAttack;
-			private int statDefense;
-			private int statSpeed;
-			private int statSpAtk;
-			private int statSpDef;
-
-			private int EVHP;
-			private int EVAttack;
-			private int EVDefense;
-			private int EVSpeed;
-			private int EVSpAtk;
-			private int EVSpDef;
-
-			private int IVHP;
-			private int IVAttack;
-			private int IVDefense;
-			private int IVSpeed;
-			private int IVSpAtk;
-			private int IVSpDef;
-
 			private int catchRate;
 			private String growthRate;
 			private int hatchSteps;
@@ -104,6 +83,27 @@ public class Pokemon {
 			private String status;
 			private int numMoves;
 			private float accuracy, evasion;
+
+			private int statHP;
+			private int statAttack;
+			private int statDefense;
+			private int statSpeed;
+			private int statSpAtk;
+			private int statSpDef;
+
+			private int EVHP;
+			private int EVAttack;
+			private int EVDefense;
+			private int EVSpeed;
+			private int EVSpAtk;
+			private int EVSpDef;
+
+			private int IVHP;
+			private int IVAttack;
+			private int IVDefense;
+			private int IVSpeed;
+			private int IVSpAtk;
+			private int IVSpDef;
 		//</editor-fold>
 	//</editor-fold>
 
