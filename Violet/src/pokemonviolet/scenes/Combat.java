@@ -47,7 +47,7 @@ public class Combat extends Scene {
 		private int optionsMain;
 		private int optionsMoves;
 		private int optionsBalls;
-		private int optionsPokemon;
+//		private int optionsPokemon;
 		private boolean inRound;
 		private int turnNum;
 		private boolean canDispose;
@@ -69,7 +69,7 @@ public class Combat extends Scene {
 		this.optionsMoves = 0;
 		this.optionsMain = 0;
 		this.optionsBalls = 0;
-		this.optionsPokemon = 0;
+//		this.optionsPokemon = 0;
 		this.turnNum = 0;
 		this.currentMenu = "MAIN";
 		this.ready = false;
@@ -251,6 +251,7 @@ public class Combat extends Scene {
 						break;
 					case 2:
 						this.currentMenu = "POKEMON";
+						main.gameState.add(new PokemonTeam(main, this, true, player.getCurrentPokemon()));
 						break;
 					case 3:
 						this.dispose();
@@ -263,8 +264,6 @@ public class Combat extends Scene {
 				subSubActionMoves();
 			} else if (currentMenu.compareTo("BALLS") == 0) {
 				subSubActionBalls();
-			} else if (currentMenu.compareTo("POKEMON") == 0 || currentMenu.compareTo("POKEMONF") == 0) {
-				subSubActionPokemon();
 			}
 		}
 
@@ -278,32 +277,6 @@ public class Combat extends Scene {
 						nextTurn();
 					} else {
 						displayTextQueue.add("There is no PP left for this move!");
-					}
-				}
-			}
-
-			private void subSubActionPokemon() {
-				if (optionsPokemon < player.getNumPokemonTeam() && player.getCurrentPokemon() != optionsPokemon) {
-					if (!player.getTeam()[optionsPokemon].isFainted()) {
-						displayTextQueue.remove(0);
-						if (currentMenu.compareTo("POKEMONF") == 0) {
-							currentMenu = "MAIN";
-						} else {
-							waitingAction = false;
-							inRound = true;
-							turnNum = turnNum + 1;
-						}
-						if (currentMenu.compareTo("POKEMON") == 0) {
-							displayTextQueue.add("That's enough, " + currentPlayerPokemon.getNameNick() + ", come back!");
-						} else {
-							//	displayTextQueue.add("You did good, "+currentPlayerPokemon.getNameNick()+".");
-						}
-						player.setCurrentPokemon(optionsPokemon);
-						currentPlayerPokemon = player.getTeam()[player.getCurrentPokemon()];
-						displayTextQueue.add("Go! " + currentPlayerPokemon.getNameNick() + "!");
-						displayHealthPlayer = currentPlayerPokemon.getCurHP();
-						displayExpPlayer = currentPlayerPokemon.getCurEXP();
-						forceEnemyTurn = true;
 					}
 				}
 			}
@@ -367,6 +340,7 @@ public class Combat extends Scene {
 					} else if (currentPlayerPokemon.isFainted() && player.getFirstAvailablePokemon() != -1) {
 						displayTextQueue.add("What Pokemon will you send out next?");
 						currentMenu = "POKEMONF";
+						main.gameState.add(new PokemonTeam(main, this, false, player.getCurrentPokemon()));
 						waitingAction = true;
 					} else if (!canDispose) {
 						subSubActionPreDispose();
@@ -440,6 +414,31 @@ public class Combat extends Scene {
 		//</editor-fold>
 	//</editor-fold>
 
+	public void receiveNewPokemon(int selection) {
+		displayTextQueue.remove(0);
+		if (currentMenu.compareTo("POKEMONF") == 0) {
+			currentMenu = "MAIN";
+		} else {
+			waitingAction = false;
+			inRound = true;
+			forceEnemyTurn = true;
+		}
+		if (currentMenu.compareTo("POKEMON") == 0) {
+			displayTextQueue.add("That's enough, " + currentPlayerPokemon.getNameNick() + ", come back!");
+		} else {
+			//	displayTextQueue.add("You did good, "+currentPlayerPokemon.getNameNick()+".");
+		}
+		player.setCurrentPokemon(selection);
+		currentPlayerPokemon = player.getTeam()[player.getCurrentPokemon()];
+		displayTextQueue.add("Go! " + currentPlayerPokemon.getNameNick() + "!");
+		displayHealthPlayer = currentPlayerPokemon.getCurHP();
+		displayExpPlayer = currentPlayerPokemon.getCurEXP();
+	}
+	
+	public void cancelNewPokemon() {
+		currentMenu = "MAIN";
+	}
+
 	@Override
 	protected void cancel() {
 		if (waitingAction) {
@@ -488,28 +487,6 @@ public class Combat extends Scene {
 				}
 
 				optionsMain = (y * 2) + x;
-				//</editor-fold>
-			} else if (currentMenu.compareTo("POKEMON") == 0 || currentMenu.compareTo("POKEMONF") == 0) {
-				//<editor-fold defaultstate="collapsed" desc="Pokemon">
-				x = 0;
-				y = optionsPokemon;
-
-				switch (dir) {
-					case "UP":
-						y = y - 1;
-						break;
-					case "DOWN":
-						y = y + 1;
-						break;
-				}
-
-				if (y < 0) {
-					y = 5;
-				} else if (y > 5) {
-					y = 0;
-				}
-
-				optionsPokemon = y;
 				//</editor-fold>
 			} else if (currentMenu.compareTo("MOVES") == 0) {
 				//<editor-fold defaultstate="collapsed" desc="Moves">
@@ -842,28 +819,6 @@ public class Combat extends Scene {
 						}
 
 						g.drawImage(ImageIO.read(new File("assets/arrow.png")), (ssX / 2) - (uiW / 2) + 15, (ssY / 2) - (uiH / 2) - 5 + ((optionsBalls + 1) * 30), 20, 20, null);
-						//</editor-fold>
-					} else if (currentMenu.compareTo("POKEMON") == 0 || currentMenu.compareTo("POKEMONF") == 0) {
-						//<editor-fold defaultstate="collapsed" desc="Pokemon UI Display">
-						int uiW = (int) (110 * RESIZE), uiH = (int) (110 * RESIZE);
-						g.drawImage(genWindow(5, uiW, uiH), (ssX / 2) - (uiW / 2), (ssY / 2) - (uiH / 2), uiW, uiH, null);
-
-						for (int i = 0; i < player.getNumPokemonTeam(); i++) {
-							if (player.getTeam()[i].isFainted()) {
-								g.setColor(Color.orange);
-							} else if (i == player.getCurrentPokemon()) {
-								g.setColor(Color.blue);
-							} else {
-								g.setColor(Color.black);
-							}
-							g.drawString(player.getTeam()[i].getNameNick(), (ssX / 2) - (uiW / 2) + 30, (ssY / 2) - (uiH / 2) + 40 + (i * 30));
-						}
-						g.setColor(Color.black);
-						for (int i = player.getNumPokemonTeam(); i < 6; i++) {
-							g.drawString("--", (ssX / 2) - (uiW / 2) + 30, (ssY / 2) - (uiH / 2) + 40 + (i * 30));
-						}
-						g.drawImage(ImageIO.read(new File("assets/arrow.png")), (ssX / 2) - (uiW / 2) + 15, (ssY / 2) - (uiH / 2) - 5 + ((optionsPokemon + 1) * 30), 20, 20, null);
-
 						//</editor-fold>
 					}
 				}

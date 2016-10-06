@@ -137,6 +137,7 @@ public final class Player {
 			setBasics();
 			this.name = name;
 			this.team[0] = starterPokemon;
+			this.pokeDex[this.team[0].getId() - 1] = true;
 			this.numPokemonTeam = 1;
 		}
 
@@ -152,6 +153,7 @@ public final class Player {
 			setBasics();
 			this.name = name;
 			this.team[0] = new Pokemon(starterID);
+			this.pokeDex[this.team[0].getId() - 1] = true;
 			this.numPokemonTeam = 1;
 		}
 
@@ -168,6 +170,7 @@ public final class Player {
 			setBasics();
 			this.name = name;
 			this.team[0] = new Pokemon(internalName);
+			this.pokeDex[this.team[0].getId() - 1] = true;
 			this.numPokemonTeam = 1;
 		}
 
@@ -212,6 +215,11 @@ public final class Player {
 		this.setyTile(30);
 		this.setCurrentPokemon(0);
 		this.pokeDex = new boolean[151];
+		for (int i = 0; i < pokeDex.length; i++) {
+			pokeDex[i] = false;
+		}
+		
+		
 		setSpawnSteps(roll(1, 2, 3));
 	}
 

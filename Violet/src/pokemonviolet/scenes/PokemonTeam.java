@@ -30,10 +30,35 @@ public class PokemonTeam extends Scene {
 	private int swap;
 	private int animFrame;
 	private BufferedImage animImg;
-	
+	private boolean sendToCombat;
+	private Combat combat;
+	private boolean canExit;
+	private int curPokemon;
+			
 	public PokemonTeam(Handler main) {
 		super(main, "TEAM", true);
 		
+		this.curPokemon = -1;
+		this.canExit = true;
+		this.combat = null;
+		this.sendToCombat = false;
+		this.team = main.player.getTeam();
+		selection = 0;
+		swap = -1;
+		animFrame = 0;
+		try {
+			animImg = ImageIO.read(new File(path+"ballAnim.png"));
+		} catch (IOException ex) {
+		}
+	}
+	
+	public PokemonTeam(Handler main, Combat cmb, boolean canExit, int currentPokemonNum) {
+		super(main, "TEAM", true);
+		
+		this.curPokemon = currentPokemonNum;
+		this.canExit = canExit;
+		this.combat = cmb;
+		this.sendToCombat = true;
 		this.team = main.player.getTeam();
 		selection = 0;
 		swap = -1;
@@ -63,7 +88,17 @@ public class PokemonTeam extends Scene {
 	@Override
 	protected void accept() {
 		if (selection == 6) {
-			this.dispose();
+			if (canExit) {
+				if (sendToCombat) {
+					combat.cancelNewPokemon();
+				}
+				this.dispose();
+			}
+		}else if (sendToCombat) {
+			if (!team[selection].isFainted() && curPokemon != selection) {
+				combat.receiveNewPokemon(selection);
+				this.dispose();
+			}
 		} else if (swap == -1) {
 			swap = selection;
 		} else {
@@ -189,6 +224,12 @@ public class PokemonTeam extends Scene {
 				g.drawString("Swapping...", 22, ssY - 10 - (int) ((49 * RESIZE) / 2));
 				g.drawString("HP: "+team[swap].getCurHP()+"/"+team[swap].getStatHP(), 22, ssY + 15 - (int) ((49 * RESIZE) / 2));
 			}
+		} else {
+			if (canExit) {
+				g.drawString("Exit", 22, ssY - 35 - (int) ((49 * RESIZE) / 2));
+			} else {
+				g.drawString("Can't exit!", 22, ssY - 35 - (int) ((49 * RESIZE) / 2));
+			}
 		}
 		
 		g.setColor(Color.white);
@@ -291,7 +332,7 @@ public class PokemonTeam extends Scene {
 				}
 			}
 		}
-
+		
 		String state = "";
 		if (selection == 6) {
 			state = "Active";
