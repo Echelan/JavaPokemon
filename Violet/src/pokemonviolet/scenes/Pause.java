@@ -22,7 +22,7 @@ import pokemonviolet.model.Handler;
  */
 public class Pause extends Scene {
 
-	private String[] options = {"PokeDex", "Heal", "Shop", "Pokemon", "PC", "Bag"};
+	private String[] options = {"PokeDex", "Heal", "Shop", "Pokemon", "PC", "Bag", "Controls"};
 	private int selection;
 
 	public Pause(Handler main) {
@@ -49,14 +49,13 @@ public class Pause extends Scene {
 	@Override
 	protected void accept() {
 		if (options[selection].compareTo("Heal") == 0) {
-			main.player.pokemonCenter();
-			this.dispose();
+			main.gameState.add(new Center(main));
 		} else if (options[selection].compareTo("Shop") == 0) {
 			main.gameState.add(new Shop(main));
 		} else if (options[selection].compareTo("Bag") == 0) {
 			main.gameState.add(new Bag(main));
 		} else if (options[selection].compareTo("Pokemon") == 0) {
-			main.gameState.add(new PokemonTeam(main));
+			main.gameState.add(new Team(main));
 		}
 	}
 

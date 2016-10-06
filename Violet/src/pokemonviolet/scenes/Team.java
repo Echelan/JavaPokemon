@@ -1,9 +1,9 @@
 /*
- *  PokemonTeam Violet - A University Project by Andres Movilla
- *  PokemonTeam COPYRIGHT 2002-2016 PokemonTeam.
+ *  Team Violet - A University Project by Andres Movilla
+ *  Team COPYRIGHT 2002-2016 Team.
  *  COPYRIGHT 1995-2016 Nintendo/Creatures Inc./GAME FREAK inc. TRADEMARK, REGISTERED TRADEMARK
- *  and PokemonTeam character names are trademarks of Nintendo.
- *  No copyright or trademark infringement is intended in using PokemonTeam content on PokemonTeam Violet.
+ *  and Team character names are trademarks of Nintendo.
+ *  No copyright or trademark infringement is intended in using Team content on Team Violet.
  */
 package pokemonviolet.scenes;
 
@@ -22,7 +22,7 @@ import static pokemonviolet.scenes.Scene.ssX;
  *
  * @author Andres
  */
-public class PokemonTeam extends Scene {
+public class Team extends Scene {
 	
 	private Pokemon[] team;
 	private static String path = "assets/pokeui/";
@@ -35,7 +35,7 @@ public class PokemonTeam extends Scene {
 	private boolean canExit;
 	private int curPokemon;
 			
-	public PokemonTeam(Handler main) {
+	public Team(Handler main) {
 		super(main, "TEAM", true);
 		
 		this.curPokemon = -1;
@@ -47,12 +47,12 @@ public class PokemonTeam extends Scene {
 		swap = -1;
 		animFrame = 0;
 		try {
-			animImg = ImageIO.read(new File(path+"ballAnim.png"));
+			animImg = ImageIO.read(new File("assets/ballAnim.png"));
 		} catch (IOException ex) {
 		}
 	}
 	
-	public PokemonTeam(Handler main, Combat cmb, boolean canExit, int currentPokemonNum) {
+	public Team(Handler main, Combat cmb, boolean canExit, int currentPokemonNum) {
 		super(main, "TEAM", true);
 		
 		this.curPokemon = currentPokemonNum;
@@ -217,7 +217,7 @@ public class PokemonTeam extends Scene {
 		}
 		
 		g.setColor(Color.black);
-		g.setFont(new Font("Arial",Font.BOLD,20));
+		g.setFont(new Font("Arial", Font.BOLD, 20));
 		if (selection < 6) {
 			g.drawString("HP: "+team[selection].getCurHP()+"/"+team[selection].getStatHP(), 22, ssY - 35 - (int) ((49 * RESIZE) / 2));
 			if (swap != -1) {
@@ -233,7 +233,7 @@ public class PokemonTeam extends Scene {
 		}
 		
 		g.setColor(Color.white);
-		g.setFont(new Font("Arial",Font.BOLD,15));
+		g.setFont(new Font("Arial", Font.BOLD, 15));
 		for (int i = 0; i < team.length; i++) {
 			String state = "";
 			if (team[i] != null) {
@@ -245,7 +245,7 @@ public class PokemonTeam extends Scene {
 			}
 			
 			g.setColor(Color.white);
-			g.setFont(new Font("Arial",Font.BOLD,15));
+			g.setFont(new Font("Arial", Font.BOLD, 15));
 			if (i == 0) {
 				try {
 					int dimX = (int) (78 * RESIZE), dimY = (int) (49 * RESIZE);
@@ -337,7 +337,7 @@ public class PokemonTeam extends Scene {
 		if (selection == 6) {
 			state = "Active";
 		}
-		g.setFont(new Font("Arial",Font.BOLD,15));
+		g.setFont(new Font("Arial", Font.BOLD, 15));
 		try {
 			g.drawImage(ImageIO.read(new File(path+"cancel"+state+".png")), ssX - 116, ssY - 40, (int) (52 * RESIZE), (int) (16 * RESIZE), null);
 			g.drawString("CANCEL", ssX - 95, ssY - 20);

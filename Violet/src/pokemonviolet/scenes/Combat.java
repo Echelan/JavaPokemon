@@ -251,7 +251,7 @@ public class Combat extends Scene {
 						break;
 					case 2:
 						this.currentMenu = "POKEMON";
-						main.gameState.add(new PokemonTeam(main, this, true, player.getCurrentPokemon()));
+						main.gameState.add(new Team(main, this, true, player.getCurrentPokemon()));
 						break;
 					case 3:
 						this.dispose();
@@ -340,7 +340,7 @@ public class Combat extends Scene {
 					} else if (currentPlayerPokemon.isFainted() && player.getFirstAvailablePokemon() != -1) {
 						displayTextQueue.add("What Pokemon will you send out next?");
 						currentMenu = "POKEMONF";
-						main.gameState.add(new PokemonTeam(main, this, false, player.getCurrentPokemon()));
+						main.gameState.add(new Team(main, this, false, player.getCurrentPokemon()));
 						waitingAction = true;
 					} else if (!canDispose) {
 						subSubActionPreDispose();
@@ -633,7 +633,7 @@ public class Combat extends Scene {
 				ready = true;
 			}
 		} else {
-			g.setFont(new Font("Arial", 0, 18));
+			g.setFont(new Font("Arial", Font.PLAIN, 18));
 			if (displayTextQueue.size() > 0) {
 				g.drawString(displayTextQueue.get(0), 30, ssY - 60);
 			}
