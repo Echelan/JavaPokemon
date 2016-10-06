@@ -44,7 +44,7 @@ public abstract class Scene {
 
 	protected abstract void move(String dir);
 
-	public abstract BufferedImage getDisplay();
+	public abstract BufferedImage getDisplay() throws IOException;
 
 	/**
 	 * Generates a window with the given theme and given dimensions.

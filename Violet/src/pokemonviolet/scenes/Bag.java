@@ -121,21 +121,18 @@ public class Bag extends Scene {
 	}
 
 	@Override
-	public BufferedImage getDisplay() {
+	public BufferedImage getDisplay() throws IOException {
 		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 
 		int windowWidth = (int) (120 * RESIZE), windowHeight = (int) (ssY * 0.8);
-		try {
-			int theme = 3;
-			g.drawImage(genWindow(theme, windowWidth, ssY - windowHeight - 3), ssX - windowWidth - 1, 1, null);
-			g.drawImage(genWindow(theme, windowWidth, windowHeight), ssX - windowWidth - 1, ssY-windowHeight - 1, null);
-			g.drawImage(genWindow(theme, 140, 60), 1, 1, null);
-			g.drawImage(genWindow(theme, 80, 80), 24, 66, null);
-			g.drawImage(genWindow(theme, ssX - windowWidth - 3, 120), 1, ssY - 121, null);
-			g.drawImage(genWindow(theme, ssX - windowWidth - 3, 50), 1, ssY - 122 - 50, null);
-		} catch (IOException ex) {
-		}
+		int theme = 3;
+		g.drawImage(genWindow(theme, windowWidth, ssY - windowHeight - 3), ssX - windowWidth - 1, 1, null);
+		g.drawImage(genWindow(theme, windowWidth, windowHeight), ssX - windowWidth - 1, ssY-windowHeight - 1, null);
+		g.drawImage(genWindow(theme, 140, 60), 1, 1, null);
+		g.drawImage(genWindow(theme, 80, 80), 24, 66, null);
+		g.drawImage(genWindow(theme, ssX - windowWidth - 3, 120), 1, ssY - 121, null);
+		g.drawImage(genWindow(theme, ssX - windowWidth - 3, 50), 1, ssY - 122 - 50, null);
 		
 		g.setColor(Color.black);
 		g.setFont(new Font("Arial", Font.BOLD, 15));
@@ -173,11 +170,7 @@ public class Bag extends Scene {
 				g.drawString(prefix + fullD.substring(thisLineFirstChar, thisLineLastChar+1) + suffix, 15, ssY - 142 + 45 + (i * 20));
 			}		
 
-			try{
-				g.drawImage(inventory[category].get(selection).getImage(), 34, 76, null);
-			} catch ( IOException ex) {
-
-			}
+			g.drawImage(inventory[category].get(selection).getImage(), 34, 76, null);
 			
 			g.setFont(new Font("Arial", Font.BOLD, 20));
 			g.drawString(inventory[category].get(selection).getNameSingular(), 15, ssY - 140);
@@ -197,12 +190,8 @@ public class Bag extends Scene {
 				g.drawString("x"+inventory[category].get(i).getAmount(), ssX - (windowWidth / 2) + 50, ((ssY / 2) - (windowHeight / 2) + 65) + ((i-startIndexX) * 20));
 			}
 		}
-
-		try {
-			int dispSelection = selection - startIndexX;
-			g.drawImage(ImageIO.read(new File("assets/arrow.png")), ssX - windowWidth + 5, ((ssY / 2) - (windowHeight / 2) + 47) + (dispSelection * 20), 20, 20, null);
-		} catch (IOException ex) {
-		}
+		int dispSelection = selection - startIndexX;
+		g.drawImage(ImageIO.read(new File("assets/arrow.png")), ssX - windowWidth + 5, ((ssY / 2) - (windowHeight / 2) + 47) + (dispSelection * 20), 20, 20, null);
 
 		return tempStitched;
 	}

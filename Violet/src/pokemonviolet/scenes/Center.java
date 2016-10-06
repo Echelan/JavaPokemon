@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import pokemonviolet.model.Handler;
-import static pokemonviolet.scenes.Scene.ssX;
 
 /**
  *
@@ -73,16 +72,13 @@ public class Center extends Scene{
 	}
 
 	@Override
-	public BufferedImage getDisplay() {
+	public BufferedImage getDisplay() throws IOException {
 		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 		
 		int dimX = (int) (ssX / 2) + 50, dimY = (int) (30 * RESIZE);
 		int posX = (ssX / 2) - (dimX / 2), posY = (ssY / 2) - (dimY / 2);
-		try {
-			g.drawImage(genWindow(2, dimX, dimY), posX, posY, null);
-		} catch (IOException ex) {
-		}
+		g.drawImage(genWindow(2, dimX, dimY), posX, posY, null);
 		
 		g.setColor(Color.black);
 		g.setFont(new Font("Arial", Font.BOLD, 20));

@@ -80,6 +80,12 @@ public class Handler implements Runnable {
 				
 		player.addItem("POKEBALL", 15);
 		player.addItem("MASTERBALL", 1);
+		
+		Pokemon snake = new Pokemon("EKANS",3);
+		snake.addMove(new PokemonMove("TAUNT"));
+		snake.addMove(new PokemonMove("TORMENT"));
+		player.addPokemon(snake);
+		
 
 		refreshDisplayedMaps();
 		thisThread.start();

@@ -99,15 +99,12 @@ public class Pause extends Scene {
 	}
 
 	@Override
-	public BufferedImage getDisplay() {
+	public BufferedImage getDisplay() throws IOException {
 		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 
 		int windowWidth = (int) (90 * RESIZE), windowHeight = (int) (127 * RESIZE);
-		try {
-			g.drawImage(genWindow(4, windowWidth, windowHeight), ssX - windowWidth - 1, (int) ((ssY / 2) - (windowHeight / 2)), null);
-		} catch (IOException ex) {
-		}
+		g.drawImage(genWindow(4, windowWidth, windowHeight), ssX - windowWidth - 1, (int) ((ssY / 2) - (windowHeight / 2)), null);
 
 		g.setColor(Color.black);
 		g.setFont(new Font("Arial", Font.BOLD, 25));
@@ -115,17 +112,11 @@ public class Pause extends Scene {
 			g.drawString(options[i], ssX - windowWidth + 30, (int) ((ssY / 2) - (windowHeight / 2)) + 40 + (i * 25));
 		}
 
-		try {
-			g.drawImage(ImageIO.read(new File("assets/arrow.png")), ssX - windowWidth + 10, (int) ((ssY / 2) - (windowHeight / 2)) + 22 + (selection * 25), 20, 20, null);
-		} catch (IOException ex) {
-		}
+		g.drawImage(ImageIO.read(new File("assets/arrow.png")), ssX - windowWidth + 10, (int) ((ssY / 2) - (windowHeight / 2)) + 22 + (selection * 25), 20, 20, null);
 
 		if (showControls) {
-			try {
-				int dimX = 433, dimY = 314;
-				g.drawImage(ImageIO.read(new File("assets/controls.png")), (ssX / 2) - (dimX / 2), (ssY / 2) - (dimY / 2), null);
-			} catch (IOException ex) {
-			}
+			int dimX = 433, dimY = 314;
+			g.drawImage(ImageIO.read(new File("assets/controls.png")), (ssX / 2) - (dimX / 2), (ssY / 2) - (dimY / 2), null);
 		}
 		
 		return tempStitched;

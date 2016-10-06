@@ -107,7 +107,6 @@ public class Pokemon {
 			private int IVSpDef;
 			
 			private boolean waitingToEvolve;
-			private boolean wantingToLearn;
 		//</editor-fold>
 	//</editor-fold>
 
@@ -479,8 +478,7 @@ public class Pokemon {
 				String[] readMoves = partes[1].split(",");
 
 				for (int j = 0; j < readMoves.length; j = j + 2) {
-					int moveLevel = Integer.parseInt(readMoves[j]);
-					this.allMoves.add(moveLevel + "-" + readMoves[j + 1]);
+					this.allMoves.add(readMoves[j] + "-" + readMoves[j + 1]);
 				}
 
 				if (this.numMoves == 0) {
@@ -636,8 +634,7 @@ public class Pokemon {
 	private void doBasics() {
 		this.numMoves = 0;
 		this.setStatus("");
-		this.waitingToEvolve = false;
-		this.wantingToLearn = false;
+		this.setWaitingToEvolve(false);
 	}
 
 	public int doCatch(Item ball) {
@@ -1025,21 +1022,33 @@ public class Pokemon {
 
 	/**
 	 * Level up Pokemon.
+	 *  @return PokemonMove Pokemon learns.
 	 */
-	public void levelUp() {
+	public String levelUp() {
 		this.setCurEXP(this.getCurEXP() - this.getMaxEXP());
 		this.level = this.getLevel() + 1;
+		
 		for (int i = 0; i < this.numEvols; i++) {
 			if (this.evolveMethod[i].compareTo("Level") == 0) {
 				if (this.level >= this.evolveLevel[i]) {
-					waitingToEvolve = true;
+					setWaitingToEvolve(true);
 				}
 			}
 		}
-		if (moveToLearn != null) {
-			wantingToLearn = true;
+		
+		String move = "";
+		if (moveToLearn() != null) {
+			move = moveToLearn().getNameInternal();
+			if (numMoves < 4) {
+				addMove(moveToLearn());
+				move = "add:"+move;
+			} else {
+				move = "wants:"+move;
+			}
 		}
 		this.updateStats();
+		
+		return move;
 	}
 	
 	public PokemonMove moveToLearn() {
@@ -1052,7 +1061,6 @@ public class Pokemon {
 		return move;
 	}
 	
-
 	/**
 	 * Set 'faint' values.
 	 */
@@ -1466,14 +1474,21 @@ public class Pokemon {
 		 * @param curEXP the curEXP to set
 		 * @return Pokemon leveled up from experience earned.
 		 */
-		public boolean setCurEXP(int curEXP) {
-			boolean levelled = false;
+		public String setCurEXP(int curEXP) {
+			String result = null;
 			this.curEXP = curEXP;
 			if (this.getCurEXP() >= this.getMaxEXP()) {
-				levelUp();
-				levelled = true;
+				String thisResult = levelUp();
+				if (thisResult == null) {
+					thisResult = "level";
+				}
+				
+				if (result == null) {
+					result = thisResult;
+				}
 			}
-			return levelled;
+			
+			return result;
 		}
 
 		/**
@@ -1629,14 +1644,14 @@ public class Pokemon {
 		public boolean isWaitingToEvolve() {
 			return waitingToEvolve;
 		}
-
-		/**
-		 * @return the wantingToLearn
-		 */
-		public boolean isWantingToLearn() {
-			return wantingToLearn;
-		}
 	
+		/**
+		 * @param waitingToEvolve the waitingToEvolve to set
+		 */
+		public void setWaitingToEvolve(boolean waitingToEvolve) {
+			this.waitingToEvolve = waitingToEvolve;
+		}
 	// </editor-fold>
+
 
 }

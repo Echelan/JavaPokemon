@@ -9,6 +9,7 @@ package pokemonviolet.view;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import pokemonviolet.model.Handler;
 import pokemonviolet.scenes.Scene;
 
@@ -44,7 +45,10 @@ public abstract class DisplayParser {
 			}
 			
 			for (int i = Handler.gameState.size() - counter; i < Handler.gameState.size(); i++) {
-				g.drawImage(Handler.gameState.get(i).getDisplay(), 0, 0, null);
+				try {
+					g.drawImage(Handler.gameState.get(i).getDisplay(), 0, 0, null);
+				} catch (IOException ex) {
+				}
 			}
 		}
 

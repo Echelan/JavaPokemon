@@ -111,17 +111,14 @@ public class BuyDialog extends Scene{
 	}
 
 	@Override
-	public BufferedImage getDisplay() {
+	public BufferedImage getDisplay() throws IOException {
 		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 
 		int x = ssX - 160;
-		try {
-			g.drawImage(genWindow(0, 120, 60), x, 40, null);
-			g.drawImage(genWindow(0, 120, 60), x, 101, null);
-			g.drawImage(genWindow(0, 120, 90), x, 162, null);
-		} catch (IOException ex) {
-		}
+		g.drawImage(genWindow(0, 120, 60), x, 40, null);
+		g.drawImage(genWindow(0, 120, 60), x, 101, null);
+		g.drawImage(genWindow(0, 120, 90), x, 162, null);
 		
 		g.setColor(Color.black);
 		g.setFont(new Font("Arial", Font.BOLD, 20));
@@ -137,10 +134,7 @@ public class BuyDialog extends Scene{
 			g.drawString(choices[i], x + 30, 203 + (i * 30));
 		}
 		
-		try {
-			g.drawImage(ImageIO.read(new File("assets/arrow.png")), x + 10, 203 + (choice * 30) - 15, 20, 20, null);
-		} catch (IOException ex) {
-		}
+		g.drawImage(ImageIO.read(new File("assets/arrow.png")), x + 10, 203 + (choice * 30) - 15, 20, 20, null);
 		
 		return tempStitched;
 	}

@@ -120,44 +120,31 @@ public class Dex extends Scene {
 	}
 
 	@Override
-	public BufferedImage getDisplay() {
+	public BufferedImage getDisplay() throws IOException {
 		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 
-		try {
-			g.drawImage(ImageIO.read(new File("assets/"+main.player.getGender().toLowerCase()+"Back.png")), 0, 0, ssX, ssY, null);
-		} catch (IOException ex) {
-		}
+		g.drawImage(ImageIO.read(new File("assets/"+main.player.getGender().toLowerCase()+"Back.png")), 0, 0, ssX, ssY, null);
 		
 		baseY = 150 + (selectionY - 1) * -75;
 
 		for (int i = 0; i < maxIndex; i++) {
 			int x = (int) Math.floor(i % maxCols), y = (int) Math.floor(i / maxCols);
-			try {
-				g.drawImage(genWindow(7, 70, 70), 21 + (x * 75), baseY + (y * 75), null);
-				if (main.player.getPokeDex()[i] != 0) {
-					g.drawImage(pokemonviolet.data.NIC.pokemonIcons.getSubimage( (int) Math.floor(i % 10) * 40, (int) Math.floor(i / 10) * 40, 40, 40), 21 + (x * 75) + 5, baseY + (y * 75) + 5, (int) (40 * 1.5f), (int) (40 * 1.5f), null);
-				} else {
-					g.drawImage(ImageIO.read(new File("assets/pokemon/blank.png")), 21 + 8 + (x * 75) + 5, baseY + 8 + (y * 75) + 5, (int) (36 * 1.25f), (int) (36 * 1.25f), null);
-				}
-			} catch (IOException ex) {
+			g.drawImage(genWindow(7, 70, 70), 21 + (x * 75), baseY + (y * 75), null);
+			if (main.player.getPokeDex()[i] != 0) {
+				g.drawImage(pokemonviolet.data.NIC.pokemonIcons.getSubimage( (int) Math.floor(i % 10) * 40, (int) Math.floor(i / 10) * 40, 40, 40), 21 + (x * 75) + 5, baseY + (y * 75) + 5, (int) (40 * 1.5f), (int) (40 * 1.5f), null);
+			} else {
+				g.drawImage(ImageIO.read(new File("assets/pokemon/blank.png")), 21 + 8 + (x * 75) + 5, baseY + 8 + (y * 75) + 5, (int) (36 * 1.25f), (int) (36 * 1.25f), null);
 			}
 		}
 		
-		try {
-			g.drawImage(ImageIO.read(new File("assets/hand.png")), 21 + 28 + ((selectionX - 1) * 75), (ssY / 2) - 40, (int) (20 * RESIZE), (int) (22 * RESIZE), null);
-		} catch (IOException ex) {
-			System.err.println("!");
-		}
+		g.drawImage(ImageIO.read(new File("assets/hand.png")), 21 + 28 + ((selectionX - 1) * 75), (ssY / 2) - 40, (int) (20 * RESIZE), (int) (22 * RESIZE), null);
 
-		try {
-			g.drawImage(genWindow(5, 120, 50), 1, 1, null);
-			if (this.showDescrip) {
-				g.drawImage(genWindow(5, ssX - 123, 140), 122, 1, null);
-			} else {
-				g.drawImage(genWindow(5, ssX - 123, 80), 122, 1, null);
-			}
-		} catch (IOException ex) {
+		g.drawImage(genWindow(5, 120, 50), 1, 1, null);
+		if (this.showDescrip) {
+			g.drawImage(genWindow(5, ssX - 123, 140), 122, 1, null);
+		} else {
+			g.drawImage(genWindow(5, ssX - 123, 80), 122, 1, null);
 		}
 		
 		g.setColor(Color.black);

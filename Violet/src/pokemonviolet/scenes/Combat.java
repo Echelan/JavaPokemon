@@ -345,9 +345,6 @@ public class Combat extends Scene {
 					} else if (!canDispose) {
 						subSubActionPreDispose();
 					} else {
-						if (currentPlayerPokemon.isFainted()) {
-							player.pokemonCenter();
-						}
 						this.dispose();
 					}
 				}
@@ -358,10 +355,17 @@ public class Combat extends Scene {
 			private void subSubActionEnemyFaint() {
 				displayTextQueue.add(currentPlayerPokemon.getNameNick() + " gained " + currentEnemyPokemon.getExpGain() + " EXP!");
 				
-				boolean levelUp = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP() + currentEnemyPokemon.getExpGain());
+				String result = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP() + currentEnemyPokemon.getExpGain());
 				doneExpPlayer = false;
-				if (levelUp) {
+				if (result.compareTo("") != 0) {
 					displayTextQueue.add(currentPlayerPokemon.getNameNick() + " is now level " + currentPlayerPokemon.getLevel() + "!");
+					if (result.compareTo("Level up!") != 0) {
+						if (result.split(":")[0].compareTo("add") == 0) {
+							displayTextQueue.add(currentPlayerPokemon.getNameNick() + " learned " + result.split(":")[1] + "!");
+						} else if (result.split(":")[0].compareTo("wants") == 0) {
+							main.gameState.add(new LearnMove(main, currentPlayerPokemon, new pokemonviolet.model.PokemonMove(result.split(":")[1])));
+						}
+					}
 				}
 				
 				currentPlayerPokemon.addEVAttack(currentEnemyPokemon.getYieldAttack());
@@ -383,13 +387,6 @@ public class Combat extends Scene {
 			}
 
 			private void subSubActionEnemyCaught() {
-				displayTextQueue.add(currentPlayerPokemon.getNameNick() + " gained " + currentEnemyPokemon.getExpGain() + " EXP!");
-				boolean levelUp = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP() + currentEnemyPokemon.getExpGain());
-				doneExpPlayer = false;
-				if (levelUp) {
-					displayTextQueue.add(currentPlayerPokemon.getNameNick() + " is now level " + currentPlayerPokemon.getLevel() + "!");
-				}
-
 				enemy.setCurrentPokemon(enemy.getCurrentPokemon() + 1);
 				currentEnemyPokemon = enemy.getTeam()[enemy.getCurrentPokemon()];
 				displayHealthEnemy = currentEnemyPokemon.getCurHP();
@@ -409,14 +406,17 @@ public class Combat extends Scene {
 				} else {
 					if (!this.caught[enemy.getCurrentPokemon()]) {
 						displayTextQueue.add(currentPlayerPokemon.getNameNick() + " gained " + currentEnemyPokemon.getExpGain() + " EXP!");
-						boolean levelUp = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP() + currentEnemyPokemon.getExpGain());
+						String result = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP() + currentEnemyPokemon.getExpGain());
 						doneExpPlayer = false;
-						if (levelUp) {
+						if (result.compareTo("") != 0) {
 							displayTextQueue.add(currentPlayerPokemon.getNameNick() + " is now level " + currentPlayerPokemon.getLevel() + "!");
+							if (result.compareTo("Level up!") != 0) {
+								displayTextQueue.add(currentPlayerPokemon.getNameNick() + " learned " + result + "!");
+							}
 						}
+						displayTextQueue.add(player.getName() + " earned $" + enemy.getReward() + "!");
+						player.setFunds(player.getFunds()+enemy.getReward());
 					}
-					displayTextQueue.add(player.getName() + " earned $" + enemy.getReward() + "!");
-					player.setFunds(player.getFunds()+enemy.getReward());
 				}
 			}
 		//</editor-fold>
@@ -561,13 +561,17 @@ public class Combat extends Scene {
 //		main.player.setInCombat(false);
 		main.gameState.remove(main.gameState.size() - 1);
 		
-		if (currentPlayerPokemon.isWantingToLearn()) {
-			main.gameState.add(new LearnMove(main,currentPlayerPokemon));
-		}
+//		if (currentPlayerPokemon.isWantingToLearn()) {
+//			main.gameState.add(new LearnMove(main,currentPlayerPokemon));
+//		}
 		
 //		if (currentPlayerPokemon.isWaitingToEvolve()) {
 //			main.gameState.add(new Evolution);
 //		}
+
+		if (currentPlayerPokemon.isFainted()) {
+			main.gameState.add(new Center(main));
+		}
 	}
 
 	@Override
@@ -576,66 +580,54 @@ public class Combat extends Scene {
 	}
 	
 	@Override
-	public BufferedImage getDisplay() {
+	public BufferedImage getDisplay() throws IOException {
 		int ssX = pokemonviolet.model.Handler.SCREEN_SIZE_X, ssY = pokemonviolet.model.Handler.SCREEN_SIZE_Y;
 		BufferedImage display = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = display.getGraphics();
 
 		//<editor-fold defaultstate="collapsed" desc="Background">
-		try {
-			g.drawImage(ImageIO.read(new File("assets/combat/background.png")), 0, 0, ssX, ssY, null);
-		} catch (IOException ex) {
-		}
+		g.drawImage(ImageIO.read(new File("assets/combat/background.png")), 0, 0, ssX, ssY, null);
 
-		try {
-			g.drawImage(ImageIO.read(new File("assets/combat/grassunderground1.png")), curEnemyX, 85, (int) (128 * RESIZE), (int) (36 * RESIZE), null);
-			g.drawImage(ImageIO.read(new File("assets/combat/grassunderground2.png")), curPlayerX, 180, (int) (128 * RESIZE), (int) (36 * RESIZE), null);
-		} catch (IOException ex) {
-		}
+		g.drawImage(ImageIO.read(new File("assets/combat/grassunderground1.png")), curEnemyX, 85, (int) (128 * RESIZE), (int) (36 * RESIZE), null);
+		g.drawImage(ImageIO.read(new File("assets/combat/grassunderground2.png")), curPlayerX, 180, (int) (128 * RESIZE), (int) (36 * RESIZE), null);
 		//</editor-fold>
 
 		boolean curCaught = caught[enemy.getCurrentPokemon()];
 
 		//<editor-fold defaultstate="collapsed" desc="Pokemon Sprites Display">
-		try {
-			if (displayHealthEnemy != 0 && !curCaught) {
-				g.drawImage(currentEnemyPokemon.getFrontImage(), curEnemyX + 50, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
-			} else if (curCaught) {
-				int x = (curEnemyX + 50 + (SPRITE_WIDTH / 2) + 20 - (int) (14 * RESIZE)), y = (18 + SPRITE_HEIGHT - 50 - (int) (14 * RESIZE));
-				int pokeX = 0;
-				
-				if (currentEnemyPokemon.getBallType() == null) {
-					currentEnemyPokemon.setBallType("POKEBALL");
-				}
-				
-				switch (currentEnemyPokemon.getBallType()) {
-					case "GREATBALL":
-						pokeX = 1;
-						break;
-					case "PREMIERBALL":
-						pokeX = 2;
-						break;
-					case "ULTRABALL":
-						pokeX = 3;
-						break;
-					case "MASTERBALL":
-						pokeX = 4;
-						break;
-				}
-				g.drawImage(ImageIO.read(new File("assets/combat/pokeballactive.png")).getSubimage(pokeX * 14, 0, 14, 14), x, y, (int) (14 * RESIZE), (int) (14 * RESIZE), null);
-			}
-			if (displayHealthPlayer != 0) {
-				g.drawImage(currentPlayerPokemon.getBackImage(), curPlayerX + 54, 64, SPRITE_WIDTH, SPRITE_HEIGHT, null);
-			}
-		} catch (IOException ex) {
-		}
+		if (displayHealthEnemy != 0 && !curCaught) {
+			g.drawImage(currentEnemyPokemon.getFrontImage(), curEnemyX + 50, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+		} else if (curCaught) {
+			int x = (curEnemyX + 50 + (SPRITE_WIDTH / 2) + 20 - (int) (14 * RESIZE)), y = (18 + SPRITE_HEIGHT - 50 - (int) (14 * RESIZE));
+			int pokeX = 0;
 
-		try {
-			g.drawImage(ImageIO.read(new File("assets/combat/dialogdisplay.png")), 0, ssY - (int) (48 * RESIZE), (int) (240 * RESIZE), (int) (48 * RESIZE), null);
-		} catch (IOException ex) {
-		}
+			if (currentEnemyPokemon.getBallType() == null) {
+				currentEnemyPokemon.setBallType("POKEBALL");
+			}
 
+			switch (currentEnemyPokemon.getBallType()) {
+				case "GREATBALL":
+					pokeX = 1;
+					break;
+				case "PREMIERBALL":
+					pokeX = 2;
+					break;
+				case "ULTRABALL":
+					pokeX = 3;
+					break;
+				case "MASTERBALL":
+					pokeX = 4;
+					break;
+			}
+			g.drawImage(ImageIO.read(new File("assets/combat/pokeballactive.png")).getSubimage(pokeX * 14, 0, 14, 14), x, y, (int) (14 * RESIZE), (int) (14 * RESIZE), null);
+		}
+		if (displayHealthPlayer != 0) {
+			g.drawImage(currentPlayerPokemon.getBackImage(), curPlayerX + 54, 64, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+		}
+		
 		//</editor-fold>
+		
+		g.drawImage(ImageIO.read(new File("assets/combat/dialogdisplay.png")), 0, ssY - (int) (48 * RESIZE), (int) (240 * RESIZE), (int) (48 * RESIZE), null);
 		
 		if (curEnemyX != finalEnemyX || curPlayerX != finalPlayerX) {
 			if (curEnemyX != finalEnemyX) {
@@ -722,33 +714,16 @@ public class Combat extends Scene {
 			//</editor-fold>
 
 			//<editor-fold defaultstate="collapsed" desc="Pokeballs Display">
-			try {
-				BufferedImage allBalls = ImageIO.read(new File("assets/combat/pokeballui.png"));
-				int dimX = 9, dimY = 9;
-				int x, y, id;
+			BufferedImage allBalls = ImageIO.read(new File("assets/combat/pokeballui.png"));
+			int dimX = 9, dimY = 9;
+			int x, y, id;
 
-				if (!wildBattle) {
-					y = 3;
-					for (int i = 0; i < 6; i++) {
-						x = 12 + (int) (i * dimX * RESIZE);
-						if (i < enemy.getNumPokemonTeam()) {
-							if (enemy.getTeam()[i].isFainted()) {
-								id = 2;
-							} else {
-								id = 1;
-							}
-						} else {
-							id = 0;
-						}
-						g.drawImage(allBalls.getSubimage(id * 9, 0, dimX, dimY), x, y, (int) (dimX * RESIZE), (int) (dimY * RESIZE), null);
-					}
-				}
-
-				y = (int) (ssY / 2) - 33;
+			if (!wildBattle) {
+				y = 3;
 				for (int i = 0; i < 6; i++) {
-					x = ssX - (int) (104 * RESIZE) + 75 + (int) (i * dimX * RESIZE);
-					if (i < player.getNumPokemonTeam()) {
-						if (player.getTeam()[i].isFainted()) {
+					x = 12 + (int) (i * dimX * RESIZE);
+					if (i < enemy.getNumPokemonTeam()) {
+						if (enemy.getTeam()[i].isFainted()) {
 							id = 2;
 						} else {
 							id = 1;
@@ -758,17 +733,27 @@ public class Combat extends Scene {
 					}
 					g.drawImage(allBalls.getSubimage(id * 9, 0, dimX, dimY), x, y, (int) (dimX * RESIZE), (int) (dimY * RESIZE), null);
 				}
-			} catch (IOException ex) {
+			}
 
+			y = (int) (ssY / 2) - 33;
+			for (int i = 0; i < 6; i++) {
+				x = ssX - (int) (104 * RESIZE) + 75 + (int) (i * dimX * RESIZE);
+				if (i < player.getNumPokemonTeam()) {
+					if (player.getTeam()[i].isFainted()) {
+						id = 2;
+					} else {
+						id = 1;
+					}
+				} else {
+					id = 0;
+				}
+				g.drawImage(allBalls.getSubimage(id * 9, 0, dimX, dimY), x, y, (int) (dimX * RESIZE), (int) (dimY * RESIZE), null);
 			}
 			//</editor-fold>
 
-			try {
-				g.drawImage(ImageIO.read(new File("assets/combat/enemydisplay.png")), 10, 20, (int) (100 * RESIZE), (int) (29 * RESIZE), null);
-				g.drawImage(ImageIO.read(new File("assets/combat/playerdisplay.png")), ssX - (int) (104 * RESIZE) - 10, (int) (ssY / 2) - 15, (int) (104 * RESIZE), (int) (37 * RESIZE), null);
-			} catch (IOException ex) {
-			}
-
+			g.drawImage(ImageIO.read(new File("assets/combat/enemydisplay.png")), 10, 20, (int) (100 * RESIZE), (int) (29 * RESIZE), null);
+			g.drawImage(ImageIO.read(new File("assets/combat/playerdisplay.png")), ssX - (int) (104 * RESIZE) - 10, (int) (ssY / 2) - 15, (int) (104 * RESIZE), (int) (37 * RESIZE), null);
+			
 			g.setColor(Color.black);
 			g.drawString(currentEnemyPokemon.getNameNick(), 25, 45);
 			g.drawString("Lv: " + currentEnemyPokemon.getLevel(), 140, 45);
@@ -779,71 +764,68 @@ public class Combat extends Scene {
 			g.drawString(displayHealthPlayer + "/" + currentPlayerPokemon.getStatHP(), ssX - (int) (104 * RESIZE) + 125, (int) (ssY / 2) + 45);
 
 			//<editor-fold defaultstate="collapsed" desc="UI Display">
-			try {
-				if (waitingAction) {
-					if (currentMenu.compareTo("MAIN") == 0) {
-						//<editor-fold defaultstate="collapsed" desc="Main UI Display">
-						int uiW = (int) (120 * RESIZE), uiH = (int) (48 * RESIZE);
+			if (waitingAction) {
+				if (currentMenu.compareTo("MAIN") == 0) {
+					//<editor-fold defaultstate="collapsed" desc="Main UI Display">
+					int uiW = (int) (120 * RESIZE), uiH = (int) (48 * RESIZE);
 
-						g.drawImage(genWindow(0, uiW, uiH), ssX - uiW, ssY - uiH, null);
+					g.drawImage(genWindow(0, uiW, uiH), ssX - uiW, ssY - uiH, null);
 
-						g.setColor(Color.black);
-						g.drawString("FIGHT", ssX - 215, ssY - 55);
-						g.drawString("POKéBALL", ssX - 105, ssY - 55);
-						g.drawString("POKéMON", ssX - 215, ssY - 20);
-						g.drawString("RUN", ssX - 105, ssY - 20);
+					g.setColor(Color.black);
+					g.drawString("FIGHT", ssX - 215, ssY - 55);
+					g.drawString("POKéBALL", ssX - 105, ssY - 55);
+					g.drawString("POKéMON", ssX - 215, ssY - 20);
+					g.drawString("RUN", ssX - 105, ssY - 20);
 
-						g.drawImage(ImageIO.read(new File("assets/arrow.png")), ssX - 230 + (int) (Math.floor(optionsMain % 2) * 110), ssY - 70 + (int) (Math.floor(optionsMain / 2) * 30), 20, 20, null);
-						//</editor-fold>
-					} else if (currentMenu.compareTo("MOVES") == 0) {
-						//<editor-fold defaultstate="collapsed" desc="Moves UI Display">
-						int ui1W = (int) (80 * RESIZE), uiH = (int) (48 * RESIZE), ui2W = (int) (160 * RESIZE);
+					g.drawImage(ImageIO.read(new File("assets/arrow.png")), ssX - 230 + (int) (Math.floor(optionsMain % 2) * 110), ssY - 70 + (int) (Math.floor(optionsMain / 2) * 30), 20, 20, null);
+					//</editor-fold>
+				} else if (currentMenu.compareTo("MOVES") == 0) {
+					//<editor-fold defaultstate="collapsed" desc="Moves UI Display">
+					int ui1W = (int) (80 * RESIZE), uiH = (int) (48 * RESIZE), ui2W = (int) (160 * RESIZE);
 
-						g.drawImage(genWindow(0, ui1W, uiH), ssX - ui1W, ssY - uiH, null);
-						g.drawImage(genWindow(0, ui2W, uiH), 0, ssY - uiH, null);
+					g.drawImage(genWindow(0, ui1W, uiH), ssX - ui1W, ssY - uiH, null);
+					g.drawImage(genWindow(0, ui2W, uiH), 0, ssY - uiH, null);
 
-						g.drawImage(ImageIO.read(new File("assets/arrow.png")), 10 + (int) (Math.floor(optionsMoves % 2) * 140), ssY - 75 + (int) (Math.floor(optionsMoves / 2) * 40), 20, 20, null);
-						for (int i = 0; i < 4; i++) {
-							String moveName;
-							if (i < currentPlayerPokemon.getNumMoves()) {
-								moveName = currentPlayerPokemon.getMoveSet()[i].getNameDisplay();
-								if (moveName == null || moveName.compareTo("") == 0) {
-									moveName = "--";
-								}
-							} else {
+					g.drawImage(ImageIO.read(new File("assets/arrow.png")), 10 + (int) (Math.floor(optionsMoves % 2) * 140), ssY - 75 + (int) (Math.floor(optionsMoves / 2) * 40), 20, 20, null);
+					for (int i = 0; i < 4; i++) {
+						String moveName;
+						if (i < currentPlayerPokemon.getNumMoves()) {
+							moveName = currentPlayerPokemon.getMoveSet()[i].getNameDisplay();
+							if (moveName == null || moveName.compareTo("") == 0) {
 								moveName = "--";
 							}
-							g.setColor(Color.black);
-							g.drawString(moveName, 30 + (int) (Math.floor(i % 2) * 140), ssY - 60 + (int) (Math.floor(i / 2) * 40));
+						} else {
+							moveName = "--";
 						}
-						if (optionsMoves < currentPlayerPokemon.getNumMoves()) {
-							g.setColor(Color.black);
-							g.drawString("PP  " + currentPlayerPokemon.getMoveSet()[optionsMoves].getPP() + " / " + currentPlayerPokemon.getMoveSet()[optionsMoves].getPPMax(), ssX - 140, ssY - 55);
-							g.drawString("TYPE  " + pokemonviolet.model.PokemonType.getNameDisplay(currentPlayerPokemon.getMoveSet()[optionsMoves].getType()), ssX - 140, ssY - 20);
-						}
-						//</editor-fold>
-					} else if (currentMenu.compareTo("BALLS") == 0) {
-						//<editor-fold defaultstate="collapsed" desc="Balls UI Display">
-						int uiW = (int) (110 * RESIZE), uiH = (int) (110 * RESIZE);
-						g.drawImage(genWindow(5, uiW, uiH), (ssX / 2) - (uiW / 2), (ssY / 2) - (uiH / 2), uiW, uiH, null);
-
-						String[] pokeTypes = {"POKEBALL", "GREATBALL", "ULTRABALL", "PREMIERBALL", "MASTERBALL"};
-						
 						g.setColor(Color.black);
-						for (int i = 0; i < pokeTypes.length; i++) {
-							if (player.searchItem(pokeTypes[i]) == null) {
-								g.drawString("--", (ssX / 2) - (uiW / 2) + 30, (ssY / 2) - (uiH / 2) + 40 + (i * 30));
-							} else {
-								g.drawString(player.searchItem(pokeTypes[i]).getNameSingular(), (ssX / 2) - (uiW / 2) + 30, (ssY / 2) - (uiH / 2) + 40 + (i * 30));
-								g.drawString("x"+player.searchItem(pokeTypes[i]).getAmount(), (ssX / 2) + (uiW / 2) - 60, (ssY / 2) - (uiH / 2) + 40 + (i * 30));
-							}
-						}
-
-						g.drawImage(ImageIO.read(new File("assets/arrow.png")), (ssX / 2) - (uiW / 2) + 15, (ssY / 2) - (uiH / 2) - 5 + ((optionsBalls + 1) * 30), 20, 20, null);
-						//</editor-fold>
+						g.drawString(moveName, 30 + (int) (Math.floor(i % 2) * 140), ssY - 60 + (int) (Math.floor(i / 2) * 40));
 					}
+					if (optionsMoves < currentPlayerPokemon.getNumMoves()) {
+						g.setColor(Color.black);
+						g.drawString("PP  " + currentPlayerPokemon.getMoveSet()[optionsMoves].getPP() + " / " + currentPlayerPokemon.getMoveSet()[optionsMoves].getPPMax(), ssX - 140, ssY - 55);
+						g.drawString("TYPE  " + pokemonviolet.model.PokemonType.getNameDisplay(currentPlayerPokemon.getMoveSet()[optionsMoves].getType()), ssX - 140, ssY - 20);
+					}
+					//</editor-fold>
+				} else if (currentMenu.compareTo("BALLS") == 0) {
+					//<editor-fold defaultstate="collapsed" desc="Balls UI Display">
+					int uiW = (int) (110 * RESIZE), uiH = (int) (110 * RESIZE);
+					g.drawImage(genWindow(5, uiW, uiH), (ssX / 2) - (uiW / 2), (ssY / 2) - (uiH / 2), uiW, uiH, null);
+
+					String[] pokeTypes = {"POKEBALL", "GREATBALL", "ULTRABALL", "PREMIERBALL", "MASTERBALL"};
+
+					g.setColor(Color.black);
+					for (int i = 0; i < pokeTypes.length; i++) {
+						if (player.searchItem(pokeTypes[i]) == null) {
+							g.drawString("--", (ssX / 2) - (uiW / 2) + 30, (ssY / 2) - (uiH / 2) + 40 + (i * 30));
+						} else {
+							g.drawString(player.searchItem(pokeTypes[i]).getNameSingular(), (ssX / 2) - (uiW / 2) + 30, (ssY / 2) - (uiH / 2) + 40 + (i * 30));
+							g.drawString("x"+player.searchItem(pokeTypes[i]).getAmount(), (ssX / 2) + (uiW / 2) - 60, (ssY / 2) - (uiH / 2) + 40 + (i * 30));
+						}
+					}
+
+					g.drawImage(ImageIO.read(new File("assets/arrow.png")), (ssX / 2) - (uiW / 2) + 15, (ssY / 2) - (uiH / 2) - 5 + ((optionsBalls + 1) * 30), 20, 20, null);
+					//</editor-fold>
 				}
-			} catch (IOException ex) {
 			}
 			//</editor-fold>
 		}

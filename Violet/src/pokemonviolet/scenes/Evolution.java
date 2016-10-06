@@ -8,6 +8,7 @@
 package pokemonviolet.scenes;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import pokemonviolet.model.Handler;
 
 /**
@@ -51,7 +52,7 @@ public class Evolution extends Scene {
 	}
 
 	@Override
-	public BufferedImage getDisplay() {
+	public BufferedImage getDisplay() throws IOException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

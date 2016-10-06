@@ -83,24 +83,19 @@ public class Gender extends Scene {
 	}
 
 	@Override
-	public BufferedImage getDisplay() {
+	public BufferedImage getDisplay() throws IOException {
 		BufferedImage display = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = display.getGraphics();
 
-		try {
-			g.drawImage(ImageIO.read(new File("assets/title/background.png")), 0, 0, null);
-		} catch (IOException ex) {
-		}
+		g.drawImage(ImageIO.read(new File("assets/title/background.png")), 0, 0, null);
 
 		g.setFont(new Font("Arial", Font.BOLD, 30));
 		g.drawString("Are you boy or a girl?", ssX / 5, 30);
 
 		int characterWidth = (int) (40 * RESIZE), characterHeight = (int) (82 * RESIZE);
 
-		try {
-			g.drawImage(ImageIO.read(new File("assets/" + genders[chosen].toLowerCase() + "Char.png")), 100 + (ssX / 2), 50, characterWidth, characterHeight, null);
-		} catch (IOException ex) {
-		}
+		
+		g.drawImage(ImageIO.read(new File("assets/" + genders[chosen].toLowerCase() + "Char.png")), 100 + (ssX / 2), 50, characterWidth, characterHeight, null);
 		for (int i = 0; i < genders.length; i++) {
 			int y = 110 + (i*70);
 			if (chosen == i) {
@@ -111,13 +106,9 @@ public class Gender extends Scene {
 			g.drawString(name[i], 120, y);
 		}
 
-		try{
-			g.drawImage(ImageIO.read(new File("assets/moveUp.png")), 60, ssY-80, 140, 70, null);
-			g.drawImage(ImageIO.read(new File("assets/moveDown.png")), 210, ssY-80, 140, 70, null);
-			g.drawImage(ImageIO.read(new File("assets/buttonA.png")), 360, ssY-80, 70, 70, null);
-		}catch(IOException ex){
-
-		}
+		g.drawImage(ImageIO.read(new File("assets/moveUp.png")), 60, ssY-80, 140, 70, null);
+		g.drawImage(ImageIO.read(new File("assets/moveDown.png")), 210, ssY-80, 140, 70, null);
+		g.drawImage(ImageIO.read(new File("assets/buttonA.png")), 360, ssY-80, 70, 70, null);
 
 		return display;
 	}

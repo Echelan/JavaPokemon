@@ -201,19 +201,13 @@ public class Team extends Scene {
 	}
 
 	@Override
-	public BufferedImage getDisplay() {
+	public BufferedImage getDisplay() throws IOException {
 		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 
-		try {
-			g.drawImage(ImageIO.read(new File(path+"background.png")), 0, 0, ssX, ssY, null);
-		} catch (IOException ex) {
-		}
-		
-		try {
-			g.drawImage(genWindow(6, (int) (80 * RESIZE), (int) (49 * RESIZE)), 8, ssY - 20 - (int) ((49 * RESIZE)), null);
-		} catch (IOException ex) {
-		}
+		g.drawImage(ImageIO.read(new File(path+"background.png")), 0, 0, ssX, ssY, null);
+
+		g.drawImage(genWindow(6, (int) (80 * RESIZE), (int) (49 * RESIZE)), 8, ssY - 20 - (int) ((49 * RESIZE)), null);
 		
 		g.setColor(Color.black);
 		g.setFont(new Font("Arial", Font.BOLD, 20));
@@ -246,9 +240,47 @@ public class Team extends Scene {
 			g.setColor(Color.white);
 			g.setFont(new Font("Arial", Font.BOLD, 15));
 			if (i == 0) {
-				try {
-					int dimX = (int) (78 * RESIZE), dimY = (int) (49 * RESIZE);
-					
+				int dimX = (int) (78 * RESIZE), dimY = (int) (49 * RESIZE);
+
+				g.setColor(Color.green);
+				if ((float) team[i].getCurHP() / (float) team[i].getStatHP() < 0.5f) {
+					g.setColor(Color.orange);
+					if ((float) team[i].getCurHP() / (float) team[i].getStatHP() < 0.25f) {
+						g.setColor(Color.red);
+					}
+				}
+				g.fillRect(57, 112, (int) ((float) 100 * (float) ((float) team[i].getCurHP() / (float) team[i].getStatHP())), 10);
+				g.setColor(Color.white);
+
+				g.drawImage(ImageIO.read(new File(path+"mainPokemon"+state+".png")), 10, 50, dimX, dimY, null);
+
+				if (state.compareTo("Blank") != 0) {
+
+					if (swap != i) {
+						int id = team[i].getId();
+						g.drawImage(pokemonviolet.data.NIC.pokemonIcons.getSubimage( (int) Math.floor((id-1) % 10) * 40, (int) Math.floor((id-1) / 10) * 40, 40, 40), 10, 37, (int) (40 * 1.5f), (int) (40 * 1.5f), null);
+					} else {
+						int yDisplace = (int) (((int) Math.pow(animFrame - 6, 2)) * 0.5f);
+						g.drawImage(animImg.getSubimage(animFrame * 16, 0, 16, 16), 20, 45 + yDisplace, (int) (16 * RESIZE), (int) (16 * RESIZE), null);
+						animFrame = animFrame + 1;
+						if (animFrame > 11) {
+							animFrame = 0;
+						}
+					}
+
+					g.drawString(team[i].getNameNick(), 20, 108);
+					g.drawString("Lv. "+team[i].getLevel(), 45, 139);
+
+					if (team[i].isFainted()) {
+						g.setColor(Color.red);
+						g.drawString("FNT", 130, 139);
+						g.setColor(Color.white);
+					}
+				}
+			} else {
+				int dimX = (int) (142 * RESIZE), dimY = (int) (22 * RESIZE);
+
+				if (state.compareTo("Blank") != 0) {
 					g.setColor(Color.green);
 					if ((float) team[i].getCurHP() / (float) team[i].getStatHP() < 0.5f) {
 						g.setColor(Color.orange);
@@ -256,78 +288,34 @@ public class Team extends Scene {
 							g.setColor(Color.red);
 						}
 					}
-					g.fillRect(57, 112, (int) ((float) 100 * (float) ((float) team[i].getCurHP() / (float) team[i].getStatHP())), 10);
+					g.fillRect(355, 29 + ((i - 1) * (dimY + 10)), (int) ((float) 100 * (float) ((float) team[i].getCurHP() / (float) team[i].getStatHP())), 10);
 					g.setColor(Color.white);
-					
-					g.drawImage(ImageIO.read(new File(path+"mainPokemon"+state+".png")), 10, 50, dimX, dimY, null);
-					
-					if (state.compareTo("Blank") != 0) {
-						
-						if (swap != i) {
-							int id = team[i].getId();
-							g.drawImage(pokemonviolet.data.NIC.pokemonIcons.getSubimage( (int) Math.floor((id-1) % 10) * 40, (int) Math.floor((id-1) / 10) * 40, 40, 40), 10, 37, (int) (40 * 1.5f), (int) (40 * 1.5f), null);
-						} else {
-							int yDisplace = (int) (((int) Math.pow(animFrame - 6, 2)) * 0.5f);
-							g.drawImage(animImg.getSubimage(animFrame * 16, 0, 16, 16), 20, 45 + yDisplace, (int) (16 * RESIZE), (int) (16 * RESIZE), null);
-							animFrame = animFrame + 1;
-							if (animFrame > 11) {
-								animFrame = 0;
-							}
-						}
-						
-						g.drawString(team[i].getNameNick(), 20, 108);
-						g.drawString("Lv. "+team[i].getLevel(), 45, 139);
-						
-						if (team[i].isFainted()) {
-							g.setColor(Color.red);
-							g.drawString("FNT", 130, 139);
-							g.setColor(Color.white);
+				}
+
+				g.drawImage(ImageIO.read(new File(path+"otherPokemon"+state+".png")), 180, 15 + ((i - 1) * (dimY + 10)), dimX, dimY, null);
+
+				if (state.compareTo("Blank") != 0) {
+
+					if (swap != i) {
+						int id = team[i].getId();
+						g.drawImage(pokemonviolet.data.NIC.pokemonIcons.getSubimage( (int) Math.floor((id-1) % 10) * 40, (int) Math.floor((id-1) / 10) * 40, 40, 40), 180, 2 + ((i - 1) * (dimY + 10)), (int) (40 * 1.5f), (int) (40 * 1.5f), null);
+					} else {
+						int yDisplace = (int) (((int) Math.pow(animFrame - 6, 2)) * 0.5f);
+						g.drawImage(animImg.getSubimage(animFrame * 16, 0, 16, 16), 190, 10 + ((i - 1) * (dimY + 10)) + yDisplace, (int) (16 * RESIZE), (int) (16 * RESIZE), null);
+						animFrame = animFrame + 1;
+						if (animFrame > 11) {
+							animFrame = 0;
 						}
 					}
-				} catch (IOException ex) {
-				}
-			} else {
-				try {
-					int dimX = (int) (142 * RESIZE), dimY = (int) (22 * RESIZE);
-					
-					if (state.compareTo("Blank") != 0) {
-						g.setColor(Color.green);
-						if ((float) team[i].getCurHP() / (float) team[i].getStatHP() < 0.5f) {
-							g.setColor(Color.orange);
-							if ((float) team[i].getCurHP() / (float) team[i].getStatHP() < 0.25f) {
-								g.setColor(Color.red);
-							}
-						}
-						g.fillRect(355, 29 + ((i - 1) * (dimY + 10)), (int) ((float) 100 * (float) ((float) team[i].getCurHP() / (float) team[i].getStatHP())), 10);
+
+					g.drawString(team[i].getNameNick(), 235, 33 + ((i - 1) * (dimY + 10)));
+					g.drawString("Lv. "+team[i].getLevel(), 250, 53 + ((i - 1) * (dimY + 10)));
+
+					if (team[i].isFainted()) {
+						g.setColor(Color.red);
+						g.drawString("FNT", 370, 53 + ((i - 1) * (dimY + 10)));
 						g.setColor(Color.white);
 					}
-					
-					g.drawImage(ImageIO.read(new File(path+"otherPokemon"+state+".png")), 180, 15 + ((i - 1) * (dimY + 10)), dimX, dimY, null);
-					
-					if (state.compareTo("Blank") != 0) {
-						
-						if (swap != i) {
-							int id = team[i].getId();
-							g.drawImage(pokemonviolet.data.NIC.pokemonIcons.getSubimage( (int) Math.floor((id-1) % 10) * 40, (int) Math.floor((id-1) / 10) * 40, 40, 40), 180, 2 + ((i - 1) * (dimY + 10)), (int) (40 * 1.5f), (int) (40 * 1.5f), null);
-						} else {
-							int yDisplace = (int) (((int) Math.pow(animFrame - 6, 2)) * 0.5f);
-							g.drawImage(animImg.getSubimage(animFrame * 16, 0, 16, 16), 190, 10 + ((i - 1) * (dimY + 10)) + yDisplace, (int) (16 * RESIZE), (int) (16 * RESIZE), null);
-							animFrame = animFrame + 1;
-							if (animFrame > 11) {
-								animFrame = 0;
-							}
-						}
-						
-						g.drawString(team[i].getNameNick(), 235, 33 + ((i - 1) * (dimY + 10)));
-						g.drawString("Lv. "+team[i].getLevel(), 250, 53 + ((i - 1) * (dimY + 10)));
-						
-						if (team[i].isFainted()) {
-							g.setColor(Color.red);
-							g.drawString("FNT", 370, 53 + ((i - 1) * (dimY + 10)));
-							g.setColor(Color.white);
-						}
-					}
-				} catch (IOException ex) {
 				}
 			}
 		}
@@ -337,11 +325,8 @@ public class Team extends Scene {
 			state = "Active";
 		}
 		g.setFont(new Font("Arial", Font.BOLD, 15));
-		try {
-			g.drawImage(ImageIO.read(new File(path+"cancel"+state+".png")), ssX - 116, ssY - 40, (int) (52 * RESIZE), (int) (16 * RESIZE), null);
-			g.drawString("CANCEL", ssX - 95, ssY - 20);
-		} catch (IOException ex) {
-		}
+		g.drawImage(ImageIO.read(new File(path+"cancel"+state+".png")), ssX - 116, ssY - 40, (int) (52 * RESIZE), (int) (16 * RESIZE), null);
+		g.drawString("CANCEL", ssX - 95, ssY - 20);
 		
 		return tempStitched;
 	}

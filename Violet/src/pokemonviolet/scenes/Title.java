@@ -121,14 +121,11 @@ public class Title extends Scene {
 	}
 
 	@Override
-	public BufferedImage getDisplay() {
+	public BufferedImage getDisplay() throws IOException {
 		BufferedImage display = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = display.getGraphics();
 
-		try {
-			g.drawImage(ImageIO.read(new File("assets/title/background.png")), 0, 0, null);
-		} catch (IOException ex) {
-		}
+		g.drawImage(ImageIO.read(new File("assets/title/background.png")), 0, 0, null);
 
 		ready = true;
 
@@ -144,40 +141,31 @@ public class Title extends Scene {
 		g.setFont(new Font("Arial", Font.BOLD, 15));
 		g.drawString("Andrés Movilla", 20, blackBarY + 40);
 
-		try {
-			if (arcanineX != finalArcanineX) {
-				arcanineX = arcanineX - 20;
+		if (arcanineX != finalArcanineX) {
+			arcanineX = arcanineX - 20;
+			if (ready) {
+				ready = false;
+			}
+		}
+		g.drawImage(ImageIO.read(new File("assets/pokemon/59ffn.png")), arcanineX, ssY - 220, 160, 160, null);
+
+		if (arcanineX == finalArcanineX) {
+			if (growlitheX != finalGrowlitheX) {
+				growlitheX = growlitheX - 20;
 				if (ready) {
 					ready = false;
 				}
 			}
-			g.drawImage(ImageIO.read(new File("assets/pokemon/59ffn.png")), arcanineX, ssY - 220, 160, 160, null);
-		} catch (IOException ex) {
 		}
+		g.drawImage(ImageIO.read(new File("assets/pokemon/58ffn.png")), growlitheX, ssY - 170, 160, 160, null);
 
-		try {
-			if (arcanineX == finalArcanineX) {
-				if (growlitheX != finalGrowlitheX) {
-					growlitheX = growlitheX - 20;
-					if (ready) {
-						ready = false;
-					}
-				}
+		if (logoY != finalLogoY) {
+			logoY = logoY + 20;
+			if (ready) {
+				ready = false;
 			}
-			g.drawImage(ImageIO.read(new File("assets/pokemon/58ffn.png")), growlitheX, ssY - 170, 160, 160, null);
-		} catch (IOException ex) {
 		}
-
-		try {
-			if (logoY != finalLogoY) {
-				logoY = logoY + 20;
-				if (ready) {
-					ready = false;
-				}
-			}
-			g.drawImage(ImageIO.read(new File("assets/title/violetLogo.png")), (ssX / 2) - 40 - (int) ((int) (1363 / 4) / 2), logoY, (int) (1363 / 4), (int) (786 / 4), null);
-		} catch (IOException ex) {
-		}
+		g.drawImage(ImageIO.read(new File("assets/title/violetLogo.png")), (ssX / 2) - 40 - (int) ((int) (1363 / 4) / 2), logoY, (int) (1363 / 4), (int) (786 / 4), null);
 
 		if (ready) {
 			startDisplay = startDisplay - 1;
@@ -189,16 +177,13 @@ public class Title extends Scene {
 				g.drawString("Press Start", 35, 250);
 			}
 
-			try {
-				if (logoY != finalLogoY) {
-					logoY = logoY + 20;
-					if (ready) {
-						ready = false;
-					}
+			if (logoY != finalLogoY) {
+				logoY = logoY + 20;
+				if (ready) {
+					ready = false;
 				}
-				g.drawImage(ImageIO.read(new File("assets/buttonStart.png")), ((int) ssX/2)-60, 200, 140, 60, null);
-			} catch (IOException ex) {
 			}
+			g.drawImage(ImageIO.read(new File("assets/buttonStart.png")), ((int) ssX/2)-60, 200, 140, 60, null);
 		}
 
 		return display;
