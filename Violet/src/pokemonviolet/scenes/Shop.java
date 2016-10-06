@@ -154,7 +154,6 @@ public class Shop extends Scene {
 		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 
-		float RESIZE = 2.0f;
 		int windowWidth = (int) (120 * RESIZE), windowHeight = (int) (ssY * 0.8);
 		try {
 			int theme = 0;

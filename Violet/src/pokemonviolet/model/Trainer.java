@@ -58,63 +58,61 @@ public class Trainer {
 		this.team = new Pokemon[6];
 
 		for (int i = 0; i < maxTeam; i++) {
-			//	if (pokemon[i] != null){
 			team[numPokemonTeam] = new Pokemon(pokemon[i][0], pokemon[i][1]);
 			numPokemonTeam = numPokemonTeam + 1;
-			//	}
 		}
 
 		this.base = 100;
 	}
 
 	//<editor-fold defaultstate="collapsed" desc="Getters & Setters">
-	/**
-	 * @return the reward
-	 */
-	public int getReward() {
-		return base*team[numPokemonTeam-1].getLevel();
-	}
+		/**
+		 * @return the reward
+		 */
+		public int getReward() {
+			return base*team[numPokemonTeam-1].getLevel();
+		}
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+		/**
+		 * @return the name
+		 */
+		public String getName() {
+			return name;
+		}
 
-	/**
-	 * @return the type
-	 */
-	public String getType() {
-		return type;
-	}
+		/**
+		 * @return the type
+		 */
+		public String getType() {
+			return type;
+		}
 
-	/**
-	 * @return the team
-	 */
-	public Pokemon[] getTeam() {
-		return team;
-	}
+		/**
+		 * @return the team
+		 */
+		public Pokemon[] getTeam() {
+			return team;
+		}
 
-	/**
-	 * @return the currentPokemon
-	 */
-	public int getCurrentPokemon() {
-		return currentPokemon;
-	}
+		/**
+		 * @return the currentPokemon
+		 */
+		public int getCurrentPokemon() {
+			return currentPokemon;
+		}
 
-	/**
-	 * @return the numPokemonTeam
-	 */
-	public int getNumPokemonTeam() {
-		return numPokemonTeam;
-	}
+		/**
+		 * @return the numPokemonTeam
+		 */
+		public int getNumPokemonTeam() {
+			return numPokemonTeam;
+		}
 
-	/**
-	 * @param currentPokemon the currentPokemon to set
-	 */
-	public void setCurrentPokemon(int currentPokemon) {
-		this.currentPokemon = currentPokemon;
-	}
+		/**
+		 * @param currentPokemon the currentPokemon to set
+		 */
+		public void setCurrentPokemon(int currentPokemon) {
+			this.currentPokemon = currentPokemon;
+		}
 	//</editor-fold>
 }

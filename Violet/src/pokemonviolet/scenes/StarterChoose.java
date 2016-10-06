@@ -135,8 +135,7 @@ public class StarterChoose extends Scene {
 		g.setFont(new Font("Arial", Font.BOLD, 30));
 		g.drawString("Choose your starter!", ssX / 5, 30);
 
-		float resize = 2.0f;
-		int characterWidth = (int) (80 * resize), characterHeight = (int) (80 * resize);
+		int characterWidth = (int) (80 * RESIZE), characterHeight = (int) (80 * RESIZE);
 
 		g.setFont(new Font("Arial", Font.BOLD, 15));
 		for (int i = 0; i < pokeID.length; i++) {

@@ -7,11 +7,15 @@
  */
 package pokemonviolet.data;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import pokemonviolet.model.Map;
 
 /**
@@ -56,6 +60,7 @@ public abstract class NIC {
 		 * Amount of Maps in Y.
 		 */
 		public static int NUM_MAPS_Y;
+		public static BufferedImage pokemonIcons;
 	//</editor-fold>
 
 	public static void loadData() {
@@ -71,6 +76,12 @@ public abstract class NIC {
 		List<String> readInfoT = null;
 		List<String> readInfoB = null;
 		ArrayList<List<String>> readMap = new ArrayList();
+		
+		try {
+			pokemonIcons = ImageIO.read(new File("assets/pokemon/pokemonIconsSmall.png"));
+		} catch (IOException ex) {
+			Logger.getLogger(NIC.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
 		File archivo;
 

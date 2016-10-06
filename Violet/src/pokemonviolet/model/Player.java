@@ -483,7 +483,6 @@ public final class Player {
 	}
 	
 	public int blackOut() {
-		pokemonCenter();
 		this.funds = this.funds/2;
 		
 		return this.funds;
@@ -759,12 +758,21 @@ public final class Player {
 		 * @return the currentPokemon
 		 */
 		public int getFirstAvailablePokemon() {
-			int value = -1;
-
-			for (int i = 0; i < numPokemonTeam; i++) {
-				if (!team[i].isFainted()) {
-					value = i;
+			int value = 0;
+			boolean found = false;
+			
+			while (value < numPokemonTeam && found == false) {
+				if (!team[value].isFainted()) {
+					found = true;
 				}
+				
+				if (!found) {
+					value = value + 1;
+				}
+			}
+			
+			if (value >= numPokemonTeam) {
+				value = -1;
 			}
 
 			return value;

@@ -24,6 +24,7 @@ public abstract class Scene {
 	protected final Handler main;
 	private final String name;
 	private final boolean full;
+	protected final static float RESIZE = 2.0f;
 
 	public Scene(Handler main, String name, boolean full) {
 		this.main = main;
@@ -58,7 +59,6 @@ public abstract class Scene {
 		BufferedImage window = new BufferedImage(dimX, dimY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = window.getGraphics();
 
-		float RESIZE = 2.0f;
 		int pieceDim = (int) (RESIZE * 7);
 
 		if (dimX < pieceDim * 2) {

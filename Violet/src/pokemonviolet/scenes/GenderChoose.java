@@ -95,8 +95,7 @@ public class GenderChoose extends Scene {
 		g.setFont(new Font("Arial", Font.BOLD, 30));
 		g.drawString("Are you boy or a girl?", ssX / 5, 30);
 
-		float resize = 2.0f;
-		int characterWidth = (int) (40 * resize), characterHeight = (int) (82 * resize);
+		int characterWidth = (int) (40 * RESIZE), characterHeight = (int) (82 * RESIZE);
 
 		try {
 			g.drawImage(ImageIO.read(new File("assets/" + genders[chosen].toLowerCase() + "Char.png")), 100 + (ssX / 2), 50, characterWidth, characterHeight, null);

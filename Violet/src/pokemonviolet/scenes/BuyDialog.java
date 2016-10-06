@@ -115,7 +115,6 @@ public class BuyDialog extends Scene{
 		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 
-		float RESIZE = 2.0f;
 		int x = ssX - 160;
 		try {
 			g.drawImage(genWindow(0, 120, 60), x, 40, null);

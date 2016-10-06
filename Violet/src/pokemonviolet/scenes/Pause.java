@@ -55,6 +55,8 @@ public class Pause extends Scene {
 			main.gameState.add(new Shop(main));
 		} else if (options[selection].compareTo("Bag") == 0) {
 			main.gameState.add(new Bag(main));
+		} else if (options[selection].compareTo("Pokemon") == 0) {
+			main.gameState.add(new PokemonTeam(main));
 		}
 	}
 
@@ -92,7 +94,6 @@ public class Pause extends Scene {
 		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 
-		float RESIZE = 2.0f;
 		int windowWidth = (int) (90 * RESIZE), windowHeight = (int) (127 * RESIZE);
 		try {
 			g.drawImage(genWindow(4, windowWidth, windowHeight), ssX - windowWidth - 1, (int) ((ssY / 2) - (windowHeight / 2)), null);
