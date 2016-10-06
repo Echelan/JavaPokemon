@@ -243,6 +243,12 @@ public final class Player {
 		return response;
 	}
 
+	public void movePokemon(int teamPos1, int teamPos2) {
+		Pokemon temp = team[teamPos1];
+		team[teamPos1] = team[teamPos2];
+		team[teamPos2] = temp;
+	}
+	
 	/**
 	 * Returns amount of item with given ID carried by Player.
 	 * <p>

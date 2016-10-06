@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import pokemonviolet.model.Map;
 
@@ -80,7 +78,6 @@ public abstract class NIC {
 		try {
 			pokemonIcons = ImageIO.read(new File("assets/pokemon/pokemonIconsSmall.png"));
 		} catch (IOException ex) {
-			Logger.getLogger(NIC.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
 		File archivo;

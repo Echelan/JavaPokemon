@@ -32,7 +32,7 @@ public class GameWindow extends JFrame implements WindowListener, ActionListener
 	public GameWindow() {
 		setLayout(null);
 		setSize(Handler.SCREEN_SIZE_X + 8, Handler.SCREEN_SIZE_Y + 31);
-		setTitle("Pokemon Violet [GAME]");
+		setTitle("Pokemon Violet");
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

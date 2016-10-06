@@ -27,12 +27,21 @@ public class PokemonTeam extends Scene {
 	private Pokemon[] team;
 	private static String path = "assets/pokeui/";
 	private int selection;
+	private int swap;
+	private int animFrame;
+	private BufferedImage animImg;
 	
 	public PokemonTeam(Handler main) {
 		super(main, "TEAM", true);
 		
 		this.team = main.player.getTeam();
 		selection = 0;
+		swap = -1;
+		animFrame = 0;
+		try {
+			animImg = ImageIO.read(new File(path+"ballAnim.png"));
+		} catch (IOException ex) {
+		}
 	}
 
 	@Override
@@ -53,12 +62,25 @@ public class PokemonTeam extends Scene {
 
 	@Override
 	protected void accept() {
-		
+		if (selection == 6) {
+			this.dispose();
+		} else if (swap == -1) {
+			swap = selection;
+		} else {
+			if (selection != swap) {
+				main.player.movePokemon(selection, swap);
+			}
+			swap = -1;
+		}
 	}
 
 	@Override
 	protected void cancel() {
-		this.dispose();
+		if (swap == -1) {
+			selection = 6;
+		} else {
+			swap = -1;
+		}
 	}
 
 	@Override
@@ -154,6 +176,23 @@ public class PokemonTeam extends Scene {
 		} catch (IOException ex) {
 		}
 		
+		try {
+			g.drawImage(genWindow(6, (int) (80 * RESIZE), (int) (49 * RESIZE)), 8, ssY - 20 - (int) ((49 * RESIZE)), null);
+		} catch (IOException ex) {
+		}
+		
+		g.setColor(Color.black);
+		g.setFont(new Font("Arial",Font.BOLD,20));
+		if (selection < 6) {
+			g.drawString("HP: "+team[selection].getCurHP()+"/"+team[selection].getStatHP(), 22, ssY - 35 - (int) ((49 * RESIZE) / 2));
+			if (swap != -1) {
+				g.drawString("Swapping...", 22, ssY - 10 - (int) ((49 * RESIZE) / 2));
+				g.drawString("HP: "+team[swap].getCurHP()+"/"+team[swap].getStatHP(), 22, ssY + 15 - (int) ((49 * RESIZE) / 2));
+			}
+		}
+		
+		g.setColor(Color.white);
+		g.setFont(new Font("Arial",Font.BOLD,15));
 		for (int i = 0; i < team.length; i++) {
 			String state = "";
 			if (team[i] != null) {
@@ -183,8 +222,18 @@ public class PokemonTeam extends Scene {
 					g.drawImage(ImageIO.read(new File(path+"mainPokemon"+state+".png")), 10, 50, dimX, dimY, null);
 					
 					if (state.compareTo("Blank") != 0) {
-						int id = team[i].getId();
-						g.drawImage(pokemonviolet.data.NIC.pokemonIcons.getSubimage( (int) Math.floor((id-1) % 10) * 40, (int) Math.floor((id-1) / 10) * 40, 40, 40), 10, 37, (int) (40 * 1.5f), (int) (40 * 1.5f), null);
+						
+						if (swap != i) {
+							int id = team[i].getId();
+							g.drawImage(pokemonviolet.data.NIC.pokemonIcons.getSubimage( (int) Math.floor((id-1) % 10) * 40, (int) Math.floor((id-1) / 10) * 40, 40, 40), 10, 37, (int) (40 * 1.5f), (int) (40 * 1.5f), null);
+						} else {
+							int yDisplace = (int) (((int) Math.pow(animFrame - 6, 2)) * 0.5f);
+							g.drawImage(animImg.getSubimage(animFrame * 16, 0, 16, 16), 20, 45 + yDisplace, (int) (16 * RESIZE), (int) (16 * RESIZE), null);
+							animFrame = animFrame + 1;
+							if (animFrame > 11) {
+								animFrame = 0;
+							}
+						}
 						
 						g.drawString(team[i].getNameNick(), 20, 108);
 						g.drawString("Lv. "+team[i].getLevel(), 45, 139);
@@ -216,8 +265,18 @@ public class PokemonTeam extends Scene {
 					g.drawImage(ImageIO.read(new File(path+"otherPokemon"+state+".png")), 180, 15 + ((i - 1) * (dimY + 10)), dimX, dimY, null);
 					
 					if (state.compareTo("Blank") != 0) {
-						int id = team[i].getId();
-						g.drawImage(pokemonviolet.data.NIC.pokemonIcons.getSubimage( (int) Math.floor((id-1) % 10) * 40, (int) Math.floor((id-1) / 10) * 40, 40, 40), 180, 2 + ((i - 1) * (dimY + 10)), (int) (40 * 1.5f), (int) (40 * 1.5f), null);
+						
+						if (swap != i) {
+							int id = team[i].getId();
+							g.drawImage(pokemonviolet.data.NIC.pokemonIcons.getSubimage( (int) Math.floor((id-1) % 10) * 40, (int) Math.floor((id-1) / 10) * 40, 40, 40), 180, 2 + ((i - 1) * (dimY + 10)), (int) (40 * 1.5f), (int) (40 * 1.5f), null);
+						} else {
+							int yDisplace = (int) (((int) Math.pow(animFrame - 6, 2)) * 0.5f);
+							g.drawImage(animImg.getSubimage(animFrame * 16, 0, 16, 16), 190, 10 + ((i - 1) * (dimY + 10)) + yDisplace, (int) (16 * RESIZE), (int) (16 * RESIZE), null);
+							animFrame = animFrame + 1;
+							if (animFrame > 11) {
+								animFrame = 0;
+							}
+						}
 						
 						g.drawString(team[i].getNameNick(), 235, 33 + ((i - 1) * (dimY + 10)));
 						g.drawString("Lv. "+team[i].getLevel(), 250, 53 + ((i - 1) * (dimY + 10)));
