@@ -357,12 +357,20 @@ public class Combat extends Scene {
 		//<editor-fold defaultstate="collapsed" desc="subSubActionsElse">
 			private void subSubActionEnemyFaint() {
 				displayTextQueue.add(currentPlayerPokemon.getNameNick() + " gained " + currentEnemyPokemon.getExpGain() + " EXP!");
+				
 				boolean levelUp = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP() + currentEnemyPokemon.getExpGain());
 				doneExpPlayer = false;
 				if (levelUp) {
 					displayTextQueue.add(currentPlayerPokemon.getNameNick() + " is now level " + currentPlayerPokemon.getLevel() + "!");
 				}
-
+				
+				currentPlayerPokemon.addEVAttack(currentEnemyPokemon.getYieldAttack());
+				currentPlayerPokemon.addEVDefense(currentEnemyPokemon.getYieldDefense());
+				currentPlayerPokemon.addEVHP(currentEnemyPokemon.getYieldHP());
+				currentPlayerPokemon.addEVSpAtk(currentEnemyPokemon.getYieldSpAtk());
+				currentPlayerPokemon.addEVSpDef(currentEnemyPokemon.getYieldSpDef());
+				currentPlayerPokemon.addEVSpeed(currentEnemyPokemon.getYieldSpeed());
+				
 				enemy.setCurrentPokemon(enemy.getCurrentPokemon() + 1);
 				currentEnemyPokemon = enemy.getTeam()[enemy.getCurrentPokemon()];
 				displayHealthEnemy = currentEnemyPokemon.getCurHP();

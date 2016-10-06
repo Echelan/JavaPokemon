@@ -16,7 +16,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import pokemonviolet.model.Handler;
 import pokemonviolet.model.Pokemon;
-import static pokemonviolet.scenes.Scene.ssX;
 
 /**
  *

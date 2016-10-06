@@ -193,7 +193,7 @@ public final class Player {
 	 */
 	private void setBasics() {
 		try {
-			this.SPRITE_SHEET = ImageIO.read(new File("assets/" + this.gender.toLowerCase() + "Sprite.png"));
+			this.SPRITE_SHEET = ImageIO.read(new File("assets/" + this.getGender().toLowerCase() + "Sprite.png"));
 		} catch (IOException ex) {
 		}
 		this.team = new Pokemon[6];
@@ -215,7 +215,7 @@ public final class Player {
 		this.setyTile(30);
 		this.setCurrentPokemon(0);
 		this.pokeDex = new boolean[151];
-		for (int i = 0; i < pokeDex.length; i++) {
+		for (int i = 0; i < getPokeDex().length; i++) {
 			pokeDex[i] = false;
 		}
 		
@@ -805,5 +805,21 @@ public final class Player {
 		public ArrayList<Item>[] getBag() {
 			return bag;
 		}
+		
+		/**
+		 * @return the gender
+		 */
+		public String getGender() {
+			return gender;
+		}
+		
+		/**
+		 * @return the pokeDex
+		 */
+		public boolean[] getPokeDex() {
+			return pokeDex;
+		}
 	//</editor-fold>
+
+
 }

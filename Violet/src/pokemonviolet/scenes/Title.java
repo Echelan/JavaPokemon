@@ -112,7 +112,7 @@ public class Title extends Scene {
 	@Override
 	protected void dispose() {
 		main.gameState.remove(main.gameState.size() - 1);
-		main.gameState.add(new GenderChoose(main));
+		main.gameState.add(new Gender(main));
 	}
 
 	@Override

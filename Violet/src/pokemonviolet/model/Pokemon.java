@@ -7,6 +7,7 @@
  */
 package pokemonviolet.model;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -27,7 +28,7 @@ public class Pokemon {
 			private static final int SPRITE_HEIGHT = 80 * RESIZE;
 			private static final int NUM_ATTRIB = 40;
 			private static final int MAX_TOTAL_EV = 510;
-			private static final  int MAX_SINGLE_EV = 252;
+			private static final int MAX_SINGLE_EV = 252;
 
 			private int id;
 			private String nameSpecies;
@@ -54,7 +55,7 @@ public class Pokemon {
 			private int catchRate;
 			private String growthRate;
 			private int hatchSteps;
-			private String color;
+			private Color color;
 			private String habitat;
 			private ArrayList<String> allMoves;
 
@@ -491,7 +492,41 @@ public class Pokemon {
 					}
 				}
 			} else if (partes[0].compareTo("Color") == 0) {
-				this.color = partes[1];
+				float[] vals;
+				switch (partes[1]) {
+					case "Black":
+						this.color = Color.BLACK;
+						break;
+					case "Blue":
+						this.color = Color.BLUE;
+						break;
+					case "Brown":
+						vals = Color.RGBtoHSB(145, 91, 37, null);
+						this.color = Color.getHSBColor(vals[0], vals[1], vals[2]);
+						break;
+					case "Gray":
+						this.color = Color.DARK_GRAY;
+						break;
+					case "Green":
+						this.color = Color.GREEN;
+						break;
+					case "Pink":
+						this.color = Color.PINK;
+						break;
+					case "Purple":
+						vals = Color.RGBtoHSB(113, 0, 211, null);
+						this.color = Color.getHSBColor(vals[0], vals[1], vals[2]);
+						break;
+					case "Red":
+						this.color = Color.RED;
+						break;
+					case "White":
+						this.color = Color.LIGHT_GRAY;
+						break;
+					case "Yellow":
+						this.color = Color.YELLOW;
+						break;
+				}
 			} else if (partes[0].compareTo("Habitat") == 0) {
 				/*
 					Cave
@@ -1293,7 +1328,7 @@ public class Pokemon {
 		/**
 		 * @return the color
 		 */
-		public String getColor() {
+		public Color getColor() {
 			return color;
 		}
 
@@ -1525,6 +1560,48 @@ public class Pokemon {
 			this.EVSpDef = EVSpDef;
 		}
 
+		/**
+		 * @param EVHP the EVHP to add
+		 */
+		public void addEVHP(int EVHP) {
+			this.EVHP = this.EVHP + EVHP;
+		}
+
+		/**
+		 * @param EVAttack the EVAttack to add
+		 */
+		public void addEVAttack(int EVAttack) {
+			this.EVAttack = this.EVAttack + EVAttack;
+		}
+
+		/**
+		 * @param EVDefense the EVDefense to add
+		 */
+		public void addEVDefense(int EVDefense) {
+			this.EVDefense = this.EVDefense + EVDefense;
+		}
+
+		/**
+		 * @param EVSpeed the EVSpeed to add
+		 */
+		public void addEVSpeed(int EVSpeed) {
+			this.EVSpeed = this.EVSpeed + EVSpeed;
+		}
+
+		/**
+		 * @param EVSpAtk the EVSpAtk to add
+		 */
+		public void addEVSpAtk(int EVSpAtk) {
+			this.EVSpAtk = this.EVSpAtk + EVSpAtk;
+		}
+
+		/**
+		 * @param EVSpDef the EVSpDef to add
+		 */
+		public void addEVSpDef(int EVSpDef) {
+			this.EVSpDef = this.EVSpDef + EVSpDef;
+		}
+		
 		/**
 		 * @return the maxEXP
 		 */

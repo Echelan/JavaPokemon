@@ -21,7 +21,7 @@ import pokemonviolet.model.Handler;
  *
  * @author Andres
  */
-public class StarterChoose extends Scene {
+public class Starter extends Scene {
 
 	private int[] pokeID = {1, 4, 7};
 	private String[] pokeNames = {"Bulbasaur", "Charmander", "Squirtle"};
@@ -32,7 +32,7 @@ public class StarterChoose extends Scene {
 	private ArrayList<String> konamiInput;
 	private String playerGender;
 
-	public StarterChoose(Handler main, String gender) {
+	public Starter(Handler main, String gender) {
 		super(main, "STARTER", true);
 
 		playerGender = gender;
@@ -94,7 +94,7 @@ public class StarterChoose extends Scene {
 	@Override
 	protected void cancel() {
 		this.dispose();
-		main.gameState.add(new GenderChoose(main));
+		main.gameState.add(new Gender(main));
 	}
 
 	@Override

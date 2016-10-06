@@ -9,6 +9,8 @@ package pokemonviolet.scenes;
 
 import java.awt.image.BufferedImage;
 import pokemonviolet.model.Handler;
+import pokemonviolet.model.Pokemon;
+import pokemonviolet.model.PokemonMove;
 
 /**
  *
@@ -16,8 +18,14 @@ import pokemonviolet.model.Handler;
  */
 public class LearnMove extends Scene {
 
-	public LearnMove(Handler main) {
+	Pokemon subject;
+	PokemonMove object;
+	
+	public LearnMove(Handler main, Pokemon subject, PokemonMove object) {
 		super(main, "LEARNMOVE", true);
+		
+		this.subject = subject;
+		this.object = object;
 	}
 
 	@Override

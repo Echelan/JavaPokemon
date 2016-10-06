@@ -33,7 +33,6 @@ public class Center extends Scene{
 		
 		main.player.pokemonCenter();
 		
-		
 		countdown = 100;
 		animFrame1 = 0;
 		animFrame2 = 6;

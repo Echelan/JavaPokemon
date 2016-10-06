@@ -20,13 +20,13 @@ import pokemonviolet.model.Handler;
  *
  * @author Andres
  */
-public class GenderChoose extends Scene {
+public class Gender extends Scene {
 
 	private int chosen = 0;
 	private String[] genders = {"Male", "Female"};
 	private String[] name = {"Boy", "Girl"};
 
-	public GenderChoose(Handler main) {
+	public Gender(Handler main) {
 		super(main, "GENDER", true);
 	}
 
@@ -48,7 +48,7 @@ public class GenderChoose extends Scene {
 	@Override
 	protected void accept() {
 		this.dispose();
-		main.gameState.add(new StarterChoose(main, genders[chosen]));
+		main.gameState.add(new Starter(main, genders[chosen]));
 	}
 
 	@Override

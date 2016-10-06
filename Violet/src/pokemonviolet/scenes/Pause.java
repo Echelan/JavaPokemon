@@ -24,24 +24,30 @@ public class Pause extends Scene {
 
 	private String[] options = {"PokeDex", "Heal", "Shop", "Pokemon", "PC", "Bag", "Controls"};
 	private int selection;
+	private boolean showControls;
 
 	public Pause(Handler main) {
 		super(main, "PAUSE", false);
 
+		this.showControls = false;
 		this.selection = 0;
 	}
 
 	@Override
 	public void receiveKeyAction(String action, String state) {
 		if (state.compareTo("RELEASE") == 0) {
-			if (action.compareTo("A") == 0) {
-				accept();
-			} else if (action.compareTo("B") == 0) {
-				cancel();
-			} else if (action.compareTo("START") == 0) {
-				start();
-			} else if (action.compareTo("UP") == 0 || action.compareTo("DOWN") == 0) {
-				move(action);
+			if (showControls) {
+				showControls = false;
+			} else {
+				if (action.compareTo("A") == 0) {
+					accept();
+				} else if (action.compareTo("B") == 0) {
+					cancel();
+				} else if (action.compareTo("START") == 0) {
+					start();
+				} else if (action.compareTo("UP") == 0 || action.compareTo("DOWN") == 0) {
+					move(action);
+				}
 			}
 		}
 	}
@@ -56,6 +62,10 @@ public class Pause extends Scene {
 			main.gameState.add(new Bag(main));
 		} else if (options[selection].compareTo("Pokemon") == 0) {
 			main.gameState.add(new Team(main));
+		} else if (options[selection].compareTo("PokeDex") == 0) {
+			main.gameState.add(new Dex(main));
+		} else if (options[selection].compareTo("Controls") == 0) {
+			showControls = true;
 		}
 	}
 
@@ -110,6 +120,14 @@ public class Pause extends Scene {
 		} catch (IOException ex) {
 		}
 
+		if (showControls) {
+			try {
+				int dimX = 433, dimY = 314;
+				g.drawImage(ImageIO.read(new File("assets/controls.png")), (ssX / 2) - (dimX / 2), (ssY / 2) - (dimY / 2), null);
+			} catch (IOException ex) {
+			}
+		}
+		
 		return tempStitched;
 	}
 
