@@ -60,7 +60,7 @@ public final class Player {
 			 * Current active Pokemon.
 			 */
 			private int currentPokemon;
-			private boolean[] pokeDex;
+			private int[] pokeDex;
 		// </editor-fold>
 		// <editor-fold defaultstate="collapsed" desc="Movement">
 			/**
@@ -137,7 +137,7 @@ public final class Player {
 			setBasics();
 			this.name = name;
 			this.team[0] = starterPokemon;
-			this.pokeDex[this.team[0].getId() - 1] = true;
+			this.pokeDex[this.team[0].getId() - 1] = 2;
 			this.numPokemonTeam = 1;
 		}
 
@@ -153,7 +153,7 @@ public final class Player {
 			setBasics();
 			this.name = name;
 			this.team[0] = new Pokemon(starterID);
-			this.pokeDex[this.team[0].getId() - 1] = true;
+			this.pokeDex[this.team[0].getId() - 1] = 2;
 			this.numPokemonTeam = 1;
 		}
 
@@ -170,7 +170,7 @@ public final class Player {
 			setBasics();
 			this.name = name;
 			this.team[0] = new Pokemon(internalName);
-			this.pokeDex[this.team[0].getId() - 1] = true;
+			this.pokeDex[this.team[0].getId() - 1] = 2;
 			this.numPokemonTeam = 1;
 		}
 
@@ -214,9 +214,9 @@ public final class Player {
 		this.setxTile(30);
 		this.setyTile(30);
 		this.setCurrentPokemon(0);
-		this.pokeDex = new boolean[151];
+		this.pokeDex = new int[151];
 		for (int i = 0; i < getPokeDex().length; i++) {
-			pokeDex[i] = false;
+			pokeDex[i] = 0;
 		}
 		
 		
@@ -233,7 +233,7 @@ public final class Player {
 	public int addPokemon(Pokemon newPokemon) {
 		int response;
 		
-		this.pokeDex[newPokemon.getId() - 1] = true;
+		this.pokeDex[newPokemon.getId() - 1] = 2;
 		
 		if (getNumPokemonTeam() == 6) {
 			if (getNumPokemonPC() == 200) {
@@ -816,8 +816,16 @@ public final class Player {
 		/**
 		 * @return the pokeDex
 		 */
-		public boolean[] getPokeDex() {
+		public int[] getPokeDex() {
 			return pokeDex;
+		}
+		
+		/**
+		 * @param index index of PokeDex to set value for
+		 * @param value value to set in PokeDex index
+		 */
+		public void setPokeDexValue(int index, int value) {
+			pokeDex[index] = value;
 		}
 	//</editor-fold>
 

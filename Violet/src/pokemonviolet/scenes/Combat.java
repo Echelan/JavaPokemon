@@ -69,7 +69,6 @@ public class Combat extends Scene {
 		this.optionsMoves = 0;
 		this.optionsMain = 0;
 		this.optionsBalls = 0;
-//		this.optionsPokemon = 0;
 		this.turnNum = 0;
 		this.currentMenu = "MAIN";
 		this.ready = false;
@@ -91,13 +90,14 @@ public class Combat extends Scene {
 			this.caught[i] = false;
 			enemy.getTeam()[i].setAccuracy(1);
 			enemy.getTeam()[i].setEvasion(1);
+			player.setPokeDexValue(enemy.getTeam()[i].getId() - 1, 1);
 		}
 
 		for (int i = 0; i < player.getNumPokemonTeam(); i++) {
 			player.getTeam()[i].setAccuracy(1);
 			player.getTeam()[i].setEvasion(1);
 		}
-
+		
 		player.setCurrentPokemon(player.getFirstAvailablePokemon());
 		this.currentEnemyPokemon = enemy.getTeam()[enemy.getCurrentPokemon()];
 		this.currentPlayerPokemon = player.getTeam()[player.getCurrentPokemon()];
@@ -153,7 +153,7 @@ public class Combat extends Scene {
 			int randomMove = (rnd.nextInt(currentEnemyPokemon.getNumMoves()));
 			
 			doTurn(currentEnemyPokemon, currentPlayerPokemon, randomMove, enemyPrefix, selfPrefix);
-			turnNum = turnNum + 1;
+			turnNum = 2;
 		} else if (currentEnemyPokemon.getStatSpeed() >= currentPlayerPokemon.getStatSpeed()) {
 			if (turnNum == 0) {
 				Random rnd = new Random();
@@ -560,6 +560,14 @@ public class Combat extends Scene {
 	protected void dispose() {
 //		main.player.setInCombat(false);
 		main.gameState.remove(main.gameState.size() - 1);
+		
+		if (currentPlayerPokemon.isWantingToLearn()) {
+			main.gameState.add(new LearnMove(main,currentPlayerPokemon));
+		}
+		
+//		if (currentPlayerPokemon.isWaitingToEvolve()) {
+//			main.gameState.add(new Evolution);
+//		}
 	}
 
 	@Override
@@ -628,6 +636,7 @@ public class Combat extends Scene {
 		}
 
 		//</editor-fold>
+		
 		if (curEnemyX != finalEnemyX || curPlayerX != finalPlayerX) {
 			if (curEnemyX != finalEnemyX) {
 				curEnemyX = curEnemyX + 20;
@@ -642,7 +651,7 @@ public class Combat extends Scene {
 			}
 		} else {
 			g.setFont(new Font("Arial", Font.PLAIN, 18));
-			if (displayTextQueue.size() > 0) {
+			if (!displayTextQueue.isEmpty()) {
 				g.drawString(displayTextQueue.get(0), 30, ssY - 60);
 			}
 
@@ -672,17 +681,21 @@ public class Combat extends Scene {
 			}
 
 			if (!doneExpPlayer) {
-				int delta = Math.abs(displayExpPlayer - currentPlayerPokemon.getCurEXP());
-				delta = (int) Math.ceil((float) delta / 5);
-				if (displayExpPlayer < currentPlayerPokemon.getCurEXP()) {
-					displayExpPlayer = displayExpPlayer + delta;
-				} else if (displayExpPlayer > currentPlayerPokemon.getCurEXP()) {
-					displayExpPlayer = displayExpPlayer + delta;
-					if (displayExpPlayer > currentPlayerPokemon.getMaxEXP()) {
-						displayExpPlayer = 0;
+				int delta = Math.abs(displayExpPlayer - currentPlayerPokemon.getCurEXP()); 
+				if (delta < 20) {
+					delta = (int) Math.ceil((float) delta / 5);
+					if (displayExpPlayer < currentPlayerPokemon.getCurEXP()) {
+						displayExpPlayer = displayExpPlayer + delta;
+					} else if (displayExpPlayer > currentPlayerPokemon.getCurEXP()) {
+						displayExpPlayer = displayExpPlayer + delta;
+						if (displayExpPlayer > currentPlayerPokemon.getMaxEXP()) {
+							displayExpPlayer = 0;
+						}
+					} else {
+						doneExpPlayer = true;
 					}
 				} else {
-					doneExpPlayer = true;
+					displayExpPlayer = currentPlayerPokemon.getCurEXP();
 				}
 			}
 

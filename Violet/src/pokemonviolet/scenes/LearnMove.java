@@ -21,10 +21,16 @@ public class LearnMove extends Scene {
 	Pokemon subject;
 	PokemonMove object;
 	
-	public LearnMove(Handler main, Pokemon subject, PokemonMove object) {
+	public LearnMove(Handler main, Pokemon subject) {
 		super(main, "LEARNMOVE", true);
 		
 		this.subject = subject;
+		
+		for (int i = 0; i < subject.allMoves.size(); i++) {
+			if (this.level == Integer.parseInt(this.allMoves.get(i).split("-")[0])) {
+				wantingToLearn = true;
+			}
+		}
 		this.object = object;
 	}
 

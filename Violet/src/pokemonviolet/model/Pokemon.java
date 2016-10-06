@@ -105,6 +105,9 @@ public class Pokemon {
 			private int IVSpeed;
 			private int IVSpAtk;
 			private int IVSpDef;
+			
+			private boolean waitingToEvolve;
+			private boolean wantingToLearn;
 		//</editor-fold>
 	//</editor-fold>
 
@@ -356,24 +359,24 @@ public class Pokemon {
 		 * @param level Pokemon level to set.
 		 */
 		public Pokemon(int id, int level, Item ball) {
-		this.id = id;
-		this.gender = "TBD";
-		this.level = level;
-		this.wild = false;
-		this.ballType = ball.getNameInternal();
+			this.id = id;
+			this.gender = "TBD";
+			this.level = level;
+			this.wild = false;
+			this.ballType = ball.getNameInternal();
 
-		genIVs();
-		doBasics();
+			genIVs();
+			doBasics();
 
-		boolean couldCreate = readInfo(this.id);
+			boolean couldCreate = readInfo(this.id);
 
-		updateStats();
-		this.setCurHP(this.getStatHP());
+			updateStats();
+			this.setCurHP(this.getStatHP());
 
-		if (!couldCreate) {
-			System.err.println("Could not find Pokemon with id " + id + ".");
+			if (!couldCreate) {
+				System.err.println("Could not find Pokemon with id " + id + ".");
+			}
 		}
-	}
 	//</editor-fold>
 
 	/**
@@ -633,6 +636,8 @@ public class Pokemon {
 	private void doBasics() {
 		this.numMoves = 0;
 		this.setStatus("");
+		this.waitingToEvolve = false;
+		this.wantingToLearn = false;
 	}
 
 	public int doCatch(Item ball) {
@@ -1027,17 +1032,26 @@ public class Pokemon {
 		for (int i = 0; i < this.numEvols; i++) {
 			if (this.evolveMethod[i].compareTo("Level") == 0) {
 				if (this.level >= this.evolveLevel[i]) {
-					evolve(getPokemonID(this.evolvesInto[i]));
+					waitingToEvolve = true;
 				}
 			}
 		}
-		for (int i = 0; i < this.allMoves.size(); i++) {
-			if (this.level == Integer.parseInt(this.allMoves.get(i).split("-")[0])) {
-				addMove(this.allMoves.get(i).split("-")[1]);
-			}
+		if (moveToLearn != null) {
+			wantingToLearn = true;
 		}
 		this.updateStats();
 	}
+	
+	public PokemonMove moveToLearn() {
+		PokemonMove move = null;
+		for (int i = 0; i < this.allMoves.size(); i++) {
+			if (this.level == Integer.parseInt(this.allMoves.get(i).split("-")[0])) {
+				move = new PokemonMove(this.allMoves.get(i).split("-")[1]);
+			}
+		}
+		return move;
+	}
+	
 
 	/**
 	 * Set 'faint' values.
@@ -1608,5 +1622,21 @@ public class Pokemon {
 		public int getMaxEXP() {
 		return maxEXP;
 	}
+		
+		/**
+		 * @return the waitingToEvolve
+		 */
+		public boolean isWaitingToEvolve() {
+			return waitingToEvolve;
+		}
+
+		/**
+		 * @return the wantingToLearn
+		 */
+		public boolean isWantingToLearn() {
+			return wantingToLearn;
+		}
+	
 	// </editor-fold>
+
 }

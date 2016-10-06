@@ -200,7 +200,7 @@ public class Shop extends Scene {
 				}
 
 				g.drawString(prefix + fullD.substring(thisLineFirstChar, thisLineLastChar+1) + suffix, 15, ssY - 142 + 45 + (i * 20));
-			}		
+			}	
 
 			try{
 				g.drawImage(new pokemonviolet.model.Item(perPocketInventory[category].get(selection)).getImage(), 34, 76, null);
