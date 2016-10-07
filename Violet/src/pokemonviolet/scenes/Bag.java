@@ -30,11 +30,19 @@ public class Bag extends Scene {
 	private int category;
 	private int startIndexX;
 	private int maxItemsPage;
+	private boolean inCombat;
+	private Combat combat;
 
-	public Bag(Handler main) {
+	public Bag(Handler main, Combat cmb) {
 		super(main, "BAG", false);
 		
 		this.inventory = main.player.getBag();
+		
+		this.combat = cmb;
+		this.inCombat = true;
+		if (this.combat == null) {
+			this.inCombat = false;
+		}
 		
 		this.selection = 0;
 		this.category = 0;
@@ -61,20 +69,22 @@ public class Bag extends Scene {
 	@Override
 	protected void accept() {
 		if (selection == inventory[category].size()) {
+			if (inCombat) {
+				combat.cancelExtraAction();
+			}
 			this.dispose();
 		} else {
-//			main.gameState.add(new BuyDialog(main,inventory[category][selection]));
+			if (inCombat && inventory[category].get(selection).getUseInBattle() != 0) {
+				main.gameState.add(new UseDialog(main,inventory[category].get(selection).getId(), this.combat));
+			} else if (!inCombat && inventory[category].get(selection).getUseOutBattle() != 0) {
+				main.gameState.add(new UseDialog(main,inventory[category].get(selection).getId()));
+			}
 		}
 	}
 
 	@Override
 	protected void cancel() {
 		this.dispose();
-	}
-
-	@Override
-	protected void dispose() {
-		main.gameState.remove(main.gameState.size() - 1);
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public class Item {
 		/**
 		 * Number of attributes per Item.
 		 */
-		private static int NUM_ATTRIB = 10;
+		private static int NUM_ATTRIB = 11;
 		private static int SPRITE_WIDTH = 60;
 		private static int SPRITE_HEIGHT = 60;
 		
@@ -68,9 +68,17 @@ public class Item {
 		 */
 		private double pokeRate;
 		/**
+		 * Value for items.
+		 */
+		private double value;
+		/**
 		 * Amount of Item.
 		 */
 		private int amount;
+		/**
+		 * Name of move to teach.
+		 */
+		private String moveName;
 	// </editor-fold>
 
 	//<editor-fold defaultstate="collapsed" desc="Constructors">
@@ -171,8 +179,64 @@ public class Item {
 				this.useInBattle = Integer.parseInt(partes[1]);
 			} else if (partes[0].compareTo("pokeRate") == 0) {
 				this.pokeRate = Double.parseDouble(partes[1]);
+			} else if (partes[0].compareTo("moveName") == 0 && partes.length > 1) {
+				this.moveName = partes[1];
 			}
 		}
+		switch (id){
+			case 1:
+				this.value = 100;
+				break;
+			case 2:
+				this.value = 200;
+				break;
+			case 3:
+				this.value = 250;
+				break;
+			case 19:
+				this.value = 20;
+				break;
+			case 20:
+				this.value = 50;
+				break;
+			case 21:
+				this.value = 200;
+				break;
+			case 34:
+				this.value = 20;
+				break;
+			case 35:
+				this.value = 50;
+				break;
+			case 36:
+				this.value = 60;
+				break;
+			case 37:
+				this.value = 80;
+				break;
+			case 38:
+				this.value = 100;
+				break;
+			case 39:
+				this.value = 50;
+				break;
+			case 40:
+				this.value = 200;
+				break;
+			case 43:
+				this.value = 10;
+				break;
+			case 47:
+				this.value = 1;
+				break;
+			case 48:
+				this.value = 10;
+				break;
+			default:
+				this.value = 0;
+				break;
+		}
+		
 		success = true;
 
 		return success;
@@ -293,8 +357,38 @@ public class Item {
 		 * @return the nameInternal
 		 */
 		public String getNameInternal() {
-		return nameInternal;
-	}
+			return nameInternal;
+		}
+		
+		/**
+		 * @return the useOutBattle
+		 */
+		public int getUseOutBattle() {
+			return useOutBattle;
+		}
+
+		/**
+		 * @return the useInBattle
+		 */
+		public int getUseInBattle() {
+			return useInBattle;
+		}
+
+		/**
+		 * @return the moveName
+		 */
+		public String getMoveName() {
+			return moveName;
+		}
+		
+		/**
+		 * @return the value
+		 */
+		public double getValue() {
+			return value;
+		}
 	//</editor-fold>
+
+
 
 }

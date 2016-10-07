@@ -99,6 +99,7 @@ public class Title extends Scene {
 	protected void start() {
 		if (ready) {
 			this.dispose();
+			main.gameState.add(new Gender(main));
 		} else {
 			accept();
 		}
@@ -107,12 +108,6 @@ public class Title extends Scene {
 	@Override
 	protected void cancel() {
 		System.exit(0);
-	}
-
-	@Override
-	protected void dispose() {
-		main.gameState.remove(main.gameState.size() - 1);
-		main.gameState.add(new Gender(main));
 	}
 
 	@Override

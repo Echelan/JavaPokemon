@@ -98,11 +98,6 @@ public class Starter extends Scene {
 	}
 
 	@Override
-	protected void dispose() {
-		main.gameState.remove(main.gameState.size() - 1);
-	}
-
-	@Override
 	protected void move(String dir) {
 		if (dir.compareTo("LEFT") == 0) {
 			chosen = chosen - 1;

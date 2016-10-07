@@ -62,11 +62,6 @@ public class Center extends Scene{
 	}
 
 	@Override
-	protected void dispose() {
-		main.gameState.remove(main.gameState.size() - 1);
-	}
-
-	@Override
 	protected void move(String dir) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}

@@ -79,11 +79,6 @@ public class Dex extends Scene {
 	}
 
 	@Override
-	protected void dispose() {
-		main.gameState.remove(main.gameState.size() - 1);
-	}
-
-	@Override
 	protected void move(String dir) {
 		if (dir.compareTo("UP") == 0) {
 			selectionY = selectionY - 1;

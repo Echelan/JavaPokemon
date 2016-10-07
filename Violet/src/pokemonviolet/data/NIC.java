@@ -44,6 +44,10 @@ public abstract class NIC {
 		 */
 		public static ArrayList<List<String>> INFO_MAPS;
 		/**
+		 * Main data for TMs.
+		 */
+		public static List<String> INFO_TM;
+		/**
 		 * Blank map data.
 		 */
 		public static List<String> INFO_BLANK_MAP;
@@ -73,6 +77,7 @@ public abstract class NIC {
 		List<String> readInfoM = null;
 		List<String> readInfoT = null;
 		List<String> readInfoB = null;
+		List<String> readInfoTM = null;
 		ArrayList<List<String>> readMap = new ArrayList();
 		
 		try {
@@ -84,45 +89,53 @@ public abstract class NIC {
 
 		try {
 
-			archivo = new File("listPokemon.txt");
+			archivo = new File("db/listPokemon.txt");
 			readInfoP = Files.readAllLines(archivo.toPath());
 
 		} catch (IOException ex) {
-			System.err.println("Couldn't load files!");
+			System.err.println("POKEMON: Couldn't load files!");
 			System.exit(0);
 		}
 
 		try {
-			archivo = new File("listItems.txt");
+			archivo = new File("db/listItems.txt");
 			readInfoI = Files.readAllLines(archivo.toPath());
 
 		} catch (IOException ex) {
-			System.err.println("Couldn't load files!");
+			System.err.println("ITEMS: Couldn't load files!");
 			System.exit(0);
 		}
 
 		try {
-			archivo = new File("listMoves.txt");
+			archivo = new File("db/listMoves.txt");
 			readInfoM = Files.readAllLines(archivo.toPath());
 
 		} catch (IOException ex) {
-			System.err.println("Couldn't load files!");
+			System.err.println("MOVES: Couldn't load files!");
 			System.exit(0);
 		}
 
 		try {
-			archivo = new File("listTypes.txt");
+			archivo = new File("db/listTypes.txt");
 			readInfoT = Files.readAllLines(archivo.toPath());
 		} catch (IOException ex) {
-			System.err.println("Couldn't load files!");
+			System.err.println("TYPES: Couldn't load files!");
 			System.exit(0);
 		}
 
 		try {
-			archivo = new File("mapBLANK.txt");
+			archivo = new File("db/listTM.txt");
+			readInfoTM = Files.readAllLines(archivo.toPath());
+		} catch (IOException ex) {
+			System.err.println("TM: Couldn't load files!");
+			System.exit(0);
+		}
+
+		try {
+			archivo = new File("db/mapBLANK.txt");
 			readInfoB = Files.readAllLines(archivo.toPath());
 		} catch (IOException ex) {
-			System.err.println("Couldn't load files!");
+			System.err.println("BLANK: Couldn't load files!");
 			System.exit(0);
 		}
 
@@ -130,7 +143,7 @@ public abstract class NIC {
 			for (int x = 0; x < NUM_MAPS_X; x++) {
 				List<String> temp = null;
 				try {
-					archivo = new File("mapX" + x + "Y" + y + ".txt");
+					archivo = new File("db/mapX" + x + "Y" + y + ".txt");
 					temp = Files.readAllLines(archivo.toPath());
 				} catch (IOException ex1) {
 					temp = readInfoB;
@@ -145,5 +158,6 @@ public abstract class NIC {
 		INFO_TYPES = readInfoT;
 		INFO_MAPS = readMap;
 		INFO_BLANK_MAP = readInfoB;
+		INFO_TM = readInfoTM;
 	}
 }

@@ -28,17 +28,30 @@ public class LearnMove extends Scene {
 
 	Pokemon subject;
 	PokemonMove object;
-	int selectionX;
-	int selectionY;
+	int selection;
+	String returnState;
+	int itemID;
 	
-	public LearnMove(Handler main, Pokemon subject, PokemonMove object) {
+	public LearnMove(Handler main, Pokemon subject, PokemonMove object, String returnState) {
 		super(main, "LEARNMOVE", true);
 		
 		this.subject = subject;
 		this.object = object;
+		this.returnState = returnState;
+		this.itemID = -1;
 		
-		this.selectionX = 0;
-		this.selectionY = 0;
+		this.selection = 0;
+	}
+	
+	public LearnMove(Handler main, Pokemon subject, PokemonMove object, String returnState, int itemID) {
+		super(main, "LEARNMOVE", true);
+		
+		this.subject = subject;
+		this.object = object;
+		this.returnState = returnState;
+		this.itemID = itemID;
+		
+		this.selection = 0;
 	}
 
 	@Override
@@ -58,7 +71,13 @@ public class LearnMove extends Scene {
 
 	@Override
 	protected void accept() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		if (selection < 4) {
+			subject.setMove(selection, object);
+			main.clearStates(returnState);
+			if (itemID != -1) {
+				main.player.subItem(itemID);
+			}
+		}
 	}
 
 	@Override
@@ -67,32 +86,17 @@ public class LearnMove extends Scene {
 	}
 
 	@Override
-	protected void dispose() {
-		main.gameState.remove(main.gameState.size() - 1);
-	}
-
-	@Override
 	protected void move(String dir) {
 		if (dir.compareTo("UP") == 0) {
-			selectionY = selectionY - 1;
+			selection = selection - 1;
 		} else if (dir.compareTo("DOWN") == 0) {
-			selectionY = selectionY + 1;
-		} else if (dir.compareTo("LEFT") == 0) {
-			selectionX = selectionX - 1;
-		} else if (dir.compareTo("RIGHT") == 0) {
-			selectionX = selectionX + 1;
+			selection = selection + 1;
 		}
 		
-		if (selectionX < 0){
-			selectionX = 0;
-		} else if (selectionX > 1) {
-			selectionX = 1;
-		}
-		
-		if (selectionY < 0){
-			selectionY = 0;
-		} else if (selectionY > 2) {
-			selectionY = 2;
+		if (selection < 0){
+			selection = 0;
+		} else if (selection > 4) {
+			selection = 4;
 		}
 	}
 
@@ -106,7 +110,7 @@ public class LearnMove extends Scene {
 		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 		
-		g.drawImage(ImageIO.read(new File("assets/maleBack.png")), 0, 0, ssX, ssY, null);
+		g.drawImage(ImageIO.read(new File("assets/pokemonBack.png")), 0, 0, ssX, ssY, null);
 		
 		g.setFont(new Font("Arial", Font.BOLD, 25));
 		g.setColor(Color.black);
@@ -114,72 +118,43 @@ public class LearnMove extends Scene {
 		g.drawImage(genWindow(7, 170, 170), 5, 5, null);
 		g.drawImage(subject.getFrontImage(), 5 + (170 / 2) - (SPRITE_WIDTH / 2), 5 + (170 / 2) - (SPRITE_HEIGHT / 2), SPRITE_WIDTH, SPRITE_HEIGHT, null);
 		
-		g.drawImage(genWindow(7, ssX - 185, 250), 180, 5, null);
+		g.drawImage(genWindow(7, ssX - 185, ssY - 61), 180, 5, null);
 		
 		g.drawImage(genWindow(7, 170, 50), 5, 180, null);
 		g.drawString(subject.getNameNick(), 20, 214);
 		
-		g.setFont(new Font("Arial", Font.BOLD, 15));
+		g.setFont(new Font("Arial", Font.BOLD, 25));
 		for (int i = 0; i < subject.getNumMoves() + 1; i++) {
 			if (i < subject.getNumMoves()) {
-				int x = 190 + ((int) Math.floor(i % 2) * 135), y = (30 + ((int) Math.floor(i / 2) * 45));
-				g.drawImage(genWindow(5, 130, 40), x, y, null);
+				int x = 190, y = 30 + (i * 30);
 				g.drawString(subject.getMoveSet()[i].getNameDisplay(), x + 20, y + 25);
 			} else {
-				int x = 190 + ((int) Math.floor(i % 2) * 135), y = (30 + ((int) Math.floor(i / 2) * 45));
-				g.drawImage(genWindow(6, 130, 40), x + 65, y, null);
-				g.drawString(object.getNameDisplay(), x + 65 + 20, y + 25);
+				int x = 190, y = 30 + (i * 30);
+				g.setColor(Color.blue);
+				g.drawString(object.getNameDisplay(), x + 20, y + 25);
+				g.setColor(Color.black);
 			}
 					
 		}
 		
+		g.setFont(new Font("Arial", Font.BOLD, 15));
 		g.drawImage(genWindow(7, ssX - 2, 85), 1, ssY - 86, null);
 		
-		if (selectionY == 2) {
-			g.drawString(object.getNameDisplay(), 16, ssY - 63);
-			g.drawString("Power: "+object.getDmgBase(), 76, ssY - 63);
-			g.drawString("Accuracy: "+object.getAccuracy(), 146, ssY - 63);
-			g.drawString("PP: "+object.getPP()+"/"+object.getPPMax(), 216, ssY - 63);
-			g.setFont(new Font("Arial", Font.PLAIN, 20));
-			
-			int charsInLine = 30;
-			String fullD = object.getDescription();
-			for (int i = 0; i < (fullD.length() / charsInLine) + 1; i++) {
-				String prefix = "", suffix = "";
-
-				int thisLineFirstChar = i * charsInLine;
-				int thisLinePrevChar = thisLineFirstChar - 1;
-				int thisLineLastChar = ((i + 1) * charsInLine) - 2;
-				int thisLineNextChar = thisLineLastChar + 1;
-
-				if (thisLineFirstChar != 0){
-					if (fullD.charAt(thisLinePrevChar) != ' ') {
-						prefix = "" + fullD.charAt(thisLinePrevChar);
-					}
-				}
-
-				if (thisLineNextChar < fullD.length()) {
-					if (fullD.charAt(thisLineNextChar) != ' ' && fullD.charAt(thisLineLastChar) != ' ') {
-						suffix = "-";
-					}
-				} else {
-					thisLineLastChar = fullD.length() - 1;
-				}
-
-				g.drawString(prefix + fullD.substring(thisLineFirstChar, thisLineLastChar+1) + suffix, 15, ssY - 142 + 45 + (i * 20));
-			}	
-			
-			g.setFont(new Font("Arial", Font.BOLD, 25));
+		PokemonMove target;
+		if (selection == 4) {
+			target = object;
 		} else {
-			int pos = (selectionY * 2) + selectionX;
-			g.drawString(subject.getMoveSet()[pos].getNameDisplay(), 16, ssY - 63);
-			g.drawString("Power: "+subject.getMoveSet()[pos].getDmgBase(), 76, ssY - 63);
-			g.drawString("Accuracy: "+subject.getMoveSet()[pos].getAccuracy(), 146, ssY - 63);
-			g.drawString("PP: "+subject.getMoveSet()[pos].getPP()+"/"+subject.getMoveSet()[pos].getPPMax(), 216, ssY - 63);
-			g.setFont(new Font("Arial", Font.PLAIN, 20));
-			
-			int charsInLine = 30;
-			String fullD = subject.getMoveSet()[pos].getDescription();
+			target = subject.getMoveSet()[selection];
+		}
+		if (target != null) {
+			g.drawString(target.getNameDisplay(), 16, ssY - 63);
+			g.drawString("Power: "+target.getDmgBase(), 136, ssY - 63);
+			g.drawString("Accuracy: "+target.getAccuracy(), 226, ssY - 63);
+			g.drawString("PP: "+target.getPP()+"/"+target.getPPMax(), 356, ssY - 63);
+			g.setFont(new Font("Arial", Font.PLAIN, 15));
+
+			int charsInLine = 60;
+			String fullD = target.getDescription();
 			for (int i = 0; i < (fullD.length() / charsInLine) + 1; i++) {
 				String prefix = "", suffix = "";
 
@@ -202,16 +177,12 @@ public class LearnMove extends Scene {
 					thisLineLastChar = fullD.length() - 1;
 				}
 
-				g.drawString(prefix + fullD.substring(thisLineFirstChar, thisLineLastChar+1) + suffix, 15, ssY - 142 + 45 + (i * 20));
+				g.drawString(prefix + fullD.substring(thisLineFirstChar, thisLineLastChar+1) + suffix, 15, ssY - 43 + (i * 20));
 			}	
-			
-			g.setFont(new Font("Arial", Font.BOLD, 25));
 		}
+		g.setFont(new Font("Arial", Font.BOLD, 25));
 		
-		int x = 195 + (selectionX * 135) + 10, y = (-7 + (selectionY * 45)) + 25;
-		if (selectionY == 2) {
-			x = 200 + (int) (1.5f * 135) + 10;
-		}
+		int x = 195, y = 40 + (selection * 30);
 		g.drawImage(ImageIO.read(new File("assets/arrow.png")), x, y, 20, 20, null);
 		
 		return tempStitched;

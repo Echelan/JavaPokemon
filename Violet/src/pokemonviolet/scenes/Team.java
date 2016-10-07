@@ -16,6 +16,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import pokemonviolet.model.Handler;
 import pokemonviolet.model.Pokemon;
+import pokemonviolet.model.PokemonMove;
 
 /**
  *
@@ -29,18 +30,32 @@ public class Team extends Scene {
 	private int swap;
 	private int animFrame;
 	private BufferedImage animImg;
-	private boolean sendToCombat;
+	private boolean inCombat;
 	private Combat combat;
 	private boolean canExit;
 	private int curPokemon;
+	private int itemToUse;
+	private boolean usingItem;
+	private int[] TMappropriate;
+	
 			
 	public Team(Handler main) {
 		super(main, "TEAM", true);
 		
 		this.curPokemon = -1;
+		
 		this.canExit = true;
 		this.combat = null;
-		this.sendToCombat = false;
+		this.inCombat = false;
+		
+		this.TMappropriate = new int[6];
+		for (int i = 0; i < TMappropriate.length; i++) {
+			TMappropriate[i] = 2;
+		}
+		
+		this.usingItem = false;
+		this.itemToUse = -1;
+		
 		this.team = main.player.getTeam();
 		selection = 0;
 		swap = -1;
@@ -55,9 +70,19 @@ public class Team extends Scene {
 		super(main, "TEAM", true);
 		
 		this.curPokemon = currentPokemonNum;
+		
 		this.canExit = canExit;
 		this.combat = cmb;
-		this.sendToCombat = true;
+		this.inCombat = true;
+		
+		this.TMappropriate = new int[6];
+		for (int i = 0; i < TMappropriate.length; i++) {
+			TMappropriate[i] = 2;
+		}
+		
+		this.usingItem = false;
+		this.itemToUse = -1;
+		
 		this.team = main.player.getTeam();
 		selection = 0;
 		swap = -1;
@@ -67,7 +92,156 @@ public class Team extends Scene {
 		} catch (IOException ex) {
 		}
 	}
+	
+	public Team(Handler main, Combat cmb, int itemID) {
+		super(main, "TEAM", true);
+		
+		this.curPokemon = -1;
+		
+		this.canExit = true;
+		this.combat = cmb;
+		this.inCombat = true;
+		if (this.combat == null) {
+			this.inCombat = false;
+		}
+		
+		this.usingItem = true;
+		this.itemToUse = itemID;
+		
+		this.team = main.player.getTeam();
+		
+		this.TMappropriate = new int[6];
+		if (new pokemonviolet.model.Item(itemToUse).getUseOutBattle() < 3) {
+			for (int i = 0; i < TMappropriate.length; i++) {
+				TMappropriate[i] = 2;
+			}
+		} else {
+			for (int i = 0; i < TMappropriate.length; i++) {
+				if (team[i] != null) {
+					String internalName = new pokemonviolet.model.Item(itemToUse).getMoveName();
+					TMappropriate[i] = 0;
+					int counter = 0;
+					while (counter < pokemonviolet.data.NIC.INFO_TM.size()) {
+						if (pokemonviolet.data.NIC.INFO_TM.get(counter).split("=")[0].compareTo(internalName) == 0) {
+							int level2 = 0;
+							while (level2 < pokemonviolet.data.NIC.INFO_TM.get(counter).split("=")[1].split(",").length) {
+								if (team[i].getNameInternal().compareTo(pokemonviolet.data.NIC.INFO_TM.get(counter).split("=")[1].split(",")[level2]) == 0) {
+									TMappropriate[i] = 1;
+									level2 = pokemonviolet.data.NIC.INFO_TM.get(counter).split("=")[1].split(",").length;
+								} else {
+									level2 = level2 + 1;
+								}
+							}
+							counter = pokemonviolet.data.NIC.INFO_TM.size();
+						} else {
+							counter = counter + 1;
+						}
+					}
+				} else {
+					TMappropriate[i] = 2;
+				}
+			}
+		}
+		
+		selection = 0;
+		swap = -1;
+		animFrame = 0;
+		try {
+			animImg = ImageIO.read(new File(path+"ballAnim.png"));
+		} catch (IOException ex) {
+		}
+	}
 
+	private void useItem() {
+		if (inCombat) {
+			if (useMedTypeItem()) {
+				main.player.subItem(itemToUse);
+				main.clearStates("COMBAT");
+				combat.usedItem();
+			}
+		} else if (!inCombat) {
+			if (new pokemonviolet.model.Item(itemToUse).getUseOutBattle() == 1) {
+				if (useMedTypeItem()) {
+					main.player.subItem(itemToUse);
+					main.clearStates("BAG");
+				}				
+			} else if (new pokemonviolet.model.Item(itemToUse).getUseOutBattle() == 3) {
+				if (TMappropriate[selection] == 1) {
+					if (team[selection].getNumMoves() < 4) {
+						team[selection].addMove(new pokemonviolet.model.Item(itemToUse).getMoveName());
+						main.clearStates("BAG");
+						main.player.subItem(itemToUse);
+					} else {
+						main.gameState.add(new LearnMove(main, team[selection], new PokemonMove(new pokemonviolet.model.Item(itemToUse).getMoveName()), "BAG"));
+					}
+				}
+			} else if (new pokemonviolet.model.Item(itemToUse).getUseOutBattle() == 4) {
+				if (TMappropriate[selection] == 1) {
+					if (team[selection].getNumMoves() < 4) {
+						team[selection].addMove(new pokemonviolet.model.Item(itemToUse).getMoveName());
+						main.clearStates("BAG");
+						main.player.subItem(itemToUse);
+					} else {
+						main.gameState.add(new LearnMove(main, team[selection], new PokemonMove(new pokemonviolet.model.Item(itemToUse).getMoveName()), "BAG"));
+					}
+				}
+			}
+		}
+	}
+	
+	private boolean useMedTypeItem() {
+		boolean used = false;
+		if (new pokemonviolet.model.Item(itemToUse).getId() < 22) {
+			used = true;
+			team[selection].setCurHP(team[selection].getCurHP() + (int) new pokemonviolet.model.Item(itemToUse).getValue());
+		} else if (new pokemonviolet.model.Item(itemToUse).getId() < 25) {
+			used = true;
+			team[selection].setCurHP((double) 1.0);
+		} else if (new pokemonviolet.model.Item(itemToUse).getId() == 32) {
+			used = true;
+			team[selection].setCurHP((double) 0.5);
+		} else if (new pokemonviolet.model.Item(itemToUse).getId() < 33) {
+			used = true;
+			team[selection].setCurHP((double) 1.0);
+		} else if (new pokemonviolet.model.Item(itemToUse).getId() < 41) {
+			used = true;
+			team[selection].setCurHP(team[selection].getCurHP() + (int) new pokemonviolet.model.Item(itemToUse).getValue());
+		} else if (new pokemonviolet.model.Item(itemToUse).getId() == 42 && team[selection].isFainted()) {
+			used = true;
+			team[selection].revive(1.0);
+		} else if (new pokemonviolet.model.Item(itemToUse).getId() < 45) {
+			boolean usedIt = false;
+			for (int i = 0; i < team[selection].getMoveSet().length; i++) {
+				if (new pokemonviolet.model.Item(itemToUse).getValue() != 0) {
+					if (!usedIt && team[selection].getMoveSet()[i].getPP() + new pokemonviolet.model.Item(itemToUse).getValue() <= team[selection].getMoveSet()[i].getPPMax()) {
+						usedIt = true;
+						team[selection].getMoveSet()[i].setPP(team[selection].getMoveSet()[i].getPP() + (int) new pokemonviolet.model.Item(itemToUse).getValue());
+					}
+				} else {
+					if (!usedIt && team[selection].getMoveSet()[i].getPP() != team[selection].getMoveSet()[i].getPPMax()) {
+						usedIt = true;
+						team[selection].getMoveSet()[i].setPP(team[selection].getMoveSet()[i].getPPMax());
+					}
+				}
+			}
+			used = usedIt;
+		} else if (new pokemonviolet.model.Item(itemToUse).getId() < 47) {
+			used = true;
+			for (int i = 0; i < team[selection].getMoveSet().length; i++) {
+				if (new pokemonviolet.model.Item(itemToUse).getValue() != 0) {
+					if (team[selection].getMoveSet()[i].getPP() + new pokemonviolet.model.Item(itemToUse).getValue() <= team[selection].getMoveSet()[i].getPPMax()) {
+						team[selection].getMoveSet()[i].setPP(team[selection].getMoveSet()[i].getPP() + (int) new pokemonviolet.model.Item(itemToUse).getValue());
+					}
+				} else {
+					if (team[selection].getMoveSet()[i].getPP() != team[selection].getMoveSet()[i].getPPMax()) {
+						team[selection].getMoveSet()[i].setPP(team[selection].getMoveSet()[i].getPPMax());
+					}
+				}
+			}
+		}
+		return used;
+	}
+	
 	@Override
 	public void receiveKeyAction(String action, String state) {
 		if (state.compareTo("RELEASE") == 0) {
@@ -88,16 +262,18 @@ public class Team extends Scene {
 	protected void accept() {
 		if (selection == 6) {
 			if (canExit) {
-				if (sendToCombat) {
-					combat.cancelNewPokemon();
+				if (inCombat) {
+					combat.cancelExtraAction();
 				}
 				this.dispose();
 			}
-		}else if (sendToCombat) {
+		}else if (inCombat && !usingItem) {
 			if (!team[selection].isFainted() && curPokemon != selection) {
 				combat.receiveNewPokemon(selection);
 				this.dispose();
 			}
+		}else if (usingItem) {
+			useItem();
 		} else if (swap == -1) {
 			swap = selection;
 		} else {
@@ -115,11 +291,6 @@ public class Team extends Scene {
 		} else {
 			swap = -1;
 		}
-	}
-
-	@Override
-	protected void dispose() {
-		main.gameState.remove(main.gameState.size() - 1);
 	}
 
 	@Override
@@ -267,8 +438,16 @@ public class Team extends Scene {
 							animFrame = 0;
 						}
 					}
-
+					
+					if (TMappropriate[i] == 0) {
+						g.setColor(Color.orange);
+					} else if (TMappropriate[i] == 1) {
+						g.setColor(Color.GREEN);
+					} else {
+						g.setColor(Color.white);
+					}
 					g.drawString(team[i].getNameNick(), 20, 108);
+					g.setColor(Color.white);
 					g.drawString("Lv. "+team[i].getLevel(), 45, 139);
 
 					if (team[i].isFainted()) {

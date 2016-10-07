@@ -40,7 +40,9 @@ public abstract class Scene {
 
 	protected abstract void start();
 
-	protected abstract void dispose();
+	public void dispose() {
+		main.gameState.remove(main.gameState.size() - 1);
+	}
 
 	protected abstract void move(String dir);
 

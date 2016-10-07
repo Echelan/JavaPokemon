@@ -37,11 +37,6 @@ public class Evolution extends Scene {
 	}
 
 	@Override
-	protected void dispose() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
 	protected void move(String dir) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}

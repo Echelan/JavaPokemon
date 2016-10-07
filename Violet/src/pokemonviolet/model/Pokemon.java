@@ -26,7 +26,7 @@ public class Pokemon {
 			private static final int RESIZE = 2;
 			private static final int SPRITE_WIDTH = 80 * RESIZE;
 			private static final int SPRITE_HEIGHT = 80 * RESIZE;
-			private static final int NUM_ATTRIB = 40;
+			private static final int NUM_ATTRIB = 38;
 			private static final int MAX_TOTAL_EV = 510;
 			private static final int MAX_SINGLE_EV = 252;
 
@@ -1025,7 +1025,7 @@ public class Pokemon {
 	 *  @return PokemonMove Pokemon learns.
 	 */
 	public String levelUp() {
-		this.setCurEXP(this.getCurEXP() - this.getMaxEXP());
+		this.curEXP = this.getCurEXP() - this.getMaxEXP();
 		this.level = this.getLevel() + 1;
 		
 		for (int i = 0; i < this.numEvols; i++) {
@@ -1467,6 +1467,19 @@ public class Pokemon {
 			if (this.getCurHP() <= 0) {
 				faint();
 				this.curHP = 0;
+			} else if (this.getCurHP() > this.getStatHP()) {
+				this.curHP = this.statHP;
+			}
+		}
+		
+		/**
+		 * @param healthpercent the health percent to set
+		 */
+		public void setCurHP(double healthpercent) {
+			this.curHP = (int) (this.baseHP * healthpercent);
+			if (this.getCurHP() <= 0) {
+				faint();
+				this.curHP = 0;
 			}
 		}
 
@@ -1475,16 +1488,16 @@ public class Pokemon {
 		 * @return Pokemon leveled up from experience earned.
 		 */
 		public String setCurEXP(int curEXP) {
-			String result = null;
+			String result = "";
 			this.curEXP = curEXP;
-			if (this.getCurEXP() >= this.getMaxEXP()) {
+			while (this.getCurEXP() >= this.getMaxEXP()) {
 				String thisResult = levelUp();
 				if (thisResult == null) {
 					thisResult = "level";
 				}
 				
-				if (result == null) {
-					result = thisResult;
+				if (result.compareTo("") == 0) {
+					result = thisResult;	
 				}
 			}
 			

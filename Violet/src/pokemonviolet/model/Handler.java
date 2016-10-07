@@ -80,12 +80,11 @@ public class Handler implements Runnable {
 				
 		player.addItem("POKEBALL", 15);
 		player.addItem("MASTERBALL", 1);
-		
-		Pokemon snake = new Pokemon("EKANS",3);
-		snake.addMove(new PokemonMove("TAUNT"));
-		snake.addMove(new PokemonMove("TORMENT"));
-		player.addPokemon(snake);
-		
+		player.addItem("TM06", 1);
+		player.addItem("TM11", 1);
+		player.addItem("TM09", 1);
+		player.addItem("TM10", 1);
+		player.addItem("POTION",1);
 
 		refreshDisplayedMaps();
 		thisThread.start();
@@ -403,6 +402,13 @@ public class Handler implements Runnable {
 	public void canContinue() {
 		gw.setVisible(true);
 		gw.startCanvasThread();
+	}
+	
+	public void clearStates(String limit) {
+		int counter = 1;
+		while (gameState.get(gameState.size() - counter).getName().compareTo(limit) != 0) {
+			gameState.get(gameState.size() - counter).dispose();
+		}
 	}
 	
 	@Override

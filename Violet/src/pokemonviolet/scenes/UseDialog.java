@@ -20,23 +20,30 @@ import pokemonviolet.model.Handler;
  *
  * @author Andres
  */
-public class BuyDialog extends Scene{
+public class UseDialog extends Scene{
 
 	private int itemID;
-	private int itemAmount;
 	private int choice;
-	private int curPrice;
-	private int itemPrice;
-	private String[] choices = {"Buy", "Cancel"};
+	private boolean inCombat;
+	private Combat combat;
+	private String[] choices = {"Use", "Cancel"};
 	
-	public BuyDialog(Handler main, int id) {
+	public UseDialog(Handler main, int id) {
 		super(main, "BUY", false);
 		
 		this.choice = 0;
 		this.itemID = id;
-		this.itemAmount = 1;
-		this.itemPrice = new pokemonviolet.model.Item(this.itemID).getPrice();
-		this.curPrice = this.itemAmount * this.itemPrice;
+		this.inCombat = false;
+		this.combat = null;
+	}
+	
+	public UseDialog(Handler main, int id, Combat cmb) {
+		super(main, "BUY", false);
+		
+		this.choice = 0;
+		this.itemID = id;
+		this.inCombat = true;
+		this.combat = cmb;
 	}
 
 	@Override
@@ -58,13 +65,31 @@ public class BuyDialog extends Scene{
 	@Override
 	protected void accept() {
 		if (choice == 0) {
-			if (main.player.getFunds() >= curPrice) {
-				main.player.setFunds(main.player.getFunds() - curPrice);
-				main.player.addItem(new pokemonviolet.model.Item(itemID, itemAmount));
-				this.dispose();
+			if (inCombat) {
+				if (new pokemonviolet.model.Item(itemID).getUseInBattle() == 1) {
+					main.gameState.add(new Team(main, combat, itemID));
+				} else if (new pokemonviolet.model.Item(itemID).getUseInBattle() == 2) {
+					if (new pokemonviolet.model.Item(itemID).getPokeRate() != 0) {
+						combat.throwBall(itemID);
+						main.player.subItem(itemID);
+						this.dispose();
+						if (inCombat) {
+							main.clearStates("COMBAT");
+						}
+					}
+				}
+			} else if (!inCombat) {
+				if (new pokemonviolet.model.Item(itemID).getUseOutBattle() == 1) {
+					main.gameState.add(new Team(main, combat, itemID));
+				} else if (new pokemonviolet.model.Item(itemID).getUseOutBattle() == 2) {
+				} else if (new pokemonviolet.model.Item(itemID).getUseOutBattle() == 3) {
+					main.gameState.add(new Team(main, combat, itemID));
+				} else if (new pokemonviolet.model.Item(itemID).getUseOutBattle() == 4) {
+					main.gameState.add(new Team(main, combat, itemID));
+				}
+//				&& new pokemonviolet.model.Item(itemID).getUseOutBattle() != 0) {
+
 			}
-		} else if (choice == 1) {
-			this.dispose();
 		}
 	}
 
@@ -84,10 +109,6 @@ public class BuyDialog extends Scene{
 			choice = choice - 1;
 		} else if (dir.compareTo("DOWN") == 0) {
 			choice = choice + 1;
-		} else if (dir.compareTo("LEFT") == 0) {
-			itemAmount = itemAmount - 1;
-		} else if (dir.compareTo("RIGHT") == 0) {
-			itemAmount = itemAmount + 1;
 		}
 		
 		if (choice < 0) {
@@ -95,14 +116,6 @@ public class BuyDialog extends Scene{
 		} else if (choice > 1) {
 			choice = 0;
 		}
-		
-		if (itemAmount > 99) {
-			itemAmount = 99;
-		} else if (itemAmount < 1) {
-			itemAmount = 1;
-		}
-		
-		this.curPrice = this.itemAmount * this.itemPrice;
 	}
 
 	@Override
@@ -111,20 +124,11 @@ public class BuyDialog extends Scene{
 		Graphics g = tempStitched.getGraphics();
 
 		int x = ssX - 160;
-		g.drawImage(genWindow(0, 120, 60), x, 40, null);
-		g.drawImage(genWindow(0, 120, 60), x, 101, null);
 		g.drawImage(genWindow(0, 120, 90), x, 162, null);
 		
 		g.setColor(Color.black);
 		g.setFont(new Font("Arial", Font.BOLD, 20));
-		g.drawString("x"+itemAmount, x + 20, 80);
 		
-		if (curPrice > main.player.getFunds()) {
-			g.setColor(Color.red);
-		}
-		g.drawString("$  "+curPrice, x + 20, 141);
-		
-		g.setColor(Color.black);
 		for (int i = 0; i < choices.length; i++) {
 			g.drawString(choices[i], x + 30, 203 + (i * 30));
 		}
