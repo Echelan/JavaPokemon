@@ -20,11 +20,12 @@ import pokemonviolet.model.Handler;
  */
 public abstract class Scene {
 
-	protected static final int ssX = pokemonviolet.model.Handler.SCREEN_SIZE_X, ssY = pokemonviolet.model.Handler.SCREEN_SIZE_Y;
+	protected static final int ssX = (int) (pokemonviolet.model.Handler.SCREEN_SIZE_X / pokemonviolet.model.Handler.RESIZE);
+	protected static final int ssY = (int) (pokemonviolet.model.Handler.SCREEN_SIZE_Y / pokemonviolet.model.Handler.RESIZE);
 	protected final Handler main;
 	private final String name;
 	private final boolean full;
-	protected final static float RESIZE = 2.0f;
+	protected final static float RESIZE = pokemonviolet.model.Handler.RESIZE;
 
 	public Scene(Handler main, String name, boolean full) {
 		this.main = main;
@@ -57,21 +58,24 @@ public abstract class Scene {
 	 * @return Window Buffered Image.
 	 * @throws IOException
 	 */
-	protected BufferedImage genWindow(int theme, int dimX, int dimY) throws IOException {
-		BufferedImage window = new BufferedImage(dimX, dimY, BufferedImage.TYPE_INT_ARGB);
+	protected BufferedImage genWindow(int theme, double dimX, double dimY) throws IOException {
+		int dimXint = resizedValue(dimX);
+		int dimYint = resizedValue(dimY);
+		
+		BufferedImage window = new BufferedImage(dimXint, dimYint, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = window.getGraphics();
 
 		int pieceDim = (int) (RESIZE * 7);
 
-		if (dimX < pieceDim * 2) {
-			dimX = pieceDim * 2;
+		if (dimXint < pieceDim * 2) {
+			dimXint = pieceDim * 2;
 		}
 
-		if (dimY < pieceDim * 2) {
-			dimY = pieceDim * 2;
+		if (dimYint < pieceDim * 2) {
+			dimYint = pieceDim * 2;
 		}
 
-		int numTilesX = dimX / pieceDim, numTilesY = dimY / pieceDim;
+		int numTilesX = dimXint / pieceDim, numTilesY = dimYint / pieceDim;
 
 		for (int i = 0; i < numTilesY + 1; i++) {
 			for (int j = 0; j < numTilesX + 1; j++) {
@@ -84,7 +88,7 @@ public abstract class Scene {
 
 				if (i == numTilesY) {
 					pieceY = pieceY + 1;
-					thisY = dimY - pieceDim;
+					thisY = dimYint - pieceDim;
 				}
 
 				if (j > 0) {
@@ -93,7 +97,7 @@ public abstract class Scene {
 
 				if (j == numTilesX) {
 					pieceX = pieceX + 1;
-					thisX = dimX - pieceDim;
+					thisX = dimXint - pieceDim;
 				}
 
 				g.drawImage(ImageIO.read(new File("assets/windows/" + theme + ".png")).getSubimage(7 * pieceX, 7 * pieceY, 7, 7), thisX, thisY, pieceDim, pieceDim, null);
@@ -115,6 +119,45 @@ public abstract class Scene {
 	 */
 	public boolean isFull() {
 		return full;
+	}
+	
+	protected int resizedValue(double unitValue) {
+		return (int) (unitValue * RESIZE);
+	}
+	
+	protected String[] genMultilineText(String originalText, int charsInLine) {
+		java.util.ArrayList<String> listResult = new java.util.ArrayList<String>();
+		
+		for (int i = 0; i < (originalText.length() / charsInLine) + 1; i++) {
+			String prefix = "", suffix = "";
+
+			int thisLineFirstChar = i * charsInLine;
+			int thisLinePrevChar = thisLineFirstChar - 1;
+			int thisLineLastChar = ((i + 1) * charsInLine) - 2;
+			int thisLineNextChar = thisLineLastChar + 1;
+
+			if (thisLineFirstChar != 0){
+				if (originalText.charAt(thisLinePrevChar) != ' ') {
+					prefix = "" + originalText.charAt(thisLinePrevChar);
+				}
+			}
+
+			if (thisLineNextChar < originalText.length()) {
+				if (originalText.charAt(thisLineNextChar) != ' ' && originalText.charAt(thisLineLastChar) != ' ') {
+					suffix = "-";
+				}
+			} else {
+				thisLineLastChar = originalText.length() - 1;
+			}
+			listResult.add(prefix + originalText.substring(thisLineFirstChar, thisLineLastChar+1) + suffix);
+		}
+		
+		String[] result = new String[listResult.size()];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = listResult.get(i);
+		}
+		
+		return result;
 	}
 
 }

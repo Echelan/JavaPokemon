@@ -64,18 +64,17 @@ public class Game extends Scene {
 
 	@Override
 	public BufferedImage getDisplay() {
-		int allW = pokemonviolet.model.Map.MAP_TOTAL_SIZE_X * 3, allH = pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y * 3;
-		BufferedImage display = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage display = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = display.getGraphics();
 
 		for (int i = 0; i < main.displayedMaps.length; i++) {
 			for (int j = 0; j < main.displayedMaps[i].length; j++) {
 				if (main.displayedMaps[i][j] != null) {
-					g.drawImage(main.displayedMaps[i][j].getImage(), main.curMapX + (int) (i * pokemonviolet.model.Map.MAP_TOTAL_SIZE_X), main.curMapY + (int) (j * pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y), (int) (pokemonviolet.model.Map.MAP_TOTAL_SIZE_X), (int) (pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y), null);
+					g.drawImage(main.displayedMaps[i][j].getImage(), resizedValue(main.curMapX + i * pokemonviolet.model.Map.MAP_TOTAL_SIZE_X), resizedValue(main.curMapY + (j * pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y)), resizedValue(pokemonviolet.model.Map.MAP_TOTAL_SIZE_X), resizedValue(pokemonviolet.model.Map.MAP_TOTAL_SIZE_Y), null);
 				}
 			}
 		}
-		g.drawImage(main.player.getCurFrameImage(), ssX / 2, ssY / 2, (int) (main.player.SPRITE_X * main.player.SPRITE_RESIZE), (int) (main.player.SPRITE_Y * main.player.SPRITE_RESIZE), null);
+		g.drawImage(main.player.getCurFrameImage(), resizedValue(ssX / 2), resizedValue(ssY / 2), (int) (main.player.SPRITE_X * main.player.SPRITE_RESIZE), (int) (main.player.SPRITE_Y * main.player.SPRITE_RESIZE), null);
 
 		return display;
 	}

@@ -68,26 +68,26 @@ public class Center extends Scene{
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 		
-		int dimX = (int) (ssX / 2) + 50, dimY = (int) (30 * RESIZE);
+		int dimX = (ssX / 2) + 25, dimY = 30;
 		int posX = (ssX / 2) - (dimX / 2), posY = (ssY / 2) - (dimY / 2);
-		g.drawImage(genWindow(2, dimX, dimY), posX, posY, null);
+		g.drawImage(genWindow(2, dimX, dimY), resizedValue(posX), resizedValue(posY), null);
 		
 		g.setColor(Color.black);
-		g.setFont(new Font("Arial", Font.BOLD, 20));
-		g.drawString( "Healing Pokemon...", posX + 35 + 20, posY + 40);
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(10)));
+		g.drawString( "Healing Pokemon...", resizedValue((posX + 17.5) + 10), resizedValue(posY + 20));
 		
-		int yDisplace = (int) (((int) Math.pow(animFrame1 - 6, 2)) * 0.5f);
-		g.drawImage(animImg.getSubimage(animFrame1 * 16, 0, 16, 16), posX + 10, posY + 5 + yDisplace, (int) (16 * RESIZE), (int) (16 * RESIZE), null);
+		int yDisplace = resizedValue(((int) Math.pow(animFrame1 - 6, 2)) * 0.125f);
+		g.drawImage(animImg.getSubimage(animFrame1 * 16, 0, 16, 16), resizedValue(posX + 5), resizedValue(posY + 2.5 + yDisplace), resizedValue(16), resizedValue(16), null);
 		animFrame1 = animFrame1 + 1;
 		if (animFrame1 > 11) {
 			animFrame1 = 0;
 		}
 		
-		yDisplace = (int) (((int) Math.pow(animFrame2 - 6, 2)) * 0.5f);
-		g.drawImage(animImg.getSubimage(animFrame2 * 16, 0, 16, 16), posX + dimX - 40, posY + 5 + yDisplace, (int) (16 * RESIZE), (int) (16 * RESIZE), null);
+		yDisplace = resizedValue(((int) Math.pow(animFrame2 - 6, 2)) * 0.125f);
+		g.drawImage(animImg.getSubimage(animFrame2 * 16, 0, 16, 16), resizedValue(posX + dimX - 20), resizedValue(posY + 2.5 + yDisplace), resizedValue(16), resizedValue(16), null);
 		animFrame2 = animFrame2 + 1;
 		if (animFrame2 > 11) {
 			animFrame2 = 0;

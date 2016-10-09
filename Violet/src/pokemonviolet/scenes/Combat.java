@@ -29,17 +29,18 @@ import pokemonviolet.model.Trainer;
 public class Combat extends Scene {
 
 	//<editor-fold defaultstate="collapsed" desc="Attributes">
-		private static final int SPRITE_WIDTH = (int) (80 * RESIZE);
-		private static final int SPRITE_HEIGHT = (int) (80 * RESIZE);
-		public final int finalPlayerX = 10, finalEnemyX = 220;
-		public int curPlayerX = finalPlayerX + 500, curEnemyX = finalEnemyX - 500;
+		private static final int SPRITE_WIDTH = 80;
+		private static final int SPRITE_HEIGHT = 80;
+		public final int finalPlayerX = 5, finalEnemyX = 110;
+		public int curPlayerX = finalPlayerX + 250, curEnemyX = finalEnemyX - 250;
 		private Pokemon currentPlayerPokemon;
 		private Pokemon currentEnemyPokemon;
 		private boolean ready;
 		private final ArrayList<String> displayTextQueue;
 		private boolean waitingAction;
 		private String currentMenu;
-		private int displayHealthEnemy, displayHealthPlayer, displayExpPlayer;
+		private int displayHealthEnemy, displayHealthPlayer, displayExpPlayer, displayLvlPlayer;
+		private int deltaHealthEnemy, deltaHealthPlayer, deltaExpPlayer;
 		private boolean doneHealthEnemy, doneHealthPlayer, doneExpPlayer;
 		private final boolean[] caught;
 		private final Player player;
@@ -87,7 +88,7 @@ public class Combat extends Scene {
 			this.caught[i] = false;
 			enemy.getTeam()[i].setAccuracy(1);
 			enemy.getTeam()[i].setEvasion(1);
-			player.setPokeDexValue(enemy.getTeam()[i].getId() - 1, 1);
+			player.foundPokemon(enemy.getTeam()[i].getId());
 		}
 
 		for (int i = 0; i < player.getNumPokemonTeam(); i++) {
@@ -102,9 +103,15 @@ public class Combat extends Scene {
 		this.displayHealthEnemy = currentEnemyPokemon.getCurHP();
 		this.displayExpPlayer = currentPlayerPokemon.getCurEXP();
 		this.displayHealthPlayer = currentPlayerPokemon.getCurHP();
+		this.displayLvlPlayer = currentPlayerPokemon.getLevel();
+		
 		this.doneHealthEnemy = true;
 		this.doneHealthPlayer = true;
 		this.doneExpPlayer = true;
+		
+		this.deltaHealthEnemy = 0;
+		this.deltaExpPlayer = 0;
+		this.deltaHealthPlayer = 0;
 
 		displayTextQueue = new ArrayList<String>();
 		displayTextQueue.add("A wild " + currentEnemyPokemon.getNameNick() + " appeared!");
@@ -534,24 +541,23 @@ public class Combat extends Scene {
 	
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		int ssX = pokemonviolet.model.Handler.SCREEN_SIZE_X, ssY = pokemonviolet.model.Handler.SCREEN_SIZE_Y;
-		BufferedImage display = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage display = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = display.getGraphics();
 
 		//<editor-fold defaultstate="collapsed" desc="Background">
-		g.drawImage(ImageIO.read(new File("assets/combat/background.png")), 0, 0, ssX, ssY, null);
+		g.drawImage(ImageIO.read(new File("assets/combat/background.png")), 0, 0, resizedValue(ssX), resizedValue(ssY), null);
 
-		g.drawImage(ImageIO.read(new File("assets/combat/grassunderground1.png")), curEnemyX, 85, (int) (128 * RESIZE), (int) (36 * RESIZE), null);
-		g.drawImage(ImageIO.read(new File("assets/combat/grassunderground2.png")), curPlayerX, 180, (int) (128 * RESIZE), (int) (36 * RESIZE), null);
+		g.drawImage(ImageIO.read(new File("assets/combat/grassunderground1.png")), resizedValue(curEnemyX), resizedValue(42.5), resizedValue(128), resizedValue(36), null);
+		g.drawImage(ImageIO.read(new File("assets/combat/grassunderground2.png")), resizedValue(curPlayerX), resizedValue(90), resizedValue(128), resizedValue(36), null);
 		//</editor-fold>
 
 		boolean curCaught = caught[enemy.getCurrentPokemon()];
 
 		//<editor-fold defaultstate="collapsed" desc="Pokemon Sprites Display">
 		if (displayHealthEnemy != 0 && !curCaught) {
-			g.drawImage(currentEnemyPokemon.getFrontImage(), curEnemyX + 50, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+			g.drawImage(currentEnemyPokemon.getFrontImage(), resizedValue(curEnemyX + 25), 0, resizedValue(SPRITE_WIDTH), resizedValue(SPRITE_HEIGHT), null);
 		} else if (curCaught) {
-			int x = (curEnemyX + 50 + (SPRITE_WIDTH / 2) + 20 - (int) (14 * RESIZE)), y = (18 + SPRITE_HEIGHT - 50 - (int) (14 * RESIZE));
+			int x = curEnemyX + 25 + (SPRITE_WIDTH / 2) + 10 - 14, y = 18 + SPRITE_HEIGHT - 25 - 14;
 			int pokeX = 0;
 
 			if (currentEnemyPokemon.getBallType() == null) {
@@ -572,75 +578,102 @@ public class Combat extends Scene {
 					pokeX = 4;
 					break;
 			}
-			g.drawImage(ImageIO.read(new File("assets/combat/pokeballactive.png")).getSubimage(pokeX * 14, 0, 14, 14), x, y, (int) (14 * RESIZE), (int) (14 * RESIZE), null);
+			g.drawImage(ImageIO.read(new File("assets/combat/pokeballactive.png")).getSubimage(pokeX * 14, 0, 14, 14), resizedValue(x), resizedValue(y), resizedValue(14), resizedValue(14), null);
 		}
 		if (displayHealthPlayer != 0) {
-			g.drawImage(currentPlayerPokemon.getBackImage(), curPlayerX + 54, 64, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+			g.drawImage(currentPlayerPokemon.getBackImage(), resizedValue(curPlayerX + 27), resizedValue(32), resizedValue(SPRITE_WIDTH), resizedValue(SPRITE_HEIGHT), null);
 		}
 		
 		//</editor-fold>
 		
-		g.drawImage(ImageIO.read(new File("assets/combat/dialogdisplay.png")), 0, ssY - (int) (48 * RESIZE), (int) (240 * RESIZE), (int) (48 * RESIZE), null);
+		g.drawImage(ImageIO.read(new File("assets/combat/dialogdisplay.png")), 0, resizedValue(ssY - 48), resizedValue(240), resizedValue(48), null);
 		
 		if (curEnemyX != finalEnemyX || curPlayerX != finalPlayerX) {
 			if (curEnemyX != finalEnemyX) {
-				curEnemyX = curEnemyX + 20;
+				curEnemyX = curEnemyX + 10;
 			}
 
 			if (curPlayerX != finalPlayerX) {
-				curPlayerX = curPlayerX - 20;
+				curPlayerX = curPlayerX - 10;
 			}
 
 			if (curEnemyX == finalEnemyX && curPlayerX == finalPlayerX) {
 				ready = true;
 			}
 		} else {
-			g.setFont(new Font("Arial", Font.PLAIN, 18));
+			g.setFont(new Font("Arial", Font.PLAIN, resizedValue(9)));
 			if (!displayTextQueue.isEmpty()) {
-				g.drawString(displayTextQueue.get(0), 30, ssY - 60);
+				g.drawString(displayTextQueue.get(0), resizedValue(15), resizedValue(ssY - 30));
 			}
 
 			//<editor-fold defaultstate="collapse" desc="Health & Experience Display">
 			if (!doneHealthEnemy) {
-				int delta = Math.abs(displayHealthEnemy - currentEnemyPokemon.getCurHP());
-				delta = (int) Math.ceil((float) delta / (float) 20);
-				if (displayHealthEnemy < currentEnemyPokemon.getCurHP()) {
-					displayHealthEnemy = displayHealthEnemy + delta;
+				if (deltaHealthEnemy == 0) {
+					deltaHealthEnemy = Math.abs(displayHealthEnemy - currentEnemyPokemon.getCurHP());
+					deltaHealthEnemy = (int) Math.ceil(deltaHealthEnemy /  20f);
+				}
+				if (Math.abs(displayHealthEnemy - currentEnemyPokemon.getCurHP()) < deltaHealthEnemy) {
+					displayHealthEnemy = currentEnemyPokemon.getCurHP();
+					deltaHealthEnemy = 0;
+					doneHealthEnemy = true;
+				} else if (displayHealthEnemy < currentEnemyPokemon.getCurHP()) {
+					displayHealthEnemy = displayHealthEnemy + deltaHealthEnemy;
 				} else if (displayHealthEnemy > currentEnemyPokemon.getCurHP()) {
-					displayHealthEnemy = displayHealthEnemy - delta;
+					displayHealthEnemy = displayHealthEnemy - deltaHealthEnemy;
 				} else {
+					displayHealthEnemy = currentEnemyPokemon.getCurHP();
+					deltaHealthEnemy = 0;
 					doneHealthEnemy = true;
 				}
 			}
 
 			if (!doneHealthPlayer) {
-				int delta = Math.abs(displayHealthPlayer - currentPlayerPokemon.getCurHP());
-				delta = (int) Math.ceil((float) delta / (float) 20);
-				if (displayHealthPlayer < currentPlayerPokemon.getCurHP()) {
-					displayHealthPlayer = displayHealthPlayer + delta;
+				if (deltaHealthPlayer == 0) {
+					deltaHealthPlayer = Math.abs(displayHealthPlayer - currentPlayerPokemon.getCurHP());
+					deltaHealthPlayer = (int) Math.ceil((float) deltaHealthPlayer / (float) 20);
+				}
+				if (Math.abs(displayHealthPlayer - currentPlayerPokemon.getCurHP()) < deltaHealthPlayer) {
+					displayHealthPlayer = currentPlayerPokemon.getCurHP();
+					deltaHealthPlayer = 0;
+					doneHealthPlayer = true;
+				} else if (displayHealthPlayer < currentPlayerPokemon.getCurHP()) {
+					displayHealthPlayer = displayHealthPlayer + deltaHealthPlayer;
 				} else if (displayHealthPlayer > currentPlayerPokemon.getCurHP()) {
-					displayHealthPlayer = displayHealthPlayer - delta;
+					displayHealthPlayer = displayHealthPlayer - deltaHealthPlayer;
 				} else {
+					displayHealthPlayer = currentPlayerPokemon.getCurHP();
+					deltaHealthPlayer = 0;
 					doneHealthPlayer = true;
 				}
 			}
 
 			if (!doneExpPlayer) {
-				int delta = Math.abs(displayExpPlayer - currentPlayerPokemon.getCurEXP()); 
-				if (delta < 20) {
-					delta = (int) Math.ceil((float) delta / 5);
-					if (displayExpPlayer < currentPlayerPokemon.getCurEXP()) {
-						displayExpPlayer = displayExpPlayer + delta;
-					} else if (displayExpPlayer > currentPlayerPokemon.getCurEXP()) {
-						displayExpPlayer = displayExpPlayer + delta;
-						if (displayExpPlayer > currentPlayerPokemon.getMaxEXP()) {
-							displayExpPlayer = 0;
-						}
-					} else {
-						doneExpPlayer = true;
+				if (displayExpPlayer < currentPlayerPokemon.getCurEXP()) {
+					if (deltaExpPlayer == 0) {
+						deltaExpPlayer = Math.abs(displayExpPlayer - currentPlayerPokemon.getCurEXP());
+						deltaExpPlayer = (int) Math.ceil((float) deltaExpPlayer / (float) 20);
 					}
-				} else {
-					displayExpPlayer = currentPlayerPokemon.getCurEXP();
+					if (Math.abs(displayExpPlayer - currentPlayerPokemon.getCurEXP()) < deltaExpPlayer) {
+						displayExpPlayer = currentPlayerPokemon.getCurEXP();
+						deltaExpPlayer = 0;
+						doneExpPlayer = true;
+					} else {
+						displayExpPlayer = displayExpPlayer + deltaExpPlayer;
+					}
+				} else if (displayLvlPlayer < currentPlayerPokemon.getLevel()) {
+					if (deltaExpPlayer == 0) {
+						deltaExpPlayer = Math.abs(displayExpPlayer - currentPlayerPokemon.getMaxEXP());
+						deltaExpPlayer = (int) Math.ceil((float) deltaExpPlayer / (float) 10);
+					}
+					if (Math.abs(displayExpPlayer - currentPlayerPokemon.getMaxEXP()) < deltaExpPlayer) {
+						displayLvlPlayer = displayLvlPlayer + 1;
+						displayExpPlayer = 0;
+						deltaExpPlayer = 0;
+					} else {
+						displayExpPlayer = displayExpPlayer + deltaExpPlayer;
+					}
+				} else if (displayExpPlayer > currentPlayerPokemon.getCurEXP()) {
+					displayExpPlayer = 0;
 				}
 			}
 
@@ -651,7 +684,7 @@ public class Combat extends Scene {
 					g.setColor(Color.red);
 				}
 			}
-			g.fillRect(86, 52, (int) ((float) 100 * (float) ((float) displayHealthEnemy / (float) currentEnemyPokemon.getStatHP())), 10);
+			g.fillRect(resizedValue(43), resizedValue(26), (resizedValue(50 * (float) ((float) displayHealthEnemy / (float) currentEnemyPokemon.getStatHP()))), resizedValue(5));
 
 			g.setColor(Color.green);
 			if ((float) displayHealthPlayer / (float) currentPlayerPokemon.getStatHP() < 0.5f) {
@@ -660,21 +693,22 @@ public class Combat extends Scene {
 					g.setColor(Color.red);
 				}
 			}
-			g.fillRect(355, 177, (int) ((float) 100 * (float) ((float) displayHealthPlayer / (float) currentPlayerPokemon.getStatHP())), 10);
+			g.fillRect(resizedValue(177.5), resizedValue(88.5), (resizedValue(50 * (float) ((float) displayHealthPlayer / (float) currentPlayerPokemon.getStatHP()))), resizedValue(5));
 
 			g.setColor(Color.blue);
-			g.fillRect(320, 207, (int) ((float) 140 * (float) ((float) displayExpPlayer / (float) currentPlayerPokemon.getMaxEXP())), 10);
+			g.fillRect(resizedValue(160), resizedValue(103.5), (resizedValue(50 * (float) ((float) displayExpPlayer / (float) currentPlayerPokemon.getMaxEXP()))), resizedValue(5));
 			//</editor-fold>
 
 			//<editor-fold defaultstate="collapsed" desc="Pokeballs Display">
 			BufferedImage allBalls = ImageIO.read(new File("assets/combat/pokeballui.png"));
 			int dimX = 9, dimY = 9;
-			int x, y, id;
+			float x, y;
+			int id;
 
 			if (!wildBattle) {
-				y = 3;
+				y = 1.5f;
 				for (int i = 0; i < 6; i++) {
-					x = 12 + (int) (i * dimX * RESIZE);
+					x = 6 + (i * dimX);
 					if (i < enemy.getNumPokemonTeam()) {
 						if (enemy.getTeam()[i].isFainted()) {
 							id = 2;
@@ -684,13 +718,13 @@ public class Combat extends Scene {
 					} else {
 						id = 0;
 					}
-					g.drawImage(allBalls.getSubimage(id * 9, 0, dimX, dimY), x, y, (int) (dimX * RESIZE), (int) (dimY * RESIZE), null);
+					g.drawImage(allBalls.getSubimage(id * dimX, 0, dimX, dimY), resizedValue(x), resizedValue(y), resizedValue(dimX), resizedValue(dimY), null);
 				}
 			}
 
-			y = (int) (ssY / 2) - 33;
+			y = (ssY / 2) - 16.5f;
 			for (int i = 0; i < 6; i++) {
-				x = ssX - (int) (104 * RESIZE) + 75 + (int) (i * dimX * RESIZE);
+				x = ssX - 104 + 37.5f + (i * dimX);
 				if (i < player.getNumPokemonTeam()) {
 					if (player.getTeam()[i].isFainted()) {
 						id = 2;
@@ -700,46 +734,46 @@ public class Combat extends Scene {
 				} else {
 					id = 0;
 				}
-				g.drawImage(allBalls.getSubimage(id * 9, 0, dimX, dimY), x, y, (int) (dimX * RESIZE), (int) (dimY * RESIZE), null);
+				g.drawImage(allBalls.getSubimage(id * dimX, 0, dimX, dimY), resizedValue(x), resizedValue(y), resizedValue(dimX), resizedValue(dimY), null);
 			}
 			//</editor-fold>
 
-			g.drawImage(ImageIO.read(new File("assets/combat/enemydisplay.png")), 10, 20, (int) (100 * RESIZE), (int) (29 * RESIZE), null);
-			g.drawImage(ImageIO.read(new File("assets/combat/playerdisplay.png")), ssX - (int) (104 * RESIZE) - 10, (int) (ssY / 2) - 15, (int) (104 * RESIZE), (int) (37 * RESIZE), null);
+			g.drawImage(ImageIO.read(new File("assets/combat/enemydisplay.png")), resizedValue(5), resizedValue(10), resizedValue(100), resizedValue(29), null);
+			g.drawImage(ImageIO.read(new File("assets/combat/playerdisplay.png")), resizedValue(ssX - 104 - 5), resizedValue((ssY / 2) - 7.5), resizedValue(104), resizedValue(37), null);
 			
 			g.setColor(Color.black);
-			g.drawString(currentEnemyPokemon.getNameNick(), 25, 45);
-			g.drawString("Lv: " + currentEnemyPokemon.getLevel(), 140, 45);
+			g.drawString(currentEnemyPokemon.getNameNick(), resizedValue(12.5), resizedValue(22.5));
+			g.drawString("Lv: " + currentEnemyPokemon.getLevel(), resizedValue(70), resizedValue(22.5));
 
-			g.drawString(currentPlayerPokemon.getNameNick(), ssX - (int) (104 * RESIZE) + 20, (int) (ssY / 2) + 10);
-			g.drawString("Lv: " + currentPlayerPokemon.getLevel(), ssX - (int) (104 * RESIZE) + 130, (int) (ssY / 2) + 10);
+			g.drawString(currentPlayerPokemon.getNameNick(), resizedValue(ssX - 104 + 10), resizedValue((ssY / 2) + 5));
+			g.drawString("Lv: " + displayLvlPlayer, resizedValue(ssX - 104 + 65), resizedValue((ssY / 2) + 5));
 
-			g.drawString(displayHealthPlayer + "/" + currentPlayerPokemon.getStatHP(), ssX - (int) (104 * RESIZE) + 125, (int) (ssY / 2) + 45);
+			g.drawString(displayHealthPlayer + "/" + currentPlayerPokemon.getStatHP(), resizedValue(ssX - 104 + 62.5), resizedValue((ssY / 2) + 22.5));
 
 			//<editor-fold defaultstate="collapsed" desc="UI Display">
 			if (waitingAction) {
 				if (currentMenu.compareTo("MAIN") == 0) {
 					//<editor-fold defaultstate="collapsed" desc="Main UI Display">
-					int uiW = (int) (120 * RESIZE), uiH = (int) (48 * RESIZE);
+					int uiW = 120, uiH = 48;
 
-					g.drawImage(genWindow(0, uiW, uiH), ssX - uiW, ssY - uiH, null);
+					g.drawImage(genWindow(0, uiW, uiH), resizedValue(ssX - uiW), resizedValue(ssY - uiH), null);
 
 					g.setColor(Color.black);
-					g.drawString("FIGHT", ssX - 215, ssY - 55);
-					g.drawString("BAG", ssX - 105, ssY - 55);
-					g.drawString("POKéMON", ssX - 215, ssY - 20);
-					g.drawString("RUN", ssX - 105, ssY - 20);
+					g.drawString("FIGHT", resizedValue(ssX - 107.5), resizedValue(ssY - 27.5));
+					g.drawString("BAG", resizedValue(ssX - 52.5), resizedValue(ssY - 27.5));
+					g.drawString("POKéMON", resizedValue(ssX - 107.5), resizedValue(ssY - 10));
+					g.drawString("RUN", resizedValue(ssX - 52.5), resizedValue(ssY - 10));
 
-					g.drawImage(ImageIO.read(new File("assets/arrow.png")), ssX - 230 + (int) (Math.floor(optionsMain % 2) * 110), ssY - 70 + (int) (Math.floor(optionsMain / 2) * 30), 20, 20, null);
+					g.drawImage(ImageIO.read(new File("assets/arrow.png")), resizedValue(ssX - 115 + Math.floor(optionsMain % 2) * 55), resizedValue(ssY - 35 + Math.floor(optionsMain / 2) * 15), resizedValue(10), resizedValue(10), null);
 					//</editor-fold>
 				} else if (currentMenu.compareTo("MOVES") == 0) {
 					//<editor-fold defaultstate="collapsed" desc="Moves UI Display">
-					int ui1W = (int) (80 * RESIZE), uiH = (int) (48 * RESIZE), ui2W = (int) (160 * RESIZE);
+					int ui1W = 80, uiH = 48, ui2W = 160;
 
-					g.drawImage(genWindow(0, ui1W, uiH), ssX - ui1W, ssY - uiH, null);
-					g.drawImage(genWindow(0, ui2W, uiH), 0, ssY - uiH, null);
+					g.drawImage(genWindow(0, ui1W, uiH), resizedValue(ssX - ui1W), resizedValue(ssY - uiH), null);
+					g.drawImage(genWindow(0, ui2W, uiH), 0, resizedValue(ssY - uiH), null);
 
-					g.drawImage(ImageIO.read(new File("assets/arrow.png")), 10 + (int) (Math.floor(optionsMoves % 2) * 140), ssY - 75 + (int) (Math.floor(optionsMoves / 2) * 40), 20, 20, null);
+					g.drawImage(ImageIO.read(new File("assets/arrow.png")), resizedValue(5 + (Math.floor(optionsMoves % 2) * 70)), resizedValue(ssY - 37.5 + (Math.floor(optionsMoves / 2) * 20)), resizedValue(10), resizedValue(10), null);
 					for (int i = 0; i < 4; i++) {
 						String moveName;
 						if (i < currentPlayerPokemon.getNumMoves()) {
@@ -751,12 +785,12 @@ public class Combat extends Scene {
 							moveName = "--";
 						}
 						g.setColor(Color.black);
-						g.drawString(moveName, 30 + (int) (Math.floor(i % 2) * 140), ssY - 60 + (int) (Math.floor(i / 2) * 40));
+						g.drawString(moveName, resizedValue(15 + (Math.floor(i % 2) * 70)), resizedValue(ssY - 30 + (Math.floor(i / 2) * 20)));
 					}
 					if (optionsMoves < currentPlayerPokemon.getNumMoves()) {
 						g.setColor(Color.black);
-						g.drawString("PP  " + currentPlayerPokemon.getMoveSet()[optionsMoves].getPP() + " / " + currentPlayerPokemon.getMoveSet()[optionsMoves].getPPMax(), ssX - 140, ssY - 55);
-						g.drawString("TYPE  " + pokemonviolet.model.PokemonType.getNameDisplay(currentPlayerPokemon.getMoveSet()[optionsMoves].getType()), ssX - 140, ssY - 20);
+						g.drawString("PP  " + currentPlayerPokemon.getMoveSet()[optionsMoves].getPP() + " / " + currentPlayerPokemon.getMoveSet()[optionsMoves].getPPMax(), resizedValue(ssX - 70), resizedValue(ssY - 27.5));
+						g.drawString("TYPE  " + pokemonviolet.model.PokemonType.getNameDisplay(currentPlayerPokemon.getMoveSet()[optionsMoves].getType()), resizedValue(ssX - 70), resizedValue(ssY - 10));
 					}
 					//</editor-fold>
 				}
@@ -764,6 +798,7 @@ public class Combat extends Scene {
 			//</editor-fold>
 		}
 		return display;
+	
 	}
 
 }

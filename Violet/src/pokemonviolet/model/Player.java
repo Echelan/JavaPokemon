@@ -47,15 +47,11 @@ public final class Player {
 			/**
 			 * Player Pokemon PC.
 			 */
-			private Pokemon[] PC;
+			private ArrayList<Pokemon> PC;
 			/**
 			 * Number of Pokemon in Player Team.
 			 */
 			private int numPokemonTeam;
-			/**
-			 * Number of Pokemon in Player PC.
-			 */
-			private int numPokemonPC;
 			/**
 			 * Current active Pokemon.
 			 */
@@ -116,7 +112,7 @@ public final class Player {
 			/**
 			 * Player sprite multiplier.
 			 */
-			public static double SPRITE_RESIZE = 1.6;
+			public static double SPRITE_RESIZE = 0.8 * pokemonviolet.main.PokemonViolet.SIZE;
 			/**
 			 * Player sprite sheet.
 			 */
@@ -196,8 +192,8 @@ public final class Player {
 			this.SPRITE_SHEET = ImageIO.read(new File("assets/" + this.getGender().toLowerCase() + "Sprite.png"));
 		} catch (IOException ex) {
 		}
+		this.PC = new ArrayList<Pokemon>();
 		this.team = new Pokemon[6];
-		this.PC = new Pokemon[200];
 		this.setFunds(500);
 		
 		this.bag = new ArrayList[6];
@@ -205,7 +201,6 @@ public final class Player {
 			bag[i] = new ArrayList<Item>();
 		}
 		
-		this.numPokemonPC = 0;
 		this.setDirection("");
 		this.setvDirection("");
 		this.maxFrames = 3;
@@ -236,13 +231,8 @@ public final class Player {
 		this.pokeDex[newPokemon.getId() - 1] = 2;
 		
 		if (getNumPokemonTeam() == 6) {
-			if (getNumPokemonPC() == 200) {
-				response = 2;
-			} else {
-				response = 1;
-				this.PC[getNumPokemonPC()] = newPokemon;
-				numPokemonPC = getNumPokemonPC() + 1;
-			}
+			response = 1;
+			this.PC.add(newPokemon);
 		} else {
 			response = 0;
 			this.team[getNumPokemonTeam()] = newPokemon;
@@ -250,7 +240,22 @@ public final class Player {
 		}
 		return response;
 	}
-
+	
+	/**
+	 * Updates Pokedex with a new found Pokemon info.
+	 * @param pokemonID ID of the new found Pokemon.
+	 */
+	public void foundPokemon(int pokemonID) {
+		if (this.pokeDex[pokemonID - 1] == 0) {
+			this.pokeDex[pokemonID - 1] = 1;
+		}
+	}
+	
+	/**
+	 * Switches the places of 2 Pokemon in Player's team.
+	 * @param teamPos1 Position of Pokemon 1 in team.
+	 * @param teamPos2 Position of Pokemon 2 in team.
+	 */
 	public void movePokemon(int teamPos1, int teamPos2) {
 		Pokemon temp = team[teamPos1];
 		team[teamPos1] = team[teamPos2];
@@ -496,6 +501,10 @@ public final class Player {
 		}
 	}
 	
+	/**
+	 * Halves Player's funds, called when Player blacks out.
+	 * @return new Player funds.
+	 */
 	public int blackOut() {
 		this.funds = this.funds/2;
 		
@@ -603,15 +612,8 @@ public final class Player {
 		/**
 		 * @return the PC
 		 */
-		public Pokemon[] getPC() {
+		public ArrayList<Pokemon> getPC() {
 			return PC;
-		}
-
-		/**
-		 * @return the numPokemonPC
-		 */
-		public int getNumPokemonPC() {
-			return numPokemonPC;
 		}
 
 		/**
@@ -819,15 +821,6 @@ public final class Player {
 		public int[] getPokeDex() {
 			return pokeDex;
 		}
-		
-		/**
-		 * @param index index of PokeDex to set value for
-		 * @param value value to set in PokeDex index
-		 */
-		public void setPokeDexValue(int index, int value) {
-			pokeDex[index] = value;
-		}
 	//</editor-fold>
-
 
 }

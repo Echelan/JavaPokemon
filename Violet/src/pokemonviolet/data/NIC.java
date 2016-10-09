@@ -14,7 +14,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
-import pokemonviolet.model.Map;
 
 /**
  *
@@ -57,80 +56,118 @@ public abstract class NIC {
 		/**
 		 * Amount of Maps in X.
 		 */
-		public static int NUM_MAPS_X;
+		public static int NUM_MAPS_X = 4;
 		/**
 		 * Amount of Maps in Y.
 		 */
-		public static int NUM_MAPS_Y;
-		public static BufferedImage pokemonIcons;
+		public static int NUM_MAPS_Y = 4;
 	//</editor-fold>
 
-	public static void loadData() {
+	//<editor-fold defaultstate="collapsed" desc="Static Images">
+		public static BufferedImage pokemonIcons;
+		public static BufferedImage tileset;
+		public static BufferedImage gym;
+		public static BufferedImage center;
+		public static BufferedImage house;
+		public static BufferedImage objects;
+		public static BufferedImage shop;
+		public static BufferedImage house2;
+		public static BufferedImage house3;
+		public static BufferedImage wstone;
+		public static BufferedImage wstone2;
+		public static BufferedImage tree;
+		public static BufferedImage tree2;
+		public static BufferedImage[] objSets;
+	//</editor-fold>
+		
+	public static void loadAllData() {
+		
+		try {
+			loadImages();
+		} catch (IOException ex) {
+			
+		}
+		
+		try {
+			loadInfo();
+		} catch (IOException ex) {
+			
+		}
+		
+		loadMaps();
+	}
+	
+	private static void loadImages() throws IOException {
+		
+		pokemonIcons = ImageIO.read(new File("assets/pokemon/pokemonIconsSmall.png"));
+		
+		tileset = ImageIO.read(new File("assets/map/tileset.png"));
 
-		Map.loadImages();
+		shop = ImageIO.read(new File("assets/map/shop.png"));
 
-		NUM_MAPS_X = 4;
-		NUM_MAPS_Y = 4;
+		gym = ImageIO.read(new File("assets/map/gym.png"));
+
+		center = ImageIO.read(new File("assets/map/center.png"));
+
+		objects = ImageIO.read(new File("assets/map/objects.png"));
+
+		house = ImageIO.read(new File("assets/map/house.png"));
+
+		tree = ImageIO.read(new File("assets/map/tree.png"));
+
+		tree2 = ImageIO.read(new File("assets/map/tree2.png"));
+
+		house2 = ImageIO.read(new File("assets/map/house2.png"));
+
+		house3 = ImageIO.read(new File("assets/map/house3.png"));
+
+		wstone = ImageIO.read(new File("assets/map/wstone.png"));
+
+		wstone2 = ImageIO.read(new File("assets/map/wstone2.png"));
+
+		objSets = new BufferedImage[]{objects, house, house2, house3, center, shop, gym, tree, tree2, wstone, wstone2};
+		
+	}
+	
+	private static void loadInfo() throws IOException {
 
 		List<String> readInfoP = null;
 		List<String> readInfoI = null;
 		List<String> readInfoM = null;
 		List<String> readInfoT = null;
-		List<String> readInfoB = null;
 		List<String> readInfoTM = null;
-		ArrayList<List<String>> readMap = new ArrayList();
-		
-		try {
-			pokemonIcons = ImageIO.read(new File("assets/pokemon/pokemonIconsSmall.png"));
-		} catch (IOException ex) {
-		}
 
 		File archivo;
 
-		try {
+		archivo = new File("db/listPokemon.txt");
+		readInfoP = Files.readAllLines(archivo.toPath());
 
-			archivo = new File("db/listPokemon.txt");
-			readInfoP = Files.readAllLines(archivo.toPath());
+		archivo = new File("db/listItems.txt");
+		readInfoI = Files.readAllLines(archivo.toPath());
 
-		} catch (IOException ex) {
-			System.err.println("POKEMON: Couldn't load files!");
-			System.exit(0);
-		}
+		archivo = new File("db/listMoves.txt");
+		readInfoM = Files.readAllLines(archivo.toPath());
 
-		try {
-			archivo = new File("db/listItems.txt");
-			readInfoI = Files.readAllLines(archivo.toPath());
+		archivo = new File("db/listTypes.txt");
+		readInfoT = Files.readAllLines(archivo.toPath());
 
-		} catch (IOException ex) {
-			System.err.println("ITEMS: Couldn't load files!");
-			System.exit(0);
-		}
+		archivo = new File("db/listTM.txt");
+		readInfoTM = Files.readAllLines(archivo.toPath());
 
-		try {
-			archivo = new File("db/listMoves.txt");
-			readInfoM = Files.readAllLines(archivo.toPath());
+		INFO_ITEMS = readInfoI;
+		INFO_POKEMON = readInfoP;
+		INFO_MOVES = readInfoM;
+		INFO_TYPES = readInfoT;
+		INFO_TM = readInfoTM;
+		
+	}
+	
+	private static void loadMaps() {
 
-		} catch (IOException ex) {
-			System.err.println("MOVES: Couldn't load files!");
-			System.exit(0);
-		}
-
-		try {
-			archivo = new File("db/listTypes.txt");
-			readInfoT = Files.readAllLines(archivo.toPath());
-		} catch (IOException ex) {
-			System.err.println("TYPES: Couldn't load files!");
-			System.exit(0);
-		}
-
-		try {
-			archivo = new File("db/listTM.txt");
-			readInfoTM = Files.readAllLines(archivo.toPath());
-		} catch (IOException ex) {
-			System.err.println("TM: Couldn't load files!");
-			System.exit(0);
-		}
-
+		File archivo;
+		List<String> readInfoB = null;
+		ArrayList<List<String>> readMap = new ArrayList();
+		
 		try {
 			archivo = new File("db/mapBLANK.txt");
 			readInfoB = Files.readAllLines(archivo.toPath());
@@ -151,13 +188,9 @@ public abstract class NIC {
 				readMap.add(temp);
 			}
 		}
-
-		INFO_ITEMS = readInfoI;
-		INFO_POKEMON = readInfoP;
-		INFO_MOVES = readInfoM;
-		INFO_TYPES = readInfoT;
+		
 		INFO_MAPS = readMap;
 		INFO_BLANK_MAP = readInfoB;
-		INFO_TM = readInfoTM;
+		
 	}
 }

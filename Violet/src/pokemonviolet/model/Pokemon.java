@@ -23,9 +23,8 @@ public class Pokemon {
 
 	//<editor-fold defaultstate="collapsed" desc="Attributes">
 		//<editor-fold defaultstate="collapsed" desc="Species Wide">
-			private static final int RESIZE = 2;
-			private static final int SPRITE_WIDTH = 80 * RESIZE;
-			private static final int SPRITE_HEIGHT = 80 * RESIZE;
+			private static final int SPRITE_WIDTH = (int) (80 * pokemonviolet.main.PokemonViolet.SIZE);
+			private static final int SPRITE_HEIGHT = (int) (80 * pokemonviolet.main.PokemonViolet.SIZE);
 			private static final int NUM_ATTRIB = 38;
 			private static final int MAX_TOTAL_EV = 510;
 			private static final int MAX_SINGLE_EV = 252;

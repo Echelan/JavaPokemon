@@ -146,27 +146,27 @@ public class Shop extends Scene {
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 
-		int windowWidth = (int) (120 * RESIZE), windowHeight = (int) (ssY * 0.8);
+		int windowWidth = 120, windowHeight = (int) (ssY * 0.8);
 		int theme = 0;
-		g.drawImage(genWindow(theme, windowWidth, ssY - windowHeight - 3), ssX - windowWidth - 1, 1, null);
-		g.drawImage(genWindow(theme, windowWidth, windowHeight), ssX - windowWidth - 1, ssY-windowHeight - 1, null);
-		g.drawImage(genWindow(theme, 130, 60), 1, 1, null);
-		g.drawImage(genWindow(theme, 80, 80), 24, 66, null);
-		g.drawImage(genWindow(theme, ssX - windowWidth - 3, 120), 1, ssY - 121, null);
-		g.drawImage(genWindow(theme, ssX - windowWidth - 3, 50), 1, ssY - 122 - 50, null);
+		g.drawImage(genWindow(theme, windowWidth, ssY - windowHeight - 1.5), resizedValue(ssX - windowWidth - 0.5), resizedValue(0.5), null);
+		g.drawImage(genWindow(theme, windowWidth, windowHeight), resizedValue(ssX - windowWidth - 0.5), resizedValue(ssY-windowHeight - 0.5), null);
+		g.drawImage(genWindow(theme, 65, 30), resizedValue(0.5), resizedValue(0.5), null);
+		g.drawImage(genWindow(theme, 40, 40), resizedValue(12), resizedValue(33), null);
+		g.drawImage(genWindow(theme, ssX - windowWidth - 1.5, 60), resizedValue(0.5), resizedValue(ssY - 60.5), null);
+		g.drawImage(genWindow(theme, ssX - windowWidth - 1.5, 25), resizedValue(0.5), resizedValue(ssY - 61 - 25), null);
 		
 		g.setColor(Color.black);
-		g.setFont(new Font("Arial", Font.BOLD, 15));
-		g.drawString("$  "+main.player.getFunds(), 15, 36);
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(7.5)));
+		g.drawString("$  "+main.player.getFunds(), resizedValue(7.5), resizedValue(18));
 		
-		g.setFont(new Font("Arial", Font.BOLD, 20));
-		g.drawString(categoryNames[category], ssX - windowWidth + 20, 40);
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(10)));
+		g.drawString(categoryNames[category], resizedValue(ssX - windowWidth + 10), resizedValue(20));
 		
 		if (selection != perPocketInventory[category].size()) {
-			g.setFont(new Font("Arial", Font.PLAIN, 15));
+			g.setFont(new Font("Arial", Font.PLAIN, resizedValue(7.5)));
 			int charsInLine = 30;
 			String fullD = new pokemonviolet.model.Item(perPocketInventory[category].get(selection)).getDescription();
 			for (int i = 0; i < (fullD.length() / charsInLine) + 1; i++) {
@@ -191,13 +191,13 @@ public class Shop extends Scene {
 					thisLineLastChar = fullD.length() - 1;
 				}
 
-				g.drawString(prefix + fullD.substring(thisLineFirstChar, thisLineLastChar+1) + suffix, 15, ssY - 142 + 45 + (i * 20));
+				g.drawString(prefix + fullD.substring(thisLineFirstChar, thisLineLastChar+1) + suffix, resizedValue(7.5), resizedValue(ssY - 71 + 22.5 + (i * 10)));
 			}	
 
-			g.drawImage(new pokemonviolet.model.Item(perPocketInventory[category].get(selection)).getImage(), 34, 76, null);
+			g.drawImage(new pokemonviolet.model.Item(perPocketInventory[category].get(selection)).getImage(), resizedValue(17), resizedValue(38), null);
 			
-			g.setFont(new Font("Arial", Font.BOLD, 20));
-			g.drawString(new pokemonviolet.model.Item(perPocketInventory[category].get(selection)).getNameSingular(), 15, ssY - 140);
+			g.setFont(new Font("Arial", Font.BOLD, resizedValue(10)));
+			g.drawString(new pokemonviolet.model.Item(perPocketInventory[category].get(selection)).getNameSingular(), resizedValue(7.5), resizedValue(ssY - 70));
 		}
 		
 		int maxIndex = startIndexX + maxItemsPage;
@@ -205,19 +205,19 @@ public class Shop extends Scene {
 			maxIndex = perPocketInventory[category].size() + 1;
 		}
 		
-		g.setFont(new Font("Arial", Font.BOLD, 20));
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(10)));
 		for (int i = startIndexX; i < maxIndex; i++) {
 			if (i == perPocketInventory[category].size()) {
-				g.drawString("CANCEL", ssX - windowWidth + 20, ((ssY / 2) - (windowHeight / 2) + 65) + ((i-startIndexX) * 20));
+				g.drawString("CANCEL", resizedValue(ssX - windowWidth + 10), resizedValue((ssY / 2) - (windowHeight / 2) + 32.5 + ((i - startIndexX) * 10)));
 			} else {
-				g.drawString(new pokemonviolet.model.Item(perPocketInventory[category].get(i)).getNameSingular(), ssX - windowWidth + 20, ((ssY / 2) - (windowHeight / 2) + 65) + ((i-startIndexX) * 20));
-				g.drawString("$"+new pokemonviolet.model.Item(perPocketInventory[category].get(i)).getPrice(), ssX - (windowWidth / 2) + 50, ((ssY / 2) - (windowHeight / 2) + 65) + ((i-startIndexX) * 20));
+				g.drawString(new pokemonviolet.model.Item(perPocketInventory[category].get(i)).getNameSingular(), resizedValue(ssX - windowWidth + 10), resizedValue(((ssY / 2) - (windowHeight / 2) + 32.5) + ((i-startIndexX) * 10)));
+				g.drawString("$"+new pokemonviolet.model.Item(perPocketInventory[category].get(i)).getPrice(), resizedValue(ssX - (windowWidth / 2) + 25), resizedValue(((ssY / 2) - (windowHeight / 2) + 32.5) + ((i-startIndexX) * 10)));
 			}
 		}
 
 		
 		int dispSelection = selection - startIndexX;
-		g.drawImage(ImageIO.read(new File("assets/arrow.png")), ssX - windowWidth + 5, ((ssY / 2) - (windowHeight / 2) + 47) + (dispSelection * 20), 20, 20, null);
+		g.drawImage(ImageIO.read(new File("assets/arrow.png")), resizedValue(ssX - windowWidth + 2.5), resizedValue(((ssY / 2) - (windowHeight / 2) + 23.5) + (dispSelection * 10)), resizedValue(10), resizedValue(10), null);
 
 		return tempStitched;
 	}

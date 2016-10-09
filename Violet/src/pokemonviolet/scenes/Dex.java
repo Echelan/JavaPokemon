@@ -21,14 +21,17 @@ import pokemonviolet.model.Handler;
  * @author Andres
  */
 public class Dex extends Scene {
+	
+	private static final int SPRITE_WIDTH = 80;
+	private static final int SPRITE_HEIGHT = 80;
 
 	private int selectionX;
 	private int selectionY;
 	private int maxIndex;
-	private int maxRows;
-	private int maxCols;
-	private int numLastRow;
-	private int baseY;
+	private final int maxRows;
+	private final int maxCols;
+	private final int numLastRow;
+	private float baseY;
 	private boolean showDescrip;
 	
 	public Dex(Handler main) {
@@ -36,7 +39,7 @@ public class Dex extends Scene {
 		
 		this.selectionX = 1;
 		this.selectionY = 1;
-		this.baseY = 100;
+		this.baseY = 50;
 		this.showDescrip = false;
 		
 		for (int i = 0; i < main.player.getPokeDex().length; i++) {
@@ -57,8 +60,9 @@ public class Dex extends Scene {
 				accept();
 			} else if (action.compareTo("B") == 0) {
 				cancel();
-			} else if (action.compareTo("START") == 0) {
-			} else{
+			}
+		} else if (state.compareTo("PRESS") == 0) {
+			if (action.compareTo("A") != 0 && action.compareTo("B") != 0 && action.compareTo("START") != 0) {
 				move(action);
 			}
 		}
@@ -80,31 +84,33 @@ public class Dex extends Scene {
 
 	@Override
 	protected void move(String dir) {
-		if (dir.compareTo("UP") == 0) {
-			selectionY = selectionY - 1;
-		} else if (dir.compareTo("DOWN") == 0) {
-			selectionY = selectionY + 1;
-		} else if (dir.compareTo("RIGHT") == 0) {
-			selectionX = selectionX + 1;
-		} else if (dir.compareTo("LEFT") == 0) {
-			selectionX = selectionX - 1;
-		}
-		
-		if (selectionY < 1) {
-			selectionY = 1;
-		} else if (selectionY > maxRows) {
-			selectionY = maxRows;
-		}
-		
-		if (selectionX < 1) {
-			selectionX = 1;
-		} else if (selectionX > maxCols) {
-			selectionX = maxCols;
-		}
-		
-		if (selectionY == maxRows) {
-			if (selectionX > numLastRow) {
-				selectionX = numLastRow;
+		if (!showDescrip) {
+			if (dir.compareTo("UP") == 0) {
+				selectionY = selectionY - 1;
+			} else if (dir.compareTo("DOWN") == 0) {
+				selectionY = selectionY + 1;
+			} else if (dir.compareTo("RIGHT") == 0) {
+				selectionX = selectionX + 1;
+			} else if (dir.compareTo("LEFT") == 0) {
+				selectionX = selectionX - 1;
+			}
+
+			if (selectionY < 1) {
+				selectionY = 1;
+			} else if (selectionY > maxRows) {
+				selectionY = maxRows;
+			}
+
+			if (selectionX < 1) {
+				selectionX = 1;
+			} else if (selectionX > maxCols) {
+				selectionX = maxCols;
+			}
+
+			if (selectionY == maxRows) {
+				if (selectionX > numLastRow) {
+					selectionX = numLastRow;
+				}
 			}
 		}
 	}
@@ -116,92 +122,74 @@ public class Dex extends Scene {
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 
-		g.drawImage(ImageIO.read(new File("assets/"+main.player.getGender().toLowerCase()+"Back.png")), 0, 0, ssX, ssY, null);
+		g.drawImage(ImageIO.read(new File("assets/"+main.player.getGender().toLowerCase()+"Back.png")), 0, 0, resizedValue(ssX), resizedValue(ssY), null);
 		
-		baseY = 150 + (selectionY - 1) * -75;
+		baseY = 75 + (selectionY - 0.5f) * -1 * 37.5f;
 
 		for (int i = 0; i < maxIndex; i++) {
 			int x = (int) Math.floor(i % maxCols), y = (int) Math.floor(i / maxCols);
-			g.drawImage(genWindow(7, 70, 70), 21 + (x * 75), baseY + (y * 75), null);
+			g.drawImage(genWindow(7, 35, 35), resizedValue(10.5 + (x * 37.5)), resizedValue(baseY + (y * 37.5)), null);
 			if (main.player.getPokeDex()[i] != 0) {
-				g.drawImage(pokemonviolet.data.NIC.pokemonIcons.getSubimage( (int) Math.floor(i % 10) * 40, (int) Math.floor(i / 10) * 40, 40, 40), 21 + (x * 75) + 5, baseY + (y * 75) + 5, (int) (40 * 1.5f), (int) (40 * 1.5f), null);
+				g.drawImage(pokemonviolet.data.NIC.pokemonIcons.getSubimage( (int) Math.floor(i % 10) * 40, (int) Math.floor(i / 10) * 40, 40, 40), resizedValue(10.5) + (x * resizedValue(37.5)) + resizedValue(2.5), resizedValue(baseY + (y * 37.5) + 2.5), resizedValue(20 * 1.5f), resizedValue(20 * 1.5f), null);
 			} else {
-				g.drawImage(ImageIO.read(new File("assets/pokemon/blank.png")), 21 + 8 + (x * 75) + 5, baseY + 8 + (y * 75) + 5, (int) (36 * 1.25f), (int) (36 * 1.25f), null);
+				g.drawImage(ImageIO.read(new File("assets/pokemon/blank.png")), resizedValue(10.5 + 4 + (x * 37.5) + 2.5), resizedValue(baseY + 4 + (y * 37.5) + 2.5), resizedValue(18 * 1.25f), resizedValue(18 * 1.25f), null);
 			}
 		}
 		
-		g.drawImage(ImageIO.read(new File("assets/hand.png")), 21 + 28 + ((selectionX - 1) * 75), (ssY / 2) - 40, (int) (20 * RESIZE), (int) (22 * RESIZE), null);
+		g.drawImage(ImageIO.read(new File("assets/hand.png")), resizedValue(10.5 + 14 + (selectionX - 1) * 37.5), resizedValue((ssY / 2) - 35), resizedValue(20), resizedValue(22), null);
 
-		g.drawImage(genWindow(5, 120, 50), 1, 1, null);
+		g.drawImage(genWindow(5, 60, 25), resizedValue(0.5), resizedValue(0.5), null);
 		if (this.showDescrip) {
-			g.drawImage(genWindow(5, ssX - 123, 140), 122, 1, null);
+			g.drawImage(genWindow(5, ssX - 61.5, 70), resizedValue(61), resizedValue(0.5), null);
 		} else {
-			g.drawImage(genWindow(5, ssX - 123, 80), 122, 1, null);
+			g.drawImage(genWindow(5, ssX - 61.5, 40), resizedValue(61), resizedValue(0.5), null);
 		}
 		
 		g.setColor(Color.black);
-		g.setFont(new Font("Arial",Font.BOLD, 20));
+		g.setFont(new Font("Arial",Font.BOLD, resizedValue(10)));
 		
-		g.drawString("PokeDex", 15, 33);
+		g.drawString("PokeDex", resizedValue(7.5), resizedValue(16.5));
 		
 		int curIndex = ((selectionY - 1) * maxCols) + selectionX;
 		
 		if (main.player.getPokeDex()[curIndex - 1] != 0) {
 			pokemonviolet.model.Pokemon indexPokemon = new pokemonviolet.model.Pokemon(curIndex);
-				g.drawString(indexPokemon.getNameSpecies(), 140, 33);
+				g.drawString(indexPokemon.getNameSpecies(), resizedValue(70), resizedValue(16.5));
 			if (this.showDescrip) {
-				g.setFont(new Font("Arial", Font.PLAIN, 15));
+				g.setFont(new Font("Arial", Font.PLAIN, resizedValue(7.5)));
+				
+				g.drawImage(genWindow(7, 170, 170), resizedValue(2.5), resizedValue(2.5), null);
+				g.drawImage(indexPokemon.getFrontImage(), resizedValue(2.5 + (85 / 2) - (SPRITE_WIDTH / 2)), resizedValue(2.5 + (85 / 2) - (SPRITE_HEIGHT / 2)), resizedValue(SPRITE_WIDTH), resizedValue(SPRITE_HEIGHT), null);
+				
 				if (main.player.getPokeDex()[curIndex - 1] == 2) {
-					int charsInLine = 47;
-					String fullD = indexPokemon.getPokeEntry();
-					for (int i = 0; i < (fullD.length() / charsInLine) + 1; i++) {
-						String prefix = "", suffix = "";
-
-						int thisLineFirstChar = i * charsInLine;
-						int thisLinePrevChar = thisLineFirstChar - 1;
-						int thisLineLastChar = ((i + 1) * charsInLine) - 2;
-						int thisLineNextChar = thisLineLastChar + 1;
-
-						if (thisLineFirstChar != 0){
-							if (fullD.charAt(thisLinePrevChar) != ' ') {
-								prefix = "" + fullD.charAt(thisLinePrevChar);
-							}
-						}
-
-						if (thisLineNextChar < fullD.length()) {
-							if (fullD.charAt(thisLineNextChar) != ' ' && fullD.charAt(thisLineLastChar) != ' ') {
-								suffix = "-";
-							}
-						} else {
-							thisLineLastChar = fullD.length() - 1;
-						}
-
-						g.drawString(prefix + fullD.substring(thisLineFirstChar, thisLineLastChar+1) + suffix, 150, 55 + (i * 20));
+					
+					for (int i = 0; i < genMultilineText(indexPokemon.getPokeEntry(), 46).length; i++) {
+						g.drawString(genMultilineText(indexPokemon.getPokeEntry(), 46)[i], resizedValue(75), resizedValue(27.5 + (i * 10)));
 					}
+					
 				} else {
-					g.drawString("No data.", 220, 55);
+					g.drawString("No data.", resizedValue(110), resizedValue(27.5));
 				}
-				g.setFont(new Font("Arial",Font.BOLD, 20));
+				g.setFont(new Font("Arial",Font.BOLD, resizedValue(10)));
 			} else {
 				if (main.player.getPokeDex()[curIndex - 1] == 2) {
-					g.drawString(indexPokemon.getKind() + " Pokemon", 280, 33);
-					g.drawString(indexPokemon.getHeight() + "m", 150, 55);
-					g.drawString(indexPokemon.getWeight() + "kg", 220, 55);
+					g.drawString(indexPokemon.getKind() + " Pokemon", resizedValue(140), resizedValue(16.5));
+					g.drawString(indexPokemon.getHeight() + "m", resizedValue(75), resizedValue(27.5));
+					g.drawString(indexPokemon.getWeight() + "kg", resizedValue(110), resizedValue(27.5));
 					for (int i = 0; i < indexPokemon.getTypes().length; i++) {
 						if (indexPokemon.getTypes()[i] != null) {
-							g.drawString(pokemonviolet.model.PokemonType.getNameDisplay(indexPokemon.getTypes()[i]), 290 + (i * 80), 55);
+							g.drawString(pokemonviolet.model.PokemonType.getNameDisplay(indexPokemon.getTypes()[i]), resizedValue(145 + (i * 40)), resizedValue(27.5));
 						}
 					}
 				} else {
-					g.drawString("No data.", 220, 55);
+					g.drawString("No data.", resizedValue(110), resizedValue(27.5));
 				}
 			}
 		}
 		
-
 		return tempStitched;
 	}
 

@@ -120,20 +120,20 @@ public class UseDialog extends Scene{
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 
-		int x = ssX - 160;
-		g.drawImage(genWindow(0, 120, 90), x, 162, null);
+		int x = ssX - 80;
+		g.drawImage(genWindow(0, 60, 45), resizedValue(x), resizedValue(81), null);
 		
 		g.setColor(Color.black);
-		g.setFont(new Font("Arial", Font.BOLD, 20));
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(10)));
 		
 		for (int i = 0; i < choices.length; i++) {
-			g.drawString(choices[i], x + 30, 203 + (i * 30));
+			g.drawString(choices[i], resizedValue(x + 15), resizedValue(101.5 + (i * 15)));
 		}
 		
-		g.drawImage(ImageIO.read(new File("assets/arrow.png")), x + 10, 203 + (choice * 30) - 15, 20, 20, null);
+		g.drawImage(ImageIO.read(new File("assets/arrow.png")), resizedValue(x + 5), resizedValue(101.5 + (choice * 30) - 7.5), resizedValue(10), resizedValue(10), null);
 		
 		return tempStitched;
 	}

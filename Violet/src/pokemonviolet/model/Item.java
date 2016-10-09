@@ -24,8 +24,8 @@ public class Item {
 		 * Number of attributes per Item.
 		 */
 		private static int NUM_ATTRIB = 11;
-		private static int SPRITE_WIDTH = 60;
-		private static int SPRITE_HEIGHT = 60;
+		private static int SPRITE_WIDTH = 30;
+		private static int SPRITE_HEIGHT = 30;
 		
 		/**
 		 * ID of Item.
@@ -284,7 +284,7 @@ public class Item {
 		
 		int x = ( (this.id - 1) % 24 ) * (SPRITE_WIDTH / 2), y = ((int) Math.floor( (double) (this.id-1) / 24 )) * (SPRITE_HEIGHT / 2);
 		
-		g.drawImage((ImageIO.read(new File("assets/itemsIcons.png"))).getSubimage(x, y, SPRITE_WIDTH/2, SPRITE_HEIGHT/2),0,0,SPRITE_WIDTH,SPRITE_HEIGHT,null);
+		g.drawImage((ImageIO.read(new File("assets/itemsIcons.png"))).getSubimage(x, y, SPRITE_WIDTH, SPRITE_HEIGHT), 0, 0, (int) (SPRITE_WIDTH * pokemonviolet.main.PokemonViolet.SIZE), (int) (SPRITE_HEIGHT * pokemonviolet.main.PokemonViolet.SIZE), null);
 		
 		return image;
 	}

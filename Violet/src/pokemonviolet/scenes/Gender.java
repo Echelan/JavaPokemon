@@ -79,31 +79,31 @@ public class Gender extends Scene {
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage display = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage display = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = display.getGraphics();
 
 		g.drawImage(ImageIO.read(new File("assets/title/background.png")), 0, 0, null);
 
-		g.setFont(new Font("Arial", Font.BOLD, 30));
-		g.drawString("Are you boy or a girl?", ssX / 5, 30);
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(15)));
+		g.drawString("Are you boy or a girl?", resizedValue(ssX / 5), resizedValue(15));
 
-		int characterWidth = (int) (40 * RESIZE), characterHeight = (int) (82 * RESIZE);
+		int characterWidth = 40, characterHeight = 82;
 
 		
-		g.drawImage(ImageIO.read(new File("assets/" + genders[chosen].toLowerCase() + "Char.png")), 100 + (ssX / 2), 50, characterWidth, characterHeight, null);
+		g.drawImage(ImageIO.read(new File("assets/" + genders[chosen].toLowerCase() + "Char.png")), resizedValue(50 + (ssX / 2)), resizedValue(25), resizedValue(characterWidth), resizedValue(characterHeight), null);
 		for (int i = 0; i < genders.length; i++) {
-			int y = 110 + (i*70);
+			int y = 55 + (i*35);
 			if (chosen == i) {
 				g.setColor(Color.WHITE);
 			} else {
 				g.setColor(Color.GRAY);
 			}
-			g.drawString(name[i], 120, y);
+			g.drawString(name[i], resizedValue(60), resizedValue(y));
 		}
 
-		g.drawImage(ImageIO.read(new File("assets/moveUp.png")), 60, ssY-80, 140, 70, null);
-		g.drawImage(ImageIO.read(new File("assets/moveDown.png")), 210, ssY-80, 140, 70, null);
-		g.drawImage(ImageIO.read(new File("assets/buttonA.png")), 360, ssY-80, 70, 70, null);
+		g.drawImage(ImageIO.read(new File("assets/moveUp.png")), resizedValue(30), resizedValue(ssY - 40), resizedValue(70), resizedValue(35), null);
+		g.drawImage(ImageIO.read(new File("assets/moveDown.png")), resizedValue(105), resizedValue(ssY - 40), resizedValue(70), resizedValue(35), null);
+		g.drawImage(ImageIO.read(new File("assets/buttonA.png")), resizedValue(180), resizedValue(ssY - 40), resizedValue(35), resizedValue(35), null);
 
 		return display;
 	}

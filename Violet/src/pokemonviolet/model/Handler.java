@@ -30,6 +30,7 @@ public class Handler implements Runnable {
 			 * Canvas size in Y dimension.
 			 */
 			public static int SCREEN_SIZE_Y;
+			public static float RESIZE;
 		//</editor-fold>
 
 		/**
@@ -53,19 +54,25 @@ public class Handler implements Runnable {
 		private boolean fillTeam = false;
 		private Thread thisThread;
 		private GameWindow gw;
-		
+		private int baseScreenSizeX, baseScreenSizeY;
 	// </editor-fold>
 
 	/**
 	 * Build game.
+	 * @float resize Resize factor of window.
 	 */
-	public Handler() {
+	public Handler(float resize) {
 		gameState = new ArrayList<Scene>();
 
-		SCREEN_SIZE_X = 480;
-		SCREEN_SIZE_Y = 320;
+		RESIZE = resize;
 		
-		gw = new GameWindow();
+		baseScreenSizeX = 240;
+		baseScreenSizeY = 160;
+		
+		SCREEN_SIZE_X = (int) (baseScreenSizeX * RESIZE);
+		SCREEN_SIZE_Y = (int) (baseScreenSizeY * RESIZE);
+		
+		gw = new GameWindow(SCREEN_SIZE_X, SCREEN_SIZE_Y);
 
 		thisThread = new Thread(this);
 
@@ -288,7 +295,7 @@ public class Handler implements Runnable {
 		
 		xDisplace = xTile * (Map.MAP_TOTAL_SIZE_X / Map.MAP_ROW_TILES);
 		
-		xTotal = (xDisplace * -1) + (SCREEN_SIZE_X / 2);
+		xTotal = (xDisplace * -1) + (baseScreenSizeX / 2);
 		
 		return xTotal;
 	}
@@ -309,7 +316,7 @@ public class Handler implements Runnable {
 		
 		yDisplace = yTile * (Map.MAP_TOTAL_SIZE_Y / Map.MAP_ROW_TILES);
 		
-		yTotal = (yDisplace * -1) + (SCREEN_SIZE_Y / 2);
+		yTotal = (yDisplace * -1) + (baseScreenSizeY / 2);
 		
 		return yTotal;
 	}

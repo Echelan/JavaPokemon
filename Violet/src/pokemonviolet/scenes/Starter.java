@@ -119,32 +119,32 @@ public class Starter extends Scene {
 	
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage display = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage display = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = display.getGraphics();
 
 		g.drawImage(ImageIO.read(new File("assets/title/background.png")), 0, 0, null);
 
-		g.setFont(new Font("Arial", Font.BOLD, 30));
-		g.drawString("Choose your starter!", ssX / 5, 30);
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(15)));
+		g.drawString("Choose your starter!", resizedValue(ssX / 5), resizedValue(15));
 
-		int characterWidth = (int) (80 * RESIZE), characterHeight = (int) (80 * RESIZE);
+		int characterWidth = 80, characterHeight = 80;
 
-		g.setFont(new Font("Arial", Font.BOLD, 15));
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(7.5)));
 		for (int i = 0; i < pokeID.length; i++) {
 			int x = 5 + (i * (ssX / 3));
 			
-			g.drawImage(ImageIO.read(new File("assets/pokemon/" + pokeID[i] + "mfn.png")), x, ssY / 5, characterWidth, characterHeight, null);
+			g.drawImage(ImageIO.read(new File("assets/pokemon/" + pokeID[i] + "mfn.png")), resizedValue(x), resizedValue(ssY / 5), resizedValue(characterWidth), resizedValue(characterHeight), null);
 			if (chosen == i) {
 				g.setColor(Color.WHITE);
 			} else {
 				g.setColor(Color.GRAY);
 			}
-			g.drawString(pokeNames[i], x + (characterWidth / 4), ssY / 5 + characterHeight + 5);
+			g.drawString(pokeNames[i], resizedValue(x + (characterWidth / 4)), resizedValue(ssY / 5 + characterHeight + 2.5));
 		}
 			
-		g.drawImage(ImageIO.read(new File("assets/moveLeft.png")), 60, ssY-80, 140, 70, null);
-		g.drawImage(ImageIO.read(new File("assets/moveRight.png")), 210, ssY-80, 140, 70, null);
-		g.drawImage(ImageIO.read(new File("assets/buttonB.png")), 360, ssY-80, 70, 70, null);
+		g.drawImage(ImageIO.read(new File("assets/moveLeft.png")), resizedValue(30), resizedValue(ssY - 40), resizedValue(70), resizedValue(35), null);
+		g.drawImage(ImageIO.read(new File("assets/moveRight.png")), resizedValue(105), resizedValue(ssY - 40), resizedValue(70), resizedValue(35), null);
+		g.drawImage(ImageIO.read(new File("assets/buttonB.png")), resizedValue(180), resizedValue(ssY - 40), resizedValue(35), resizedValue(35), null);
 
 		return display;
 	}

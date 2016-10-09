@@ -373,31 +373,31 @@ public class Team extends Scene {
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 
-		g.drawImage(ImageIO.read(new File(path+"background.png")), 0, 0, ssX, ssY, null);
+		g.drawImage(ImageIO.read(new File(path+"background.png")), 0, 0, resizedValue(ssX), resizedValue(ssY), null);
 
-		g.drawImage(genWindow(6, (int) (80 * RESIZE), (int) (49 * RESIZE)), 8, ssY - 20 - (int) ((49 * RESIZE)), null);
+		g.drawImage(genWindow(6, 80, 49), resizedValue(4), resizedValue(ssY - 10 - 49), null);
 		
 		g.setColor(Color.black);
-		g.setFont(new Font("Arial", Font.BOLD, 20));
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(10)));
 		if (selection < 6) {
-			g.drawString("HP: "+team[selection].getCurHP()+"/"+team[selection].getStatHP(), 22, ssY - 35 - (int) ((49 * RESIZE) / 2));
+			g.drawString("HP: "+team[selection].getCurHP()+"/"+team[selection].getStatHP(), resizedValue(11), resizedValue(ssY - 17.5 - 49 / 2));
 			if (swap != -1) {
-				g.drawString("Swapping...", 22, ssY - 10 - (int) ((49 * RESIZE) / 2));
-				g.drawString("HP: "+team[swap].getCurHP()+"/"+team[swap].getStatHP(), 22, ssY + 15 - (int) ((49 * RESIZE) / 2));
+				g.drawString("Swapping...", resizedValue(11), resizedValue(ssY - 5 - 49 / 2));
+				g.drawString("HP: "+team[swap].getCurHP()+"/"+team[swap].getStatHP(), resizedValue(11), resizedValue(ssY + 7.5 - 49 / 2));
 			}
 		} else {
 			if (canExit) {
-				g.drawString("Exit", 22, ssY - 35 - (int) ((49 * RESIZE) / 2));
+				g.drawString("Exit", resizedValue(11), resizedValue(ssY - 17.5 - 49 / 2));
 			} else {
-				g.drawString("Can't exit!", 22, ssY - 35 - (int) ((49 * RESIZE) / 2));
+				g.drawString("Can't exit!", resizedValue(11), resizedValue(ssY - 17.5 - 49 / 2));
 			}
 		}
 		
 		g.setColor(Color.white);
-		g.setFont(new Font("Arial", Font.BOLD, 15));
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(7.5)));
 		for (int i = 0; i < team.length; i++) {
 			String state = "";
 			if (team[i] != null) {
@@ -409,9 +409,9 @@ public class Team extends Scene {
 			}
 			
 			g.setColor(Color.white);
-			g.setFont(new Font("Arial", Font.BOLD, 15));
+			g.setFont(new Font("Arial", Font.BOLD, resizedValue(7.5)));
 			if (i == 0) {
-				int dimX = (int) (78 * RESIZE), dimY = (int) (49 * RESIZE);
+				int dimX = 78, dimY = 49;
 
 				g.setColor(Color.green);
 				if ((float) team[i].getCurHP() / (float) team[i].getStatHP() < 0.5f) {
@@ -420,10 +420,10 @@ public class Team extends Scene {
 						g.setColor(Color.red);
 					}
 				}
-				g.fillRect(57, 112, (int) ((float) 100 * (float) ((float) team[i].getCurHP() / (float) team[i].getStatHP())), 10);
+				g.fillRect(resizedValue(28.5), resizedValue(57), resizedValue((float) 50 * ((float) team[i].getCurHP() / (float) team[i].getStatHP())), resizedValue(5));
 				g.setColor(Color.white);
 
-				g.drawImage(ImageIO.read(new File(path+"mainPokemon"+state+".png")), 10, 50, dimX, dimY, null);
+				g.drawImage(ImageIO.read(new File(path+"mainPokemon"+state+".png")), resizedValue(5), resizedValue(25), resizedValue(dimX), resizedValue(dimY), null);
 
 				if (state.compareTo("Blank") != 0) {
 
@@ -431,8 +431,8 @@ public class Team extends Scene {
 						int id = team[i].getId();
 						g.drawImage(pokemonviolet.data.NIC.pokemonIcons.getSubimage( (int) Math.floor((id-1) % 10) * 40, (int) Math.floor((id-1) / 10) * 40, 40, 40), 10, 37, (int) (40 * 1.5f), (int) (40 * 1.5f), null);
 					} else {
-						int yDisplace = (int) (((int) Math.pow(animFrame - 6, 2)) * 0.5f);
-						g.drawImage(animImg.getSubimage(animFrame * 16, 0, 16, 16), 20, 45 + yDisplace, (int) (16 * RESIZE), (int) (16 * RESIZE), null);
+						int yDisplace = (int) (((int) Math.pow(animFrame - 6, 2)) * 0.25f);
+						g.drawImage(animImg.getSubimage(animFrame * 16, 0, 16, 16), resizedValue(10), resizedValue(22.5 + yDisplace), resizedValue(16), resizedValue(16), null);
 						animFrame = animFrame + 1;
 						if (animFrame > 11) {
 							animFrame = 0;
@@ -446,13 +446,13 @@ public class Team extends Scene {
 					} else {
 						g.setColor(Color.white);
 					}
-					g.drawString(team[i].getNameNick(), 20, 108);
+					g.drawString(team[i].getNameNick(), resizedValue(10), resizedValue(54));
 					g.setColor(Color.white);
-					g.drawString("Lv. "+team[i].getLevel(), 45, 139);
+					g.drawString("Lv. "+team[i].getLevel(), resizedValue(22.5), resizedValue(69.5));
 
 					if (team[i].isFainted()) {
 						g.setColor(Color.red);
-						g.drawString("FNT", 130, 139);
+						g.drawString("FNT", resizedValue(65), resizedValue(69.5));
 						g.setColor(Color.white);
 					}
 				}
@@ -503,9 +503,9 @@ public class Team extends Scene {
 		if (selection == 6) {
 			state = "Active";
 		}
-		g.setFont(new Font("Arial", Font.BOLD, 15));
-		g.drawImage(ImageIO.read(new File(path+"cancel"+state+".png")), ssX - 116, ssY - 40, (int) (52 * RESIZE), (int) (16 * RESIZE), null);
-		g.drawString("CANCEL", ssX - 95, ssY - 20);
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(7.5)));
+		g.drawImage(ImageIO.read(new File(path+"cancel"+state+".png")), resizedValue(ssX - 58), resizedValue(ssY - 20), resizedValue(52), resizedValue(16), null);
+		g.drawString("CANCEL", resizedValue(ssX - 47.5), resizedValue(ssY - 10));
 		
 		return tempStitched;
 	}

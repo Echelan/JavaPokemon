@@ -41,19 +41,19 @@ public class Title extends Scene {
 		ready = false;
 		startDisplay = 6;
 
-		logoY = -400;
+		logoY = -200;
 		finalLogoY = 00;
 
-		blackBarY = ssY + 50;
-		finalBlackBarY = ssY - 50;
+		blackBarY = ssY + 25;
+		finalBlackBarY = ssY - 25;
 
 		arcanineX = ssX;
-		finalArcanineX = ssX - 160;
+		finalArcanineX = ssX - 80;
 
-		growlitheX = ssX + 120;
-		finalGrowlitheX = finalArcanineX + 60;
+		growlitheX = ssX + 60;
+		finalGrowlitheX = finalArcanineX + 30;
 
-		logoY = -100;
+		logoY = -50;
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class Title extends Scene {
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage display = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage display = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = display.getGraphics();
 
 		g.drawImage(ImageIO.read(new File("assets/title/background.png")), 0, 0, null);
@@ -125,42 +125,42 @@ public class Title extends Scene {
 		ready = true;
 
 		if (blackBarY != finalBlackBarY) {
-			blackBarY = blackBarY - 20;
+			blackBarY = blackBarY - 10;
 			if (ready) {
 				ready = false;
 			}
 		}
 		g.setColor(Color.black);
-		g.fillRect(0, blackBarY, ssX, ssY);
+		g.fillRect(0, resizedValue(blackBarY), resizedValue(ssX), resizedValue(ssY));
 		g.setColor(Color.white);
-		g.setFont(new Font("Arial", Font.BOLD, 15));
-		g.drawString("Andrés Movilla", 20, blackBarY + 40);
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(7.5)));
+		g.drawString("Andrés Movilla", resizedValue(10), resizedValue(blackBarY + 20));
 
 		if (arcanineX != finalArcanineX) {
-			arcanineX = arcanineX - 20;
+			arcanineX = arcanineX - 10;
 			if (ready) {
 				ready = false;
 			}
 		}
-		g.drawImage(ImageIO.read(new File("assets/pokemon/59ffn.png")), arcanineX, ssY - 220, 160, 160, null);
+		g.drawImage(ImageIO.read(new File("assets/pokemon/59ffn.png")), resizedValue(arcanineX), resizedValue(ssY - 110), resizedValue(80), resizedValue(80), null);
 
 		if (arcanineX == finalArcanineX) {
 			if (growlitheX != finalGrowlitheX) {
-				growlitheX = growlitheX - 20;
+				growlitheX = growlitheX - 10;
 				if (ready) {
 					ready = false;
 				}
 			}
 		}
-		g.drawImage(ImageIO.read(new File("assets/pokemon/58ffn.png")), growlitheX, ssY - 170, 160, 160, null);
+		g.drawImage(ImageIO.read(new File("assets/pokemon/58ffn.png")), resizedValue(growlitheX), resizedValue(ssY - 85), resizedValue(80), resizedValue(80), null);
 
 		if (logoY != finalLogoY) {
-			logoY = logoY + 20;
+			logoY = logoY + 10;
 			if (ready) {
 				ready = false;
 			}
 		}
-		g.drawImage(ImageIO.read(new File("assets/title/violetLogo.png")), (ssX / 2) - 40 - (int) ((int) (1363 / 4) / 2), logoY, (int) (1363 / 4), (int) (786 / 4), null);
+		g.drawImage(ImageIO.read(new File("assets/title/violetLogo.png")), resizedValue((ssX / 2) - 20 - (681.5 / 4) / 2), resizedValue(logoY), resizedValue(681.5 / 4), resizedValue(393 / 4), null);
 
 		if (ready) {
 			startDisplay = startDisplay - 1;
@@ -168,17 +168,17 @@ public class Title extends Scene {
 				if (startDisplay == 0) {
 					startDisplay = 6;
 				}
-				g.setFont(new Font("Arial", Font.BOLD, 25));
-				g.drawString("Press Start", 35, 250);
+				g.setFont(new Font("Arial", Font.BOLD, resizedValue(12.5)));
+				g.drawString("Press Start", resizedValue(17.5), resizedValue(125));
 			}
 
 			if (logoY != finalLogoY) {
-				logoY = logoY + 20;
+				logoY = logoY + 10;
 				if (ready) {
 					ready = false;
 				}
 			}
-			g.drawImage(ImageIO.read(new File("assets/buttonStart.png")), ((int) ssX/2)-60, 200, 140, 60, null);
+			g.drawImage(ImageIO.read(new File("assets/buttonStart.png")), resizedValue( (ssX / 2) - 30), resizedValue(100), resizedValue(70), resizedValue(30), null);
 		}
 
 		return display;

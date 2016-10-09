@@ -9,10 +9,8 @@ package pokemonviolet.model;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.*;
 import java.util.List;
 import java.util.Random;
-import javax.imageio.ImageIO;
 
 /**
  *
@@ -21,22 +19,6 @@ import javax.imageio.ImageIO;
 public class Map {
 
 	//<editor-fold defaultstate="collapsed" desc="Attributes">
-		//<editor-fold defaultstate="collapsed" desc="Static Images">
-			private static BufferedImage tileset;
-			private static BufferedImage gym;
-			private static BufferedImage center;
-			private static BufferedImage house;
-			private static BufferedImage objects;
-			private static BufferedImage shop;
-			private static BufferedImage house2;
-			private static BufferedImage house3;
-			private static BufferedImage wstone;
-			private static BufferedImage wstone2;
-			private static BufferedImage tree;
-			private static BufferedImage tree2;
-			private static BufferedImage[] objSets;
-		//</editor-fold>
-
 		//<editor-fold defaultstate="collapsed" desc="Statics">
 			private static final int TILE_WIDTH = 16;
 			private static final int TILE_HEIGHT = 16;
@@ -49,12 +31,10 @@ public class Map {
 			private static final int MAX_TILE_IN_SET_COL = 3;
 			private static final int MAX_SET_IN_TILE_SET_ROW = 4;
 
-			public static int MAP_TOTAL_SIZE_X;
-			public static int MAP_TOTAL_SIZE_Y;
-
-			public static int MAP_ROW_TILES = 20;
-
-			private static final double MAP_MULT = 2.0;
+			public static final int MAP_ROW_TILES = 20;
+			
+			public static final int MAP_TOTAL_SIZE_X = (int) (MAP_ROW_TILES * TILE_WIDTH);
+			public static final int MAP_TOTAL_SIZE_Y = (int) (MAP_ROW_TILES * TILE_HEIGHT);
 		//</editor-fold>
 
 		//<editor-fold defaultstate="collapsed" desc="Vars">
@@ -65,40 +45,6 @@ public class Map {
 			private final List<String> tileInformation;
 		//</editor-fold>
 	//</editor-fold>
-
-	public static void loadImages() {
-		try {
-			tileset = ImageIO.read(new File("assets/map/tileset.png"));
-
-			shop = ImageIO.read(new File("assets/map/shop.png"));
-
-			gym = ImageIO.read(new File("assets/map/gym.png"));
-
-			center = ImageIO.read(new File("assets/map/center.png"));
-
-			objects = ImageIO.read(new File("assets/map/objects.png"));
-
-			house = ImageIO.read(new File("assets/map/house.png"));
-
-			tree = ImageIO.read(new File("assets/map/tree.png"));
-
-			tree2 = ImageIO.read(new File("assets/map/tree2.png"));
-
-			house2 = ImageIO.read(new File("assets/map/house2.png"));
-
-			house3 = ImageIO.read(new File("assets/map/house3.png"));
-
-			wstone = ImageIO.read(new File("assets/map/wstone.png"));
-
-			wstone2 = ImageIO.read(new File("assets/map/wstone2.png"));
-
-			objSets = new BufferedImage[]{objects, house, house2, house3, center, shop, gym, tree, tree2, wstone, wstone2};
-		} catch (IOException ex) {
-		}
-
-		MAP_TOTAL_SIZE_X = (int) (MAP_ROW_TILES * TILE_WIDTH * MAP_MULT);
-		MAP_TOTAL_SIZE_Y = (int) (MAP_ROW_TILES * TILE_HEIGHT * MAP_MULT);
-	}
 
 	public Map(List<String> info, int x, int y, int posX, int posY) {
 		pokemonInMap = new int[151][7];
@@ -158,7 +104,7 @@ public class Map {
 				xTile = getTileXinImage(thistileset, thistiletype);
 				yTile = getTileYinImage(thistileset, thistiletype);
 
-				g.drawImage(tileset.getSubimage(xTile, yTile, TILE_WIDTH, TILE_HEIGHT), (int) (i * TILE_WIDTH * MAP_MULT), (int) (j * TILE_HEIGHT * MAP_MULT), (int) (TILE_WIDTH * MAP_MULT), (int) (TILE_HEIGHT * MAP_MULT), null);
+				g.drawImage(pokemonviolet.data.NIC.tileset.getSubimage(xTile, yTile, TILE_WIDTH, TILE_HEIGHT), i * TILE_WIDTH, (int) (j * TILE_HEIGHT), TILE_WIDTH, TILE_HEIGHT, null);
 
 				int thisobjset = Integer.parseInt(thisrow[j].split("-")[2], 16);
 				int thisobjtype = Integer.parseInt(thisrow[j].split("-")[3], 16);
@@ -166,7 +112,7 @@ public class Map {
 				xTile = getObjXinImage(thisobjset, thisobjtype);
 				yTile = getObjYinImage(thisobjset, thisobjtype);
 
-				g.drawImage(objSets[thisobjset].getSubimage(xTile, yTile, TILE_WIDTH, TILE_HEIGHT), (int) (i * TILE_WIDTH * MAP_MULT), (int) (j * TILE_HEIGHT * MAP_MULT), (int) (TILE_WIDTH * MAP_MULT), (int) (TILE_HEIGHT * MAP_MULT), null);
+				g.drawImage(pokemonviolet.data.NIC.objSets[thisobjset].getSubimage(xTile, yTile, TILE_WIDTH, TILE_HEIGHT), i * TILE_WIDTH, (int) (j * TILE_HEIGHT), TILE_WIDTH, TILE_HEIGHT, null);
 			}
 		}
 
@@ -260,14 +206,14 @@ public class Map {
 		}
 
 		public static int getObjXinImage(int setinfo, int tileinfo) {
-			int maxtileinsetrow = (objSets[setinfo].getWidth() / TILE_WIDTH);
+			int maxtileinsetrow = (pokemonviolet.data.NIC.objSets[setinfo].getWidth() / TILE_WIDTH);
 			int regX = (int) (Math.floor((double) tileinfo % maxtileinsetrow) * TILE_WIDTH);
 
 			return regX;
 		}
 
 		public static int getObjYinImage(int setinfo, int tileinfo) {
-			int maxtileinsetrow = (objSets[setinfo].getWidth() / TILE_WIDTH);
+			int maxtileinsetrow = (pokemonviolet.data.NIC.objSets[setinfo].getWidth() / TILE_WIDTH);
 			int regY = (int) (Math.floor((double) tileinfo / maxtileinsetrow) * TILE_HEIGHT);
 
 			return regY;

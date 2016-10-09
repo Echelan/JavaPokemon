@@ -23,8 +23,9 @@ import pokemonviolet.model.PokemonMove;
  * @author Andres
  */
 public class LearnMove extends Scene {
-	private static final int SPRITE_WIDTH = (int) (80 * RESIZE);
-	private static final int SPRITE_HEIGHT = (int) (80 * RESIZE);
+	
+	private static final int SPRITE_WIDTH = 80;
+	private static final int SPRITE_HEIGHT = 80;
 
 	Pokemon subject;
 	PokemonMove object;
@@ -107,38 +108,38 @@ public class LearnMove extends Scene {
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 		
-		g.drawImage(ImageIO.read(new File("assets/pokemonBack.png")), 0, 0, ssX, ssY, null);
+		g.drawImage(ImageIO.read(new File("assets/pokemonBack.png")), 0, 0, resizedValue(ssX), resizedValue(ssY), null);
 		
-		g.setFont(new Font("Arial", Font.BOLD, 25));
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(12.5)));
 		g.setColor(Color.black);
 		
-		g.drawImage(genWindow(7, 170, 170), 5, 5, null);
-		g.drawImage(subject.getFrontImage(), 5 + (170 / 2) - (SPRITE_WIDTH / 2), 5 + (170 / 2) - (SPRITE_HEIGHT / 2), SPRITE_WIDTH, SPRITE_HEIGHT, null);
+		g.drawImage(genWindow(7, 170, 170), resizedValue(2.5), resizedValue(2.5), null);
+		g.drawImage(subject.getFrontImage(), resizedValue(2.5 + (85 / 2) - (SPRITE_WIDTH / 2)), resizedValue(2.5 + (85 / 2) - (SPRITE_HEIGHT / 2)), resizedValue(SPRITE_WIDTH), resizedValue(SPRITE_HEIGHT), null);
 		
-		g.drawImage(genWindow(7, ssX - 185, ssY - 61), 180, 5, null);
+		g.drawImage(genWindow(7, ssX - 185, ssY - 61), resizedValue(90), resizedValue(2.5), null);
 		
-		g.drawImage(genWindow(7, 170, 50), 5, 180, null);
-		g.drawString(subject.getNameNick(), 20, 214);
+		g.drawImage(genWindow(7, 170, 50), resizedValue(2.5), resizedValue(90), null);
+		g.drawString(subject.getNameNick(), resizedValue(10), resizedValue(107));
 		
-		g.setFont(new Font("Arial", Font.BOLD, 25));
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(12.5)));
 		for (int i = 0; i < subject.getNumMoves() + 1; i++) {
 			if (i < subject.getNumMoves()) {
-				int x = 190, y = 30 + (i * 30);
-				g.drawString(subject.getMoveSet()[i].getNameDisplay(), x + 20, y + 25);
+				int x = 95, y = 15 + (i * 15);
+				g.drawString(subject.getMoveSet()[i].getNameDisplay(), resizedValue(x + 10), resizedValue(y + 12.5));
 			} else {
-				int x = 190, y = 30 + (i * 30);
+				int x = 95, y = 15 + (i * 15);
 				g.setColor(Color.blue);
-				g.drawString(object.getNameDisplay(), x + 20, y + 25);
+				g.drawString(object.getNameDisplay(), resizedValue(x + 10), resizedValue(y + 12.5));
 				g.setColor(Color.black);
 			}
 					
 		}
 		
 		g.setFont(new Font("Arial", Font.BOLD, 15));
-		g.drawImage(genWindow(7, ssX - 2, 85), 1, ssY - 86, null);
+		g.drawImage(genWindow(7, ssX - 2, 85), resizedValue(0.5), resizedValue(ssY - 43), null);
 		
 		PokemonMove target;
 		if (selection == 4) {
@@ -147,43 +148,20 @@ public class LearnMove extends Scene {
 			target = subject.getMoveSet()[selection];
 		}
 		if (target != null) {
-			g.drawString(target.getNameDisplay(), 16, ssY - 63);
-			g.drawString("Power: "+target.getDmgBase(), 136, ssY - 63);
-			g.drawString("Accuracy: "+target.getAccuracy(), 226, ssY - 63);
-			g.drawString("PP: "+target.getPP()+"/"+target.getPPMax(), 356, ssY - 63);
-			g.setFont(new Font("Arial", Font.PLAIN, 15));
+			g.drawString(target.getNameDisplay(), resizedValue(8), resizedValue(ssY - 31.5));
+			g.drawString("Power: "+target.getDmgBase(), resizedValue(68), resizedValue(ssY - 31.5));
+			g.drawString("Accuracy: "+target.getAccuracy(), resizedValue(113), resizedValue(ssY - 31.5));
+			g.drawString("PP: "+target.getPP()+"/"+target.getPPMax(), resizedValue(178), resizedValue(ssY - 31.5));
+			g.setFont(new Font("Arial", Font.PLAIN, resizedValue(7.5)));
 
-			int charsInLine = 60;
-			String fullD = target.getDescription();
-			for (int i = 0; i < (fullD.length() / charsInLine) + 1; i++) {
-				String prefix = "", suffix = "";
-
-				int thisLineFirstChar = i * charsInLine;
-				int thisLinePrevChar = thisLineFirstChar - 1;
-				int thisLineLastChar = ((i + 1) * charsInLine) - 2;
-				int thisLineNextChar = thisLineLastChar + 1;
-
-				if (thisLineFirstChar != 0){
-					if (fullD.charAt(thisLinePrevChar) != ' ') {
-						prefix = "" + fullD.charAt(thisLinePrevChar);
-					}
-				}
-
-				if (thisLineNextChar < fullD.length()) {
-					if (fullD.charAt(thisLineNextChar) != ' ' && fullD.charAt(thisLineLastChar) != ' ') {
-						suffix = "-";
-					}
-				} else {
-					thisLineLastChar = fullD.length() - 1;
-				}
-
-				g.drawString(prefix + fullD.substring(thisLineFirstChar, thisLineLastChar+1) + suffix, 15, ssY - 43 + (i * 20));
-			}	
+			for (int i = 0; i < genMultilineText(target.getDescription(), 60).length; i++) {
+				g.drawString(genMultilineText(target.getDescription(), 60)[i], resizedValue(7.5), resizedValue(ssY - 21.5 + (i * 10)));
+			}
+			
 		}
 		g.setFont(new Font("Arial", Font.BOLD, 25));
 		
-		int x = 195, y = 40 + (selection * 30);
-		g.drawImage(ImageIO.read(new File("assets/arrow.png")), x, y, 20, 20, null);
+		g.drawImage(ImageIO.read(new File("assets/arrow.png")), resizedValue(87.5), resizedValue(20 + (selection * 15)), resizedValue(10), resizedValue(10), null);
 		
 		return tempStitched;
 	}

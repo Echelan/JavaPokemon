@@ -96,23 +96,22 @@ public class Pause extends Scene {
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage tempStitched = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 
-		int windowWidth = (int) (90 * RESIZE), windowHeight = (int) (127 * RESIZE);
-		g.drawImage(genWindow(4, windowWidth, windowHeight), ssX - windowWidth - 1, (int) ((ssY / 2) - (windowHeight / 2)), null);
+		int windowWidth = 90, windowHeight = 127;
+		g.drawImage(genWindow(4, windowWidth, windowHeight), resizedValue(ssX - windowWidth - 0.5), resizedValue((ssY / 2) - (windowHeight / 2)), null);
 
 		g.setColor(Color.black);
-		g.setFont(new Font("Arial", Font.BOLD, 25));
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(12.5)));
 		for (int i = 0; i < options.length; i++) {
-			g.drawString(options[i], ssX - windowWidth + 30, (int) ((ssY / 2) - (windowHeight / 2)) + 40 + (i * 25));
+			g.drawString(options[i], resizedValue(ssX - windowWidth + 15), resizedValue(((ssY / 2) - (windowHeight / 2)) + 20 + (i * 12.5)));
 		}
 
-		g.drawImage(ImageIO.read(new File("assets/arrow.png")), ssX - windowWidth + 10, (int) ((ssY / 2) - (windowHeight / 2)) + 22 + (selection * 25), 20, 20, null);
+		g.drawImage(ImageIO.read(new File("assets/arrow.png")), resizedValue(ssX - windowWidth + 5), resizedValue(((ssY / 2) - (windowHeight / 2)) + 11 + (selection * 12.5)), resizedValue(10), resizedValue(10), null);
 
 		if (showControls) {
-			int dimX = 433, dimY = 314;
-			g.drawImage(ImageIO.read(new File("assets/controls.png")), (ssX / 2) - (dimX / 2), (ssY / 2) - (dimY / 2), null);
+			g.drawImage(ImageIO.read(new File("assets/controls.png")), resizedValue((ssX / 2) - (216.5 / 2)), resizedValue((ssY / 2) - (157 / 2)), null);
 		}
 		
 		return tempStitched;

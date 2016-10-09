@@ -22,14 +22,15 @@ import pokemonviolet.model.Handler;
 public class PokemonViolet {
 
 	private static Handler h;
+	public static float SIZE = 2.0f;
 	
 	public static void main(String[] args) throws InterruptedException {
 
 		SplashWindow s = new SplashWindow();
 
-		pokemonviolet.data.NIC.loadData();
+		pokemonviolet.data.NIC.loadAllData();
 
-		h = new Handler();
+		h = new Handler(SIZE);
 
 		try {
 			Thread.sleep(1000);
