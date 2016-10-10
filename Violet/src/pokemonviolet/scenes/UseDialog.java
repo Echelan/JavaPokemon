@@ -82,13 +82,20 @@ public class UseDialog extends Scene{
 				if (new pokemonviolet.model.Item(itemID).getUseOutBattle() == 1) {
 					main.gameState.add(new Team(main, combat, itemID));
 				} else if (new pokemonviolet.model.Item(itemID).getUseOutBattle() == 2) {
+					if (itemID < 4) {
+						main.player.setSpawnSteps(main.player.getSpawnSteps() + (int) new pokemonviolet.model.Item(itemID).getValue());
+					} else {
+						for (int i = 0; i < main.player.getNumPokemonTeam(); i++) {
+							main.player.getTeam()[i].revive(1.0);
+						}
+					}
+					main.player.subItem(itemID);
+					this.dispose();
 				} else if (new pokemonviolet.model.Item(itemID).getUseOutBattle() == 3) {
 					main.gameState.add(new Team(main, combat, itemID));
 				} else if (new pokemonviolet.model.Item(itemID).getUseOutBattle() == 4) {
 					main.gameState.add(new Team(main, combat, itemID));
 				}
-//				&& new pokemonviolet.model.Item(itemID).getUseOutBattle() != 0) {
-
 			}
 		}
 	}

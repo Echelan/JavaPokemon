@@ -180,7 +180,6 @@ public class Team extends Scene {
 					if (team[selection].getNumMoves() < 4) {
 						team[selection].addMove(new pokemonviolet.model.Item(itemToUse).getMoveName());
 						main.clearStates("BAG");
-						main.player.subItem(itemToUse);
 					} else {
 						main.gameState.add(new LearnMove(main, team[selection], new PokemonMove(new pokemonviolet.model.Item(itemToUse).getMoveName()), "BAG"));
 					}
