@@ -37,8 +37,8 @@ public abstract class DisplayParser {
 			}
 			
 			if (Handler.gameState.get(Handler.gameState.size() - counter).getName().compareTo("GAME") == 0) {
-				for (int i = 0; i < ssX/32; i++) {
-					for (int j = 0; j < ssY/32; j++) {
+				for (int i = 0; i < (ssX/32) + 2; i++) {
+					for (int j = 0; j < (ssY/32) + 2; j++) {
 						g.drawImage(GameDisplay.water, i*32, j*32, null);
 					}
 				}

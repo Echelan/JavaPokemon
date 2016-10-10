@@ -79,14 +79,14 @@ public class Center extends Scene{
 		g.setFont(new Font("Arial", Font.BOLD, resizedValue(10)));
 		g.drawString( "Healing Pokemon...", resizedValue((posX + 17.5) + 10), resizedValue(posY + 20));
 		
-		int yDisplace = resizedValue(((int) Math.pow(animFrame1 - 6, 2)) * 0.125f);
+		float yDisplace = (float) Math.pow(animFrame1 - 6, 2) * 0.25f;
 		g.drawImage(animImg.getSubimage(animFrame1 * 16, 0, 16, 16), resizedValue(posX + 5), resizedValue(posY + 2.5 + yDisplace), resizedValue(16), resizedValue(16), null);
 		animFrame1 = animFrame1 + 1;
 		if (animFrame1 > 11) {
 			animFrame1 = 0;
 		}
 		
-		yDisplace = resizedValue(((int) Math.pow(animFrame2 - 6, 2)) * 0.125f);
+		yDisplace = (float) Math.pow(animFrame2 - 6, 2) * 0.25f;
 		g.drawImage(animImg.getSubimage(animFrame2 * 16, 0, 16, 16), resizedValue(posX + dimX - 20), resizedValue(posY + 2.5 + yDisplace), resizedValue(16), resizedValue(16), null);
 		animFrame2 = animFrame2 + 1;
 		if (animFrame2 > 11) {

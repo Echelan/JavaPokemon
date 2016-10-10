@@ -26,6 +26,8 @@ public class Item {
 		private static int NUM_ATTRIB = 11;
 		private static int SPRITE_WIDTH = 30;
 		private static int SPRITE_HEIGHT = 30;
+		private static int SPRITE_WIDTH_RESIZED = (int) (SPRITE_WIDTH * pokemonviolet.main.PokemonViolet.SIZE);
+		private static int SPRITE_HEIGHT_RESIZED = (int) (SPRITE_HEIGHT * pokemonviolet.main.PokemonViolet.SIZE);
 		
 		/**
 		 * ID of Item.
@@ -279,12 +281,12 @@ public class Item {
 	}
 
 	public BufferedImage getImage() throws IOException {
-		BufferedImage image = new BufferedImage(SPRITE_WIDTH, SPRITE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(SPRITE_WIDTH_RESIZED, SPRITE_HEIGHT_RESIZED, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
 		
-		int x = ( (this.id - 1) % 24 ) * (SPRITE_WIDTH / 2), y = ((int) Math.floor( (double) (this.id-1) / 24 )) * (SPRITE_HEIGHT / 2);
+		int x = ( (this.id - 1) % 24 ) * SPRITE_WIDTH, y = ((int) Math.floor( (double) (this.id-1) / 24 )) * SPRITE_HEIGHT;
 		
-		g.drawImage((ImageIO.read(new File("assets/itemsIcons.png"))).getSubimage(x, y, SPRITE_WIDTH, SPRITE_HEIGHT), 0, 0, (int) (SPRITE_WIDTH * pokemonviolet.main.PokemonViolet.SIZE), (int) (SPRITE_HEIGHT * pokemonviolet.main.PokemonViolet.SIZE), null);
+		g.drawImage((ImageIO.read(new File("assets/itemsIcons.png"))).getSubimage(x, y, SPRITE_WIDTH, SPRITE_HEIGHT), 0, 0, SPRITE_WIDTH_RESIZED, SPRITE_HEIGHT_RESIZED, null);
 		
 		return image;
 	}

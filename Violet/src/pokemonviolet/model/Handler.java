@@ -31,6 +31,8 @@ public class Handler implements Runnable {
 			 */
 			public static int SCREEN_SIZE_Y;
 			public static float RESIZE;
+			public static int BASE_SCREEN_SIZE_X = 240;
+			public static int BASE_SCREEN_SIZE_Y = 160;
 		//</editor-fold>
 
 		/**
@@ -54,7 +56,6 @@ public class Handler implements Runnable {
 		private boolean fillTeam = false;
 		private Thread thisThread;
 		private GameWindow gw;
-		private int baseScreenSizeX, baseScreenSizeY;
 	// </editor-fold>
 
 	/**
@@ -66,11 +67,8 @@ public class Handler implements Runnable {
 
 		RESIZE = resize;
 		
-		baseScreenSizeX = 240;
-		baseScreenSizeY = 160;
-		
-		SCREEN_SIZE_X = (int) (baseScreenSizeX * RESIZE);
-		SCREEN_SIZE_Y = (int) (baseScreenSizeY * RESIZE);
+		SCREEN_SIZE_X = (int) (BASE_SCREEN_SIZE_X * RESIZE);
+		SCREEN_SIZE_Y = (int) (BASE_SCREEN_SIZE_Y * RESIZE);
 		
 		gw = new GameWindow(SCREEN_SIZE_X, SCREEN_SIZE_Y);
 
@@ -84,13 +82,8 @@ public class Handler implements Runnable {
 		displayedMaps = new Map[3][3];
 
 		player = new Player(name, gender, new Pokemon(pokeID, 5, "POKEBALL"));
-				
 		player.addItem("POKEBALL", 15);
 		player.addItem("MASTERBALL", 1);
-		player.addItem("TM06", 1);
-		player.addItem("TM11", 1);
-		player.addItem("TM09", 1);
-		player.addItem("TM10", 1);
 		player.addItem("POTION",1);
 
 		refreshDisplayedMaps();
@@ -295,7 +288,7 @@ public class Handler implements Runnable {
 		
 		xDisplace = xTile * (Map.MAP_TOTAL_SIZE_X / Map.MAP_ROW_TILES);
 		
-		xTotal = (xDisplace * -1) + (baseScreenSizeX / 2);
+		xTotal = (xDisplace * -1) + (BASE_SCREEN_SIZE_X / 2);
 		
 		return xTotal;
 	}
@@ -316,7 +309,7 @@ public class Handler implements Runnable {
 		
 		yDisplace = yTile * (Map.MAP_TOTAL_SIZE_Y / Map.MAP_ROW_TILES);
 		
-		yTotal = (yDisplace * -1) + (baseScreenSizeY / 2);
+		yTotal = (yDisplace * -1) + (BASE_SCREEN_SIZE_Y / 2);
 		
 		return yTotal;
 	}
@@ -412,9 +405,10 @@ public class Handler implements Runnable {
 	}
 	
 	public void clearStates(String limit) {
-		int counter = 1;
-		while (gameState.get(gameState.size() - counter).getName().compareTo(limit) != 0) {
-			gameState.get(gameState.size() - counter).dispose();
+		boolean pullOut = true;
+		while (pullOut && gameState.get(gameState.size() - 1).getName().compareTo(limit) != 0) {
+			gameState.get(gameState.size() - 1).dispose();
+			pullOut = !gameState.isEmpty();
 		}
 	}
 	

@@ -707,7 +707,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		int regX = (int) (Math.floor((double) tileinfo % MAX_TILE_IN_SET_ROW) * TILE_RESIZED_WIDTH);
 		int specialX = (int) (Math.floor((double) setinfo % MAX_SET_IN_TILE_SET_ROW) * (TILE_RESIZED_WIDTH * MAX_TILE_IN_SET_ROW));
 
-		//	System.out.println("X: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialX+", TILE: "+regX+") = "+(regX+specialX));
+		
 		return regX + specialX;
 	}
 
@@ -715,25 +715,19 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 		int regY = (int) (Math.floor((double) tileinfo / MAX_TILE_IN_SET_ROW) * TILE_RESIZED_HEIGHT);
 		int specialY = (int) (Math.floor((double) setinfo / MAX_SET_IN_TILE_SET_ROW) * (TILE_RESIZED_HEIGHT * MAX_TILE_IN_SET_COL));
 
-		//	System.out.println("Y: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialY+", TILE: "+regY+") = "+(regY+specialY));
+		
 		return regY + specialY;
 	}
 
 	public static int getObjX(int setinfo, int tileinfo) {
 		int maxtileinsetrow = (objSets[setinfo].getWidth() / TILE_RESIZED_WIDTH);
 		int regX = (int) (Math.floor((double) tileinfo % maxtileinsetrow) * TILE_RESIZED_WIDTH);
-		//	int specialX = (int)(Math.floor((double)setinfo%MAXSETINTILESETROW)*(TILERESIZEDWIDTH*MAXTILEINSETROW));
-
-		//	System.out.println("X: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialX+", TILE: "+regX+") = "+(regX+specialX));
 		return regX;
 	}
 
 	public static int getObjY(int setinfo, int tileinfo) {
 		int maxtileinsetrow = (objSets[setinfo].getWidth() / TILE_RESIZED_WIDTH);
 		int regY = (int) (Math.floor((double) tileinfo / maxtileinsetrow) * TILE_RESIZED_HEIGHT);
-		//	int specialY = (int)(Math.floor((double)setinfo/MAXSETINTILESETROW)*(TILERESIZEDHEIGHT*MAXTILEINSETCOL));
-
-		//	System.out.println("Y: ( SET: "+setinfo+", TILE: "+tileinfo+") -> "+"( SET: "+specialY+", TILE: "+regY+") = "+(regY+specialY));
 		return regY;
 	}
 

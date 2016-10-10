@@ -39,8 +39,7 @@ public class Combat extends Scene {
 		private final ArrayList<String> displayTextQueue;
 		private boolean waitingAction;
 		private String currentMenu;
-		private int displayHealthEnemy, displayHealthPlayer, displayExpPlayer, displayLvlPlayer;
-		private int deltaHealthEnemy, deltaHealthPlayer, deltaExpPlayer;
+		private float displayHealthEnemy, displayHealthPlayer, displayExpPlayer, displayLvlPlayer;
 		private boolean doneHealthEnemy, doneHealthPlayer, doneExpPlayer;
 		private final boolean[] caught;
 		private final Player player;
@@ -100,18 +99,14 @@ public class Combat extends Scene {
 		this.currentEnemyPokemon = enemy.getTeam()[enemy.getCurrentPokemon()];
 		this.currentPlayerPokemon = player.getTeam()[player.getCurrentPokemon()];
 
-		this.displayHealthEnemy = currentEnemyPokemon.getCurHP();
-		this.displayExpPlayer = currentPlayerPokemon.getCurEXP();
-		this.displayHealthPlayer = currentPlayerPokemon.getCurHP();
+		this.displayHealthEnemy = roundToDecimalPlaces(currentEnemyPokemon.getCurHP() / (float) currentEnemyPokemon.getMaxHP(), 1);
+		this.displayExpPlayer = roundToDecimalPlaces(currentPlayerPokemon.getCurEXP() / (float) currentPlayerPokemon.getMaxEXP(), 1);
+		this.displayHealthPlayer = roundToDecimalPlaces(currentPlayerPokemon.getCurHP() / (float) currentPlayerPokemon.getMaxHP(), 1);
 		this.displayLvlPlayer = currentPlayerPokemon.getLevel();
 		
 		this.doneHealthEnemy = true;
 		this.doneHealthPlayer = true;
 		this.doneExpPlayer = true;
-		
-		this.deltaHealthEnemy = 0;
-		this.deltaExpPlayer = 0;
-		this.deltaHealthPlayer = 0;
 
 		displayTextQueue = new ArrayList<String>();
 		displayTextQueue.add("A wild " + currentEnemyPokemon.getNameNick() + " appeared!");
@@ -382,9 +377,9 @@ public class Combat extends Scene {
 		doneExpPlayer = false;
 		if (result.compareTo("") != 0) {
 			displayTextQueue.add(currentPlayerPokemon.getNameNick() + " is now level " + currentPlayerPokemon.getLevel() + "!");
-			if (result.compareTo("Level up!") != 0) {
+			if (result.compareTo("level") != 0) {
 				if (result.split(":")[0].compareTo("add") == 0) {
-					displayTextQueue.add(currentPlayerPokemon.getNameNick() + " learned " + result.split(":")[1] + "!");
+					displayTextQueue.add(currentPlayerPokemon.getNameNick() + " learned " + new pokemonviolet.model.PokemonMove(result.split(":")[1]).getNameDisplay() + "!");
 				} else if (result.split(":")[0].compareTo("wants") == 0) {
 					main.gameState.add(new LearnMove(main, currentPlayerPokemon, new pokemonviolet.model.PokemonMove(result.split(":")[1]), "COMBAT"));
 				}
@@ -421,12 +416,18 @@ public class Combat extends Scene {
 		player.setCurrentPokemon(selection);
 		currentPlayerPokemon = player.getTeam()[player.getCurrentPokemon()];
 		displayTextQueue.add("Go! " + currentPlayerPokemon.getNameNick() + "!");
-		displayHealthPlayer = currentPlayerPokemon.getCurHP();
-		displayExpPlayer = currentPlayerPokemon.getCurEXP();
+		this.displayExpPlayer = roundToDecimalPlaces(currentPlayerPokemon.getCurEXP() / (float) currentPlayerPokemon.getMaxEXP(), 1);
+		this.displayHealthPlayer = roundToDecimalPlaces(currentPlayerPokemon.getCurHP() / (float) currentPlayerPokemon.getMaxHP(), 1);
+		displayLvlPlayer = currentPlayerPokemon.getLevel();
 	}
 	
 	public void cancelExtraAction() {
 		currentMenu = "MAIN";
+	}
+	
+	private float roundToDecimalPlaces(double value, int decimalPlaces) {
+		float shift = (float) Math.pow(10,decimalPlaces);
+		return Math.round(value*shift)/shift;
 	}
 
 	@Override
@@ -518,16 +519,11 @@ public class Combat extends Scene {
 
 	@Override
 	public void dispose() {
-//		main.player.setInCombat(false);
 		main.gameState.remove(main.gameState.size() - 1);
 		
-//		if (currentPlayerPokemon.isWantingToLearn()) {
-//			main.gameState.add(new LearnMove(main,currentPlayerPokemon));
-//		}
-		
-//		if (currentPlayerPokemon.isWaitingToEvolve()) {
-//			main.gameState.add(new Evolution);
-//		}
+		if (currentPlayerPokemon.isWaitingToEvolve()) {
+			main.gameState.add(new Evolution(main));
+		}
 
 		if (currentPlayerPokemon.isFainted()) {
 			main.gameState.add(new Center(main));
@@ -555,9 +551,9 @@ public class Combat extends Scene {
 
 		//<editor-fold defaultstate="collapsed" desc="Pokemon Sprites Display">
 		if (displayHealthEnemy != 0 && !curCaught) {
-			g.drawImage(currentEnemyPokemon.getFrontImage(), resizedValue(curEnemyX + 25), 0, resizedValue(SPRITE_WIDTH), resizedValue(SPRITE_HEIGHT), null);
+			g.drawImage(currentEnemyPokemon.getFrontImage(), resizedValue(curEnemyX + 25), 0, null);
 		} else if (curCaught) {
-			int x = curEnemyX + 25 + (SPRITE_WIDTH / 2) + 10 - 14, y = 18 + SPRITE_HEIGHT - 25 - 14;
+			int x = curEnemyX + 25 + (SPRITE_WIDTH / 2) + 10 - 14, y = 9 + SPRITE_HEIGHT - 25 - 14;
 			int pokeX = 0;
 
 			if (currentEnemyPokemon.getBallType() == null) {
@@ -581,7 +577,7 @@ public class Combat extends Scene {
 			g.drawImage(ImageIO.read(new File("assets/combat/pokeballactive.png")).getSubimage(pokeX * 14, 0, 14, 14), resizedValue(x), resizedValue(y), resizedValue(14), resizedValue(14), null);
 		}
 		if (displayHealthPlayer != 0) {
-			g.drawImage(currentPlayerPokemon.getBackImage(), resizedValue(curPlayerX + 27), resizedValue(32), resizedValue(SPRITE_WIDTH), resizedValue(SPRITE_HEIGHT), null);
+			g.drawImage(currentPlayerPokemon.getBackImage(), resizedValue(curPlayerX + 27), resizedValue(32), null);
 		}
 		
 		//</editor-fold>
@@ -608,95 +604,85 @@ public class Combat extends Scene {
 
 			//<editor-fold defaultstate="collapse" desc="Health & Experience Display">
 			if (!doneHealthEnemy) {
-				if (deltaHealthEnemy == 0) {
-					deltaHealthEnemy = Math.abs(displayHealthEnemy - currentEnemyPokemon.getCurHP());
-					deltaHealthEnemy = (int) Math.ceil(deltaHealthEnemy /  20f);
-				}
-				if (Math.abs(displayHealthEnemy - currentEnemyPokemon.getCurHP()) < deltaHealthEnemy) {
-					displayHealthEnemy = currentEnemyPokemon.getCurHP();
-					deltaHealthEnemy = 0;
+				float actualPercent = roundToDecimalPlaces(currentEnemyPokemon.getCurHP() / (float) currentEnemyPokemon.getMaxHP(), 1);
+				if (Math.abs(displayHealthEnemy - actualPercent) < 0.02f) {
+					displayHealthEnemy = actualPercent;
 					doneHealthEnemy = true;
-				} else if (displayHealthEnemy < currentEnemyPokemon.getCurHP()) {
-					displayHealthEnemy = displayHealthEnemy + deltaHealthEnemy;
-				} else if (displayHealthEnemy > currentEnemyPokemon.getCurHP()) {
-					displayHealthEnemy = displayHealthEnemy - deltaHealthEnemy;
+				} else if (displayHealthEnemy < actualPercent) {
+					displayHealthEnemy = displayHealthEnemy + 0.02f;
+				} else if (displayHealthEnemy > actualPercent) {
+					displayHealthEnemy = displayHealthEnemy - 0.02f;
 				} else {
-					displayHealthEnemy = currentEnemyPokemon.getCurHP();
-					deltaHealthEnemy = 0;
+					displayHealthEnemy = actualPercent;
 					doneHealthEnemy = true;
 				}
 			}
 
 			if (!doneHealthPlayer) {
-				if (deltaHealthPlayer == 0) {
-					deltaHealthPlayer = Math.abs(displayHealthPlayer - currentPlayerPokemon.getCurHP());
-					deltaHealthPlayer = (int) Math.ceil((float) deltaHealthPlayer / (float) 20);
-				}
-				if (Math.abs(displayHealthPlayer - currentPlayerPokemon.getCurHP()) < deltaHealthPlayer) {
-					displayHealthPlayer = currentPlayerPokemon.getCurHP();
-					deltaHealthPlayer = 0;
-					doneHealthPlayer = true;
-				} else if (displayHealthPlayer < currentPlayerPokemon.getCurHP()) {
-					displayHealthPlayer = displayHealthPlayer + deltaHealthPlayer;
-				} else if (displayHealthPlayer > currentPlayerPokemon.getCurHP()) {
-					displayHealthPlayer = displayHealthPlayer - deltaHealthPlayer;
+				float actualPercent = roundToDecimalPlaces(currentPlayerPokemon.getCurHP() / (float) currentPlayerPokemon.getMaxHP(), 1);
+				if (Math.abs(displayHealthPlayer - actualPercent) < 0.02f) {
+						displayHealthPlayer = actualPercent;
+						doneHealthPlayer = true;
+				} else if (displayHealthPlayer < actualPercent) {
+					displayHealthPlayer = displayHealthPlayer + 0.02f;
+				} else if (displayHealthPlayer > actualPercent) {
+					displayHealthPlayer = displayHealthPlayer - 0.02f;
 				} else {
-					displayHealthPlayer = currentPlayerPokemon.getCurHP();
-					deltaHealthPlayer = 0;
+					displayHealthPlayer = actualPercent;
 					doneHealthPlayer = true;
 				}
 			}
 
 			if (!doneExpPlayer) {
-				if (displayExpPlayer < currentPlayerPokemon.getCurEXP()) {
-					if (deltaExpPlayer == 0) {
-						deltaExpPlayer = Math.abs(displayExpPlayer - currentPlayerPokemon.getCurEXP());
-						deltaExpPlayer = (int) Math.ceil((float) deltaExpPlayer / (float) 20);
-					}
-					if (Math.abs(displayExpPlayer - currentPlayerPokemon.getCurEXP()) < deltaExpPlayer) {
-						displayExpPlayer = currentPlayerPokemon.getCurEXP();
-						deltaExpPlayer = 0;
-						doneExpPlayer = true;
-					} else {
-						displayExpPlayer = displayExpPlayer + deltaExpPlayer;
-					}
-				} else if (displayLvlPlayer < currentPlayerPokemon.getLevel()) {
-					if (deltaExpPlayer == 0) {
-						deltaExpPlayer = Math.abs(displayExpPlayer - currentPlayerPokemon.getMaxEXP());
-						deltaExpPlayer = (int) Math.ceil((float) deltaExpPlayer / (float) 10);
-					}
-					if (Math.abs(displayExpPlayer - currentPlayerPokemon.getMaxEXP()) < deltaExpPlayer) {
-						displayLvlPlayer = displayLvlPlayer + 1;
+				if (displayLvlPlayer < currentPlayerPokemon.getLevel()) {
+					float actualPercent = 1f;
+					if (Math.abs(displayExpPlayer - actualPercent) < 0.02f) {
 						displayExpPlayer = 0;
-						deltaExpPlayer = 0;
+						displayLvlPlayer = displayLvlPlayer + 1;
+					} else if (displayExpPlayer < actualPercent) {
+						displayExpPlayer = displayExpPlayer + 0.02f;
+					} else if (displayExpPlayer > actualPercent) {
+						displayExpPlayer = displayExpPlayer - 0.02f;
 					} else {
-						displayExpPlayer = displayExpPlayer + deltaExpPlayer;
+						displayExpPlayer = 0;
+						displayLvlPlayer = displayLvlPlayer + 1;
 					}
-				} else if (displayExpPlayer > currentPlayerPokemon.getCurEXP()) {
-					displayExpPlayer = 0;
+				} else {
+					float actualPercent = roundToDecimalPlaces(currentPlayerPokemon.getCurEXP() / (float) currentPlayerPokemon.getMaxEXP(), 1);
+					if (Math.abs(displayExpPlayer - actualPercent) < 0.02f) {
+						displayExpPlayer = actualPercent;
+						doneExpPlayer = true;
+					} else if (displayExpPlayer < actualPercent) {
+						displayExpPlayer = displayExpPlayer + 0.02f;
+					} else if (displayExpPlayer > actualPercent) {
+						displayExpPlayer = displayExpPlayer - 0.02f;
+					} else {
+						displayExpPlayer = actualPercent;
+						doneExpPlayer = true;
+					}
 				}
 			}
 
 			g.setColor(Color.green);
-			if ((float) (float) displayHealthEnemy / (float) currentEnemyPokemon.getStatHP() < 0.5f) {
+			if (displayHealthEnemy < 0.5f) {
 				g.setColor(Color.orange);
-				if ((float) (float) displayHealthEnemy / (float) currentEnemyPokemon.getStatHP() < 0.25f) {
+				if (displayHealthEnemy < 0.25f) {
 					g.setColor(Color.red);
 				}
 			}
-			g.fillRect(resizedValue(43), resizedValue(26), (resizedValue(50 * (float) ((float) displayHealthEnemy / (float) currentEnemyPokemon.getStatHP()))), resizedValue(5));
+			g.fillRect(resizedValue(43), resizedValue(26), resizedValue(50 * displayHealthEnemy), resizedValue(5));
 
 			g.setColor(Color.green);
-			if ((float) displayHealthPlayer / (float) currentPlayerPokemon.getStatHP() < 0.5f) {
+			if (displayHealthPlayer < 0.5f) {
 				g.setColor(Color.orange);
-				if ((float) displayHealthPlayer / (float) currentPlayerPokemon.getStatHP() < 0.25f) {
+				if (displayHealthPlayer < 0.25f) {
 					g.setColor(Color.red);
 				}
 			}
-			g.fillRect(resizedValue(177.5), resizedValue(88.5), (resizedValue(50 * (float) ((float) displayHealthPlayer / (float) currentPlayerPokemon.getStatHP()))), resizedValue(5));
+			g.fillRect(resizedValue(177.5), resizedValue(88.5), resizedValue(50 * displayHealthPlayer), resizedValue(5));
 
 			g.setColor(Color.blue);
-			g.fillRect(resizedValue(160), resizedValue(103.5), (resizedValue(50 * (float) ((float) displayExpPlayer / (float) currentPlayerPokemon.getMaxEXP()))), resizedValue(5));
+			g.fillRect(resizedValue(160), resizedValue(103.5), resizedValue(67 * displayExpPlayer), resizedValue(5));
 			//</editor-fold>
 
 			//<editor-fold defaultstate="collapsed" desc="Pokeballs Display">
@@ -746,9 +732,9 @@ public class Combat extends Scene {
 			g.drawString("Lv: " + currentEnemyPokemon.getLevel(), resizedValue(70), resizedValue(22.5));
 
 			g.drawString(currentPlayerPokemon.getNameNick(), resizedValue(ssX - 104 + 10), resizedValue((ssY / 2) + 5));
-			g.drawString("Lv: " + displayLvlPlayer, resizedValue(ssX - 104 + 65), resizedValue((ssY / 2) + 5));
+			g.drawString("Lv: " + (int) displayLvlPlayer, resizedValue(ssX - 104 + 65), resizedValue((ssY / 2) + 5));
 
-			g.drawString(displayHealthPlayer + "/" + currentPlayerPokemon.getStatHP(), resizedValue(ssX - 104 + 62.5), resizedValue((ssY / 2) + 22.5));
+			g.drawString((int) (displayHealthPlayer * currentPlayerPokemon.getMaxHP()) + "/" + currentPlayerPokemon.getMaxHP(), resizedValue(ssX - 104 + 62.5), resizedValue((ssY / 2) + 22.5));
 
 			//<editor-fold defaultstate="collapsed" desc="UI Display">
 			if (waitingAction) {

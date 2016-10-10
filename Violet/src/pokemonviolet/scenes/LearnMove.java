@@ -116,12 +116,12 @@ public class LearnMove extends Scene {
 		g.setFont(new Font("Arial", Font.BOLD, resizedValue(12.5)));
 		g.setColor(Color.black);
 		
-		g.drawImage(genWindow(7, 170, 170), resizedValue(2.5), resizedValue(2.5), null);
+		g.drawImage(genWindow(7, 85, 85), resizedValue(2.5), resizedValue(2.5), null);
 		g.drawImage(subject.getFrontImage(), resizedValue(2.5 + (85 / 2) - (SPRITE_WIDTH / 2)), resizedValue(2.5 + (85 / 2) - (SPRITE_HEIGHT / 2)), resizedValue(SPRITE_WIDTH), resizedValue(SPRITE_HEIGHT), null);
 		
-		g.drawImage(genWindow(7, ssX - 185, ssY - 61), resizedValue(90), resizedValue(2.5), null);
+		g.drawImage(genWindow(7, ssX - 92.5, ssY - 47.5), resizedValue(90), resizedValue(2.5), null);
 		
-		g.drawImage(genWindow(7, 170, 50), resizedValue(2.5), resizedValue(90), null);
+		g.drawImage(genWindow(7, 85, 25), resizedValue(2.5), resizedValue(90), null);
 		g.drawString(subject.getNameNick(), resizedValue(10), resizedValue(107));
 		
 		g.setFont(new Font("Arial", Font.BOLD, resizedValue(12.5)));
@@ -138,8 +138,8 @@ public class LearnMove extends Scene {
 					
 		}
 		
-		g.setFont(new Font("Arial", Font.BOLD, 15));
-		g.drawImage(genWindow(7, ssX - 2, 85), resizedValue(0.5), resizedValue(ssY - 43), null);
+		g.setFont(new Font("Arial", Font.BOLD, resizedValue(7.5)));
+		g.drawImage(genWindow(7, ssX - 1, 42.5), resizedValue(0.5), resizedValue(ssY - 43), null);
 		
 		PokemonMove target;
 		if (selection == 4) {
@@ -161,7 +161,7 @@ public class LearnMove extends Scene {
 		}
 		g.setFont(new Font("Arial", Font.BOLD, 25));
 		
-		g.drawImage(ImageIO.read(new File("assets/arrow.png")), resizedValue(87.5), resizedValue(20 + (selection * 15)), resizedValue(10), resizedValue(10), null);
+		g.drawImage(ImageIO.read(new File("assets/arrow.png")), resizedValue(90), resizedValue(20 + (selection * 15)), resizedValue(10), resizedValue(10), null);
 		
 		return tempStitched;
 	}

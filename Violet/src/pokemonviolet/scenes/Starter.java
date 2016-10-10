@@ -122,7 +122,7 @@ public class Starter extends Scene {
 		BufferedImage display = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = display.getGraphics();
 
-		g.drawImage(ImageIO.read(new File("assets/title/background.png")), 0, 0, null);
+		g.drawImage(ImageIO.read(new File("assets/title/background.png")), 0, 0, resizedValue(ssX), resizedValue(ssY), null);
 
 		g.setFont(new Font("Arial", Font.BOLD, resizedValue(15)));
 		g.drawString("Choose your starter!", resizedValue(ssX / 5), resizedValue(15));

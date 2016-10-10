@@ -70,7 +70,10 @@ public class Dex extends Scene {
 
 	@Override
 	protected void accept() {
-		this.showDescrip = true;
+		int curIndex = ((selectionY - 1) * maxCols) + selectionX;
+		if (main.player.getPokeDex()[curIndex - 1] != 0) {
+			this.showDescrip = true;
+		}
 	}
 
 	@Override
@@ -133,9 +136,9 @@ public class Dex extends Scene {
 			int x = (int) Math.floor(i % maxCols), y = (int) Math.floor(i / maxCols);
 			g.drawImage(genWindow(7, 35, 35), resizedValue(10.5 + (x * 37.5)), resizedValue(baseY + (y * 37.5)), null);
 			if (main.player.getPokeDex()[i] != 0) {
-				g.drawImage(pokemonviolet.data.NIC.pokemonIcons.getSubimage( (int) Math.floor(i % 10) * 40, (int) Math.floor(i / 10) * 40, 40, 40), resizedValue(10.5) + (x * resizedValue(37.5)) + resizedValue(2.5), resizedValue(baseY + (y * 37.5) + 2.5), resizedValue(20 * 1.5f), resizedValue(20 * 1.5f), null);
+				g.drawImage(new pokemonviolet.model.Pokemon(i + 1).getIcon(), resizedValue(10.5 + (x * 37.5) - 2.5), resizedValue(baseY + (y * 37.5) - 2.5), null);
 			} else {
-				g.drawImage(ImageIO.read(new File("assets/pokemon/blank.png")), resizedValue(10.5 + 4 + (x * 37.5) + 2.5), resizedValue(baseY + 4 + (y * 37.5) + 2.5), resizedValue(18 * 1.25f), resizedValue(18 * 1.25f), null);
+				g.drawImage(ImageIO.read(new File("assets/pokemon/blank.png")), resizedValue(10.5 + 6.5 + (x * 37.5)), resizedValue(baseY + 6.5 + (y * 37.5)), resizedValue(18 * 1.25f), resizedValue(18 * 1.25f), null);
 			}
 		}
 		
@@ -161,8 +164,8 @@ public class Dex extends Scene {
 			if (this.showDescrip) {
 				g.setFont(new Font("Arial", Font.PLAIN, resizedValue(7.5)));
 				
-				g.drawImage(genWindow(7, 170, 170), resizedValue(2.5), resizedValue(2.5), null);
-				g.drawImage(indexPokemon.getFrontImage(), resizedValue(2.5 + (85 / 2) - (SPRITE_WIDTH / 2)), resizedValue(2.5 + (85 / 2) - (SPRITE_HEIGHT / 2)), resizedValue(SPRITE_WIDTH), resizedValue(SPRITE_HEIGHT), null);
+				g.drawImage(genWindow(7, 85, 85), resizedValue(2.5), resizedValue(ssY - 85 - 2.5), null);
+				g.drawImage(indexPokemon.getFrontImage(), resizedValue(2.5 + (85 / 2) - (SPRITE_WIDTH / 2)), resizedValue(ssY - 85 - 2.5 + (85 / 2) - (SPRITE_HEIGHT / 2)), null);
 				
 				if (main.player.getPokeDex()[curIndex - 1] == 2) {
 					

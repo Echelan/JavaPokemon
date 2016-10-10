@@ -154,7 +154,6 @@ public class PokemonMove {
 	private int getMoveID(String internalName) {
 		int id = 0;
 		boolean foundMove = false;
-		//	System.out.println("Searching for " + internalName);
 		while (foundMove == false && id < pokemonviolet.data.NIC.INFO_MOVES.size()) {
 			String[] moveinfo = pokemonviolet.data.NIC.INFO_MOVES.get(id).split(";");
 			int attribComp = 0;

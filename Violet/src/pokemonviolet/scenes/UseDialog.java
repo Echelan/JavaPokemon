@@ -133,7 +133,7 @@ public class UseDialog extends Scene{
 			g.drawString(choices[i], resizedValue(x + 15), resizedValue(101.5 + (i * 15)));
 		}
 		
-		g.drawImage(ImageIO.read(new File("assets/arrow.png")), resizedValue(x + 5), resizedValue(101.5 + (choice * 30) - 7.5), resizedValue(10), resizedValue(10), null);
+		g.drawImage(ImageIO.read(new File("assets/arrow.png")), resizedValue(x + 5), resizedValue(101.5 + (choice * 15) - 9), resizedValue(10), resizedValue(10), null);
 		
 		return tempStitched;
 	}

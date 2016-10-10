@@ -22,7 +22,7 @@ import pokemonviolet.model.Handler;
 public class PokemonViolet {
 
 	private static Handler h;
-	public static float SIZE = 2.0f;
+	public static float SIZE = (float) 3;
 	
 	public static void main(String[] args) throws InterruptedException {
 

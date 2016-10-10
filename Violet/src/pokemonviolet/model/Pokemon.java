@@ -23,8 +23,14 @@ public class Pokemon {
 
 	//<editor-fold defaultstate="collapsed" desc="Attributes">
 		//<editor-fold defaultstate="collapsed" desc="Species Wide">
-			private static final int SPRITE_WIDTH = (int) (80 * pokemonviolet.main.PokemonViolet.SIZE);
-			private static final int SPRITE_HEIGHT = (int) (80 * pokemonviolet.main.PokemonViolet.SIZE);
+			private static final int SPRITE_WIDTH = 80;
+			private static final int SPRITE_HEIGHT = 80;
+			private static final int SPRITE_WIDTH_RESIZED = (int) (SPRITE_WIDTH * pokemonviolet.main.PokemonViolet.SIZE);
+			private static final int SPRITE_HEIGHT_RESIZED = (int) (SPRITE_HEIGHT * pokemonviolet.main.PokemonViolet.SIZE);
+			private static final int ICON_WIDTH = 40;
+			private static final int ICON_HEIGHT = 40;
+			private static final int ICON_WIDTH_RESIZED = (int) (SPRITE_WIDTH * pokemonviolet.main.PokemonViolet.SIZE * 0.5);
+			private static final int ICON_HEIGHT_RESIZED = (int) (SPRITE_HEIGHT * pokemonviolet.main.PokemonViolet.SIZE * 0.5);
 			private static final int NUM_ATTRIB = 38;
 			private static final int MAX_TOTAL_EV = 510;
 			private static final int MAX_SINGLE_EV = 252;
@@ -735,7 +741,6 @@ public class Pokemon {
 			while (attribComp < NUM_ATTRIB && foundPokemon == false) {
 				String[] partes = pokeinfo[attribComp].split("=");
 				if (partes[0].compareTo("InternalName") == 0) {
-					//		System.out.println("Comparing " + partes[1] + "...");
 					if (partes[1].compareTo(internalName) == 0) {
 						foundPokemon = true;
 					} else {
@@ -1035,24 +1040,25 @@ public class Pokemon {
 			}
 		}
 		
-		String move = "";
+		String result = "level";
 		if (moveToLearn() != null) {
-			move = moveToLearn().getNameInternal();
+			result = moveToLearn().getNameInternal();
 			if (numMoves < 4) {
-				addMove(moveToLearn());
-				move = "add:"+move;
+				addMove(result);
+				result = "add:"+result;
 			} else {
-				move = "wants:"+move;
+				result = "wants:"+result;
 			}
 		}
 		this.updateStats();
 		
-		return move;
+		return result;
 	}
 	
 	public PokemonMove moveToLearn() {
 		PokemonMove move = null;
 		for (int i = 0; i < this.allMoves.size(); i++) {
+			
 			if (this.level == Integer.parseInt(this.allMoves.get(i).split("-")[0])) {
 				move = new PokemonMove(this.allMoves.get(i).split("-")[1]);
 			}
@@ -1173,7 +1179,7 @@ public class Pokemon {
 	}
 
 	public BufferedImage getFrontImage() throws IOException {
-		BufferedImage image = new BufferedImage(SPRITE_WIDTH, SPRITE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(SPRITE_WIDTH_RESIZED, SPRITE_HEIGHT_RESIZED, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
 
 		String suffix = "";
@@ -1192,13 +1198,13 @@ public class Pokemon {
 			suffix = suffix + "n";
 		}
 
-		g.drawImage(ImageIO.read(new File("assets/pokemon/" + getId() + suffix + ".png")), 0, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+		g.drawImage(ImageIO.read(new File("assets/pokemon/" + getId() + suffix + ".png")), 0, 0, SPRITE_WIDTH_RESIZED, SPRITE_HEIGHT_RESIZED, null);
 
 		return image;
 	}
 
 	public BufferedImage getBackImage() throws IOException {
-		BufferedImage image = new BufferedImage(SPRITE_WIDTH, SPRITE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(SPRITE_WIDTH_RESIZED, SPRITE_HEIGHT_RESIZED, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
 
 		String suffix = "";
@@ -1217,11 +1223,21 @@ public class Pokemon {
 			suffix = suffix + "n";
 		}
 
-		g.drawImage(ImageIO.read(new File("assets/pokemon/" + getId() + suffix + ".png")), 0, 0, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+		g.drawImage(ImageIO.read(new File("assets/pokemon/" + getId() + suffix + ".png")), 0, 0, SPRITE_WIDTH_RESIZED, SPRITE_HEIGHT_RESIZED, null);
 
 		return image;
 	}
-
+	
+	public BufferedImage getIcon() throws IOException {
+		BufferedImage image = new BufferedImage(ICON_WIDTH_RESIZED, ICON_HEIGHT_RESIZED, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = image.getGraphics();
+		
+		int x = (int) Math.floor((this.id-1) % 10) * ICON_WIDTH, y = (int) Math.floor((this.id-1) / 10) * ICON_HEIGHT;
+		g.drawImage(pokemonviolet.data.NIC.pokemonIcons.getSubimage( x, y, ICON_WIDTH, ICON_HEIGHT), 0, 0, ICON_WIDTH_RESIZED, ICON_HEIGHT_RESIZED, null);
+		
+		return image;
+	}
+	
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
 		public boolean getCanEvolve() {
 			return (this.numEvols > 0);
@@ -1491,12 +1507,11 @@ public class Pokemon {
 			this.curEXP = curEXP;
 			while (this.getCurEXP() >= this.getMaxEXP()) {
 				String thisResult = levelUp();
-				if (thisResult == null) {
-					thisResult = "level";
-				}
 				
 				if (result.compareTo("") == 0) {
 					result = thisResult;	
+				} else if (result.compareTo("level") == 0) {
+					result = thisResult;
 				}
 			}
 			
@@ -1559,6 +1574,13 @@ public class Pokemon {
 			return statHP;
 		}
 
+		/**
+		 * @return the statHP
+		 */
+		public int getMaxHP() {
+			return statHP;
+		}
+		
 		/**
 		 * @param EVHP the EVHP to set
 		 */

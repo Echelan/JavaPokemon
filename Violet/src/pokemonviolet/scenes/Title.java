@@ -120,7 +120,7 @@ public class Title extends Scene {
 		BufferedImage display = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = display.getGraphics();
 
-		g.drawImage(ImageIO.read(new File("assets/title/background.png")), 0, 0, null);
+		g.drawImage(ImageIO.read(new File("assets/title/background.png")), 0, 0, resizedValue(ssX), resizedValue(ssY), null);
 
 		ready = true;
 

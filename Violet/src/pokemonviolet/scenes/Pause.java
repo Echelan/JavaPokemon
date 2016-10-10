@@ -23,7 +23,7 @@ import pokemonviolet.model.Handler;
 public class Pause extends Scene {
 
 //	private String[] options = {"PokeDex", "Heal", "Shop", "Pokemon", "PC", "Bag", "Controls"};
-	private String[] options = {"PokeDex", "Heal", "Shop", "Pokemon", "Bag", "Controls"};
+	private String[] options = {"PokeDex", "Heal", "Shop", "Pokemon", "Bag", "Controls", "Exit"};
 	private int selection;
 	private boolean showControls;
 
@@ -67,6 +67,9 @@ public class Pause extends Scene {
 			main.gameState.add(new Dex(main));
 		} else if (options[selection].compareTo("Controls") == 0) {
 			showControls = true;
+		} else if (options[selection].compareTo("Exit") == 0) {
+			main.clearStates("");
+			main.gameState.add(new Title(main, false));
 		}
 	}
 
@@ -111,7 +114,7 @@ public class Pause extends Scene {
 		g.drawImage(ImageIO.read(new File("assets/arrow.png")), resizedValue(ssX - windowWidth + 5), resizedValue(((ssY / 2) - (windowHeight / 2)) + 11 + (selection * 12.5)), resizedValue(10), resizedValue(10), null);
 
 		if (showControls) {
-			g.drawImage(ImageIO.read(new File("assets/controls.png")), resizedValue((ssX / 2) - (216.5 / 2)), resizedValue((ssY / 2) - (157 / 2)), null);
+			g.drawImage(ImageIO.read(new File("assets/controls.png")), resizedValue((ssX / 2) - (216.5 / 2)), resizedValue((ssY / 2) - (157 / 2)), resizedValue(216.5), resizedValue(157), null);
 		}
 		
 		return tempStitched;
