@@ -7,28 +7,55 @@
  */
 package pokemonviolet.scenes;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import pokemonviolet.model.Handler;
+import pokemonviolet.model.Pokemon;
 
 /**
  *
  * @author Andres
  */
 public class Evolution extends Scene {
+	private static final int SPRITE_WIDTH = 80;
+	private static final int SPRITE_HEIGHT = 80;
 
-	public Evolution(Handler main) {
+	private Pokemon experiment626;
+	private BufferedImage oldImage;
+	private BufferedImage newImage;
+	private int timer;
+	
+	public Evolution(Handler main, Pokemon subject) {
 		super(main, "EVOLUTION", true);
+		
+		this.experiment626 = subject;
+		this.timer = 0;
+		try {
+			this.oldImage = subject.getFrontImage();
+			this.newImage = new pokemonviolet.model.Pokemon(subject.getNextEvolutionId()).getFrontImage();
+		} catch (IOException ex) {
+			
+		}
 	}
 
 	@Override
-	public void receiveKeyAction(String action, String state) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public void receiveKeyAction(String action, String state) {		
+		if (state.compareTo("RELEASE") == 0) {
+			if (action.compareTo("A") == 0) {
+				accept();
+			}
+		}
 	}
 
 	@Override
 	protected void accept() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		if (timer > 90) {
+			experiment626.evolve(experiment626.getNextEvolutionId());
+			experiment626.setNextEvolutionId(-1);
+			this.dispose();
+		}
 	}
 
 	@Override
@@ -48,7 +75,29 @@ public class Evolution extends Scene {
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = tempStitched.getGraphics();
+		
+		g.setColor(Color.black);
+		g.fillRect(0, 0, resizedValue(ssX), resizedValue(ssY));
+		
+		timer = timer + 1;
+		if (timer < 100) {
+			if (timer % 2 == 0) {
+				g.drawImage(newImage, resizedValue((ssX / 2) - (SPRITE_WIDTH / 2)), resizedValue((ssY / 2) - (SPRITE_HEIGHT / 2)), null);
+			} else if (timer % 2 == 1) {
+				g.drawImage(oldImage, resizedValue((ssX / 2) - (SPRITE_WIDTH / 2)), resizedValue((ssY / 2) - (SPRITE_HEIGHT / 2)), null);
+			}
+		} else {
+			g.drawImage(newImage, resizedValue((ssX / 2) - (SPRITE_WIDTH / 2)), resizedValue((ssY / 2) - (SPRITE_HEIGHT / 2)), null);
+			
+			if (timer > 80  && timer < 83) {
+				g.setColor(Color.white);
+				g.fillRect(0, 0, resizedValue(ssX), resizedValue(ssY));
+			}
+		}
+		
+		return tempStitched;		
 	}
 
 }

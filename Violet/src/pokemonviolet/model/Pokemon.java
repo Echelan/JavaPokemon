@@ -111,7 +111,7 @@ public class Pokemon {
 			private int IVSpAtk;
 			private int IVSpDef;
 			
-			private boolean waitingToEvolve;
+			private int nextEvolutionId;
 		//</editor-fold>
 	//</editor-fold>
 
@@ -639,7 +639,7 @@ public class Pokemon {
 	private void doBasics() {
 		this.numMoves = 0;
 		this.setStatus("");
-		this.setWaitingToEvolve(false);
+		this.setNextEvolutionId(-1);
 	}
 
 	public int doCatch(Item ball) {
@@ -1035,7 +1035,7 @@ public class Pokemon {
 		for (int i = 0; i < this.numEvols; i++) {
 			if (this.evolveMethod[i].compareTo("Level") == 0) {
 				if (this.level >= this.evolveLevel[i]) {
-					setWaitingToEvolve(true);
+					setNextEvolutionId(getPokemonID(this.evolvesInto[i]));
 				}
 			}
 		}
@@ -1673,19 +1673,21 @@ public class Pokemon {
 	}
 		
 		/**
-		 * @return the waitingToEvolve
+		 * @return the nextEvolutionId
 		 */
-		public boolean isWaitingToEvolve() {
-			return waitingToEvolve;
+		public int getNextEvolutionId() {
+			return nextEvolutionId;
 		}
-	
+		
 		/**
-		 * @param waitingToEvolve the waitingToEvolve to set
+		 * @param nextEvolutionId the nextEvolutionId to set
 		 */
-		public void setWaitingToEvolve(boolean waitingToEvolve) {
-			this.waitingToEvolve = waitingToEvolve;
+		public void setNextEvolutionId(int nextEvolutionId) {
+			this.nextEvolutionId = nextEvolutionId;
 		}
 	// </editor-fold>
+
+
 
 
 }

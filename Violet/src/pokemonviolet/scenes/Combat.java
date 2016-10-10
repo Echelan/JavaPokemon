@@ -371,9 +371,7 @@ public class Combat extends Scene {
 		displayTextQueue.add(currentPlayerPokemon.getNameNick() + " gained " + currentEnemyPokemon.getExpGain() + " EXP!");
 
 		String result = currentPlayerPokemon.setCurEXP(currentPlayerPokemon.getCurEXP() + currentEnemyPokemon.getExpGain());
-
-		System.out.println(result);
-
+		
 		doneExpPlayer = false;
 		if (result.compareTo("") != 0) {
 			displayTextQueue.add(currentPlayerPokemon.getNameNick() + " is now level " + currentPlayerPokemon.getLevel() + "!");
@@ -521,8 +519,8 @@ public class Combat extends Scene {
 	public void dispose() {
 		main.gameState.remove(main.gameState.size() - 1);
 		
-		if (currentPlayerPokemon.isWaitingToEvolve()) {
-			main.gameState.add(new Evolution(main));
+		if (currentPlayerPokemon.getNextEvolutionId() != -1) {
+			main.gameState.add(new Evolution(main, currentPlayerPokemon));
 		}
 
 		if (currentPlayerPokemon.isFainted()) {
