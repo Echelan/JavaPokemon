@@ -214,16 +214,35 @@ public class Summary extends Scene {
 			g.setColor(Color.black);
 			g.drawImage(ImageIO.read(new File("assets/DNA.png")), resizedValue(100), resizedValue(9), resizedValue(120), resizedValue(27.2), null);
 			
+			g.setColor(subject.getColor());
+			g.fillRect(resizedValue(ssX - 30), resizedValue(45), resizedValue(15), resizedValue(15));
+			if (subject.getGender().compareTo("Female") == 0) {
+				g.setColor(Color.pink);
+			} else if (subject.getGender().compareTo("Male") == 0) {
+				g.setColor(Color.blue);
+			} else {
+				g.setColor(Color.gray);
+			}
+			g.fillRect(resizedValue(ssX - 30), resizedValue(65), resizedValue(15), resizedValue(15));
+			
+			g.drawImage(new pokemonviolet.model.Item(subject.getBallType()).getImage(),resizedValue(ssX - 30 - 8), resizedValue(80), null);
+			
+			g.setColor(Color.black);
+			g.setFont(new Font("Arial", Font.BOLD, resizedValue(9)));
+			g.drawString("Level "+subject.getLevel(), resizedValue(100), resizedValue(65));
+			g.drawString("HP " + subject.getCurHP() + "/" + subject.getMaxHP(), resizedValue(100), resizedValue(80));
+			g.drawString((subject.getCurEXP()/(float)subject.getMaxEXP()*100)+"% to level " + (subject.getLevel() + 1), resizedValue(100), resizedValue(95));
+			
 			g.setFont(new Font("Arial", Font.BOLD, resizedValue(7.5)));
-			g.drawString("Level "+subject.getLevel(), resizedValue(8), resizedValue(ssY - 31.5));
-			g.drawString(subject.getWeight()+" kg", resizedValue(48), resizedValue(ssY - 31.5));
-			g.drawString(subject.getHeight()+" m", resizedValue(93), resizedValue(ssY - 31.5));
+			g.drawString(subject.getKind()+ " Pokemon", resizedValue(8), resizedValue(ssY - 31.5));
+			g.drawString(subject.getWeight()+" kg", resizedValue(80), resizedValue(ssY - 31.5));
+			g.drawString(subject.getHeight()+" m", resizedValue(120), resizedValue(ssY - 31.5));
 			String typeText = "";
 			typeText = typeText + subject.getTypes()[0];
 			if (subject.getTypes()[1] != null) {
 				typeText = typeText + " " +subject.getTypes()[1];
 			}
-			g.drawString(typeText, resizedValue(138), resizedValue(ssY - 31.5));
+			g.drawString(typeText, resizedValue(158), resizedValue(ssY - 31.5));
 			g.setFont(new Font("Arial", Font.PLAIN, resizedValue(6.5)));
 
 			for (int i = 0; i < genMultilineText(subject.getPokeEntry(), 80).length; i++) {
