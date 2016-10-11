@@ -39,6 +39,8 @@ public class PokemonViolet {
 		
 		s.dispose();
 		h.canContinue();
+		new Thread(h).start();
+		
 	}	
 	
 	private static class SplashWindow extends JWindow {

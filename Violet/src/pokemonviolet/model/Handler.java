@@ -54,7 +54,6 @@ public class Handler implements Runnable {
 		public int curMapX, curMapY;
 		private boolean randomPokemon = false;
 		private boolean fillTeam = false;
-		private Thread thisThread;
 		private GameWindow gw;
 	// </editor-fold>
 
@@ -72,14 +71,13 @@ public class Handler implements Runnable {
 		
 		gw = new GameWindow(SCREEN_SIZE_X, SCREEN_SIZE_Y);
 
-		thisThread = new Thread(this);
-
+		
 		gameState.add(new pokemonviolet.scenes.Title(this, true));
+
+		displayedMaps = new Map[3][3];
 	}
 
 	public void startGame(String name, String gender, int pokeID) {
-
-		displayedMaps = new Map[3][3];
 
 		player = new Player(name, gender, new Pokemon(pokeID, 5, "POKEBALL"));
 		player.addItem("POKEBALL", 15);
@@ -87,7 +85,11 @@ public class Handler implements Runnable {
 		player.addItem("POTION",1);
 		
 		refreshDisplayedMaps();
-		thisThread.start();
+	}
+	
+	public void deleteGame() {
+		player = null;
+		cleanMaps();
 	}
 
 	private void refreshDisplayedMaps() {
@@ -264,9 +266,9 @@ public class Handler implements Runnable {
 					}
 					break;
 			}
-			if (isDone) {
-				tileCheck();
-			}
+		}
+		if (isDone) {
+			tileCheck();
 		}
 		
 		return isDone;
@@ -323,21 +325,9 @@ public class Handler implements Runnable {
 
 	private void tileCheck() {
 		int xTile, yTile;
-		xTile = player.getxTile();
-		yTile = player.getyTile();
-		while (xTile > 19) {
-			xTile = xTile - 20;
-		}
-		while (xTile < 0) {
-			xTile = xTile + 20;
-		}
-		while (yTile > 19) {
-			yTile = yTile - 20;
-		}
-		while (yTile < 0) {
-			yTile = yTile + 20;
-		}
-
+		xTile = player.calcXinMap();
+		yTile = player.calcYinMap();
+		
 		String[] tileInfo = displayedMaps[1][1].getTileInformation(yTile, xTile);
 		if (Integer.parseInt(tileInfo[2]) == 0 && Integer.parseInt(tileInfo[3]) == 1) {
 			steppedGrass();
@@ -425,11 +415,11 @@ public class Handler implements Runnable {
 						}
 					}
 				}
+			}
 				
-				try {
-					Thread.sleep(70);
-				} catch (InterruptedException ex) {
-				}
+			try {
+				Thread.sleep(40);
+			} catch (InterruptedException ex) {
 			}
 		}
 	}

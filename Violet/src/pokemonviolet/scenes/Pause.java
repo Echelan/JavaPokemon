@@ -23,7 +23,6 @@ import pokemonviolet.model.Handler;
 public class Pause extends Scene {
 
 	private String[] options = {"PokeDex", "Heal", "Shop", "Pokemon", "PC", "Bag", "Controls", "Exit"};
-//	private String[] options = {"PokeDex", "Heal", "Shop", "Pokemon", "Bag", "Controls", "Exit"};
 	private int selection;
 	private boolean showControls;
 
@@ -72,6 +71,7 @@ public class Pause extends Scene {
 		} else if (options[selection].compareTo("Exit") == 0) {
 			main.clearStates("");
 			main.gameState.add(new Title(main, false));
+			main.deleteGame();
 		}
 	}
 

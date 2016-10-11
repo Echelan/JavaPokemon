@@ -64,7 +64,7 @@ public class GameDisplay extends Canvas implements Runnable {
 			}
 
 			try {
-				Thread.sleep(80);
+				Thread.sleep(40);
 			} catch (InterruptedException ex) {
 			}
 		}

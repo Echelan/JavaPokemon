@@ -62,7 +62,7 @@ public final class Player {
 			/**
 			 * Position change interval.
 			 */
-			public static int MOVE_POS = 9;
+			public static int MOVE_POS = 4;
 			/**
 			 * Running multiplier.
 			 */
