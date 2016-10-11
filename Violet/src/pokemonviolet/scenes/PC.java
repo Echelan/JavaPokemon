@@ -63,6 +63,7 @@ public class PC extends Scene {
 			} else if (action.compareTo("B") == 0) {
 				cancel();
 			} else if (action.compareTo("START") == 0) {
+				start();
 			}
 		} else if (state.compareTo("PRESS") == 0) {
 			if (action.compareTo("UP") == 0 || action.compareTo("DOWN") == 0 || action.compareTo("LEFT") == 0 || action.compareTo("RIGHT") == 0) {
@@ -85,11 +86,13 @@ public class PC extends Scene {
 					swapSelect = -1;
 				}
 			} else if (action == 1) {
-				if (main.player.getNumPokemonTeam() < main.player.getTeam().length) {
-					main.player.withdrawPC(id);
-				} else {
-					swapSelect = id;
-					action = 0;
+				if (main.player.getPC().size() > 0) {
+					if (main.player.getNumPokemonTeam() < main.player.getTeam().length) {
+						main.player.withdrawPC(id);
+					} else {
+						swapSelect = id;
+						action = 0;
+					}
 				}
 			}
 		}
@@ -106,7 +109,12 @@ public class PC extends Scene {
 
 	@Override
 	protected void start() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		int id = selectionX[action] + (selectionY[action] * maxRows[action]);
+		if (action == 0) {
+			main.gameState.add(new Summary(main, main.player.getTeam()[id]));
+		} else if (action == 1) {
+			main.gameState.add(new Summary(main, main.player.getPC().get(id)));
+		}
 	}
 
 	@Override
@@ -241,7 +249,7 @@ public class PC extends Scene {
 			if (this.action == 0) {
 				int x = 17 + (int) (selectionX[action] * (dimX + 5)), y = 17 + (int) (selectionY[action] * (dimY + 5));
 				g.drawImage(ImageIO.read(new File("assets/hand.png")), resizedValue(x), resizedValue(y), resizedValue(20), resizedValue(22), null);
-			} else if (this.action == 1) {
+			} else if (this.action == 1 && main.player.getPC().size() > 0) {
 				int x = 30 + (int) (selectionX[action] * (dimX + 5)), y = 17 + (dimY);
 				g.drawImage(ImageIO.read(new File("assets/hand.png")), resizedValue(x), resizedValue(y), resizedValue(20), resizedValue(22), null);
 			}

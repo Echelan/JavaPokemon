@@ -172,7 +172,7 @@ public class Team extends Scene {
 						main.clearStates("BAG");
 						main.player.subItem(itemToUse);
 					} else {
-						main.gameState.add(new LearnMove(main, team[selection], new PokemonMove(new pokemonviolet.model.Item(itemToUse).getMoveName()), "BAG"));
+						main.gameState.add(new Summary(main, team[selection], new PokemonMove(new pokemonviolet.model.Item(itemToUse).getMoveName()), "BAG", itemToUse));
 					}
 				}
 			} else if (new pokemonviolet.model.Item(itemToUse).getUseOutBattle() == 4) {
@@ -181,7 +181,7 @@ public class Team extends Scene {
 						team[selection].addMove(new pokemonviolet.model.Item(itemToUse).getMoveName());
 						main.clearStates("BAG");
 					} else {
-						main.gameState.add(new LearnMove(main, team[selection], new PokemonMove(new pokemonviolet.model.Item(itemToUse).getMoveName()), "BAG"));
+						main.gameState.add(new Summary(main, team[selection], new PokemonMove(new pokemonviolet.model.Item(itemToUse).getMoveName()), "BAG"));
 					}
 				}
 			}
@@ -249,6 +249,7 @@ public class Team extends Scene {
 			} else if (action.compareTo("B") == 0) {
 				cancel();
 			} else if (action.compareTo("START") == 0) {
+				start();
 			}
 		} else if (state.compareTo("PRESS") == 0) {
 			if (action.compareTo("UP") == 0 || action.compareTo("DOWN") == 0 || action.compareTo("LEFT") == 0 || action.compareTo("RIGHT") == 0) {
@@ -367,7 +368,7 @@ public class Team extends Scene {
 
 	@Override
 	protected void start() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		main.gameState.add(new Summary(main, main.player.getTeam()[selection]));
 	}
 
 	@Override
@@ -486,14 +487,22 @@ public class Team extends Scene {
 						g.drawImage(team[i].getIcon(), resizedValue(85), resizedValue(-5 + ((i - 1) * (dimY + 5))), null);
 					} else {
 						int yDisplace = (int) (((int) Math.pow(animFrame - 6, 2)) * 0.25f);
-						g.drawImage(animImg.getSubimage(animFrame * 16, 0, 16, 16), resizedValue(95), resizedValue(5 + ((i - 1) * dimY) + yDisplace), resizedValue(16), resizedValue(16), null);
+						g.drawImage(animImg.getSubimage(animFrame * 16, 0, 16, 16), resizedValue(95), resizedValue(5 + ((i - 1) * (dimY + 5)) + yDisplace), resizedValue(16), resizedValue(16), null);
 						animFrame = animFrame + 1;
 						if (animFrame > 11) {
 							animFrame = 0;
 						}
 					}
 
+					if (TMappropriate[i] == 0) {
+						g.setColor(Color.orange);
+					} else if (TMappropriate[i] == 1) {
+						g.setColor(Color.GREEN);
+					} else {
+						g.setColor(Color.white);
+					}
 					g.drawString(team[i].getNameNick(),resizedValue(117.5), resizedValue(16.5 + ((i - 1) * (dimY + 5))));
+					g.setColor(Color.white);
 					g.drawString("Lv. "+team[i].getLevel(), resizedValue(125), resizedValue(26.5 + ((i - 1) * (dimY + 5))));
 
 					if (team[i].isFainted()) {

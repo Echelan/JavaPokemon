@@ -22,7 +22,7 @@ public class Evolution extends Scene {
 	private static final int SPRITE_WIDTH = 80;
 	private static final int SPRITE_HEIGHT = 80;
 
-	private Pokemon experiment626;
+	private Pokemon subject;
 	private BufferedImage oldImage;
 	private BufferedImage newImage;
 	private int timer;
@@ -30,7 +30,7 @@ public class Evolution extends Scene {
 	public Evolution(Handler main, Pokemon subject) {
 		super(main, "EVOLUTION", true);
 		
-		this.experiment626 = subject;
+		this.subject = subject;
 		this.timer = 0;
 		try {
 			this.oldImage = subject.getFrontImage();
@@ -52,8 +52,8 @@ public class Evolution extends Scene {
 	@Override
 	protected void accept() {
 		if (timer > 90) {
-			experiment626.evolve(experiment626.getNextEvolutionId());
-			experiment626.setNextEvolutionId(-1);
+			subject.evolve(subject.getNextEvolutionId());
+			subject.setNextEvolutionId(-1);
 			this.dispose();
 		}
 	}

@@ -379,7 +379,7 @@ public class Combat extends Scene {
 				if (result.split(":")[0].compareTo("add") == 0) {
 					displayTextQueue.add(currentPlayerPokemon.getNameNick() + " learned " + new pokemonviolet.model.PokemonMove(result.split(":")[1]).getNameDisplay() + "!");
 				} else if (result.split(":")[0].compareTo("wants") == 0) {
-					main.gameState.add(new LearnMove(main, currentPlayerPokemon, new pokemonviolet.model.PokemonMove(result.split(":")[1]), "COMBAT"));
+					main.gameState.add(new Summary(main, currentPlayerPokemon, new pokemonviolet.model.PokemonMove(result.split(":")[1]), "COMBAT"));
 				}
 			}
 		}

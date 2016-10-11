@@ -85,20 +85,6 @@ public class Handler implements Runnable {
 		player.addItem("POKEBALL", 15);
 		player.addItem("MASTERBALL", 1);
 		player.addItem("POTION",1);
-
-		player.addPokemon(new Pokemon(1));
-		player.addPokemon(new Pokemon(2));
-		player.addPokemon(new Pokemon(3));
-		player.addPokemon(new Pokemon(4));
-		player.addPokemon(new Pokemon(5));
-		player.addPokemon(new Pokemon(6));
-		player.addPokemon(new Pokemon(7));
-		player.addPokemon(new Pokemon(8));
-		player.addPokemon(new Pokemon(9));
-		player.addPokemon(new Pokemon(10));
-		player.addPokemon(new Pokemon(11));
-		player.addPokemon(new Pokemon(12));
-		player.addPokemon(new Pokemon(13));
 		
 		refreshDisplayedMaps();
 		thisThread.start();

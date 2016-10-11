@@ -1715,9 +1715,126 @@ public class Pokemon {
 		public void setNextEvolutionId(int nextEvolutionId) {
 			this.nextEvolutionId = nextEvolutionId;
 		}
+		
+		/**
+		 * @return the Color defining HP IV
+		 */
+		public Color getColorHP() {
+			Color result = Color.darkGray;
+			int thisIV = this.IVHP;
+			
+			if (thisIV > 28) {
+				result = Color.blue;
+			} else if (thisIV > 20) {
+				result = Color.green;
+			} else if (thisIV > 10) {
+				result = Color.orange;
+			} else {
+				result = Color.red;
+			}
+			
+			return result;
+		}
+
+		/**
+		 * @return the Color defining Attack IV
+		 */
+		public Color getColorAttack() {
+			Color result = Color.darkGray;
+			int thisIV = this.IVAttack;
+			
+			if (thisIV > 28) {
+				result = Color.blue;
+			} else if (thisIV > 20) {
+				result = Color.green;
+			} else if (thisIV > 10) {
+				result = Color.orange;
+			} else {
+				result = Color.red;
+			}
+			
+			return result;
+		}
+
+		/**
+		 * @return the Color defining Defense IV
+		 */
+		public Color getColorDefense() {
+			Color result = Color.darkGray;
+			int thisIV = this.IVDefense;
+			
+			if (thisIV > 28) {
+				result = Color.blue;
+			} else if (thisIV > 20) {
+				result = Color.green;
+			} else if (thisIV > 10) {
+				result = Color.orange;
+			} else {
+				result = Color.red;
+			}
+			
+			return result;
+		}
+
+		/**
+		 * @return the Color defining Speed IV
+		 */
+		public Color getColorSpeed() {
+			Color result = Color.darkGray;
+			int thisIV = this.IVSpeed;
+			
+			if (thisIV > 28) {
+				result = Color.blue;
+			} else if (thisIV > 20) {
+				result = Color.green;
+			} else if (thisIV > 10) {
+				result = Color.orange;
+			} else {
+				result = Color.red;
+			}
+			
+			return result;
+		}
+
+		/**
+		 * @return the Color defining SpAtk IV
+		 */
+		public Color getColorSpAtk() {
+			Color result = Color.darkGray;
+			int thisIV = this.IVSpAtk;
+			
+			if (thisIV > 28) {
+				result = Color.blue;
+			} else if (thisIV > 20) {
+				result = Color.green;
+			} else if (thisIV > 10) {
+				result = Color.orange;
+			} else {
+				result = Color.red;
+			}
+			
+			return result;
+		}
+
+		/**
+		 * @return the Color defining SpDef IV
+		 */
+		public Color getColorSpDef() {
+			Color result = Color.darkGray;
+			int thisIV = this.IVSpDef;
+			
+			if (thisIV > 28) {
+				result = Color.blue;
+			} else if (thisIV > 20) {
+				result = Color.green;
+			} else if (thisIV > 10) {
+				result = Color.orange;
+			} else {
+				result = Color.red;
+			}
+			
+			return result;
+		}
 	// </editor-fold>
-
-
-
 
 }
