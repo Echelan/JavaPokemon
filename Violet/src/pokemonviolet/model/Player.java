@@ -592,6 +592,27 @@ public final class Player {
 		return value;
 	}
 
+	public void depositPC(int placeOnTeam) {
+		if (placeOnTeam < numPokemonTeam && numPokemonTeam > 1) {
+			Pokemon temp = this.team[placeOnTeam];
+			this.PC.add(temp);
+			for (int i = placeOnTeam; i < numPokemonTeam - 1; i++) {
+				this.team[i] = this.team[i + 1];
+			}
+			this.team[numPokemonTeam - 1] = null;
+			numPokemonTeam = numPokemonTeam - 1;
+		}
+	}
+	
+	public void withdrawPC(int placeOnPC) {
+		if (numPokemonTeam < this.team.length && placeOnPC < this.PC.size()) {
+			Pokemon temp = this.PC.get(placeOnPC);
+			this.team[numPokemonTeam] = temp;
+			numPokemonTeam = numPokemonTeam + 1;
+			this.PC.remove(placeOnPC);
+		}
+	}
+	
 	// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
 		/**
 		 * @return the funds

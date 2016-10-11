@@ -33,7 +33,7 @@ public class Pokemon {
 			private static final int ICON_HEIGHT_RESIZED = (int) (SPRITE_HEIGHT * pokemonviolet.main.PokemonViolet.SIZE * 0.5);
 			private static final int NUM_ATTRIB = 38;
 			private static final int MAX_TOTAL_EV = 510;
-			private static final int MAX_SINGLE_EV = 252;
+			private static final int MAX_SINGLE_EV = 255;
 
 			private int id;
 			private String nameSpecies;
@@ -112,6 +112,7 @@ public class Pokemon {
 			private int IVSpDef;
 			
 			private int nextEvolutionId;
+			private int curTotalEV;
 		//</editor-fold>
 	//</editor-fold>
 
@@ -1178,6 +1179,16 @@ public class Pokemon {
 		return damageInfo;
 	}
 
+	private void calcTotalEv() {
+		curTotalEV = 0;
+		curTotalEV = curTotalEV + this.EVAttack;
+		curTotalEV = curTotalEV + this.EVDefense;
+		curTotalEV = curTotalEV + this.EVHP;
+		curTotalEV = curTotalEV + this.EVSpAtk;
+		curTotalEV = curTotalEV + this.EVSpDef;
+		curTotalEV = curTotalEV + this.EVSpeed;
+	}
+	
 	public BufferedImage getFrontImage() throws IOException {
 		BufferedImage image = new BufferedImage(SPRITE_WIDTH_RESIZED, SPRITE_HEIGHT_RESIZED, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
@@ -1242,7 +1253,7 @@ public class Pokemon {
 		public boolean getCanEvolve() {
 			return (this.numEvols > 0);
 		}
-
+		
 		/**
 		 * @return the numMoves
 		 */
@@ -1504,17 +1515,18 @@ public class Pokemon {
 		 */
 		public String setCurEXP(int curEXP) {
 			String result = "";
-			this.curEXP = curEXP;
-			while (this.getCurEXP() >= this.getMaxEXP()) {
-				String thisResult = levelUp();
-				
-				if (result.compareTo("") == 0) {
-					result = thisResult;	
-				} else if (result.compareTo("level") == 0) {
-					result = thisResult;
+			if (this.level < 100) {
+				this.curEXP = curEXP;
+				while (this.getCurEXP() >= this.getMaxEXP()) {
+					String thisResult = levelUp();
+
+					if (result.compareTo("") == 0) {
+						result = thisResult;	
+					} else if (result.compareTo("level") == 0) {
+						result = thisResult;
+					}
 				}
 			}
-			
 			return result;
 		}
 
@@ -1627,50 +1639,68 @@ public class Pokemon {
 		 * @param EVHP the EVHP to add
 		 */
 		public void addEVHP(int EVHP) {
-			this.EVHP = this.EVHP + EVHP;
+			if (this.EVHP < MAX_SINGLE_EV && curTotalEV < MAX_TOTAL_EV) {
+				setEVHP(this.EVHP + EVHP);
+				calcTotalEv();
+			}
 		}
 
 		/**
 		 * @param EVAttack the EVAttack to add
 		 */
 		public void addEVAttack(int EVAttack) {
-			this.EVAttack = this.EVAttack + EVAttack;
+			if (this.EVAttack < MAX_SINGLE_EV && curTotalEV < MAX_TOTAL_EV) {
+				setEVAttack(this.EVAttack + EVAttack);
+				calcTotalEv();
+			}
 		}
 
 		/**
 		 * @param EVDefense the EVDefense to add
 		 */
 		public void addEVDefense(int EVDefense) {
-			this.EVDefense = this.EVDefense + EVDefense;
+			if (this.EVDefense < MAX_SINGLE_EV && curTotalEV < MAX_TOTAL_EV) {
+				setEVDefense(this.EVDefense + EVDefense);
+				calcTotalEv();
+			}
 		}
 
 		/**
 		 * @param EVSpeed the EVSpeed to add
 		 */
 		public void addEVSpeed(int EVSpeed) {
-			this.EVSpeed = this.EVSpeed + EVSpeed;
+			if (this.EVSpeed < MAX_SINGLE_EV && curTotalEV < MAX_TOTAL_EV) {
+				setEVSpeed(this.EVSpeed + EVSpeed);
+				calcTotalEv();
+			}
 		}
 
 		/**
 		 * @param EVSpAtk the EVSpAtk to add
 		 */
 		public void addEVSpAtk(int EVSpAtk) {
-			this.EVSpAtk = this.EVSpAtk + EVSpAtk;
+			if (this.EVSpAtk < MAX_SINGLE_EV && curTotalEV < MAX_TOTAL_EV) {
+				setEVSpAtk(this.EVSpAtk + EVSpAtk);
+				calcTotalEv();
+			}
 		}
 
 		/**
 		 * @param EVSpDef the EVSpDef to add
 		 */
 		public void addEVSpDef(int EVSpDef) {
-			this.EVSpDef = this.EVSpDef + EVSpDef;
+			if (this.EVSpDef < MAX_SINGLE_EV && curTotalEV < MAX_TOTAL_EV) {
+				setEVSpDef(this.EVSpDef + EVSpDef);
+				calcTotalEv();
+			}
 		}
 		
 		/**
 		 * @return the maxEXP
 		 */
 		public int getMaxEXP() {
-		return maxEXP;
-	}
+			return maxEXP;
+		}
 		
 		/**
 		 * @return the nextEvolutionId

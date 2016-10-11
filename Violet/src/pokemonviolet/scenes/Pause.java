@@ -22,8 +22,8 @@ import pokemonviolet.model.Handler;
  */
 public class Pause extends Scene {
 
-//	private String[] options = {"PokeDex", "Heal", "Shop", "Pokemon", "PC", "Bag", "Controls"};
-	private String[] options = {"PokeDex", "Heal", "Shop", "Pokemon", "Bag", "Controls", "Exit"};
+	private String[] options = {"PokeDex", "Heal", "Shop", "Pokemon", "PC", "Bag", "Controls", "Exit"};
+//	private String[] options = {"PokeDex", "Heal", "Shop", "Pokemon", "Bag", "Controls", "Exit"};
 	private int selection;
 	private boolean showControls;
 
@@ -65,6 +65,8 @@ public class Pause extends Scene {
 			main.gameState.add(new Team(main));
 		} else if (options[selection].compareTo("PokeDex") == 0) {
 			main.gameState.add(new Dex(main));
+		} else if (options[selection].compareTo("PC") == 0) {
+			main.gameState.add(new PC(main));
 		} else if (options[selection].compareTo("Controls") == 0) {
 			showControls = true;
 		} else if (options[selection].compareTo("Exit") == 0) {

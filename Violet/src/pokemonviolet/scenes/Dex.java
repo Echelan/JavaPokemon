@@ -144,11 +144,11 @@ public class Dex extends Scene {
 		
 		g.drawImage(ImageIO.read(new File("assets/hand.png")), resizedValue(10.5 + 14 + (selectionX - 1) * 37.5), resizedValue((ssY / 2) - 35), resizedValue(20), resizedValue(22), null);
 
-		g.drawImage(genWindow(5, 60, 25), resizedValue(0.5), resizedValue(0.5), null);
+		g.drawImage(genWindow(3, 60, 25), resizedValue(0.5), resizedValue(0.5), null);
 		if (this.showDescrip) {
-			g.drawImage(genWindow(5, ssX - 61.5, 70), resizedValue(61), resizedValue(0.5), null);
+			g.drawImage(genWindow(3, ssX - 61.5, 70), resizedValue(61), resizedValue(0.5), null);
 		} else {
-			g.drawImage(genWindow(5, ssX - 61.5, 40), resizedValue(61), resizedValue(0.5), null);
+			g.drawImage(genWindow(3, ssX - 61.5, 40), resizedValue(61), resizedValue(0.5), null);
 		}
 		
 		g.setColor(Color.black);

@@ -113,7 +113,7 @@ public class Shop extends Scene {
 			}
 			selection = selection - 1;
 		} else if (dir.compareTo("DOWN") == 0) {
-			if (selection-(maxItemsPage-1) == startIndexX) {
+			if (selection - (maxItemsPage - 1) == startIndexX) {
 				startIndexX = startIndexX + 1;
 			}
 			selection = selection + 1;
@@ -167,33 +167,11 @@ public class Shop extends Scene {
 		
 		if (selection != perPocketInventory[category].size()) {
 			g.setFont(new Font("Arial", Font.PLAIN, resizedValue(7.5)));
-			int charsInLine = 30;
-			String fullD = new pokemonviolet.model.Item(perPocketInventory[category].get(selection)).getDescription();
-			for (int i = 0; i < (fullD.length() / charsInLine) + 1; i++) {
-				String prefix = "", suffix = "";
-
-				int thisLineFirstChar = i * charsInLine;
-				int thisLinePrevChar = thisLineFirstChar - 1;
-				int thisLineLastChar = ((i + 1) * charsInLine) - 2;
-				int thisLineNextChar = thisLineLastChar + 1;
-
-				if (thisLineFirstChar != 0){
-					if (fullD.charAt(thisLinePrevChar) != ' ') {
-						prefix = "" + fullD.charAt(thisLinePrevChar);
-					}
-				}
-
-				if (thisLineNextChar < fullD.length()) {
-					if (fullD.charAt(thisLineNextChar) != ' ' && fullD.charAt(thisLineLastChar) != ' ') {
-						suffix = "-";
-					}
-				} else {
-					thisLineLastChar = fullD.length() - 1;
-				}
-
-				g.drawString(prefix + fullD.substring(thisLineFirstChar, thisLineLastChar+1) + suffix, resizedValue(7.5), resizedValue(ssY - 71 + 22.5 + (i * 10)));
-			}	
-
+			
+			for (int i = 0; i < genMultilineText(new pokemonviolet.model.Item(perPocketInventory[category].get(selection)).getDescription(), 30).length; i++) {
+				g.drawString(genMultilineText(new pokemonviolet.model.Item(perPocketInventory[category].get(selection)).getDescription(), 30)[i], resizedValue(7.5), resizedValue(ssY - 71 + 22.5 + (i * 10)));
+			}
+			
 			g.drawImage(new pokemonviolet.model.Item(perPocketInventory[category].get(selection)).getImage(), resizedValue(17), resizedValue(38), null);
 			
 			g.setFont(new Font("Arial", Font.BOLD, resizedValue(10)));
