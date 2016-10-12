@@ -87,8 +87,7 @@ public class Starter extends Scene {
 	@Override
 	protected void accept() {
 		this.dispose();
-		main.startGame("Player", playerGender, pokeID[chosen]);
-		main.gameState.add(new Game(main));
+		main.gameState.add(new Game(main, new pokemonviolet.model.Player("Player", playerGender, new pokemonviolet.model.Pokemon(pokeID[chosen], 5, "POKEBALL"))));
 	}
 
 	@Override

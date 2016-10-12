@@ -745,7 +745,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 	public void writeMapFile() {
 		FileWriter fw = null;
 		try {
-			File archivo = new File("mapX" + windowGeneral.mapIDx.getText() + "Y" + windowGeneral.mapIDy.getText() + ".txt");
+			File archivo = new File("db/mapX" + windowGeneral.mapIDx.getText() + "Y" + windowGeneral.mapIDy.getText() + ".txt");
 			fw = new FileWriter(archivo.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
 			/*
@@ -797,7 +797,7 @@ public class MapBuilder extends JFrame implements WindowListener, ActionListener
 
 		List<String> readMapInfo = null;
 		try {
-			File archivo = new File("mapX" + windowGeneral.mapIDx.getText() + "Y" + windowGeneral.mapIDy.getText() + ".txt");
+			File archivo = new File("db/mapX" + windowGeneral.mapIDx.getText() + "Y" + windowGeneral.mapIDy.getText() + ".txt");
 			readMapInfo = Files.readAllLines(archivo.toPath());
 		} catch (IOException ex1) {
 			try {

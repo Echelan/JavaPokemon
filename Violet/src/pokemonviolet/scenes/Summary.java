@@ -92,7 +92,7 @@ public class Summary extends Scene {
 				subject.setMove(selection, object);
 				main.clearStates(returnState);
 				if (itemID != -1) {
-					main.player.subItem(itemID);
+					main.getPlayer().subItem(itemID);
 				}
 			}
 		}

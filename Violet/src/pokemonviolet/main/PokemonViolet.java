@@ -39,7 +39,7 @@ public class PokemonViolet {
 		
 		s.dispose();
 		h.canContinue();
-		new Thread(h).start();
+//		new Thread(h).start();
 		
 	}	
 	

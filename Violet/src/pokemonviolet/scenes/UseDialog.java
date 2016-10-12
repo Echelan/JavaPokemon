@@ -71,7 +71,7 @@ public class UseDialog extends Scene{
 				} else if (new pokemonviolet.model.Item(itemID).getUseInBattle() == 2) {
 					if (new pokemonviolet.model.Item(itemID).getPokeRate() != 0) {
 						combat.throwBall(itemID);
-						main.player.subItem(itemID);
+						main.getPlayer().subItem(itemID);
 						this.dispose();
 						if (inCombat) {
 							main.clearStates("COMBAT");
@@ -83,13 +83,13 @@ public class UseDialog extends Scene{
 					main.gameState.add(new Team(main, combat, itemID));
 				} else if (new pokemonviolet.model.Item(itemID).getUseOutBattle() == 2) {
 					if (itemID < 4) {
-						main.player.setSpawnSteps(main.player.getSpawnSteps() + (int) new pokemonviolet.model.Item(itemID).getValue());
+						main.getPlayer().setSpawnSteps(main.getPlayer().getSpawnSteps() + (int) new pokemonviolet.model.Item(itemID).getValue());
 					} else {
-						for (int i = 0; i < main.player.getNumPokemonTeam(); i++) {
-							main.player.getTeam()[i].revive(1.0);
+						for (int i = 0; i < main.getPlayer().getNumPokemonTeam(); i++) {
+							main.getPlayer().getTeam()[i].revive(1.0);
 						}
 					}
-					main.player.subItem(itemID);
+					main.getPlayer().subItem(itemID);
 					this.dispose();
 				} else if (new pokemonviolet.model.Item(itemID).getUseOutBattle() == 3) {
 					main.gameState.add(new Team(main, combat, itemID));

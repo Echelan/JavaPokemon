@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import pokemonviolet.model.Handler;
-import static pokemonviolet.scenes.Scene.ssX;
 
 /**
  *
@@ -79,16 +78,16 @@ public class PC extends Scene {
 		} else {
 			int id = selectionX[action] + (selectionY[action] * maxRows[action]);
 			if (action == 0) {
-				main.player.depositPC(id);
+				main.getPlayer().depositPC(id);
 				if (swapSelect != -1) {
 					action = 1;
-					main.player.withdrawPC(swapSelect);
+					main.getPlayer().withdrawPC(swapSelect);
 					swapSelect = -1;
 				}
 			} else if (action == 1) {
-				if (main.player.getPC().size() > 0) {
-					if (main.player.getNumPokemonTeam() < main.player.getTeam().length) {
-						main.player.withdrawPC(id);
+				if (main.getPlayer().getPC().size() > 0) {
+					if (main.getPlayer().getNumPokemonTeam() < main.getPlayer().getTeam().length) {
+						main.getPlayer().withdrawPC(id);
 					} else {
 						swapSelect = id;
 						action = 0;
@@ -110,10 +109,10 @@ public class PC extends Scene {
 	@Override
 	protected void start() {
 		int id = selectionX[action] + (selectionY[action] * maxRows[action]);
-		if (action == 0) {
-			main.gameState.add(new Summary(main, main.player.getTeam()[id]));
-		} else if (action == 1) {
-			main.gameState.add(new Summary(main, main.player.getPC().get(id)));
+		if (action == 0 && main.getPlayer().getTeam()[id] != null) {
+			main.gameState.add(new Summary(main, main.getPlayer().getTeam()[id]));
+		} else if (action == 1 && main.getPlayer().getPC().get(id) != null) {
+			main.gameState.add(new Summary(main, main.getPlayer().getPC().get(id)));
 		}
 	}
 
@@ -168,15 +167,15 @@ public class PC extends Scene {
 						selectionY[action] = 3;
 					}
 				} else if (action == 1) {
-					if (selectionY[action] > (int) (Math.floor((main.player.getPC().size() - 1) / maxRows[1]))) {
-						selectionY[action] = (int) (Math.floor((main.player.getPC().size() - 1) / maxRows[1]));
+					if (selectionY[action] > (int) (Math.floor((main.getPlayer().getPC().size() - 1) / maxRows[1]))) {
+						selectionY[action] = (int) (Math.floor((main.getPlayer().getPC().size() - 1) / maxRows[1]));
 					}
 				}
 			}
 			if (action == 1) {
-				if (selectionY[action] == (int) (Math.floor((main.player.getPC().size() - 1) / maxRows[1]))) {
-					if (selectionX[action] > (int) (Math.floor((main.player.getPC().size() - 1) % maxRows[1]))) {
-						selectionX[action] = (int) (Math.floor((main.player.getPC().size() - 1) % maxRows[1]));
+				if (selectionY[action] == (int) (Math.floor((main.getPlayer().getPC().size() - 1) / maxRows[1]))) {
+					if (selectionX[action] > (int) (Math.floor((main.getPlayer().getPC().size() - 1) % maxRows[1]))) {
+						selectionX[action] = (int) (Math.floor((main.getPlayer().getPC().size() - 1) % maxRows[1]));
 					}
 				}
 			}
@@ -188,25 +187,25 @@ public class PC extends Scene {
 		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 		
-		g.drawImage(ImageIO.read(new File("assets/"+main.player.getGender().toLowerCase()+"Back.png")), 0, 0, resizedValue(ssX), resizedValue(ssY), null);
+		g.drawImage(ImageIO.read(new File("assets/"+main.getPlayer().getGender().toLowerCase()+"Back.png")), 0, 0, resizedValue(ssX), resizedValue(ssY), null);
 		
 		g.setColor(Color.white);
 		g.setFont(new Font("Arial",Font.BOLD, resizedValue(7.5)));
 		
 		int dimX = 62, dimY = 35;
-		for (int i = 0; i < main.player.getPC().size(); i++) {
+		for (int i = 0; i < main.getPlayer().getPC().size(); i++) {
 			int x = 20 + (int) (Math.floor(i % maxRows[1]) * (dimX + 5)), y = 34 + (int) (Math.floor(i / maxRows[1]) * (dimY + 5)) - ((selectionY[1] - 1) * (dimY + 5));
 			g.drawImage(ImageIO.read(new File("assets/pcPokemon.png")), resizedValue(x), resizedValue(y), resizedValue(dimX), resizedValue(dimY), null);
 				
-			g.drawImage(main.player.getPC().get(i).getIcon(), resizedValue(x - 4), resizedValue(y - 1), null);
-			g.drawString(main.player.getPC().get(i).getNameNick(), resizedValue(x + 4), resizedValue(y + 10));
-			g.drawString("Lv. "+main.player.getPC().get(i).getLevel(), resizedValue(x + 35), resizedValue(y + 28));
+			g.drawImage(main.getPlayer().getPC().get(i).getIcon(), resizedValue(x - 4), resizedValue(y - 1), null);
+			g.drawString(main.getPlayer().getPC().get(i).getNameNick(), resizedValue(x + 4), resizedValue(y + 10));
+			g.drawString("Lv. "+main.getPlayer().getPC().get(i).getLevel(), resizedValue(x + 35), resizedValue(y + 28));
 		}
 		
 		g.setColor(Color.black);
 		g.setFont(new Font("Arial",Font.BOLD, resizedValue(10)));
 		g.drawImage(genWindow(3, 70, 25), resizedValue(0.5), resizedValue(0.5), null);
-		g.drawString(main.player.getName()+"'s PC", resizedValue(7.5), resizedValue(16.5));
+		g.drawString(main.getPlayer().getName()+"'s PC", resizedValue(7.5), resizedValue(16.5));
 		
 		
 		if (this.action == 1) {
@@ -231,14 +230,14 @@ public class PC extends Scene {
 		g.setFont(new Font("Arial",Font.BOLD, resizedValue(7.5)));
 		if (this.action == 0) {
 			g.drawImage(genWindow(5, 142, ssY - 26.5), resizedValue(0.5), resizedValue(26), null);
-			for (int i = 0; i < main.player.getTeam().length; i++) {
+			for (int i = 0; i < main.getPlayer().getTeam().length; i++) {
 				int x = 7 + (int) (Math.floor(i % maxRows[0]) * (dimX + 5)), y = 34 + (int) (Math.floor(i / maxRows[0]) * (dimY + 5));
-				if (i < main.player.getNumPokemonTeam()) {
+				if (i < main.getPlayer().getNumPokemonTeam()) {
 					g.drawImage(ImageIO.read(new File("assets/pcPokemon.png")), resizedValue(x), resizedValue(y), resizedValue(dimX), resizedValue(dimY), null);
 
-					g.drawImage(main.player.getTeam()[i].getIcon(), resizedValue(x - 4), resizedValue(y - 1), null);
-					g.drawString(main.player.getTeam()[i].getNameNick(), resizedValue(x + 4), resizedValue(y + 10));
-					g.drawString("Lv. "+main.player.getTeam()[i].getLevel(), resizedValue(x + 35), resizedValue(y + 28));
+					g.drawImage(main.getPlayer().getTeam()[i].getIcon(), resizedValue(x - 4), resizedValue(y - 1), null);
+					g.drawString(main.getPlayer().getTeam()[i].getNameNick(), resizedValue(x + 4), resizedValue(y + 10));
+					g.drawString("Lv. "+main.getPlayer().getTeam()[i].getLevel(), resizedValue(x + 35), resizedValue(y + 28));
 				} else {
 					g.drawImage(ImageIO.read(new File("assets/pcPokemonBlank.png")), resizedValue(x), resizedValue(y), resizedValue(dimX), resizedValue(dimY), null);
 				}
@@ -249,7 +248,7 @@ public class PC extends Scene {
 			if (this.action == 0) {
 				int x = 17 + (int) (selectionX[action] * (dimX + 5)), y = 17 + (int) (selectionY[action] * (dimY + 5));
 				g.drawImage(ImageIO.read(new File("assets/hand.png")), resizedValue(x), resizedValue(y), resizedValue(20), resizedValue(22), null);
-			} else if (this.action == 1 && main.player.getPC().size() > 0) {
+			} else if (this.action == 1 && main.getPlayer().getPC().size() > 0) {
 				int x = 30 + (int) (selectionX[action] * (dimX + 5)), y = 17 + (dimY);
 				g.drawImage(ImageIO.read(new File("assets/hand.png")), resizedValue(x), resizedValue(y), resizedValue(20), resizedValue(22), null);
 			}

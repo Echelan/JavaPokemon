@@ -36,7 +36,7 @@ public class Bag extends Scene {
 	public Bag(Handler main, Combat cmb) {
 		super(main, "BAG", false);
 		
-		this.inventory = main.player.getBag();
+		this.inventory = main.getPlayer().getBag();
 		
 		this.combat = cmb;
 		this.inCombat = true;
@@ -149,7 +149,7 @@ public class Bag extends Scene {
 		
 		g.setColor(Color.black);
 		g.setFont(new Font("Arial", Font.BOLD, resizedValue(7.5)));
-		g.drawString(main.player.getName()+"'s Bag", resizedValue(7.5), resizedValue(18));
+		g.drawString(main.getPlayer().getName()+"'s Bag", resizedValue(7.5), resizedValue(18));
 		
 		g.setFont(new Font("Arial", Font.BOLD, resizedValue(10)));
 		g.drawString(namePockets[category], resizedValue(ssX - windowWidth + 10), resizedValue(20));

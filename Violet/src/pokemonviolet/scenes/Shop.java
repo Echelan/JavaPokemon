@@ -160,7 +160,7 @@ public class Shop extends Scene {
 		
 		g.setColor(Color.black);
 		g.setFont(new Font("Arial", Font.BOLD, resizedValue(7.5)));
-		g.drawString("$  "+main.player.getFunds(), resizedValue(7.5), resizedValue(18));
+		g.drawString("$  "+main.getPlayer().getFunds(), resizedValue(7.5), resizedValue(18));
 		
 		g.setFont(new Font("Arial", Font.BOLD, resizedValue(10)));
 		g.drawString(categoryNames[category], resizedValue(ssX - windowWidth + 10), resizedValue(20));

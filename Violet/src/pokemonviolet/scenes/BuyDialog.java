@@ -58,9 +58,9 @@ public class BuyDialog extends Scene{
 	@Override
 	protected void accept() {
 		if (choice == 0) {
-			if (main.player.getFunds() >= curPrice) {
-				main.player.setFunds(main.player.getFunds() - curPrice);
-				main.player.addItem(new pokemonviolet.model.Item(itemID, itemAmount));
+			if (main.getPlayer().getFunds() >= curPrice) {
+				main.getPlayer().setFunds(main.getPlayer().getFunds() - curPrice);
+				main.getPlayer().addItem(new pokemonviolet.model.Item(itemID, itemAmount));
 				this.dispose();
 			}
 		} else if (choice == 1) {
@@ -119,7 +119,7 @@ public class BuyDialog extends Scene{
 		g.setFont(new Font("Arial", Font.BOLD, resizedValue(10)));
 		g.drawString("x"+itemAmount, resizedValue(x + 10), resizedValue(40));
 		
-		if (curPrice > main.player.getFunds()) {
+		if (curPrice > main.getPlayer().getFunds()) {
 			g.setColor(Color.red);
 		}
 		g.drawString("$  "+curPrice, resizedValue(x + 10), resizedValue(70 + 0.5));

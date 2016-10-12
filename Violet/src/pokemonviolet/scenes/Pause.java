@@ -71,7 +71,6 @@ public class Pause extends Scene {
 		} else if (options[selection].compareTo("Exit") == 0) {
 			main.clearStates("");
 			main.gameState.add(new Title(main, false));
-			main.deleteGame();
 		}
 	}
 

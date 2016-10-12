@@ -42,8 +42,8 @@ public class Dex extends Scene {
 		this.baseY = 50;
 		this.showDescrip = false;
 		
-		for (int i = 0; i < main.player.getPokeDex().length; i++) {
-			if (main.player.getPokeDex()[i] != 0) {
+		for (int i = 0; i < main.getPlayer().getPokeDex().length; i++) {
+			if (main.getPlayer().getPokeDex()[i] != 0) {
 				this.maxIndex = i;
 			}
 		}
@@ -71,7 +71,7 @@ public class Dex extends Scene {
 	@Override
 	protected void accept() {
 		int curIndex = ((selectionY - 1) * maxCols) + selectionX;
-		if (main.player.getPokeDex()[curIndex - 1] != 0) {
+		if (main.getPlayer().getPokeDex()[curIndex - 1] != 0) {
 			this.showDescrip = true;
 		}
 	}
@@ -128,14 +128,14 @@ public class Dex extends Scene {
 		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = tempStitched.getGraphics();
 
-		g.drawImage(ImageIO.read(new File("assets/"+main.player.getGender().toLowerCase()+"Back.png")), 0, 0, resizedValue(ssX), resizedValue(ssY), null);
+		g.drawImage(ImageIO.read(new File("assets/"+main.getPlayer().getGender().toLowerCase()+"Back.png")), 0, 0, resizedValue(ssX), resizedValue(ssY), null);
 		
 		baseY = 75 + (selectionY - 0.5f) * -1 * 37.5f;
 
 		for (int i = 0; i < maxIndex; i++) {
 			int x = (int) Math.floor(i % maxCols), y = (int) Math.floor(i / maxCols);
 			g.drawImage(genWindow(7, 35, 35), resizedValue(10.5 + (x * 37.5)), resizedValue(baseY + (y * 37.5)), null);
-			if (main.player.getPokeDex()[i] != 0) {
+			if (main.getPlayer().getPokeDex()[i] != 0) {
 				g.drawImage(new pokemonviolet.model.Pokemon(i + 1).getIcon(), resizedValue(10.5 + (x * 37.5) - 2.5), resizedValue(baseY + (y * 37.5) - 2.5), null);
 			} else {
 				g.drawImage(ImageIO.read(new File("assets/pokemon/blank.png")), resizedValue(10.5 + 6.5 + (x * 37.5)), resizedValue(baseY + 6.5 + (y * 37.5)), resizedValue(18 * 1.25f), resizedValue(18 * 1.25f), null);
@@ -158,7 +158,7 @@ public class Dex extends Scene {
 		
 		int curIndex = ((selectionY - 1) * maxCols) + selectionX;
 		
-		if (main.player.getPokeDex()[curIndex - 1] != 0) {
+		if (main.getPlayer().getPokeDex()[curIndex - 1] != 0) {
 			pokemonviolet.model.Pokemon indexPokemon = new pokemonviolet.model.Pokemon(curIndex);
 				g.drawString(indexPokemon.getNameSpecies(), resizedValue(70), resizedValue(16.5));
 			if (this.showDescrip) {
@@ -167,7 +167,7 @@ public class Dex extends Scene {
 				g.drawImage(genWindow(7, 85, 85), resizedValue(2.5), resizedValue(ssY - 85 - 2.5), null);
 				g.drawImage(indexPokemon.getFrontImage(), resizedValue(2.5 + (85 / 2) - (SPRITE_WIDTH / 2)), resizedValue(ssY - 85 - 2.5 + (85 / 2) - (SPRITE_HEIGHT / 2)), null);
 				
-				if (main.player.getPokeDex()[curIndex - 1] == 2) {
+				if (main.getPlayer().getPokeDex()[curIndex - 1] == 2) {
 					
 					for (int i = 0; i < genMultilineText(indexPokemon.getPokeEntry(), 46).length; i++) {
 						g.drawString(genMultilineText(indexPokemon.getPokeEntry(), 46)[i], resizedValue(75), resizedValue(27.5 + (i * 10)));
@@ -178,7 +178,7 @@ public class Dex extends Scene {
 				}
 				g.setFont(new Font("Arial",Font.BOLD, resizedValue(10)));
 			} else {
-				if (main.player.getPokeDex()[curIndex - 1] == 2) {
+				if (main.getPlayer().getPokeDex()[curIndex - 1] == 2) {
 					g.drawString(indexPokemon.getKind() + " Pokemon", resizedValue(140), resizedValue(16.5));
 					g.drawString(indexPokemon.getHeight() + "m", resizedValue(75), resizedValue(27.5));
 					g.drawString(indexPokemon.getWeight() + "kg", resizedValue(110), resizedValue(27.5));

@@ -48,7 +48,7 @@ public class GameDisplay extends Canvas implements Runnable {
 
 	@Override
 	public void run() {
-		createBufferStrategy(2);
+		createBufferStrategy(3);
 		while (true) {
 			if (!Handler.gameState.isEmpty()) {
 				Graphics g = getBufferStrategy().getDrawGraphics();

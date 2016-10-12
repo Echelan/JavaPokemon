@@ -55,7 +55,7 @@ public class Combat extends Scene {
 		private boolean forceEnemyTurn;
 	//</editor-fold>
 
-	public Combat(Player player, Trainer enemy, boolean wildBattle, Handler main) {
+	public Combat(Handler main, Player player, Trainer enemy, boolean wildBattle) {
 		super(main, "COMBAT", true);
 		
 		this.player = player;

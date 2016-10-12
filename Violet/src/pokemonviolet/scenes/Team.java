@@ -56,7 +56,7 @@ public class Team extends Scene {
 		this.usingItem = false;
 		this.itemToUse = -1;
 		
-		this.team = main.player.getTeam();
+		this.team = main.getPlayer().getTeam();
 		selection = 0;
 		swap = -1;
 		animFrame = 0;
@@ -83,7 +83,7 @@ public class Team extends Scene {
 		this.usingItem = false;
 		this.itemToUse = -1;
 		
-		this.team = main.player.getTeam();
+		this.team = main.getPlayer().getTeam();
 		selection = 0;
 		swap = -1;
 		animFrame = 0;
@@ -108,7 +108,7 @@ public class Team extends Scene {
 		this.usingItem = true;
 		this.itemToUse = itemID;
 		
-		this.team = main.player.getTeam();
+		this.team = main.getPlayer().getTeam();
 		
 		this.TMappropriate = new int[6];
 		if (new pokemonviolet.model.Item(itemToUse).getUseOutBattle() < 3) {
@@ -155,14 +155,14 @@ public class Team extends Scene {
 	private void useItem() {
 		if (inCombat) {
 			if (useMedTypeItem()) {
-				main.player.subItem(itemToUse);
+				main.getPlayer().subItem(itemToUse);
 				main.clearStates("COMBAT");
 				combat.usedItem();
 			}
 		} else if (!inCombat) {
 			if (new pokemonviolet.model.Item(itemToUse).getUseOutBattle() == 1) {
 				if (useMedTypeItem()) {
-					main.player.subItem(itemToUse);
+					main.getPlayer().subItem(itemToUse);
 					main.clearStates("BAG");
 				}				
 			} else if (new pokemonviolet.model.Item(itemToUse).getUseOutBattle() == 3) {
@@ -170,7 +170,7 @@ public class Team extends Scene {
 					if (team[selection].getNumMoves() < 4) {
 						team[selection].addMove(new pokemonviolet.model.Item(itemToUse).getMoveName());
 						main.clearStates("BAG");
-						main.player.subItem(itemToUse);
+						main.getPlayer().subItem(itemToUse);
 					} else {
 						main.gameState.add(new Summary(main, team[selection], new PokemonMove(new pokemonviolet.model.Item(itemToUse).getMoveName()), "BAG", itemToUse));
 					}
@@ -278,7 +278,7 @@ public class Team extends Scene {
 			swap = selection;
 		} else {
 			if (selection != swap) {
-				main.player.movePokemon(selection, swap);
+				main.getPlayer().movePokemon(selection, swap);
 			}
 			swap = -1;
 		}
@@ -368,7 +368,7 @@ public class Team extends Scene {
 
 	@Override
 	protected void start() {
-		main.gameState.add(new Summary(main, main.player.getTeam()[selection]));
+		main.gameState.add(new Summary(main, main.getPlayer().getTeam()[selection]));
 	}
 
 	@Override
