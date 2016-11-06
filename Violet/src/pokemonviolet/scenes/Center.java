@@ -42,7 +42,7 @@ public class Center extends Scene{
 	}
 
 	@Override
-	public void receiveKeyAction(String action, String state) {
+	public void receiveKeyAction(int action, int state) {
 		
 	}
 
@@ -62,7 +62,7 @@ public class Center extends Scene{
 	}
 
 	@Override
-	protected void move(String dir) {
+	protected void move(int dir) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

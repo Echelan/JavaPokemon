@@ -31,7 +31,6 @@ public class Pokemon {
 			private static final int ICON_HEIGHT = 40;
 			private static final int ICON_WIDTH_RESIZED = (int) (SPRITE_WIDTH * pokemonviolet.main.PokemonViolet.SIZE * 0.5);
 			private static final int ICON_HEIGHT_RESIZED = (int) (SPRITE_HEIGHT * pokemonviolet.main.PokemonViolet.SIZE * 0.5);
-			private static final int NUM_ATTRIB = 38;
 			private static final int MAX_TOTAL_EV = 510;
 			private static final int MAX_SINGLE_EV = 255;
 
@@ -427,10 +426,9 @@ public class Pokemon {
 	private boolean readInfo(int id) {
 		boolean success = false;
 
-		String[] pokeinfo = pokemonviolet.data.NIC.INFO_POKEMON.get(id - 1).split(";");
-
-		for (int i = 0; i < NUM_ATTRIB; i++) {
-			String[] partes = pokeinfo[i].split("=");
+		String[] pokeInfo = pokemonviolet.data.NIC.INFO_POKEMON.get(id - 1).split(";");
+		for (int i = 0; i < pokeInfo.length; i++) {
+			String[] partes = pokeInfo[i].split("=");
 			if (partes[0].compareTo("Name") == 0) {
 				this.nameSpecies = partes[1];
 				this.setNameNick(partes[1]);
@@ -737,10 +735,10 @@ public class Pokemon {
 		boolean foundPokemon = false;
 
 		while (foundPokemon == false && id < pokemonviolet.data.NIC.INFO_POKEMON.size()) {
-			String[] pokeinfo = pokemonviolet.data.NIC.INFO_POKEMON.get(id).split(";");
+			String[] pokeInfo = pokemonviolet.data.NIC.INFO_POKEMON.get(id).split(";");
 			int attribComp = 0;
-			while (attribComp < NUM_ATTRIB && foundPokemon == false) {
-				String[] partes = pokeinfo[attribComp].split("=");
+			while (attribComp < pokeInfo.length && foundPokemon == false) {
+				String[] partes = pokeInfo[attribComp].split("=");
 				if (partes[0].compareTo("InternalName") == 0) {
 					if (partes[1].compareTo(internalName) == 0) {
 						foundPokemon = true;

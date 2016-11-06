@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import pokemonviolet.control.KeyHandler;
 import pokemonviolet.model.Handler;
 
 /**
@@ -28,15 +29,15 @@ public class Title extends Scene {
 	private boolean ready;
 
 	private boolean konamiExecuted;
-	private String[] konamiCode = {"UP", "UP", "DOWN", "DOWN", "LEFT", "RIGHT", "LEFT", "RIGHT", "B", "A", "START"};
-	private ArrayList<String> konamiInput;
+	private int[] konamiCode = {KeyHandler.ACTION_UP, KeyHandler.ACTION_UP, KeyHandler.ACTION_DOWN, KeyHandler.ACTION_DOWN, KeyHandler.ACTION_LEFT, KeyHandler.ACTION_RIGHT, KeyHandler.ACTION_LEFT, KeyHandler.ACTION_RIGHT, KeyHandler.ACTION_B, KeyHandler.ACTION_A, KeyHandler.ACTION_START};
+	private ArrayList<Integer> konamiInput;
 
 	public Title(Handler main, boolean canKonami) {
 		super(main, "TITLE", true);
 
 		konamiExecuted = !canKonami;
 
-		konamiInput = new ArrayList<String>();
+		konamiInput = new ArrayList<Integer>();
 
 		ready = false;
 		startDisplay = 6;
@@ -57,11 +58,11 @@ public class Title extends Scene {
 	}
 
 	@Override
-	public void receiveKeyAction(String action, String state) {
+	public void receiveKeyAction(int action, int state) {
 		boolean konamid = false;
 		if (!konamiExecuted) {
-			if (state.compareTo("RELEASE") == 0) {
-				if (action.compareTo(konamiCode[konamiInput.size()]) == 0) {
+			if (state == KeyHandler.STATE_RELEASE) {
+				if (action == konamiCode[konamiInput.size()]) {
 					konamiInput.add(action);
 					konamid = true;
 					if (konamiInput.size() == konamiCode.length) {
@@ -75,12 +76,12 @@ public class Title extends Scene {
 			}
 		}
 
-		if (!konamid && state.compareTo("RELEASE") == 0) {
-			if (action.compareTo("START") == 0) {
+		if (!konamid && state == KeyHandler.STATE_RELEASE) {
+			if (action == KeyHandler.ACTION_START) {
 				start();
-			} else if (action.compareTo("A") == 0) {
+			} else if (action == KeyHandler.ACTION_A) {
 				accept();
-			} else if (action.compareTo("B") == 0) {
+			} else if (action == KeyHandler.ACTION_B) {
 				cancel();
 			}
 		}
@@ -111,7 +112,7 @@ public class Title extends Scene {
 	}
 
 	@Override
-	protected void move(String dir) {
+	protected void move(int dir) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

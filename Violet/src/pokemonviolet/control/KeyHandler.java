@@ -16,69 +16,80 @@ import java.awt.event.KeyEvent;
  */
 public class KeyHandler extends KeyAdapter {
 
+	public final static int ACTION_NONE = 0;
+	public final static int ACTION_A = 1;
+	public final static int ACTION_B = 2;
+	public final static int ACTION_START = 3;
+	public final static int ACTION_UP = 4;
+	public final static int ACTION_DOWN = 5;
+	public final static int ACTION_LEFT = 6;
+	public final static int ACTION_RIGHT = 7;
+	public final static int STATE_PRESS = 0;
+	public final static int STATE_RELEASE = 1;
+	
 	@Override
 	public void keyReleased(KeyEvent key) {
 		boolean acceptedKey = false;
-		String sendAction = "";
+		int sendAction = ACTION_NONE;
 
 		if (key.getKeyCode() == KeyEvent.VK_UP || key.getKeyCode() == KeyEvent.VK_W) {
 			acceptedKey = true;
-			sendAction = "UP";
+			sendAction = ACTION_UP;
 		} else if (key.getKeyCode() == KeyEvent.VK_DOWN || key.getKeyCode() == KeyEvent.VK_S) {
 			acceptedKey = true;
-			sendAction = "DOWN";
+			sendAction = ACTION_DOWN;
 		} else if (key.getKeyCode() == KeyEvent.VK_LEFT || key.getKeyCode() == KeyEvent.VK_A) {
 			acceptedKey = true;
-			sendAction = "LEFT";
+			sendAction = ACTION_LEFT;
 		} else if (key.getKeyCode() == KeyEvent.VK_RIGHT || key.getKeyCode() == KeyEvent.VK_D) {
 			acceptedKey = true;
-			sendAction = "RIGHT";
+			sendAction = ACTION_RIGHT;
 		} else if (key.getKeyCode() == KeyEvent.VK_K) {
 			acceptedKey = true;
-			sendAction = "B";
+			sendAction = ACTION_B;
 		} else if (key.getKeyCode() == KeyEvent.VK_J) {
 			acceptedKey = true;
-			sendAction = "A";
+			sendAction = ACTION_A;
 		} else if (key.getKeyCode() == KeyEvent.VK_ENTER) {
 			acceptedKey = true;
-			sendAction = "START";
+			sendAction = ACTION_START;
 		}
 
 		if (acceptedKey) {
-			pokemonviolet.model.Handler.gameState.get(pokemonviolet.model.Handler.gameState.size() - 1).receiveKeyAction(sendAction, "RELEASE");
+			pokemonviolet.model.Handler.gameState.get(pokemonviolet.model.Handler.gameState.size() - 1).receiveKeyAction(sendAction, STATE_RELEASE);
 		}
 	}
 	
 	@Override
 	public void keyPressed(KeyEvent key) {
 		boolean acceptedKey = false;
-		String sendAction = "";
+		int sendAction = ACTION_NONE;
 
 		if (key.getKeyCode() == KeyEvent.VK_UP || key.getKeyCode() == KeyEvent.VK_W) {
 			acceptedKey = true;
-			sendAction = "UP";
+			sendAction = ACTION_UP;
 		} else if (key.getKeyCode() == KeyEvent.VK_DOWN || key.getKeyCode() == KeyEvent.VK_S) {
 			acceptedKey = true;
-			sendAction = "DOWN";
+			sendAction = ACTION_DOWN;
 		} else if (key.getKeyCode() == KeyEvent.VK_LEFT || key.getKeyCode() == KeyEvent.VK_A) {
 			acceptedKey = true;
-			sendAction = "LEFT";
+			sendAction = ACTION_LEFT;
 		} else if (key.getKeyCode() == KeyEvent.VK_RIGHT || key.getKeyCode() == KeyEvent.VK_D) {
 			acceptedKey = true;
-			sendAction = "RIGHT";
+			sendAction = ACTION_RIGHT;
 		} else if (key.getKeyCode() == KeyEvent.VK_K) {
 			acceptedKey = true;
-			sendAction = "B";
+			sendAction = ACTION_B;
 		} else if (key.getKeyCode() == KeyEvent.VK_J) {
 			acceptedKey = true;
-			sendAction = "A";
+			sendAction = ACTION_A;
 		} else if (key.getKeyCode() == KeyEvent.VK_ENTER) {
 			acceptedKey = true;
-			sendAction = "START";
+			sendAction = ACTION_START;
 		}
 
 		if (acceptedKey) {
-			pokemonviolet.model.Handler.gameState.get(pokemonviolet.model.Handler.gameState.size() - 1).receiveKeyAction(sendAction, "PRESS");
+			pokemonviolet.model.Handler.gameState.get(pokemonviolet.model.Handler.gameState.size() - 1).receiveKeyAction(sendAction, STATE_PRESS);
 		}
 	}
 }

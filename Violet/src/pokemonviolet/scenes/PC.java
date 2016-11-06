@@ -13,6 +13,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import pokemonviolet.control.KeyHandler;
 import javax.imageio.ImageIO;
 import pokemonviolet.model.Handler;
 
@@ -55,17 +56,17 @@ public class PC extends Scene {
 	}
 
 	@Override
-	public void receiveKeyAction(String action, String state) {
-		if (state.compareTo("RELEASE") == 0) {
-			if (action.compareTo("A") == 0) {
+	public void receiveKeyAction(int action, int state) {
+		if (state == KeyHandler.STATE_RELEASE) {
+			if (action == KeyHandler.ACTION_A) {
 				accept();
-			} else if (action.compareTo("B") == 0) {
+			} else if (action == KeyHandler.ACTION_B) {
 				cancel();
-			} else if (action.compareTo("START") == 0) {
+			} else if (action == KeyHandler.ACTION_START) {
 				start();
 			}
-		} else if (state.compareTo("PRESS") == 0) {
-			if (action.compareTo("UP") == 0 || action.compareTo("DOWN") == 0 || action.compareTo("LEFT") == 0 || action.compareTo("RIGHT") == 0) {
+		} else if (state == KeyHandler.STATE_PRESS) {
+			if (action == KeyHandler.ACTION_UP || action == KeyHandler.ACTION_DOWN || action == KeyHandler.ACTION_LEFT || action == KeyHandler.ACTION_RIGHT) {
 				move(action);
 			}
 		}
@@ -117,11 +118,11 @@ public class PC extends Scene {
 	}
 
 	@Override
-	protected void move(String dir) {
+	protected void move(int dir) {
 		if (this.selAction) {
-			if (dir.compareTo("LEFT") == 0) {
+			if (dir == KeyHandler.ACTION_LEFT) {
 				action = action - 1;
-			} else if (dir.compareTo("RIGHT") == 0) {
+			} else if (dir == KeyHandler.ACTION_RIGHT) {
 				action = action + 1;
 			}
 			
@@ -131,15 +132,15 @@ public class PC extends Scene {
 				action = 0;
 			}
 		} else {
-			if (dir.compareTo("UP") == 0 || dir.compareTo("DOWN") == 0) {
-				if (dir.compareTo("UP") == 0) {
+			if (dir == KeyHandler.ACTION_UP || dir == KeyHandler.ACTION_DOWN) {
+				if (dir == KeyHandler.ACTION_UP) {
 					if (action == 1) {
 						if (selectionY[action] == startIndex) {
 							startIndex = startIndex - 1;
 						}
 					}
 					selectionY[action] = selectionY[action] - 1;
-				} else if (dir.compareTo("DOWN") == 0) {
+				} else if (dir == KeyHandler.ACTION_DOWN) {
 					if (action == 1) {
 						if (selectionY[action] - (maxItemsPage - 1) == startIndex) {
 							startIndex = startIndex + 1;
@@ -147,10 +148,10 @@ public class PC extends Scene {
 					}
 					selectionY[action] = selectionY[action] + 1;
 				}
-			} else if (dir.compareTo("LEFT") == 0 || dir.compareTo("RIGHT") == 0) {
-				if (dir.compareTo("LEFT") == 0) {
+			} else if (dir == KeyHandler.ACTION_LEFT || dir == KeyHandler.ACTION_RIGHT) {
+				if (dir == KeyHandler.ACTION_LEFT) {
 					selectionX[action] = selectionX[action] - 1;
-				} else if (dir.compareTo("RIGHT") == 0) {
+				} else if (dir == KeyHandler.ACTION_RIGHT) {
 					selectionX[action] = selectionX[action] + 1;
 				}
 			}

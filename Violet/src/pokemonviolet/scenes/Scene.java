@@ -33,7 +33,7 @@ public abstract class Scene {
 		this.full = full;
 	}
 
-	public abstract void receiveKeyAction(String action, String state);
+	public abstract void receiveKeyAction(int action, int state);
 
 	protected abstract void accept();
 
@@ -45,7 +45,7 @@ public abstract class Scene {
 		main.gameState.remove(main.gameState.size() - 1);
 	}
 
-	protected abstract void move(String dir);
+	protected abstract void move(int dir);
 
 	public abstract BufferedImage getDisplay() throws IOException;
 

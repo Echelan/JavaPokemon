@@ -14,10 +14,6 @@ package pokemonviolet.model;
 public class PokemonMove {
 
 	//<editor-fold defaultstate="collapsed" desc="Attributes">
-		/**
-		 * Number of attributes per Move.
-		 */
-		static final private int NUM_ATTRIB = 13;
 
 		/**
 		 * ID of Move
@@ -107,9 +103,9 @@ public class PokemonMove {
 	private boolean readInfo(int id) {
 		boolean success = false;
 
-		String[] iteminfo = pokemonviolet.data.NIC.INFO_MOVES.get(id - 1).split(";");
-		for (int i = 0; i < NUM_ATTRIB; i++) {
-			String[] partes = iteminfo[i].split("=");
+		String[] moveInfo = pokemonviolet.data.NIC.INFO_MOVES.get(id - 1).split(";");
+		for (int i = 0; i < moveInfo.length; i++) {
+			String[] partes = moveInfo[i].split("=");
 			if (partes[0].compareTo("internalName") == 0) {
 				this.nameInternal = partes[1];
 			} else if (partes[0].compareTo("displayName") == 0) {
@@ -155,10 +151,10 @@ public class PokemonMove {
 		int id = 0;
 		boolean foundMove = false;
 		while (foundMove == false && id < pokemonviolet.data.NIC.INFO_MOVES.size()) {
-			String[] moveinfo = pokemonviolet.data.NIC.INFO_MOVES.get(id).split(";");
+			String[] moveInfo = pokemonviolet.data.NIC.INFO_MOVES.get(id).split(";");
 			int attribComp = 0;
-			while (attribComp < NUM_ATTRIB && foundMove == false) {
-				String[] partes = moveinfo[attribComp].split("=");
+			while (attribComp < moveInfo.length && foundMove == false) {
+				String[] partes = moveInfo[attribComp].split("=");
 				if (partes[0].compareTo("internalName") == 0) {
 					if (partes[1].compareTo(internalName) == 0) {
 						foundMove = true;

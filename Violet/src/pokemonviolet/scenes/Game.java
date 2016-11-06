@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import pokemonviolet.model.Handler;
+import pokemonviolet.control.KeyHandler;
 import pokemonviolet.model.Map;
 import pokemonviolet.model.Player;
 import pokemonviolet.model.Trainer;
@@ -350,22 +351,40 @@ public class Game extends Scene {
 	}
 	
 	@Override
-	public void receiveKeyAction(String action, String state) {
-		if (action.compareTo("A") == 0) {
-		} else if (action.compareTo("B") == 0) {
-			player.setRunning(state.compareTo("PRESS") == 0);
-		} else if (action.compareTo("START") == 0) {
-			if (state.compareTo("RELEASE") == 0) {
+	public void receiveKeyAction(int action, int state) {
+		if (action == KeyHandler.ACTION_A) {
+		} else if (action == KeyHandler.ACTION_B) {
+			player.setRunning(state == KeyHandler.STATE_PRESS);
+		} else if (action == KeyHandler.ACTION_START) {
+			if (state == KeyHandler.STATE_RELEASE) {
 				start();
 			}
-		} else if (state.compareTo("PRESS") == 0) {
-			if (player.getvDirection().compareTo("") == 0) {
-				player.setvDirection(action);
-				player.setDirection(action);
-			}
-		} else if (state.compareTo("RELEASE") == 0) {
-			if (player.getDirection().compareTo(action) == 0) {
-				player.setDirection("");
+		} else {
+			String actionStr = "";
+				switch (action) {
+					case KeyHandler.ACTION_LEFT:
+						actionStr = "LEFT";
+						break;
+					case KeyHandler.ACTION_UP:
+						actionStr = "UP";
+						break;
+					case KeyHandler.ACTION_RIGHT:
+						actionStr = "RIGHT";
+						break;
+					case KeyHandler.ACTION_DOWN:
+						actionStr = "DOWN";
+						break;
+				}
+				
+			if (state == KeyHandler.STATE_PRESS) {
+				if (player.getvDirection().compareTo("") == 0) {
+					player.setvDirection(actionStr);
+					player.setDirection(actionStr);
+				}
+			} else if (state == KeyHandler.STATE_RELEASE) {
+				if (player.getDirection().compareTo(actionStr) == 0) {
+					player.setDirection("");
+				}
 			}
 		}
 	}
@@ -381,7 +400,7 @@ public class Game extends Scene {
 	}
 
 	@Override
-	protected void move(String dir) {
+	protected void move(int dir) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

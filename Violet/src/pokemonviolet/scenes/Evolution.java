@@ -12,6 +12,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import pokemonviolet.model.Handler;
+import pokemonviolet.control.KeyHandler;
 import pokemonviolet.model.Pokemon;
 
 /**
@@ -41,9 +42,9 @@ public class Evolution extends Scene {
 	}
 
 	@Override
-	public void receiveKeyAction(String action, String state) {		
-		if (state.compareTo("RELEASE") == 0) {
-			if (action.compareTo("A") == 0) {
+	public void receiveKeyAction(int action, int state) {		
+		if (state == KeyHandler.STATE_RELEASE) {
+			if (action == KeyHandler.ACTION_A) {
 				accept();
 			}
 		}
@@ -64,7 +65,7 @@ public class Evolution extends Scene {
 	}
 
 	@Override
-	protected void move(String dir) {
+	protected void move(int dir) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

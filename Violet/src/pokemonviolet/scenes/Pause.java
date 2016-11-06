@@ -13,6 +13,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import pokemonviolet.control.KeyHandler;
 import javax.imageio.ImageIO;
 import pokemonviolet.model.Handler;
 
@@ -34,18 +35,18 @@ public class Pause extends Scene {
 	}
 
 	@Override
-	public void receiveKeyAction(String action, String state) {
-		if (state.compareTo("RELEASE") == 0) {
+	public void receiveKeyAction(int action, int state) {
+		if (state == KeyHandler.STATE_RELEASE) {
 			if (showControls) {
 				showControls = false;
 			} else {
-				if (action.compareTo("A") == 0) {
+				if (action == KeyHandler.ACTION_A) {
 					accept();
-				} else if (action.compareTo("B") == 0) {
+				} else if (action == KeyHandler.ACTION_B) {
 					cancel();
-				} else if (action.compareTo("START") == 0) {
+				} else if (action == KeyHandler.ACTION_START) {
 					start();
-				} else if (action.compareTo("UP") == 0 || action.compareTo("DOWN") == 0) {
+				} else if (action == KeyHandler.ACTION_UP || action == KeyHandler.ACTION_DOWN) {
 					move(action);
 				}
 			}
@@ -80,10 +81,10 @@ public class Pause extends Scene {
 	}
 
 	@Override
-	protected void move(String dir) {
-		if (dir.compareTo("UP") == 0) {
+	protected void move(int dir) {
+		if (dir == KeyHandler.ACTION_UP) {
 			selection = selection - 1;
-		} else if (dir.compareTo("DOWN") == 0) {
+		} else if (dir == KeyHandler.ACTION_DOWN) {
 			selection = selection + 1;
 		}
 		if (selection >= options.length) {

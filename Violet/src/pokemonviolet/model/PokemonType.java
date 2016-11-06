@@ -14,11 +14,6 @@ package pokemonviolet.model;
 public abstract class PokemonType {
 
 	/**
-	 * Number of Attributes per Type.
-	 */
-	static final private int NUM_ATTRIB = 7;
-
-	/**
 	 * Get info from main data about Type with given ID.
 	 *
 	 * @param id Type ID to search for in main data.
@@ -28,7 +23,7 @@ public abstract class PokemonType {
 		String returnValue = null;
 
 		String[] typeInfo = pokemonviolet.data.NIC.INFO_TYPES.get(id - 1).split(";");
-		for (int i = 0; i < NUM_ATTRIB; i++) {
+		for (int i = 0; i < typeInfo.length; i++) {
 			String[] partes = typeInfo[i].split("=");
 			if (partes[0].compareTo(search) == 0) {
 				if (partes.length == 2) {
@@ -53,7 +48,7 @@ public abstract class PokemonType {
 		boolean found = false;
 		while (!found) {
 			String[] typeInfo = pokemonviolet.data.NIC.INFO_TYPES.get(id - 1).split(";");
-			for (int i = 0; i < NUM_ATTRIB; i++) {
+			for (int i = 0; i < typeInfo.length; i++) {
 				String[] partes = typeInfo[i].split("=");
 				if (partes[0].compareTo("InternalName") == 0) {
 					if (partes[1].compareTo(internalName) == 0) {

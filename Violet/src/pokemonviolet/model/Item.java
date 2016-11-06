@@ -20,10 +20,6 @@ import javax.imageio.ImageIO;
 public class Item {
 
 	// <editor-fold defaultstate="collapsed" desc="Attributes">
-		/**
-		 * Number of attributes per Item.
-		 */
-		private static int NUM_ATTRIB = 11;
 		private static int SPRITE_WIDTH = 30;
 		private static int SPRITE_HEIGHT = 30;
 		private static int SPRITE_WIDTH_RESIZED = (int) (SPRITE_WIDTH * pokemonviolet.main.PokemonViolet.SIZE);
@@ -159,10 +155,10 @@ public class Item {
 	 */
 	private boolean readInfo(int id) {
 		boolean success = false;
-
-		String[] iteminfo = pokemonviolet.data.NIC.INFO_ITEMS.get(id - 1).split(";");
-		for (int i = 0; i < NUM_ATTRIB; i++) {
-			String[] partes = iteminfo[i].split("=");
+		
+		String[] itemInfo = pokemonviolet.data.NIC.INFO_ITEMS.get(id - 1).split(";");
+		for (int i = 0; i < itemInfo.length; i++) {
+			String[] partes = itemInfo[i].split("=");
 			if (partes[0].compareTo("internalName") == 0) {
 				this.nameInternal = partes[1];
 			} else if (partes[0].compareTo("nameSingular") == 0) {
@@ -185,6 +181,7 @@ public class Item {
 				this.moveName = partes[1];
 			}
 		}
+		
 		switch (id){
 			case 1:
 				this.value = 100;
@@ -257,10 +254,10 @@ public class Item {
 		boolean foundItem = false;
 
 		while (foundItem == false && id < pokemonviolet.data.NIC.INFO_ITEMS.size()) {
-			String[] iteminfo = pokemonviolet.data.NIC.INFO_ITEMS.get(id).split(";");
+			String[] itemInfo = pokemonviolet.data.NIC.INFO_ITEMS.get(id).split(";");
 			int attribComp = 0;
-			while (attribComp < NUM_ATTRIB && foundItem == false) {
-				String[] partes = iteminfo[attribComp].split("=");
+			while (attribComp < itemInfo.length && foundItem == false) {
+				String[] partes = itemInfo[attribComp].split("=");
 				if (partes[0].compareTo("internalName") == 0) {
 					if (partes[1].compareTo(internalName) == 0) {
 						foundItem = true;

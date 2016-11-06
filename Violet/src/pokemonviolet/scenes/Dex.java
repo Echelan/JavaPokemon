@@ -13,6 +13,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import pokemonviolet.control.KeyHandler;
 import javax.imageio.ImageIO;
 import pokemonviolet.model.Handler;
 
@@ -54,15 +55,15 @@ public class Dex extends Scene {
 	}
 
 	@Override
-	public void receiveKeyAction(String action, String state) {
-		if (state.compareTo("RELEASE") == 0) {
-			if (action.compareTo("A") == 0) {
+	public void receiveKeyAction(int action, int state) {
+		if (state == KeyHandler.STATE_RELEASE) {
+			if (action == KeyHandler.ACTION_A) {
 				accept();
-			} else if (action.compareTo("B") == 0) {
+			} else if (action == KeyHandler.ACTION_B) {
 				cancel();
 			}
-		} else if (state.compareTo("PRESS") == 0) {
-			if (action.compareTo("A") != 0 && action.compareTo("B") != 0 && action.compareTo("START") != 0) {
+		} else if (state == KeyHandler.STATE_PRESS) {
+			if (action != KeyHandler.ACTION_A && action != KeyHandler.ACTION_B && action != KeyHandler.ACTION_START) {
 				move(action);
 			}
 		}
@@ -86,15 +87,15 @@ public class Dex extends Scene {
 	}
 
 	@Override
-	protected void move(String dir) {
+	protected void move(int dir) {
 		if (!showDescrip) {
-			if (dir.compareTo("UP") == 0) {
+			if (dir == KeyHandler.ACTION_UP) {
 				selectionY = selectionY - 1;
-			} else if (dir.compareTo("DOWN") == 0) {
+			} else if (dir == KeyHandler.ACTION_DOWN) {
 				selectionY = selectionY + 1;
-			} else if (dir.compareTo("RIGHT") == 0) {
+			} else if (dir == KeyHandler.ACTION_RIGHT) {
 				selectionX = selectionX + 1;
-			} else if (dir.compareTo("LEFT") == 0) {
+			} else if (dir == KeyHandler.ACTION_LEFT) {
 				selectionX = selectionX - 1;
 			}
 

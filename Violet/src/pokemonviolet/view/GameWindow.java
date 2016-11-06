@@ -7,11 +7,10 @@
  */
 package pokemonviolet.view;
 
-import pokemonviolet.control.KeyHandler;
-import pokemonviolet.view.GameDisplay;
 import java.awt.Color;
 import java.awt.event.*;
 import javax.swing.*;
+import pokemonviolet.control.KeyHandler;
 
 /**
  * @author movillaf

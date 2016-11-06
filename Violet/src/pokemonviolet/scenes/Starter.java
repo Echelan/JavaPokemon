@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import pokemonviolet.control.KeyHandler;
 import javax.imageio.ImageIO;
 import pokemonviolet.model.Handler;
 
@@ -28,8 +29,8 @@ public class Starter extends Scene {
 	private int chosen;
 
 	private boolean konamiExecuted;
-	private String[] konamiCode = {"UP", "UP", "DOWN", "DOWN", "LEFT", "RIGHT", "LEFT", "RIGHT", "B", "A", "START"};
-	private ArrayList<String> konamiInput;
+	private int[] konamiCode = {KeyHandler.ACTION_UP, KeyHandler.ACTION_UP, KeyHandler.ACTION_DOWN, KeyHandler.ACTION_DOWN, KeyHandler.ACTION_LEFT, KeyHandler.ACTION_RIGHT, KeyHandler.ACTION_LEFT, KeyHandler.ACTION_RIGHT, KeyHandler.ACTION_B, KeyHandler.ACTION_A, KeyHandler.ACTION_START};
+	private ArrayList<Integer> konamiInput;
 	private String playerGender;
 
 	public Starter(Handler main, String gender) {
@@ -37,18 +38,18 @@ public class Starter extends Scene {
 
 		playerGender = gender;
 
-		konamiInput = new ArrayList<String>();
+		konamiInput = new ArrayList<Integer>();
 
 		chosen = 0;
 
 	}
 
 	@Override
-	public void receiveKeyAction(String action, String state) {
+	public void receiveKeyAction(int action, int state) {
 		boolean konamid = false;
 		if (!konamiExecuted) {
-			if (state.compareTo("RELEASE") == 0) {
-				if (action.compareTo(konamiCode[konamiInput.size()]) == 0) {
+			if (state == KeyHandler.STATE_RELEASE) {
+				if (action == konamiCode[konamiInput.size()]) {
 					konamiInput.add(action);
 					konamid = true;
 					if (konamiInput.size() == konamiCode.length) {
@@ -70,14 +71,14 @@ public class Starter extends Scene {
 		}
 
 		if (!konamid) {
-			if (state.compareTo("RELEASE") == 0) {
-				if (action.compareTo("A") == 0) {
+			if (state == KeyHandler.STATE_RELEASE) {
+				if (action == KeyHandler.ACTION_A) {
 					accept();
-				} else if (action.compareTo("B") == 0) {
+				} else if (action == KeyHandler.ACTION_B) {
 					cancel();
 				}
-			} else if (state.compareTo("PRESS") == 0) {
-				if (action.compareTo("LEFT") == 0 || action.compareTo("RIGHT") == 0) {
+			} else if (state == KeyHandler.STATE_PRESS) {
+				if (action == KeyHandler.ACTION_LEFT || action == KeyHandler.ACTION_RIGHT) {
 					move(action);
 				}
 			}
@@ -97,10 +98,10 @@ public class Starter extends Scene {
 	}
 
 	@Override
-	protected void move(String dir) {
-		if (dir.compareTo("LEFT") == 0) {
+	protected void move(int dir) {
+		if (dir == KeyHandler.ACTION_LEFT) {
 			chosen = chosen - 1;
-		} else if (dir.compareTo("RIGHT") == 0) {
+		} else if (dir == KeyHandler.ACTION_RIGHT) {
 			chosen = chosen + 1;
 		}
 

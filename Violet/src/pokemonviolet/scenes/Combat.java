@@ -18,6 +18,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import pokemonviolet.model.Handler;
 import pokemonviolet.model.Item;
+import pokemonviolet.control.KeyHandler;
 import pokemonviolet.model.Player;
 import pokemonviolet.model.Pokemon;
 import pokemonviolet.model.Trainer;
@@ -222,15 +223,15 @@ public class Combat extends Scene {
 	}
 
 	@Override
-	public void receiveKeyAction(String action, String state) {
-		if (state.compareTo("RELEASE") == 0) {
-			if (action.compareTo("A") == 0) {
+	public void receiveKeyAction(int action, int state) {
+		if (state == KeyHandler.STATE_RELEASE) {
+			if (action == KeyHandler.ACTION_A) {
 				accept();
-			} else if (action.compareTo("B") == 0) {
+			} else if (action == KeyHandler.ACTION_B) {
 				cancel();
 			}
-		} else if (state.compareTo("PRESS") == 0) {
-			if (action.compareTo("A") != 0 && action.compareTo("B") != 0 && action.compareTo("START") != 0) {
+		} else if (state == KeyHandler.STATE_PRESS) {
+			if (action != KeyHandler.ACTION_A && action != KeyHandler.ACTION_B && action != KeyHandler.ACTION_START) {
 				move(action);
 			}
 		}
@@ -440,7 +441,7 @@ public class Combat extends Scene {
 	}
 	
 	@Override
-	public void move(String dir) {
+	public void move(int dir) {
 		if (waitingAction) {
 			int x, y;
 			if (currentMenu.compareTo("MAIN") == 0) {
@@ -449,16 +450,16 @@ public class Combat extends Scene {
 				y = (int) Math.floor(optionsMain / 2);
 
 				switch (dir) {
-					case "LEFT":
+					case KeyHandler.ACTION_LEFT:
 						x = x - 1;
 						break;
-					case "UP":
+					case KeyHandler.ACTION_UP:
 						y = y - 1;
 						break;
-					case "RIGHT":
+					case KeyHandler.ACTION_RIGHT:
 						x = x + 1;
 						break;
-					case "DOWN":
+					case KeyHandler.ACTION_DOWN:
 						y = y + 1;
 						break;
 				}
@@ -483,16 +484,16 @@ public class Combat extends Scene {
 				y = (int) Math.floor(optionsMoves / 2);
 
 				switch (dir) {
-					case "LEFT":
+					case KeyHandler.ACTION_LEFT:
 						x = x - 1;
 						break;
-					case "UP":
+					case KeyHandler.ACTION_UP:
 						y = y - 1;
 						break;
-					case "RIGHT":
+					case KeyHandler.ACTION_RIGHT:
 						x = x + 1;
 						break;
-					case "DOWN":
+					case KeyHandler.ACTION_DOWN:
 						y = y + 1;
 						break;
 				}
