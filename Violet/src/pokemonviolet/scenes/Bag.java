@@ -136,8 +136,8 @@ public class Bag extends Scene {
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = tempStitched.getGraphics();
+		BufferedImage display = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = display.getGraphics();
 
 		int windowWidth = 120, windowHeight = (int) (ssY * 0.8);
 		int theme = 3;
@@ -185,6 +185,6 @@ public class Bag extends Scene {
 		int dispSelection = selection - startIndexX;
 		g.drawImage(ImageIO.read(new File("assets/arrow.png")), resizedValue(ssX - windowWidth + 2.5), resizedValue(((ssY / 2) - (windowHeight / 2) + 23.5) + (dispSelection * 10)), resizedValue(10), resizedValue(10), null);
 
-		return tempStitched;
+		return display;
 	}
 }

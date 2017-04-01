@@ -185,8 +185,8 @@ public class PC extends Scene {
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = tempStitched.getGraphics();
+		BufferedImage display = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = display.getGraphics();
 		
 		g.drawImage(ImageIO.read(new File("assets/"+main.getPlayer().getGender().toLowerCase()+"Back.png")), 0, 0, resizedValue(ssX), resizedValue(ssY), null);
 		
@@ -255,7 +255,7 @@ public class PC extends Scene {
 			}
 		}
 		
-		return tempStitched;
+		return display;
 	}
 	
 }

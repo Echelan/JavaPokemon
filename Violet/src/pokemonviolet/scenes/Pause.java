@@ -101,8 +101,8 @@ public class Pause extends Scene {
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = tempStitched.getGraphics();
+		BufferedImage display = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = display.getGraphics();
 
 		int windowWidth = 90, windowHeight = 127;
 		g.drawImage(genWindow(4, windowWidth, windowHeight), resizedValue(ssX - windowWidth - 0.5), resizedValue((ssY / 2) - (windowHeight / 2)), null);
@@ -119,7 +119,7 @@ public class Pause extends Scene {
 			g.drawImage(ImageIO.read(new File("assets/controls.png")), resizedValue((ssX / 2) - (216.5 / 2)), resizedValue((ssY / 2) - (157 / 2)), resizedValue(216.5), resizedValue(157), null);
 		}
 		
-		return tempStitched;
+		return display;
 	}
 
 }

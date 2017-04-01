@@ -43,7 +43,7 @@ public class Title extends Scene {
 		startDisplay = 6;
 
 		logoY = -200;
-		finalLogoY = 00;
+		finalLogoY = 0;
 
 		blackBarY = ssY + 25;
 		finalBlackBarY = ssY - 25;
@@ -161,7 +161,7 @@ public class Title extends Scene {
 				ready = false;
 			}
 		}
-		g.drawImage(ImageIO.read(new File("assets/title/violetLogo.png")), resizedValue((ssX / 2) - 20 - (681.5 / 4) / 2), resizedValue(logoY), resizedValue(681.5 / 4), resizedValue(393 / 4), null);
+		g.drawImage(ImageIO.read(new File("assets/title/violetPokemonLogo.png")), resizedValue((ssX / 2) - 20 - (681.5 / 4) / 2), resizedValue(logoY), resizedValue(681.5 / 4), resizedValue(393 / 4), null);
 
 		if (ready) {
 			startDisplay = startDisplay - 1;

@@ -68,8 +68,8 @@ public class Center extends Scene{
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = tempStitched.getGraphics();
+		BufferedImage display = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = display.getGraphics();
 		
 		int dimX = (ssX / 2) + 25, dimY = 30;
 		int posX = (ssX / 2) - (dimX / 2), posY = (ssY / 2) - (dimY / 2);
@@ -98,7 +98,7 @@ public class Center extends Scene{
 			this.dispose();
 		}
 		
-		return tempStitched;
+		return display;
 	}
 	
 }

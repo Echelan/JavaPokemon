@@ -128,8 +128,8 @@ public class UseDialog extends Scene{
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = tempStitched.getGraphics();
+		BufferedImage display = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = display.getGraphics();
 
 		int x = ssX - 80;
 		g.drawImage(genWindow(0, 60, 45), resizedValue(x), resizedValue(81), null);
@@ -143,7 +143,7 @@ public class UseDialog extends Scene{
 		
 		g.drawImage(ImageIO.read(new File("assets/arrow.png")), resizedValue(x + 5), resizedValue(101.5 + (choice * 15) - 9), resizedValue(10), resizedValue(10), null);
 		
-		return tempStitched;
+		return display;
 	}
 	
 }

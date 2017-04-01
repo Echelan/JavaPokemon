@@ -146,8 +146,8 @@ public class Summary extends Scene {
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = tempStitched.getGraphics();
+		BufferedImage display = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = display.getGraphics();
 		
 		g.drawImage(ImageIO.read(new File("assets/pokemonBack.png")), 0, 0, resizedValue(ssX), resizedValue(ssY), null);
 		
@@ -250,7 +250,7 @@ public class Summary extends Scene {
 				g.drawString(genMultilineText(subject.getPokeEntry(), 80)[i], resizedValue(7.5), resizedValue(ssY - 21.5 + (i * 9)));
 			}
 		}
-		return tempStitched;
+		return display;
 	}
 	
 }

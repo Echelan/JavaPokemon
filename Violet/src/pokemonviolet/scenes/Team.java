@@ -374,8 +374,8 @@ public class Team extends Scene {
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = tempStitched.getGraphics();
+		BufferedImage display = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = display.getGraphics();
 
 		g.drawImage(ImageIO.read(new File(path+"background.png")), 0, 0, resizedValue(ssX), resizedValue(ssY), null);
 
@@ -524,7 +524,7 @@ public class Team extends Scene {
 		g.drawImage(ImageIO.read(new File(path+"cancel"+state+".png")), resizedValue(ssX - 58), resizedValue(ssY - 20), resizedValue(52), resizedValue(16), null);
 		g.drawString("CANCEL", resizedValue(ssX - 47.5), resizedValue(ssY - 10));
 		
-		return tempStitched;
+		return display;
 	}
 
 }

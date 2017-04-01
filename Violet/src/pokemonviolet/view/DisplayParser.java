@@ -19,10 +19,8 @@ import pokemonviolet.scenes.Scene;
  */
 public abstract class DisplayParser {
 
-	private static final int ssX = Handler.SCREEN_SIZE_X, ssY = Handler.SCREEN_SIZE_Y;
-
 	public static BufferedImage displayImage() {
-		BufferedImage display = new BufferedImage(ssX, ssY, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage display = new BufferedImage(Handler.SCREEN_SIZE_X, Handler.SCREEN_SIZE_Y, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = display.getGraphics();
 
 		int counter = 0;
@@ -37,8 +35,8 @@ public abstract class DisplayParser {
 			}
 			
 			if (Handler.gameState.get(Handler.gameState.size() - counter).getName().compareTo("GAME") == 0) {
-				for (int i = 0; i < (ssX/32) + 2; i++) {
-					for (int j = 0; j < (ssY/32) + 2; j++) {
+				for (int i = 0; i < (Handler.SCREEN_SIZE_X/32) + 2; i++) {
+					for (int j = 0; j < (Handler.SCREEN_SIZE_Y/32) + 2; j++) {
 						g.drawImage(GameDisplay.water, i*32, j*32, null);
 					}
 				}

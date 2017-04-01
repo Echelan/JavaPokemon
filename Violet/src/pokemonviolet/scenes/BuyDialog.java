@@ -108,8 +108,8 @@ public class BuyDialog extends Scene{
 
 	@Override
 	public BufferedImage getDisplay() throws IOException {
-		BufferedImage tempStitched = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = tempStitched.getGraphics();
+		BufferedImage display = new BufferedImage(resizedValue(ssX), resizedValue(ssY), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = display.getGraphics();
 
 		int x = ssX - 80;
 		g.drawImage(genWindow(0, 60, 30), resizedValue(x), resizedValue(20), null);
@@ -132,7 +132,7 @@ public class BuyDialog extends Scene{
 		
 		g.drawImage(ImageIO.read(new File("assets/arrow.png")), resizedValue(x + 5), resizedValue(100 + 1.5 + (choice * 15) - 7.5), resizedValue(10), resizedValue(10), null);
 		
-		return tempStitched;
+		return display;
 	}
 	
 }
