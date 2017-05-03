@@ -1,0 +1,11 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix} Pokemon Violet - A University Project by Andres Movilla
+${licensePrefix} Pokemon COPYRIGHT 2002-2016 Pokemon.
+${licensePrefix} COPYRIGHT 1995-2016 Nintendo/Creatures Inc./GAME FREAK inc. TRADEMARK, REGISTERED TRADEMARK
+${licensePrefix} and Pokemon character names are trademarks of Nintendo.
+${licensePrefix} No copyright or trademark infringement is intended in using Pokemon content on Pokemon Violet.
+<#if licenseLast??>
+${licenseLast}
+</#if>
